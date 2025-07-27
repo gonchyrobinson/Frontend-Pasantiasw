@@ -1,46 +1,141 @@
-# Getting Started with Create React App
+# Sistema de Gestión de Pasantías
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema web para la gestión de pasantías de la Secretaría de Bienestar Estudiantil, desarrollado con React, TypeScript y Material-UI.
 
-## Available Scripts
+## 🚀 Características
 
-In the project directory, you can run:
+- **Interfaz Moderna**: Diseño responsive con Material-UI
+- **Gestión de Estado**: React Query para estado del servidor
+- **TypeScript**: Tipado estático para mayor seguridad
+- **Accesibilidad**: Componentes con ARIA attributes
+- **Manejo de Errores**: Error boundaries y estados de carga
+- **Testing**: Tests unitarios con React Testing Library
 
-### `npm start`
+## 🛠️ Tecnologías
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React 18** con TypeScript
+- **Material-UI (MUI)** para componentes UI
+- **React Query** para gestión de estado del servidor
+- **Axios** para llamadas HTTP
+- **React Router** para navegación
+- **React Testing Library** para testing
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📁 Estructura del Proyecto
 
-### `npm test`
+```
+src/
+├── components/     # Componentes compartidos
+├── hooks/         # Custom hooks
+├── contexts/      # React contexts
+├── apis/          # Integración con APIs
+├── types/         # Tipos TypeScript
+├── helpers/       # Funciones utilitarias
+└── [feature]/     # Código específico de features
+    ├── components/
+    ├── hooks/
+    └── types/
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Instalación
 
-### `npm run build`
+```bash
+# Clonar el repositorio
+git clone <repository-url>
+cd frontend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Instalar dependencias
+npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Iniciar el servidor de desarrollo
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🔧 Configuración de MUI MCP
 
-### `npm run eject`
+Este proyecto está configurado para usar el **Material-UI Model Context Protocol (MCP)** que proporciona acceso directo a la documentación oficial de MUI.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Configuración en Cursor
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Abrir configuración de MCP** en Cursor ("Settings" -> "MCP" -> "Add Server")
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. **Agregar el servidor MUI MCP**:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```json
+{
+  "mcp": {
+    "servers": {
+      "mui-mcp": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["-y", "@mui/mcp@latest"]
+      }
+    }
+  }
+}
+```
 
-## Learn More
+3. **Probar la conexión**:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run mcp:test
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Beneficios del MUI MCP
+
+- ✅ **Documentación oficial**: Acceso directo a la documentación de MUI
+- ✅ **Ejemplos de código**: Código real y verificable
+- ✅ **Sin alucinaciones**: Respuestas basadas en documentación real
+- ✅ **Enlaces verificables**: URLs que funcionan y llevan a la documentación correcta
+
+### Uso del MCP
+
+El MCP se activa automáticamente cuando haces preguntas sobre Material-UI. El asistente:
+
+1. Busca en la documentación oficial de MUI
+2. Obtiene ejemplos de código reales
+3. Proporciona enlaces directos a la documentación
+4. Da respuestas precisas y actualizadas
+
+## 🧪 Testing
+
+```bash
+# Ejecutar tests
+npm test
+
+# Ejecutar tests en modo watch
+npm test -- --watch
+```
+
+## 📦 Scripts Disponibles
+
+- `npm start` - Inicia el servidor de desarrollo
+- `npm build` - Construye la aplicación para producción
+- `npm test` - Ejecuta los tests
+- `npm run mcp:test` - Prueba la conexión del MUI MCP
+
+## 🎨 Guías de Estilo
+
+### Componentes
+- Usar componentes funcionales con TypeScript
+- Definir interfaces para props
+- Seguir el patrón: `ComponentName.tsx`
+
+### Estado
+- React Query para estado del servidor
+- React Context para estado global de UI
+- Estado local cuando sea posible
+
+### Styling
+- Material-UI como librería principal
+- Sistema de theming de MUI
+- `clsx` para clases condicionales
+
+## 🔗 Enlaces Útiles
+
+- [Documentación de Material-UI](https://mui.com/material-ui/getting-started/)
+- [React Query Documentation](https://tanstack.com/query/latest)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+
+## 📝 Licencia
+
+Este proyecto está bajo la licencia MIT.

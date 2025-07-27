@@ -1,0 +1,35 @@
+# Cursor Rules for MUI MCP Integration
+
+## Use the mui-mcp server to answer any MUI questions
+
+- 1. call the "useMuiDocs" tool to fetch the docs of the package relevant in the question
+- 2. call the "fetchDocs" tool to fetch any additional docs if needed using ONLY the URLs present in the returned content.
+- 3. repeat steps 1-2 until you have fetched all relevant docs for the given question
+- 4. use the fetched content to answer the question
+
+## MCP Configuration
+
+The MUI MCP server should be configured in your Cursor settings with:
+
+```json
+"mcp": {
+  "servers": {
+    "mui-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mui/mcp@latest"]
+    }
+  }
+}
+```
+
+## Material-UI Best Practices
+
+- Use Material-UI components as the primary UI library
+- Follow MUI's theming system with createTheme
+- Use proper TypeScript types for all components
+- Implement responsive design with Grid system
+- Use sx prop for styling when possible
+- Follow accessibility guidelines with proper ARIA attributes
+- Use React Query for server state management
+- Implement proper error boundaries and loading states 

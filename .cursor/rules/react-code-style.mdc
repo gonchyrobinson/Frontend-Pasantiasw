@@ -1,0 +1,165 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Apex.UI Code Style and Practices
+
+## TypeScript and React Guidelines
+
+1. **Component Structure**
+   - Use functional components with TypeScript
+   - Define prop interfaces using `interface` keyword
+   - Place component files in appropriate feature directories
+   - Follow the pattern: `ComponentName.tsx` for components
+
+2. **TypeScript Best Practices**
+   - Use strict type checking
+   - Avoid `any` type - use proper type definitions
+   - Use type inference where possible
+   - Define interfaces for API responses and data models
+   - Use enums for fixed sets of values
+
+3. **React Hooks**
+   - Use custom hooks for reusable logic
+   - Follow the naming convention: `use[Feature]`
+   - Place hooks in the `hooks` directory
+   - Include proper TypeScript types for hook parameters and return values
+
+4. **State Management**
+   - Use React Query for server state management
+   - Use React Context for global UI state
+   - Keep component state local when possible
+   - Use proper state management patterns (reducers, actions)
+
+5. **Styling**
+   - Use Material-UI (MUI) components as the primary UI library
+   - Follow MUI's theming system
+   - Use `clsx` for conditional class names
+   - Keep styles modular and reusable
+   - Use styled css for adding css and if necessary, a general css file index.css but not more
+
+6. **Code Organization**
+   - Group related components in feature directories
+   - Keep components small and focused
+   - Use index files for clean exports
+   - Follow the pattern: `feature/ComponentName/index.tsx`
+
+7. **Testing**
+   - Write unit tests for components and hooks
+   - Use Playwright for E2E testing
+   - Follow the pattern: `ComponentName.test.tsx`
+   - Test both success and error scenarios
+
+8. **API Integration**
+   - Use Axios for HTTP requests
+   - Implement proper error handling
+   - Use React Query for data fetching and caching
+   - Define API types in separate files
+
+9. **Performance**
+   - Use React.memo for expensive components
+   - Implement proper loading states
+   - Use proper key props in lists
+   - Avoid unnecessary re-renders
+
+10. **Code Quality**
+    - Follow ESLint and Prettier configurations
+    - Write meaningful commit messages
+    - Document complex logic with comments
+    - Keep functions small and focused
+
+## File Structure
+
+```
+src/
+  ├── components/     # Shared components
+  ├── hooks/         # Custom hooks
+  ├── contexts/      # React contexts
+  ├── apis/          # API integration
+  ├── types/         # TypeScript types
+  ├── helpers/       # Utility functions
+  ├── [feature]/     # Feature-specific code
+  │   ├── components/
+  │   ├── hooks/
+  │   └── types/
+  └── pages/         # Page components
+      └── [PageName]/
+          ├── components/     # Page-specific components
+          ├── helpers/        # Page-specific helper functions
+          └── index.tsx       # Main page component
+```
+
+## Page Structure Guidelines
+
+1. **Page Organization**
+   - Each page should have its own folder under `src/pages/`
+   - Page folder name should match the page name (e.g., `Home/`, `Dashboard/`, `Profile/`)
+   - Main page component should be named `index.tsx` within the page folder
+
+2. **Page Components**
+   - Create a `components/` subfolder within each page folder
+   - Place page-specific components in the `components/` folder
+   - Use descriptive names for components (e.g., `WelcomeSection.tsx`, `StatsCard.tsx`)
+   - Create an `index.ts` file in the `components/` folder to export all components
+
+3. **Page Helpers**
+   - Create a `helpers/` subfolder within each page folder
+   - Place page-specific helper functions in the `helpers/` folder
+   - Use descriptive names for helper files (e.g., `statsHelpers.ts`, `formHelpers.ts`)
+   - Include TypeScript interfaces and types specific to the page
+
+4. **Component Guidelines**
+   - Keep page components focused on the specific page functionality
+   - Extract reusable logic into helper functions
+   - Use proper TypeScript interfaces for component props
+   - Follow Material-UI best practices for styling
+
+5. **Helper Function Guidelines**
+   - Create pure functions when possible
+   - Include proper TypeScript types for parameters and return values
+   - Add JSDoc comments for complex functions
+   - Group related functions in the same helper file
+
+## Naming Conventions
+
+- Components: PascalCase (e.g., `UserProfile.tsx`)
+- Hooks: camelCase with 'use' prefix (e.g., `useAuth.ts`)
+- Types/Interfaces: PascalCase (e.g., `UserProfileProps`)
+- Constants: UPPER_SNAKE_CASE
+- Functions: camelCase
+- Files: kebab-case for non-component files
+
+## Best Practices
+
+1. **Error Handling**
+   - Use proper error boundaries
+   - Implement meaningful error messages
+   - Handle API errors gracefully
+   - Log errors appropriately
+
+2. **Security**
+   - Implement proper authentication
+   - Sanitize user inputs
+   - Follow security best practices
+   - Use environment variables for sensitive data
+
+3. **Accessibility**
+   - Use semantic HTML
+   - Implement proper ARIA attributes
+   - Ensure keyboard navigation
+   - Test with screen readers
+
+4. **Documentation**
+   - Document complex components
+   - Add JSDoc comments for functions
+   - Keep README up to date
+   - Document API integration
+
+5. **Version Control**
+   - Use meaningful commit messages
+   - Follow Git flow branching strategy
+   - Keep PRs focused and small
+   - Use meaningful commit messages
+   - Follow Git flow branching strategy
+   - Keep PRs focused and smal
