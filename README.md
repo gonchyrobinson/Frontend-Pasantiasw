@@ -93,8 +93,76 @@ frontend/
 
 ### Prerrequisitos
 
-- **Node.js** >= 18.0.0
-- **npm** >= 8.0.0
+- **Node.js** >= 18.0.0 (recomendado: 20.x LTS)
+- **npm** >= 8.0.0 (recomendado: 10.x)
+
+#### Verificar Versiones Actuales
+
+```bash
+node --version
+npm --version
+```
+
+#### Instalar/Actualizar Node.js
+
+**Windows:**
+
+```bash
+# Descargar desde https://nodejs.org/
+# O usar Chocolatey:
+choco install nodejs
+
+# O usar winget:
+winget install OpenJS.NodeJS
+```
+
+**macOS:**
+
+```bash
+# Usar Homebrew:
+brew install node
+
+# O descargar desde https://nodejs.org/
+```
+
+**Linux (Ubuntu/Debian):**
+
+```bash
+# Usar NodeSource repository:
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# O usar nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install 20
+nvm use 20
+```
+
+**Linux (CentOS/RHEL/Fedora):**
+
+```bash
+# Usar NodeSource repository:
+curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+sudo yum install -y nodejs
+
+# O usar nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install 20
+nvm use 20
+```
+
+#### Verificar Instalación
+
+```bash
+# Verificar Node.js
+node --version  # Debe mostrar v18.x.x o superior
+
+# Verificar npm
+npm --version   # Debe mostrar 8.x.x o superior
+
+# Verificar que todo funciona
+npm --help
+```
 
 ### Instalación
 
@@ -120,6 +188,52 @@ frontend/
    # Editar .env con tus valores
    VITE_API_URL=http://localhost:5000/api
    ```
+
+### Solución de Problemas
+
+#### Error de Dependencias (ERESOLVE)
+
+Si encuentras errores como:
+
+```
+npm error code ERESOLVE
+npm error ERESOLVE could not resolve
+```
+
+**Solución:**
+
+```bash
+# Limpiar cache de npm
+npm cache clean --force
+
+# Instalar con legacy peer deps
+npm install --legacy-peer-deps
+
+# O usar force
+npm install --force
+```
+
+#### Versión de Node.js Incompatible
+
+Si ves errores relacionados con versiones de Node.js:
+
+```bash
+# Verificar versión actual
+node --version
+
+# Si es menor a 18.x, actualizar Node.js
+# Ver instrucciones de instalación arriba
+```
+
+#### Error de TypeScript
+
+Si hay errores de TypeScript:
+
+```bash
+# Limpiar cache de TypeScript
+rm -rf node_modules/.cache
+npm run type-check
+```
 
 ## 📜 Scripts Disponibles
 
