@@ -1,5 +1,5 @@
-import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
 interface QueryProviderProps {
   children: React.ReactNode;
@@ -10,9 +10,14 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
       gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime in v5)
-      retry: (failureCount, error: any) => {
+      retry: (failureCount, error: Error) => {
         // Don't retry on 4xx errors
-        if (error?.response?.status >= 400 && error?.response?.status < 500) {
+        const apiError = error as { response?: { status?: number } };
+        if (
+          apiError?.response?.status &&
+          apiError.response.status >= 400 &&
+          apiError.response.status < 500
+        ) {
           return false;
         }
         return failureCount < 3;
@@ -34,4 +39,4 @@ const QueryProvider: React.FC<QueryProviderProps> = ({ children }) => {
   );
 };
 
-export default QueryProvider; 
+export default QueryProvider;

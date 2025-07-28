@@ -1,7 +1,15 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Box, Typography, Button, Container, Paper, Stack, Chip } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { Refresh, BugReport, Home, ArrowBack } from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Paper,
+  Stack,
+  Chip,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -89,56 +97,62 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <ErrorContainer maxWidth="md">
+        <ErrorContainer maxWidth='md'>
           <ErrorCard elevation={8}>
             <ErrorIcon>
-              <BugReport fontSize="inherit" />
+              <BugReport fontSize='inherit' />
             </ErrorIcon>
-            
-            <Typography variant="h4" component="h1" gutterBottom color="error">
+
+            <Typography variant='h4' component='h1' gutterBottom color='error'>
               Algo salió mal
             </Typography>
-            
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Ha ocurrido un error inesperado. Nuestro equipo ha sido notificado y estamos trabajando para solucionarlo.
+
+            <Typography variant='body1' color='text.secondary' sx={{ mb: 3 }}>
+              Ha ocurrido un error inesperado. Nuestro equipo ha sido notificado
+              y estamos trabajando para solucionarlo.
             </Typography>
 
-            <Stack direction="row" spacing={1} justifyContent="center" sx={{ mb: 3 }}>
-              <Chip 
-                label="Error de aplicación" 
-                color="error" 
-                variant="outlined" 
-                size="small"
+            <Stack
+              direction='row'
+              spacing={1}
+              justifyContent='center'
+              sx={{ mb: 3 }}
+            >
+              <Chip
+                label='Error de aplicación'
+                color='error'
+                variant='outlined'
+                size='small'
               />
-              <Chip 
-                label="Notificado automáticamente" 
-                color="info" 
-                variant="outlined" 
-                size="small"
+              <Chip
+                label='Notificado automáticamente'
+                color='info'
+                variant='outlined'
+                size='small'
               />
             </Stack>
 
-            <ErrorActions direction="row" spacing={2}>
+            <ErrorActions direction='row' spacing={2}>
               <Button
-                variant="contained"
+                variant='contained'
                 startIcon={<Refresh />}
                 onClick={this.handleRetry}
                 sx={{ textTransform: 'none' }}
               >
                 Reintentar
               </Button>
-              
+
               <Button
-                variant="outlined"
+                variant='outlined'
                 startIcon={<ArrowBack />}
                 onClick={this.handleGoBack}
                 sx={{ textTransform: 'none' }}
               >
                 Volver
               </Button>
-              
+
               <Button
-                variant="outlined"
+                variant='outlined'
                 startIcon={<Home />}
                 onClick={this.handleGoHome}
                 sx={{ textTransform: 'none' }}
@@ -149,14 +163,22 @@ class ErrorBoundary extends Component<Props, State> {
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <ErrorDetails>
-                <Typography variant="subtitle2" gutterBottom>
+                <Typography variant='subtitle2' gutterBottom>
                   Detalles del error (solo en desarrollo):
                 </Typography>
-                <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap' }}>
+                <Typography
+                  variant='body2'
+                  component='pre'
+                  sx={{ whiteSpace: 'pre-wrap' }}
+                >
                   {this.state.error.toString()}
                 </Typography>
                 {this.state.errorInfo && (
-                  <Typography variant="body2" component="pre" sx={{ whiteSpace: 'pre-wrap', mt: 1 }}>
+                  <Typography
+                    variant='body2'
+                    component='pre'
+                    sx={{ whiteSpace: 'pre-wrap', mt: 1 }}
+                  >
                     {this.state.errorInfo.componentStack}
                   </Typography>
                 )}
@@ -171,4 +193,4 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-export default ErrorBoundary; 
+export default ErrorBoundary;

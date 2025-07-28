@@ -1,6 +1,10 @@
 // Helper para llamadas a la API
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+// Define a generic type for request data
+type RequestData = Record<string, unknown>;
 
 export const apiClient = {
   async get<T>(endpoint: string): Promise<T> {
@@ -10,15 +14,15 @@ export const apiClient = {
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   },
 
-  async post<T>(endpoint: string, data: any): Promise<T> {
+  async post<T>(endpoint: string, data: RequestData): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       headers: {
@@ -26,15 +30,15 @@ export const apiClient = {
       },
       body: JSON.stringify(data),
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   },
 
-  async put<T>(endpoint: string, data: any): Promise<T> {
+  async put<T>(endpoint: string, data: RequestData): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
       headers: {
@@ -42,11 +46,11 @@ export const apiClient = {
       },
       body: JSON.stringify(data),
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   },
 
@@ -57,11 +61,11 @@ export const apiClient = {
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   },
-}; 
+};

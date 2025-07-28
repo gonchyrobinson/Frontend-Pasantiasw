@@ -1,6 +1,15 @@
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  UseQueryOptions,
+  UseMutationOptions,
+} from '@tanstack/react-query';
+
 import { apiClient } from '../apis/apiClient';
 import { ApiResponse } from '../types';
+
+// Define a generic type for mutation variables (same as RequestData in apiClient)
+type RequestData = Record<string, unknown>;
 
 // Query hook for GET requests
 export const useApiQuery = <T>(
@@ -15,9 +24,12 @@ export const useApiQuery = <T>(
 };
 
 // Mutation hook for POST requests
-export const useApiMutation = <T, TVariables = any>(
+export const useApiMutation = <T, TVariables extends RequestData = RequestData>(
   endpoint: string,
-  options?: Omit<UseMutationOptions<ApiResponse<T>, Error, TVariables>, 'mutationFn'>
+  options?: Omit<
+    UseMutationOptions<ApiResponse<T>, Error, TVariables>,
+    'mutationFn'
+  >
 ) => {
   return useMutation({
     mutationFn: (data: TVariables) => apiClient.post<T>(endpoint, data),
@@ -26,9 +38,12 @@ export const useApiMutation = <T, TVariables = any>(
 };
 
 // Mutation hook for PUT requests
-export const useApiUpdate = <T, TVariables = any>(
+export const useApiUpdate = <T, TVariables extends RequestData = RequestData>(
   endpoint: string,
-  options?: Omit<UseMutationOptions<ApiResponse<T>, Error, TVariables>, 'mutationFn'>
+  options?: Omit<
+    UseMutationOptions<ApiResponse<T>, Error, TVariables>,
+    'mutationFn'
+  >
 ) => {
   return useMutation({
     mutationFn: (data: TVariables) => apiClient.put<T>(endpoint, data),
@@ -50,10 +65,10 @@ export const useApiDelete = <T>(
 // Legacy hook for backward compatibility
 export const useApi = <T>(endpoint: string) => {
   const { data, isLoading, error } = useApiQuery<T>(endpoint);
-  
+
   return {
     data: data?.data || null,
     loading: isLoading,
     error: error?.message || null,
   };
-}; 
+};

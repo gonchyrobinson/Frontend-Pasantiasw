@@ -1,6 +1,6 @@
-import React from 'react';
 import { Box, Typography, LinearProgress, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 const StyledProgressSection = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(3),
@@ -23,21 +23,23 @@ interface ProgressSectionProps {
 const ProgressSection: React.FC<ProgressSectionProps> = ({ title, items }) => {
   return (
     <StyledProgressSection>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant='h6' gutterBottom>
         {title}
       </Typography>
       <Stack spacing={2}>
         {items.map((item, index) => (
           <Box key={index}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant="body2">{item.label}</Typography>
-              <Typography variant="body2" color={item.color || 'primary'}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}
+            >
+              <Typography variant='body2'>{item.label}</Typography>
+              <Typography variant='body2' color={item.color || 'primary'}>
                 {item.value}%
               </Typography>
             </Box>
-            <LinearProgress 
-              variant="determinate" 
-              value={item.value} 
+            <LinearProgress
+              variant='determinate'
+              value={item.value}
               color={item.color || 'primary'}
             />
           </Box>
@@ -47,4 +49,4 @@ const ProgressSection: React.FC<ProgressSectionProps> = ({ title, items }) => {
   );
 };
 
-export default ProgressSection; 
+export default ProgressSection;

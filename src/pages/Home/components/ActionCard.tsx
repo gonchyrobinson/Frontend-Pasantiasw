@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, Box, Typography, Button } from '@mui/material';
 import { Add } from '@mui/icons-material';
+import { Card, CardContent, Box, Typography, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 const StyledActionCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -44,18 +44,24 @@ const ActionCard: React.FC<ActionCardProps> = ({
     <StyledActionCard onClick={onClick}>
       <CardContent sx={{ flexGrow: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <StatIcon sx={{ backgroundColor: `${color}.light`, color: `${color}.main`, mr: 2 }}>
+          <StatIcon
+            sx={{
+              backgroundColor: `${color}.light`,
+              color: `${color}.main`,
+              mr: 2,
+            }}
+          >
             {icon}
           </StatIcon>
-          <Typography variant="h6" component="h3">
+          <Typography variant='h6' component='h3'>
             {title}
           </Typography>
         </Box>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
           {description}
         </Typography>
         <Button
-          variant="contained"
+          variant='contained'
           startIcon={<Add />}
           fullWidth
           sx={{ textTransform: 'none' }}
@@ -67,4 +73,4 @@ const ActionCard: React.FC<ActionCardProps> = ({
   );
 };
 
-export default ActionCard; 
+export default ActionCard;

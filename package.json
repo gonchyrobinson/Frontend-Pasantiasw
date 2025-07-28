@@ -27,9 +27,22 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/ui": "^2.1.8",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "husky": "^9.1.7",
     "jsdom": "^25.0.1",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
     "vite": "^7.0.6",
     "vitest": "^2.1.8"
   },
@@ -45,7 +58,13 @@
     "build:cra": "react-scripts build",
     "test:cra": "react-scripts test",
     "eject": "react-scripts eject",
-    "mcp:test": "npx -y @mui/mcp@latest"
+    "mcp:test": "npx -y @mui/mcp@latest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -63,6 +82,15 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,scss}": [
+      "prettier --write"
     ]
   }
 }

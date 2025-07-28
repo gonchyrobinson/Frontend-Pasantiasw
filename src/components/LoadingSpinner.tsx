@@ -1,6 +1,6 @@
-import React from 'react';
 import { Box, CircularProgress, Typography, Paper, Fade } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -41,11 +41,13 @@ const LoadingCard = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[8],
 }));
 
-const StyledCircularProgress = styled(CircularProgress)(({ theme }) => ({
-  '& .MuiCircularProgress-circle': {
-    strokeLinecap: 'round',
-  },
-}));
+const StyledCircularProgress = styled(CircularProgress)(
+  ({ theme: _theme }) => ({
+    '& .MuiCircularProgress-circle': {
+      strokeLinecap: 'round',
+    },
+  })
+);
 
 const LoadingMessage = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
@@ -53,38 +55,38 @@ const LoadingMessage = styled(Typography)(({ theme }) => ({
   maxWidth: 200,
 }));
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  message = 'Cargando...', 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  message = 'Cargando...',
   size = 'medium',
   variant = 'inline',
   showBackdrop = false,
 }) => {
   const getSize = () => {
     switch (size) {
-      case 'small': return 24;
-      case 'large': return 48;
-      default: return 32;
+      case 'small':
+        return 24;
+      case 'large':
+        return 48;
+      default:
+        return 32;
     }
   };
 
-  const getContainerSize = () => {
+  const _getContainerSize = () => {
     switch (size) {
-      case 'small': return 80;
-      case 'large': return 120;
-      default: return 100;
+      case 'small':
+        return 80;
+      case 'large':
+        return 120;
+      default:
+        return 100;
     }
   };
 
   const loadingContent = (
     <LoadingContainer>
-      <StyledCircularProgress 
-        size={getSize()} 
-        thickness={4}
-        sx={{ mb: 2 }}
-      />
-      <LoadingMessage variant="body2">
-        {message}
-      </LoadingMessage>
+      <StyledCircularProgress size={getSize()} thickness={4} sx={{ mb: 2 }} />
+      <LoadingMessage variant='body2'>{message}</LoadingMessage>
     </LoadingContainer>
   );
 
@@ -93,9 +95,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       <Fade in={true} timeout={300}>
         <LoadingOverlay>
           {showBackdrop ? (
-            <LoadingCard elevation={8}>
-              {loadingContent}
-            </LoadingCard>
+            <LoadingCard elevation={8}>{loadingContent}</LoadingCard>
           ) : (
             loadingContent
           )}
@@ -107,17 +107,11 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <Fade in={true} timeout={300}>
       <LoadingContainer>
-        <StyledCircularProgress 
-          size={getSize()} 
-          thickness={4}
-          sx={{ mb: 2 }}
-        />
-        <LoadingMessage variant="body2">
-          {message}
-        </LoadingMessage>
+        <StyledCircularProgress size={getSize()} thickness={4} sx={{ mb: 2 }} />
+        <LoadingMessage variant='body2'>{message}</LoadingMessage>
       </LoadingContainer>
     </Fade>
   );
 };
 
-export default LoadingSpinner; 
+export default LoadingSpinner;

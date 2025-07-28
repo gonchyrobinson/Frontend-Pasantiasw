@@ -1,4 +1,4 @@
-import React from 'react';
+import { Business, School, Payment, Add } from '@mui/icons-material';
 import {
   Typography,
   Grid,
@@ -8,14 +8,11 @@ import {
   SpeedDialAction,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  Business,
-  School,
-  Payment,
-  Add,
-} from '@mui/icons-material';
+import React from 'react';
+
 import { useApiQuery } from '../../hooks/useApi';
 import { Convenio, Pasantia, Pago } from '../../types';
+
 import {
   WelcomeSection,
   StatsCard,
@@ -38,12 +35,21 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 
 const Home: React.FC = () => {
   // Example API calls - replace with actual endpoints
-  const { data: conveniosData, isLoading: conveniosLoading, error: conveniosError } = 
-    useApiQuery<Convenio[]>('/convenios');
-  const { data: pasantiasData, isLoading: pasantiasLoading, error: pasantiasError } = 
-    useApiQuery<Pasantia[]>('/pasantias');
-  const { data: pagosData, isLoading: pagosLoading, error: pagosError } = 
-    useApiQuery<Pago[]>('/pagos');
+  const {
+    data: conveniosData,
+    isLoading: conveniosLoading,
+    error: conveniosError,
+  } = useApiQuery<Convenio[]>('/convenios');
+  const {
+    data: pasantiasData,
+    isLoading: pasantiasLoading,
+    error: pasantiasError,
+  } = useApiQuery<Pasantia[]>('/pasantias');
+  const {
+    data: pagosData,
+    isLoading: pagosLoading,
+    error: pagosError,
+  } = useApiQuery<Pago[]>('/pagos');
 
   // Icons
   const icons = {
@@ -77,12 +83,12 @@ const Home: React.FC = () => {
   const progressItems = getProgressItems();
 
   return (
-    <StyledContainer maxWidth="lg">
+    <StyledContainer maxWidth='lg'>
       <WelcomeSection
-        title="Bienvenido al Sistema de Gestión de Pasantías"
-        subtitle="Secretaría de Bienestar Estudiantil"
-        statusLabel="Sistema Activo"
-        statusColor="success"
+        title='Bienvenido al Sistema de Gestión de Pasantías'
+        subtitle='Secretaría de Bienestar Estudiantil'
+        statusLabel='Sistema Activo'
+        statusColor='success'
       />
 
       {/* Stats Cards */}
@@ -105,13 +111,10 @@ const Home: React.FC = () => {
       </Grid>
 
       {/* Progress Section */}
-      <ProgressSection
-        title="Progreso del Sistema"
-        items={progressItems}
-      />
+      <ProgressSection title='Progreso del Sistema' items={progressItems} />
 
       {/* Quick Actions */}
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
+      <Typography variant='h5' component='h2' gutterBottom sx={{ mt: 4 }}>
         Acciones Rápidas
       </Typography>
       <Grid container spacing={3}>
@@ -129,18 +132,18 @@ const Home: React.FC = () => {
 
       {/* Error Display */}
       {hasErrors(!!conveniosError, !!pasantiasError, !!pagosError) && (
-        <Alert severity="error" sx={{ mt: 3 }}>
+        <Alert severity='error' sx={{ mt: 3 }}>
           Error al cargar los datos. Por favor, intente nuevamente.
         </Alert>
       )}
 
       {/* Speed Dial for Quick Actions */}
       <SpeedDial
-        ariaLabel="Acciones rápidas"
+        ariaLabel='Acciones rápidas'
         sx={{ position: 'fixed', bottom: 16, right: 16 }}
         icon={<Add />}
       >
-        {speedDialActions.map((action) => (
+        {speedDialActions.map(action => (
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
@@ -153,4 +156,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home; 
+export default Home;

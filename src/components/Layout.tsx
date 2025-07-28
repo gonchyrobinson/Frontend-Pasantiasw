@@ -1,8 +1,9 @@
-import React from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Header from './Header';
+import React from 'react';
+
 import Footer from './Footer';
+import Header from './Header';
 import Sidebar from './Sidebar';
 
 interface LayoutProps {
@@ -46,13 +47,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Header />
       <MainContent>
         <Sidebar />
-        <ContentArea component="main">
-          {children}
-        </ContentArea>
+        <ContentArea component='main'>{children}</ContentArea>
       </MainContent>
       <Footer />
     </LayoutContainer>
   );
 };
 
-export default Layout; 
+export default Layout;

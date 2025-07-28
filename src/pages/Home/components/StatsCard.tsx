@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, Box, Typography, Skeleton } from '@mui/material';
 import { TrendingUp, TrendingDown } from '@mui/icons-material';
+import { Card, CardContent, Box, Typography, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 const StyledStatsCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -48,32 +48,47 @@ const StatsCard: React.FC<StatsCardProps> = ({
   return (
     <StyledStatsCard>
       <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mb: 2,
+          }}
+        >
           <StatIcon sx={{ backgroundColor: bgColor, color: color }}>
             {icon}
           </StatIcon>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             {trendDirection === 'up' ? (
-              <TrendingUp fontSize="small" color="success" />
+              <TrendingUp fontSize='small' color='success' />
             ) : (
-              <TrendingDown fontSize="small" color="error" />
+              <TrendingDown fontSize='small' color='error' />
             )}
-            <Typography variant="caption" color={trendDirection === 'up' ? 'success.main' : 'error.main'}>
+            <Typography
+              variant='caption'
+              color={trendDirection === 'up' ? 'success.main' : 'error.main'}
+            >
               {trend}
             </Typography>
           </Box>
         </Box>
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography variant='h6' component='h2' gutterBottom>
           {title}
         </Typography>
         {loading ? (
-          <Skeleton variant="text" width="60%" />
+          <Skeleton variant='text' width='60%' />
         ) : error ? (
-          <Typography color="error" variant="body2">
+          <Typography color='error' variant='body2'>
             Error al cargar
           </Typography>
         ) : (
-          <Typography variant="h4" component="p" color="primary" sx={{ fontWeight: 600 }}>
+          <Typography
+            variant='h4'
+            component='p'
+            color='primary'
+            sx={{ fontWeight: 600 }}
+          >
             {value}
           </Typography>
         )}
@@ -82,4 +97,4 @@ const StatsCard: React.FC<StatsCardProps> = ({
   );
 };
 
-export default StatsCard; 
+export default StatsCard;

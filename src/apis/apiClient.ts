@@ -1,7 +1,14 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+
 import { ApiResponse } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || import.meta.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.REACT_APP_API_URL ||
+  'http://localhost:5000/api';
+
+// Define a generic type for request data
+type RequestData = Record<string, unknown>;
 
 class ApiClient {
   private client: AxiosInstance;
@@ -17,7 +24,7 @@ class ApiClient {
 
     // Request interceptor
     this.client.interceptors.request.use(
-      (config) => {
+      config => {
         // Add auth token if available
         const token = localStorage.getItem('authToken');
         if (token) {
@@ -25,7 +32,7 @@ class ApiClient {
         }
         return config;
       },
-      (error) => {
+      error => {
         return Promise.reject(error);
       }
     );
@@ -55,7 +62,7 @@ class ApiClient {
     }
   }
 
-  async post<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
+  async post<T>(endpoint: string, data: RequestData): Promise<ApiResponse<T>> {
     try {
       const response = await this.client.post<ApiResponse<T>>(endpoint, data);
       return response.data;
@@ -64,7 +71,7 @@ class ApiClient {
     }
   }
 
-  async put<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
+  async put<T>(endpoint: string, data: RequestData): Promise<ApiResponse<T>> {
     try {
       const response = await this.client.put<ApiResponse<T>>(endpoint, data);
       return response.data;
@@ -82,7 +89,7 @@ class ApiClient {
     }
   }
 
-  private handleError(error: any): Error {
+  private handleError(error: unknown): Error {
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message || error.message;
       return new Error(message);
@@ -91,4 +98,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(); 
+export const apiClient = new ApiClient();

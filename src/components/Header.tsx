@@ -1,5 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Dashboard,
+  Business,
+  School,
+  Payment,
+  Assessment,
+  Notifications,
+  Settings,
+  Logout,
+  Person,
+} from '@mui/icons-material';
 import {
   AppBar,
   Toolbar,
@@ -17,17 +26,8 @@ import {
   ListItemText,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  Dashboard,
-  Business,
-  School,
-  Payment,
-  Assessment,
-  Notifications,
-  Settings,
-  Logout,
-  Person,
-} from '@mui/icons-material';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -43,7 +43,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 const NavButton = styled(Button, {
-  shouldForwardProp: (prop) => !['component', 'to'].includes(prop as string),
+  shouldForwardProp: prop => !['component', 'to'].includes(prop as string),
 })<{ component?: React.ElementType; to?: string }>(({ theme }) => ({
   textTransform: 'none',
   fontWeight: 500,
@@ -61,7 +61,8 @@ const UserSection = styled(Box)(({ theme }) => ({
 
 const Header: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [notificationsAnchor, setNotificationsAnchor] = React.useState<null | HTMLElement>(null);
+  const [notificationsAnchor, setNotificationsAnchor] =
+    React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -88,17 +89,21 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <StyledAppBar position="static">
+    <StyledAppBar position='static'>
       <StyledToolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
+        <Typography
+          variant='h6'
+          component='div'
+          sx={{ flexGrow: 1, fontWeight: 600 }}
+        >
           Sistema de Pasantías
         </Typography>
-        
+
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <Tooltip key={item.path} title={item.label} arrow>
               <NavButton
-                color="inherit"
+                color='inherit'
                 component={Link}
                 to={item.path}
                 startIcon={item.icon}
@@ -111,27 +116,27 @@ const Header: React.FC = () => {
 
         <UserSection>
           {/* Notifications */}
-          <Tooltip title="Notificaciones" arrow>
+          <Tooltip title='Notificaciones' arrow>
             <IconButton
-              color="inherit"
+              color='inherit'
               onClick={handleNotificationsMenu}
-              aria-label="notifications"
+              aria-label='notifications'
             >
-              <Badge badgeContent={3} color="error">
+              <Badge badgeContent={3} color='error'>
                 <Notifications />
               </Badge>
             </IconButton>
           </Tooltip>
 
           {/* User Menu */}
-          <Tooltip title="Menú de usuario" arrow>
+          <Tooltip title='Menú de usuario' arrow>
             <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              size='large'
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
               onClick={handleMenu}
-              color="inherit"
+              color='inherit'
             >
               <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.light' }}>
                 <Person />
@@ -141,7 +146,7 @@ const Header: React.FC = () => {
 
           {/* Notifications Menu */}
           <Menu
-            id="notifications-menu"
+            id='notifications-menu'
             anchorEl={notificationsAnchor}
             anchorOrigin={{
               vertical: 'bottom',
@@ -160,36 +165,36 @@ const Header: React.FC = () => {
           >
             <MenuItem onClick={handleNotificationsClose}>
               <ListItemIcon>
-                <Business fontSize="small" />
+                <Business fontSize='small' />
               </ListItemIcon>
-              <ListItemText 
-                primary="Nuevo convenio aprobado"
-                secondary="Convenio con Empresa ABC ha sido aprobado"
+              <ListItemText
+                primary='Nuevo convenio aprobado'
+                secondary='Convenio con Empresa ABC ha sido aprobado'
               />
             </MenuItem>
             <MenuItem onClick={handleNotificationsClose}>
               <ListItemIcon>
-                <School fontSize="small" />
+                <School fontSize='small' />
               </ListItemIcon>
-              <ListItemText 
-                primary="Pasantía iniciada"
-                secondary="Juan Pérez ha iniciado su pasantía"
+              <ListItemText
+                primary='Pasantía iniciada'
+                secondary='Juan Pérez ha iniciado su pasantía'
               />
             </MenuItem>
             <MenuItem onClick={handleNotificationsClose}>
               <ListItemIcon>
-                <Payment fontSize="small" />
+                <Payment fontSize='small' />
               </ListItemIcon>
-              <ListItemText 
-                primary="Pago registrado"
-                secondary="Pago de pasantía registrado exitosamente"
+              <ListItemText
+                primary='Pago registrado'
+                secondary='Pago de pasantía registrado exitosamente'
               />
             </MenuItem>
           </Menu>
 
           {/* User Menu */}
           <Menu
-            id="menu-appbar"
+            id='menu-appbar'
             anchorEl={anchorEl}
             anchorOrigin={{
               vertical: 'bottom',
@@ -208,22 +213,22 @@ const Header: React.FC = () => {
           >
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <Person fontSize="small" />
+                <Person fontSize='small' />
               </ListItemIcon>
-              <ListItemText primary="Perfil" />
+              <ListItemText primary='Perfil' />
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <Settings fontSize="small" />
+                <Settings fontSize='small' />
               </ListItemIcon>
-              <ListItemText primary="Configuración" />
+              <ListItemText primary='Configuración' />
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
-                <Logout fontSize="small" />
+                <Logout fontSize='small' />
               </ListItemIcon>
-              <ListItemText primary="Cerrar Sesión" />
+              <ListItemText primary='Cerrar Sesión' />
             </MenuItem>
           </Menu>
         </UserSection>
@@ -232,4 +237,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header; 
+export default Header;

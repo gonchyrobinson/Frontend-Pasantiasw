@@ -1,6 +1,7 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,7 +22,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          mui: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
+          mui: [
+            '@mui/material',
+            '@mui/icons-material',
+            '@emotion/react',
+            '@emotion/styled',
+          ],
           router: ['react-router-dom'],
           query: ['@tanstack/react-query'],
         },
@@ -38,4 +44,4 @@ export default defineConfig({
     global: 'globalThis',
   },
   envPrefix: ['VITE_', 'REACT_APP_'],
-}); 
+});

@@ -131,9 +131,30 @@ export const getSpeedDialActions = (icons: {
   payment: React.ReactNode;
 }): SpeedDialAction[] => {
   return [
-    { icon: icons.add, name: 'Nuevo Convenio', action: () => console.log('Nuevo Convenio') },
-    { icon: icons.school, name: 'Nueva Pasantía', action: () => console.log('Nueva Pasantía') },
-    { icon: icons.payment, name: 'Registrar Pago', action: () => console.log('Registrar Pago') },
+    {
+      icon: icons.add,
+      name: 'Nuevo Convenio',
+      action: () => {
+        // TODO: Implement navigation to new convenio form
+        // window.location.href = '/convenios/nuevo';
+      },
+    },
+    {
+      icon: icons.school,
+      name: 'Nueva Pasantía',
+      action: () => {
+        // TODO: Implement navigation to new pasantia form
+        // window.location.href = '/pasantias/nueva';
+      },
+    },
+    {
+      icon: icons.payment,
+      name: 'Registrar Pago',
+      action: () => {
+        // TODO: Implement navigation to new payment form
+        // window.location.href = '/pagos/nuevo';
+      },
+    },
   ];
 };
 
@@ -169,4 +190,4 @@ export const hasErrors = (
   pagosError: boolean
 ): boolean => {
   return [conveniosError, pasantiasError, pagosError].some(Boolean);
-}; 
+};

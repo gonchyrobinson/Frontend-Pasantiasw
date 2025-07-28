@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+
 import Home from './index';
 
 // Mock the API hook
@@ -11,7 +11,9 @@ vi.mock('../../hooks/useApi', () => ({
   useApiQuery: vi.fn(),
 }));
 
-const mockUseApiQuery = vi.mocked(await import('../../hooks/useApi')).useApiQuery;
+const mockUseApiQuery = vi.mocked(
+  await import('../../hooks/useApi')
+).useApiQuery;
 
 const theme = createTheme();
 
@@ -25,9 +27,7 @@ const renderWithProviders = (component: React.ReactElement) => {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        {component}
-      </ThemeProvider>
+      <ThemeProvider theme={theme}>{component}</ThemeProvider>
     </QueryClientProvider>
   );
 };
@@ -45,9 +45,13 @@ describe('Home Component', () => {
     });
 
     renderWithProviders(<Home />);
-    
-    expect(screen.getByText('Bienvenido al Sistema de Gestión de Pasantías')).toBeInTheDocument();
-    expect(screen.getByText('Secretaría de Bienestar Estudiantil')).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Bienvenido al Sistema de Gestión de Pasantías')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Secretaría de Bienestar Estudiantil')
+    ).toBeInTheDocument();
   });
 
   it('renders quick actions', () => {
@@ -58,7 +62,7 @@ describe('Home Component', () => {
     });
 
     renderWithProviders(<Home />);
-    
+
     expect(screen.getByText('Acciones Rápidas')).toBeInTheDocument();
     expect(screen.getByText('Nuevo Convenio')).toBeInTheDocument();
     expect(screen.getByText('Nueva Pasantía')).toBeInTheDocument();
@@ -73,7 +77,7 @@ describe('Home Component', () => {
     });
 
     renderWithProviders(<Home />);
-    
+
     // Check for skeleton elements (Material-UI creates multiple skeleton elements)
     const skeletons = screen.getAllByTestId('skeleton');
     expect(skeletons.length).toBeGreaterThan(0);
@@ -87,8 +91,12 @@ describe('Home Component', () => {
     });
 
     renderWithProviders(<Home />);
-    
-    expect(screen.getByText('Error al cargar los datos. Por favor, intente nuevamente.')).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        'Error al cargar los datos. Por favor, intente nuevamente.'
+      )
+    ).toBeInTheDocument();
   });
 
   it('displays stats with data', () => {
@@ -110,9 +118,9 @@ describe('Home Component', () => {
       });
 
     renderWithProviders(<Home />);
-    
+
     expect(screen.getByText('Convenios Activos')).toBeInTheDocument();
     expect(screen.getByText('Pasantías Activas')).toBeInTheDocument();
     expect(screen.getByText('Pagos Pendientes')).toBeInTheDocument();
   });
-}); 
+});

@@ -1,6 +1,9 @@
-import React from 'react';
-import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
+import React from 'react';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -94,4 +97,4 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   );
 };
 
-export default ThemeProvider; 
+export default ThemeProvider;

@@ -1,15 +1,16 @@
 import React from 'react';
-import AppRoutes from './routes/AppRoutes';
-import ThemeProvider from './contexts/ThemeProvider';
-import QueryProvider from './contexts/QueryProvider';
+
 import ErrorBoundary from './components/ErrorBoundary';
+import QueryProvider from './contexts/QueryProvider';
+import ThemeProvider from './contexts/ThemeProvider';
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
   return (
     <ErrorBoundary>
       <QueryProvider>
         <ThemeProvider>
-          <div className="App">
+          <div className='App'>
             <AppRoutes />
           </div>
         </ThemeProvider>
