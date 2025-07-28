@@ -3,14 +3,15 @@ import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import Home from './index';
 
 // Mock the API hook
-jest.mock('../../hooks/useApi', () => ({
-  useApiQuery: jest.fn(),
+vi.mock('../../hooks/useApi', () => ({
+  useApiQuery: vi.fn(),
 }));
 
-const mockUseApiQuery = require('../../hooks/useApi').useApiQuery;
+const mockUseApiQuery = vi.mocked(await import('../../hooks/useApi')).useApiQuery;
 
 const theme = createTheme();
 
@@ -33,7 +34,7 @@ const renderWithProviders = (component: React.ReactElement) => {
 
 describe('Home Component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders welcome message', () => {
