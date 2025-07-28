@@ -19,7 +19,7 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 
 - **React 18.2.0** - Biblioteca de interfaz de usuario
 - **TypeScript 4.9.5** - Tipado estático
-- **Vite 7.0.6** - Build tool y dev server
+- **Vite 5.4.19** - Build tool y dev server
 
 ### UI & Styling
 
@@ -175,8 +175,25 @@ npm --help
 
 2. **Instalar dependencias**
 
+   **Opción 1: Instalación automática (Recomendada)**
+
    ```bash
-   npm install
+   # Windows
+   install.bat
+
+   # Linux/macOS
+   ./install.sh
+   ```
+
+   **Opción 2: Instalación manual**
+
+   ```bash
+   # Limpiar cache y remover archivos existentes
+   npm cache clean --force
+   rm -rf node_modules package-lock.json
+
+   # Instalar con legacy peer deps
+   npm install --legacy-peer-deps
    ```
 
 3. **Configurar variables de entorno**
