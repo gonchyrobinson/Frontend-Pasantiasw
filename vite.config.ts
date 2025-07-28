@@ -43,5 +43,5 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
-  envPrefix: ['VITE_', 'REACT_APP_'],
+  envPrefix: ['VITE_'],
 });

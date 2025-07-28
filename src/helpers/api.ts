@@ -1,7 +1,7 @@
 // Helper para llamadas a la API
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Define a generic type for request data
 type RequestData = Record<string, unknown>;
