@@ -89,6 +89,142 @@ frontend/
 └── vitest.config.ts                  # Configuración Vitest
 ```
 
+## 🔧 Configuración de Entornos
+
+### Estructura de Archivos de Entorno
+
+El proyecto utiliza archivos de entorno separados para diferentes ambientes:
+
+- `.env.development` - Configuración para desarrollo local
+- `.env.production` - Configuración para producción
+- `.env.example` - Plantilla de ejemplo
+
+### Variables de Entorno
+
+#### Desarrollo (.env.development)
+
+```env
+VITE_SERVER_BASE_URL=https://localhost:7001
+VITE_API_URL=https://localhost:7001/api
+VITE_ENVIRONMENT=development
+VITE_VERSION=1.0.0
+```
+
+#### Producción (.env.production)
+
+```env
+VITE_SERVER_BASE_URL=https://api.tudominio.com
+VITE_API_URL=https://api.tudominio.com/api
+VITE_ENVIRONMENT=production
+VITE_VERSION=1.0.0
+```
+
+### Configuración del Backend
+
+#### Desarrollo
+
+- **URL**: `https://localhost:7001`
+- **Protocolo**: HTTPS con certificado autofirmado
+- **CORS**: Configurado para `http://localhost:3000`
+
+#### Producción
+
+- **URL**: `https://api.tudominio.com`
+- **Protocolo**: HTTPS con certificado válido
+- **CORS**: Configurado para el dominio de producción
+
+## 🔗 Configuración de Conexión Frontend-Backend
+
+### Configuración Implementada
+
+#### 1. Proxy de Desarrollo
+
+- Configurado en `frontend/vite.config.ts`
+- Todas las peticiones a `/api/*` se redirigen a `https://localhost:7001`
+- Configuración: `changeOrigin: true, secure: false` (permite certificados autofirmados)
+
+#### 2. Cliente API Simplificado
+
+- Ubicado en `frontend/src/apis/apiClient.ts`
+- Configurado para usar la URL base `/api`
+- Maneja respuestas directas del backend sin estructura `ApiResponse` envolvente
+- Manejo básico de errores implementado
+
+#### 3. Tipos de Datos
+
+- Actualizados en `frontend/src/types/index.ts`
+- Mantiene compatibilidad con `ApiResponse<T>` para futuras implementaciones
+- Tipos básicos para el sistema de gestión de pasantías
+
+### Instrucciones para Probar
+
+#### 1. Iniciar el Backend
+
+```bash
+cd backend/Backend
+dotnet run
+```
+
+El backend debe estar ejecutándose en `https://localhost:7001`
+
+#### 2. Iniciar el Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+El frontend debe estar ejecutándose en `http://localhost:3000`
+
+#### 3. Probar la Conexión
+
+1. Abrir `http://localhost:3000` en el navegador
+2. La aplicación debería cargar correctamente sin errores de conexión
+
+### Solución de Problemas
+
+#### Problema: Error de CORS
+
+**Causa**: El navegador bloquea peticiones entre diferentes orígenes.
+
+**Solución**:
+
+- ✅ Proxy configurado en Vite
+- ✅ CORS configurado en el backend
+- ✅ Configuración HTTPS para desarrollo
+
+#### Problema: Certificados HTTPS
+
+**Causa**: Certificados autofirmados en desarrollo.
+
+**Solución**:
+
+- ✅ `secure: false` en la configuración del proxy
+- ✅ Configuración para permitir certificados autofirmados
+
+### Troubleshooting de Entornos
+
+#### Error de Certificado en Desarrollo
+
+Si tienes problemas con certificados autofirmados:
+
+1. El proxy está configurado con `secure: false`
+2. Acepta el certificado en el navegador
+3. Verifica que el backend esté ejecutándose en HTTPS
+
+#### Error de CORS
+
+- Verificar que el backend tenga CORS configurado correctamente
+- Verificar que las URLs coincidan entre frontend y backend
+
+#### Cambio de Ambiente
+
+Para cambiar entre ambientes:
+
+1. Modificar las variables en el archivo correspondiente
+2. Reiniciar el servidor de desarrollo
+3. Limpiar la caché del navegador si es necesario
+
 ## 🚀 Instalación y Configuración
 
 ### Prerrequisitos
@@ -199,11 +335,12 @@ npm --help
 3. **Configurar variables de entorno**
 
    ```bash
-   # Crear archivo .env
-   cp .env.example .env
+   # Crear archivo .env.development
+   cp .env.example .env.development
 
-   # Editar .env con tus valores
-   VITE_API_URL=http://localhost:5000/api
+   # Editar .env.development con tus valores
+   VITE_SERVER_BASE_URL=https://localhost:7001
+   VITE_API_URL=https://localhost:7001/api
    ```
 
 ### Solución de Problemas
@@ -407,15 +544,19 @@ src/pages/[PageName]/
 ### Desarrollo
 
 ```env
-VITE_API_URL=http://localhost:5000/api
-VITE_APP_TITLE=Apex.UI
+VITE_SERVER_BASE_URL=https://localhost:7001
+VITE_API_URL=https://localhost:7001/api
+VITE_ENVIRONMENT=development
+VITE_VERSION=1.0.0
 ```
 
 ### Producción
 
 ```env
-VITE_API_URL=https://api.com
-VITE_APP_TITLE=pASANTIAS Y pps
+VITE_SERVER_BASE_URL=https://api.tudominio.com
+VITE_API_URL=https://api.tudominio.com/api
+VITE_ENVIRONMENT=production
+VITE_VERSION=1.0.0
 ```
 
 ## 📦 Dependencias Principales
