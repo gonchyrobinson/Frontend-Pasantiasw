@@ -36,6 +36,7 @@ export interface Usuario {
   rol: 'admin' | 'usuario';
 }
 
+// Tipos para respuestas del backend
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

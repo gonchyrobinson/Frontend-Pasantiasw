@@ -1,9 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
-import { ApiResponse } from '../types';
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Usar la URL base del proxy configurado en Vite
+const API_BASE_URL = '/api';
 
 // Define a generic type for request data
 type RequestData = Record<string, unknown>;
@@ -20,14 +18,10 @@ class ApiClient {
       timeout: 10000,
     });
 
-    // Request interceptor
+    // Request interceptor - por ahora sin autenticación
     this.client.interceptors.request.use(
       config => {
-        // Add auth token if available
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
+        // Aquí se agregará la autenticación más adelante
         return config;
       },
       error => {
@@ -41,46 +35,47 @@ class ApiClient {
         return response;
       },
       (error: AxiosError) => {
-        if (error.response?.status === 401) {
-          // Handle unauthorized access
-          localStorage.removeItem('authToken');
-          window.location.href = '/login';
-        }
+        // Manejo básico de errores - se expandirá más adelante
+        console.error(
+          'API Error:',
+          error.response?.status,
+          error.response?.data
+        );
         return Promise.reject(error);
       }
     );
   }
 
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async get<T>(endpoint: string): Promise<T> {
     try {
-      const response = await this.client.get<ApiResponse<T>>(endpoint);
+      const response = await this.client.get<T>(endpoint);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
     }
   }
 
-  async post<T>(endpoint: string, data: RequestData): Promise<ApiResponse<T>> {
+  async post<T>(endpoint: string, data: RequestData): Promise<T> {
     try {
-      const response = await this.client.post<ApiResponse<T>>(endpoint, data);
+      const response = await this.client.post<T>(endpoint, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
     }
   }
 
-  async put<T>(endpoint: string, data: RequestData): Promise<ApiResponse<T>> {
+  async put<T>(endpoint: string, data: RequestData): Promise<T> {
     try {
-      const response = await this.client.put<ApiResponse<T>>(endpoint, data);
+      const response = await this.client.put<T>(endpoint, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
     }
   }
 
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+  async delete<T>(endpoint: string): Promise<T> {
     try {
-      const response = await this.client.delete<ApiResponse<T>>(endpoint);
+      const response = await this.client.delete<T>(endpoint);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
