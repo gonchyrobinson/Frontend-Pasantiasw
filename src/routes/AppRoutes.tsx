@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 import Layout from '../components/Layout';
 import Home from '../pages/Home';
+import Empresas from '../pages/Empresas';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -16,6 +16,7 @@ const AppRoutes: React.FC = () => {
           <Route path='/pagos' element={<div>Página de Pagos</div>} />
           <Route path='/busqueda' element={<div>Página de Búsqueda</div>} />
           <Route path='/reportes' element={<div>Página de Reportes</div>} />
+          <Route path='/empresas' element={<Empresas />} />
           <Route
             path='/configuracion'
             element={<div>Página de Configuración</div>}
