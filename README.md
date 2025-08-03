@@ -6,6 +6,8 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 
 - **Frontend Moderno**: React 18 con TypeScript
 - **UI Framework**: Material-UI (MUI) con componentes personalizados
+- **Sistema de Formularios**: FormularioGenerico con validaciones avanzadas
+- **Autenticación**: Sistema completo de login/registro con JWT
 - **Estado Global**: React Query para gestión de estado del servidor
 - **Build Tool**: Vite para desarrollo rápido y builds optimizados
 - **Testing**: Vitest con React Testing Library
@@ -21,6 +23,12 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 - **TypeScript 4.9.5** - Tipado estático
 - **Vite 5.4.19** - Build tool y dev server
 
+### Formularios y Validación
+
+- **React Hook Form 7.48.2** - Gestión de formularios
+- **FormularioGenerico** - Sistema de formularios genéricos
+- **Validaciones Avanzadas** - Soporte para patrones, rangos y validaciones custom
+
 ### UI & Styling
 
 - **Material-UI 5.15.10** - Componentes de UI
@@ -31,6 +39,7 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 
 - **@tanstack/react-query 5.17.19** - Gestión de estado del servidor
 - **Axios 1.6.7** - Cliente HTTP
+- **react-hook-form 7.48.2** - Gestión de formularios
 
 ### Routing
 
@@ -50,6 +59,179 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 - **Husky 9.0.11** - Git hooks
 - **lint-staged 15.2.2** - Linting de archivos staged
 
+## 📝 Sistema de Formularios Genéricos
+
+### Características Principales
+
+- ✅ **Formularios Dinámicos**: Basados en metadata JSON
+- ✅ **Componentes Reutilizables**: Para cada tipo de campo
+- ✅ **Validaciones Avanzadas**: Integradas con React Hook Form
+- ✅ **Dropdowns Dinámicos**: Carga de datos desde API
+- ✅ **Diseño Responsive**: Grid system de Material-UI
+- ✅ **TypeScript**: Type safety completo
+- ✅ **Accesibilidad**: Sin autoFocus y manejo de errores mejorado
+
+### Tipos de Campos Soportados
+
+| Tipo              | Descripción                   | Componente                    |
+| ----------------- | ----------------------------- | ----------------------------- |
+| `text`            | Campo de texto básico         | `TextField`                   |
+| `password`        | Campo de contraseña           | `TextField` (type="password") |
+| `email`           | Campo de email con validación | `EmailField`                  |
+| `currency`        | Campo numérico para moneda    | `CurrencyField`               |
+| `number`          | Campo numérico básico         | `NumberField`                 |
+| `date`            | Campo de fecha                | `DateField`                   |
+| `checkbox`        | Checkbox                      | `CheckboxField`               |
+| `textarea`        | Área de texto multilínea      | `TextField` (multiline)       |
+| `dropdown`        | Select con opciones estáticas | `DropdownField`               |
+| `dynamicDropdown` | Select con opciones desde API | `DynamicDropdownField`        |
+
+### Ejemplo de Uso
+
+```tsx
+import { FormularioGenerico, FormMetadata } from '../../FormularioGenerico';
+
+const loginMetadata: FormMetadata = {
+  submitButtonText: 'Iniciar Sesión',
+  fields: [
+    {
+      name: 'username',
+      type: 'text',
+      label: 'Usuario',
+      placeholder: 'Ingrese su usuario',
+      validations: {
+        required: 'El usuario es requerido',
+      },
+      gridSize: 12,
+    },
+    {
+      name: 'password',
+      type: 'password',
+      label: 'Contraseña',
+      placeholder: 'Ingrese su contraseña',
+      validations: {
+        required: 'La contraseña es requerida',
+      },
+      gridSize: 12,
+    },
+  ],
+};
+
+const Login = () => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
+    // Lógica de autenticación
+  };
+
+  return (
+    <FormularioGenerico
+      metadata={loginMetadata}
+      onSubmit={handleSubmit}
+      loading={loading}
+    />
+  );
+};
+```
+
+### Formularios Predefinidos
+
+El sistema incluye formularios predefinidos para entidades principales:
+
+```tsx
+import {
+  createConvenioFormMetadata,
+  createEmpresaFormMetadata,
+  createEstudianteFormMetadata,
+} from '../../FormularioGenerico';
+
+// Uso directo
+<FormularioGenerico
+  metadata={createConvenioFormMetadata()}
+  onSubmit={handleSubmit}
+/>;
+```
+
+### Validaciones Avanzadas
+
+```tsx
+validations: {
+  required: 'Campo requerido',
+  minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+  maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+  pattern: {
+    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+    message: 'Email inválido'
+  },
+  min: { value: 0, message: 'Valor mínimo 0' },
+  max: { value: 100, message: 'Valor máximo 100' }
+}
+```
+
+## 🔐 Sistema de Autenticación
+
+### Características
+
+- ✅ **JWT Tokens**: Almacenamiento seguro en sessionStorage
+- ✅ **Interceptores Axios**: Inyección automática de tokens
+- ✅ **Rutas Protegidas**: Redirección automática a login
+- ✅ **Manejo de Errores**: Gestión centralizada de errores 401
+- ✅ **Navegación Inteligente**: Redirección después del login
+- ✅ **Sin Refresh**: Navegación fluida sin recargas de página
+
+### Componentes de Autenticación
+
+#### Login.tsx
+
+```tsx
+// Formulario de login con diseño moderno
+// Gradientes y efectos glassmorphism
+// Validaciones completas
+// Manejo de errores de API
+```
+
+#### RegistroUsuarios.tsx
+
+```tsx
+// Formulario de registro con validaciones
+// Confirmación de contraseña
+// Validaciones de email y longitud
+```
+
+### Helpers de Autenticación
+
+#### authHelper.ts
+
+```tsx
+export const authHelper = {
+  getToken: () => sessionStorage.getItem('auth_token'),
+  saveToken: (token: string) => sessionStorage.setItem('auth_token', token),
+  removeToken: () => sessionStorage.removeItem('auth_token'),
+  isAuthenticated: () => !!sessionStorage.getItem('auth_token'),
+};
+```
+
+#### interceptors.ts
+
+```tsx
+// Interceptores de Axios para:
+// - Inyección automática de tokens
+// - Manejo de errores 401
+// - Redirección sin refresh
+```
+
+### Rutas Protegidas
+
+```tsx
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+
+  if (!authHelper.isAuthenticated()) {
+    return <Navigate to='/login' state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
+```
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -67,10 +249,58 @@ frontend/
 │   ├── components/                   # Componentes compartidos
 │   ├── contexts/                     # Contextos de React
 │   ├── features/                     # Características específicas
+│   ├── FormularioGenerico/          # Sistema de formularios genéricos
+│   │   ├── components/               # Componentes de campos
+│   │   │   ├── TextField.tsx         # Campo de texto
+│   │   │   ├── EmailField.tsx        # Campo de email
+│   │   │   ├── CurrencyField.tsx     # Campo de moneda
+│   │   │   ├── NumberField.tsx       # Campo numérico
+│   │   │   ├── DateField.tsx         # Campo de fecha
+│   │   │   ├── CheckboxField.tsx     # Campo checkbox
+│   │   │   ├── DropdownField.tsx     # Select estático
+│   │   │   ├── DynamicDropdownField.tsx # Select dinámico
+│   │   │   └── FormularioGenerico.tsx # Componente principal
+│   │   ├── helpers/                  # Funciones auxiliares
+│   │   │   ├── validationHelpers.ts  # Helpers de validación
+│   │   │   └── formMetadataHelpers.ts # Helpers de metadata
+│   │   ├── types/                    # Tipos TypeScript
+│   │   │   └── index.ts              # Definiciones de tipos
+│   │   ├── index.ts                  # Exportaciones principales
+│   │   └── README.md                 # Documentación del sistema
 │   ├── helpers/                      # Funciones auxiliares
+│   │   ├── authHelper.ts             # Gestión de autenticación
+│   │   ├── interceptors.ts           # Interceptores de Axios
+│   │   └── routesHelper.ts           # Constantes de rutas
 │   ├── hooks/                        # Custom hooks
-│   ├── pages/                        # Páginas de la aplicación
+│   │   ├── useApi.ts                 # Hook para llamadas API
+│   │   ├── useNavigation.ts          # Hook de navegación
+│   │   └── useAuthForm.ts            # Hook para formularios de auth
+│   ├── modules/                      # Módulos de la aplicación
+│   │   ├── Login/                    # Módulo de autenticación
+│   │   │   ├── Login.tsx             # Componente de login
+│   │   │   ├── components/           # Componentes específicos
+│   │   │   ├── helpers/              # Helpers específicos
+│   │   │   └── types/                # Tipos específicos
+│   │   ├── CreacionUsuarios/         # Módulo de registro
+│   │   │   ├── RegistroUsuarios.tsx  # Componente de registro
+│   │   │   ├── components/           # Componentes específicos
+│   │   │   ├── helpers/              # Helpers específicos
+│   │   │   └── types/                # Tipos específicos
+│   │   ├── Convenios/                # Módulo de convenios
+│   │   ├── Pasantias/                # Módulo de pasantías
+│   │   ├── Pagos/                    # Módulo de pagos
+│   │   ├── Reportes/                 # Módulo de reportes
+│   │   ├── Inicio/                   # Módulo de inicio
+│   │   ├── Shared/                   # Componentes compartidos
+│   │   ├── SharedForms/              # Formularios compartidos
+│   │   └── PaginasError/             # Páginas de error
+│   ├── features/                     # Características específicas (vacío)
+│   ├── contexts/                     # Contextos de React
+│   │   ├── QueryProvider.tsx         # Provider de React Query
+│   │   └── ThemeProvider.tsx         # Provider del tema
 │   ├── routes/                       # Configuración de rutas
+│   │   ├── AppRoutes.tsx             # Configuración de rutas
+│   │   └── helpers/                  # Helpers de rutas
 │   ├── test/                         # Configuración de tests
 │   ├── types/                        # Definiciones de tipos
 │   ├── vite-env.d.ts                 # Tipos de Vite
@@ -504,6 +734,14 @@ src/pages/[PageName]/
 - **Styling**: Preferir `styled` components sobre `sx` prop
 - **Components**: Usar componentes MUI como base
 - **Icons**: Importar desde `@mui/icons-material`
+
+### FormularioGenerico
+
+- **Metadata**: Definir formularios usando `FormMetadata`
+- **Validaciones**: Usar `ValidationRule` para validaciones complejas
+- **Tipos**: Usar `FieldType` para tipos de campos
+- **Helpers**: Usar helpers predefinidos para formularios comunes
+- **noValidate**: Siempre usar `noValidate` para control total
 
 ### TypeScript
 
