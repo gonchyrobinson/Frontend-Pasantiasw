@@ -41,7 +41,7 @@ const ContentArea = styled(Box)(({ theme }) => ({
   },
 }));
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = ({ children }: LayoutProps) => {
   return (
     <LayoutContainer>
       <Header />

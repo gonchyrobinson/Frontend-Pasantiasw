@@ -13,12 +13,10 @@ import React from 'react';
 import { useApiQuery } from '../../hooks/useApi';
 import { Convenio, Pasantia, Pago } from '../../types';
 
-import {
-  WelcomeSection,
-  StatsCard,
-  ProgressSection,
-  ActionCard,
-} from './components';
+import WelcomeSection from './components/WelcomeSection';
+import StatsCard from './components/StatsCard';
+import ProgressSection from './components/ProgressSection';
+import ActionCard from './components/ActionCard';
 import {
   calculateStats,
   getQuickActions,
@@ -33,7 +31,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   paddingBottom: theme.spacing(3),
 }));
 
-const Home: React.FC = () => {
+const Inicio: React.FC = () => {
   // Example API calls - replace with actual endpoints
   const {
     data: conveniosData,
@@ -156,4 +154,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Inicio;

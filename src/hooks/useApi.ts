@@ -5,7 +5,7 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query';
 
-import { apiClient } from '../apis/apiClient';
+import { apiClient } from '../modules/Shared/apis/apiClient';
 import { ApiResponse } from '../types';
 
 // Define a generic type for mutation variables (same as RequestData in apiClient)

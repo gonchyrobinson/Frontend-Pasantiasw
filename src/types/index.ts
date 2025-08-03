@@ -1,15 +1,39 @@
 // Tipos básicos para el sistema de gestión de pasantías
 
-export interface Convenio {
+// Tipos de autenticación
+export type LoginCredentials = {
+  username: string;
+  password: string;
+};
+
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+};
+
+export type LoginResponse = {
+  token: string;
+  user: User;
+};
+
+export type AuthState = {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+};
+
+export type Convenio = {
   id: number;
   empresa: string;
   fechaInicio: string;
   fechaFin: string;
   estado: 'activo' | 'vencido' | 'renovado';
   descripcion: string;
-}
+};
 
-export interface Pasantia {
+export type Pasantia = {
   id: number;
   estudiante: string;
   empresa: string;
@@ -18,28 +42,28 @@ export interface Pasantia {
   fechaFin: string;
   estado: 'activa' | 'finalizada' | 'suspendida';
   tipo: 'regular' | 'pps';
-}
+};
 
-export interface Pago {
+export type Pago = {
   id: number;
   convenioId: number;
   monto: number;
   fecha: string;
   estado: 'pendiente' | 'pagado' | 'vencido';
   descripcion: string;
-}
+};
 
-export interface Usuario {
+export type Usuario = {
   id: number;
   nombre: string;
   email: string;
   rol: 'admin' | 'usuario';
-}
+};
 
 // Tipos para respuestas del backend
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   success: boolean;
   data?: T;
   message?: string;
   error?: string;
-}
+};
