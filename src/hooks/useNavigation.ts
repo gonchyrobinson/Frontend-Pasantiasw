@@ -37,6 +37,10 @@ export const useNavigation = () => {
   };
 
   // Navigation methods for menu items
+  const goToEmpresas = () => {
+    navigate(ROUTES.EMPRESAS);
+  };
+
   const goToConvenios = () => {
     navigate(ROUTES.CONVENIOS);
   };
@@ -71,6 +75,7 @@ export const useNavigation = () => {
     goForward,
     redirectAfterLogin,
     logout,
+    goToEmpresas,
     goToConvenios,
     goToPasantias,
     goToPagos,

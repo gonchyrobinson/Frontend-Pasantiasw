@@ -9,6 +9,7 @@ export const ROUTES = {
   INICIO: '/dashboard', // Alias para dashboard
 
   // Módulos principales
+  EMPRESAS: '/empresas',
   CONVENIOS: '/convenios',
   PASANTIAS: '/pasantias',
   PAGOS: '/pagos',

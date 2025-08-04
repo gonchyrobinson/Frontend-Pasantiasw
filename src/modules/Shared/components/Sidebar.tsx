@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Drawer,
   List,
@@ -17,6 +16,7 @@ import {
   Payment,
   Assessment,
   Settings,
+  Domain,
 } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigation } from '../../../hooks/useNavigation';
@@ -28,6 +28,7 @@ const Sidebar = () => {
   const location = useLocation();
   const {
     goToDashboard,
+    goToEmpresas,
     goToConvenios,
     goToPasantias,
     goToPagos,
@@ -41,6 +42,12 @@ const Sidebar = () => {
       icon: <Dashboard />,
       onClick: goToDashboard,
       path: ROUTES.DASHBOARD,
+    },
+    {
+      text: 'Empresas',
+      icon: <Domain />,
+      onClick: goToEmpresas,
+      path: ROUTES.EMPRESAS,
     },
     {
       text: 'Convenios',

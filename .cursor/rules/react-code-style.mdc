@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Apex.UI Code Style and Practices
+# Code Style and Practices
 
 ## TypeScript and React Guidelines
 

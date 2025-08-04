@@ -10,6 +10,7 @@ import { ROUTES } from '../helpers/routesHelper';
 import Layout from '../modules/Shared/components/Layout';
 import Inicio from '../modules/Inicio/Inicio';
 import Login from '../modules/Login/Login';
+import Empresas from '../modules/Empresas/Empresas';
 import Convenios from '../modules/Convenios/Convenios';
 import Pasantias from '../modules/Pasantias/Pasantias';
 import Pagos from '../modules/Pagos/Pagos';
@@ -36,6 +37,16 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <Inicio />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.EMPRESAS}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Empresas />
               </Layout>
             </ProtectedRoute>
           }

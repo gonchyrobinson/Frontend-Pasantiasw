@@ -7,6 +7,7 @@ import {
   Settings,
   Logout,
   Person,
+  Domain,
 } from '@mui/icons-material';
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import CustomMenu from './menu/CustomMenu';
@@ -44,6 +45,7 @@ const Header: React.FC = () => {
     useState<null | HTMLElement>(null);
   const {
     goToDashboard,
+    goToEmpresas,
     goToConvenios,
     goToPasantias,
     goToPagos,
@@ -71,6 +73,7 @@ const Header: React.FC = () => {
 
   const navItems = [
     { label: 'Inicio', icon: <Dashboard />, onClick: goToDashboard },
+    { label: 'Empresas', icon: <Domain />, onClick: goToEmpresas },
     { label: 'Convenios', icon: <Business />, onClick: goToConvenios },
     { label: 'Pasantías', icon: <School />, onClick: goToPasantias },
     { label: 'Pagos', icon: <Payment />, onClick: goToPagos },

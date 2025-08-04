@@ -1,4 +1,4 @@
-# Apex.UI - Sistema de Gestión de Pasantías
+# Sistema de Gestión de Pasantías
 
 Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript, Material-UI y Vite.
 
@@ -742,6 +742,14 @@ src/pages/[PageName]/
 - **Tipos**: Usar `FieldType` para tipos de campos
 - **Helpers**: Usar helpers predefinidos para formularios comunes
 - **noValidate**: Siempre usar `noValidate` para control total
+
+### ElementCardGenerica
+
+- **Metadata**: Definir cartas usando `FieldMetadata` con auto-detección de tipos
+- **Formateo**: Automático para fechas, monedas, emails y booleanos
+- **Acciones**: Opcionales (editar, expandir, eliminar) usando callbacks
+- **Responsive**: Adaptable con Grid de MUI
+- **Exclusión**: Automática de campos como id, fechaCreacion, eliminado
 
 ### TypeScript
 
