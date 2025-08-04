@@ -1,22 +1,11 @@
-import { Box, Typography, Chip } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import React from 'react';
-
-const StyledWelcomeSection = styled(Box)(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  padding: theme.spacing(3),
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-  borderRadius: theme.spacing(2),
-  textAlign: 'center',
-}));
-
-interface WelcomeSectionProps {
-  title: string;
-  subtitle: string;
-  statusLabel?: string;
-  statusColor?: 'success' | 'error' | 'warning' | 'info';
-}
+import { WelcomeSectionProps } from '../types';
+import {
+  ContenedorBienvenida,
+  TituloBienvenida,
+  SubtituloBienvenida,
+} from './ComponentesGenericos';
+import { ChipStyled } from './StyledComponents';
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   title,
@@ -25,25 +14,11 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   statusColor = 'success',
 }) => {
   return (
-    <StyledWelcomeSection>
-      <Typography
-        variant='h4'
-        component='h1'
-        gutterBottom
-        sx={{ fontWeight: 600 }}
-      >
-        {title}
-      </Typography>
-      <Typography variant='subtitle1' sx={{ opacity: 0.9 }}>
-        {subtitle}
-      </Typography>
-      <Chip
-        label={statusLabel}
-        color={statusColor}
-        size='small'
-        sx={{ mt: 2 }}
-      />
-    </StyledWelcomeSection>
+    <ContenedorBienvenida>
+      <TituloBienvenida>{title}</TituloBienvenida>
+      <SubtituloBienvenida>{subtitle}</SubtituloBienvenida>
+      <ChipStyled label={statusLabel} color={statusColor} size='small' />
+    </ContenedorBienvenida>
   );
 };
 

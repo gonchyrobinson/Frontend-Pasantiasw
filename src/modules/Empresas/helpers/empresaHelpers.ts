@@ -62,3 +62,29 @@ export const getEmpresasStats = (empresas: EmpresaDto[]) => {
 
   return { total, activas, inactivas, porTipo };
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const processEmpresasResponse = (response: any): EmpresaDto[] => {
+  if (!response) return [];
+  return Array.isArray(response)
+    ? response
+    : response?.data && Array.isArray(response.data)
+      ? response.data
+      : [];
+};
+
+export const applyEmpresasFilters = (
+  empresas: EmpresaDto[],
+  searchText: string,
+  vigenciaFilter: string,
+  tipoContratoFilter: string
+): EmpresaDto[] => {
+  let filtered = filterEmpresas(empresas, searchText);
+  if (vigenciaFilter) {
+    filtered = filtered.filter(e => e.vigencia === vigenciaFilter);
+  }
+  if (tipoContratoFilter) {
+    filtered = filtered.filter(e => e.tipoContrato === tipoContratoFilter);
+  }
+  return filtered;
+};

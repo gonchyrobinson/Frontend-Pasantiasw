@@ -31,3 +31,16 @@ export interface EmpresasState {
   error: string | null;
   empresas: EmpresaDto[];
 }
+
+export interface EmpresasFiltersState {
+  searchText: string;
+  vigenciaFilter: string;
+  tipoContratoFilter: string;
+}
+
+export interface EmpresasStats {
+  total: number;
+  activas: number;
+  inactivas: number;
+  porTipo: Record<string, number>;
+}

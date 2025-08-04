@@ -3,18 +3,26 @@ import {
   Container,
   Typography,
   Box,
-  Button,
   Alert,
   CircularProgress,
-  Fab,
+  Button,
 } from '@mui/material';
-import { Add, Refresh } from '@mui/icons-material';
+import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
 import { EmpresaDto } from './types';
-import { filterEmpresas } from './helpers/empresaHelpers';
+import {
+  processEmpresasResponse,
+  applyEmpresasFilters,
+} from './helpers/empresaHelpers';
 import EmpresasGrid from './components/EmpresasGrid';
 import EmpresasFilters from './components/EmpresasFilters';
 import EmpresasStats from './components/EmpresasStats';
+import {
+  ContenedorHeader,
+  BotonNuevaEmpresa,
+  FabNuevaEmpresa,
+} from './components/ComponentesPersonalizados';
+import { ContenedorLoading } from './components/StyledComponents';
 
 const Empresas: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -29,21 +37,16 @@ const Empresas: React.FC = () => {
   } = useApiQuery<EmpresaDto[]>('/empresas');
 
   const empresas = useMemo(() => {
-    if (!empresasResponse) return [];
-    return Array.isArray(empresasResponse)
-      ? empresasResponse
-      : empresasResponse?.data && Array.isArray(empresasResponse.data)
-        ? empresasResponse.data
-        : [];
+    return processEmpresasResponse(empresasResponse);
   }, [empresasResponse]);
 
   const filteredEmpresas = useMemo(() => {
-    let filtered = filterEmpresas(empresas, searchText);
-    if (vigenciaFilter)
-      filtered = filtered.filter(e => e.vigencia === vigenciaFilter);
-    if (tipoContratoFilter)
-      filtered = filtered.filter(e => e.tipoContrato === tipoContratoFilter);
-    return filtered;
+    return applyEmpresasFilters(
+      empresas,
+      searchText,
+      vigenciaFilter,
+      tipoContratoFilter
+    );
   }, [empresas, searchText, vigenciaFilter, tipoContratoFilter]);
 
   const handleClearFilters = () => {
@@ -55,16 +58,9 @@ const Empresas: React.FC = () => {
   if (isLoading) {
     return (
       <Container maxWidth='lg' sx={{ py: 3 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 400,
-          }}
-        >
+        <ContenedorLoading>
           <CircularProgress size={60} />
-        </Box>
+        </ContenedorLoading>
       </Container>
     );
   }
@@ -89,14 +85,7 @@ const Empresas: React.FC = () => {
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'between',
-          alignItems: 'center',
-          mb: 4,
-        }}
-      >
+      <ContenedorHeader>
         <Box>
           <Typography variant='h4' component='h1' gutterBottom>
             Gestión de Empresas
@@ -105,17 +94,12 @@ const Empresas: React.FC = () => {
             Administra las empresas del sistema de pasantías
           </Typography>
         </Box>
-        <Button
-          variant='contained'
-          startIcon={<Add />}
+        <BotonNuevaEmpresa
           onClick={() => {
             // TODO: Implementar creación de empresa
           }}
-          sx={{ ml: 'auto' }}
-        >
-          Nueva Empresa
-        </Button>
-      </Box>
+        />
+      </ContenedorHeader>
 
       <EmpresasStats empresas={empresas} />
 
@@ -144,16 +128,11 @@ const Empresas: React.FC = () => {
         }}
       />
 
-      <Fab
-        color='primary'
-        aria-label='add empresa'
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+      <FabNuevaEmpresa
         onClick={() => {
           // TODO: Implementar creación rápida de empresa
         }}
-      >
-        <Add />
-      </Fab>
+      />
     </Container>
   );
 };

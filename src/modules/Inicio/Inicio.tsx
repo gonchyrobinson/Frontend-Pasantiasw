@@ -1,13 +1,4 @@
 import { Business, School, Payment, Add } from '@mui/icons-material';
-import {
-  Typography,
-  Grid,
-  Container,
-  Alert,
-  SpeedDial,
-  SpeedDialAction,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { useApiQuery } from '../../hooks/useApi';
@@ -24,12 +15,14 @@ import {
   getProgressItems,
   hasErrors,
 } from './helpers/statsHelpers';
-
-// Styled components
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-}));
+import {
+  ContenedorPrincipal,
+  ContenedorGrid,
+  ItemGrid,
+  TituloSeccion,
+  AlertaError,
+  SpeedDialRapido,
+} from './components/ComponentesGenericos';
 
 const Inicio: React.FC = () => {
   // Example API calls - replace with actual endpoints
@@ -81,7 +74,7 @@ const Inicio: React.FC = () => {
   const progressItems = getProgressItems();
 
   return (
-    <StyledContainer maxWidth='lg'>
+    <ContenedorPrincipal>
       <WelcomeSection
         title='Bienvenido al Sistema de Gestión de Pasantías'
         subtitle='Secretaría de Bienestar Estudiantil'
@@ -90,9 +83,9 @@ const Inicio: React.FC = () => {
       />
 
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <ContenedorGrid>
         {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <ItemGrid key={index}>
             <StatsCard
               title={stat.title}
               value={stat.value}
@@ -104,53 +97,36 @@ const Inicio: React.FC = () => {
               trend={stat.trend}
               trendDirection={stat.trendDirection}
             />
-          </Grid>
+          </ItemGrid>
         ))}
-      </Grid>
+      </ContenedorGrid>
 
       {/* Progress Section */}
       <ProgressSection title='Progreso del Sistema' items={progressItems} />
 
       {/* Quick Actions */}
-      <Typography variant='h5' component='h2' gutterBottom sx={{ mt: 4 }}>
-        Acciones Rápidas
-      </Typography>
-      <Grid container spacing={3}>
+      <TituloSeccion>Acciones Rápidas</TituloSeccion>
+      <ContenedorGrid>
         {quickActions.map((action, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <ItemGrid key={index}>
             <ActionCard
               title={action.title}
               description={action.description}
               icon={action.icon}
               color={action.color}
             />
-          </Grid>
+          </ItemGrid>
         ))}
-      </Grid>
+      </ContenedorGrid>
 
       {/* Error Display */}
       {hasErrors(!!conveniosError, !!pasantiasError, !!pagosError) && (
-        <Alert severity='error' sx={{ mt: 3 }}>
-          Error al cargar los datos. Por favor, intente nuevamente.
-        </Alert>
+        <AlertaError mensaje='Error al cargar los datos. Por favor, intente nuevamente.' />
       )}
 
       {/* Speed Dial for Quick Actions */}
-      <SpeedDial
-        ariaLabel='Acciones rápidas'
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
-        icon={<Add />}
-      >
-        {speedDialActions.map(action => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            onClick={action.action}
-          />
-        ))}
-      </SpeedDial>
-    </StyledContainer>
+      <SpeedDialRapido actions={speedDialActions} icon={<Add />} />
+    </ContenedorPrincipal>
   );
 };
 

@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Box, Typography, Paper, TextField } from '@mui/material';
+import { Box, Typography, Paper, TextField, Button, Fab } from '@mui/material';
 
 export const EmptyStateStyled = styled(Box)(({ theme }) => ({
   textAlign: 'center',
@@ -70,4 +70,35 @@ export const CampoBusquedaStyled = styled(TextField)(({ theme }) => ({
     marginRight: theme.spacing(1),
     color: theme.palette.text.secondary,
   },
+}));
+
+export const ContenedorLoadingStyled = styled(Box)(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: 400,
+}));
+
+export const ContenedorHeaderStyled = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: theme.spacing(4),
+}));
+
+export const BotonNuevaEmpresaStyled = styled(Button)(() => ({
+  marginLeft: 'auto',
+}));
+
+export const FabStyled = styled(Fab)(() => ({
+  position: 'fixed',
+  bottom: 16,
+  right: 16,
+}));
+
+export const ContenedorLoading = styled(Box)(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: 400,
 }));

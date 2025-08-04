@@ -751,6 +751,115 @@ src/pages/[PageName]/
 - **Responsive**: Adaptable con Grid de MUI
 - **Exclusión**: Automática de campos como id, fechaCreacion, eliminado
 
+### Organización de Módulos
+
+#### **Cuatro Reglas Esenciales para Estructura de Módulos**
+
+Al trabajar con cualquier módulo (ej: `@Empresas/`, `@Inicio/`, `@Login/`, `@CreacionUsuarios/`), seguir estas **4 reglas obligatorias**:
+
+##### **1. Regla StyledComponents.tsx**
+
+- **Ubicación**: `src/modules/[ModuleName]/components/StyledComponents.tsx`
+- **Propósito**: Centralizar todos los componentes styled con propiedades `sx`
+- **Contenido**: Todos los componentes MUI que usan prop `sx` para estilos
+- **Nomenclatura**: Usar nombres descriptivos terminando con `Styled` (ej: `ContenedorPrincipalStyled`, `TarjetaEstadisticaStyled`)
+- **Ejemplo**:
+  ```typescript
+  export const ContenedorPrincipalStyled = styled(Container)(({ theme }) => ({
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.background.default,
+  }));
+  ```
+
+##### **2. Regla ComponentesGenericos.tsx**
+
+- **Ubicación**: `src/modules/[ModuleName]/components/ComponentesGenericos.tsx`
+- **Propósito**: Alojar componentes MUI reutilizables con lógica personalizada (NO solo `sx`)
+- **Contenido**: Componentes con propiedades como `elevation`, `fullWidth`, `variant`, etc.
+- **Nomenclatura**: Usar nombres descriptivos sin sufijo `Styled` (ej: `ContenedorPrincipal`, `TarjetaEstadistica`)
+- **Ejemplo**:
+  ```typescript
+  export const TarjetaEstadistica = ({ children }: { children: React.ReactNode }) => (
+    <StyledStatsCard elevation={2}>{children}</StyledStatsCard>
+  );
+  ```
+
+##### **3. Regla de Organización de Tipos**
+
+- **Ubicación**: `src/modules/[ModuleName]/types/index.ts`
+- **Propósito**: Centralizar todas las interfaces y tipos TypeScript del módulo
+- **Contenido**: Todas las interfaces, tipos, enums y definiciones de tipos
+- **Nomenclatura**: Usar PascalCase para interfaces y tipos (ej: `EmpresaDto`, `LoginCredentials`)
+- **Ejemplo**:
+
+  ```typescript
+  export interface EmpresaDto {
+    idEmpresa: number;
+    nombre: string;
+    // ... otras propiedades
+  }
+
+  export type VigenciaType = 'vigente' | 'no_vigente';
+  export const Vigencia = {
+    Vigente: 'vigente' as const,
+    NoVigente: 'no_vigente' as const,
+  } as const;
+  ```
+
+##### **4. Regla de Organización de Helpers**
+
+- **Ubicación**: `src/modules/[ModuleName]/helpers/[feature]Helpers.ts`
+- **Propósito**: Extraer lógica de negocio y funciones complejas de componentes
+- **Contenido**: Funciones puras, procesamiento de datos, lógica de validación, generación de metadata
+- **Nomenclatura**: Usar camelCase con nombres descriptivos (ej: `getEmpresaMetadata`, `filterEmpresas`)
+- **Ejemplo**:
+
+  ```typescript
+  export const getEmpresaMetadata = (): FieldMetadata[] => [
+    { name: 'nombre', label: 'Nombre de la Empresa' },
+    // ... otros campos
+  ];
+
+  export const filterEmpresas = (
+    empresas: EmpresaDto[],
+    searchText: string
+  ): EmpresaDto[] => {
+    // ... lógica de filtrado
+  };
+  ```
+
+#### **Guías de Implementación**
+
+##### **Cuándo Usar Cada Archivo**:
+
+- **StyledComponents.tsx**: Componentes con prop `sx` para estilos
+- **ComponentesGenericos.tsx**: Componentes con otras props de MUI (elevation, variant, etc.)
+- **types/index.ts**: Todas las interfaces y definiciones de tipos TypeScript
+- **helpers/[feature]Helpers.ts**: Lógica de negocio y funciones de procesamiento de datos
+
+##### **Prioridad de Extracción de Componentes**:
+
+1. **Primero**: Extraer componentes con `sx` a `StyledComponents.tsx`
+2. **Segundo**: Extraer componentes con otras props de MUI a `ComponentesGenericos.tsx`
+3. **Tercero**: Extraer interfaces a `types/index.ts`
+4. **Cuarto**: Extraer lógica de negocio a `helpers/[feature]Helpers.ts`
+
+##### **Organización de Imports**:
+
+- Importar componentes styled desde `./StyledComponents`
+- Importar componentes genéricos desde `./ComponentesGenericos`
+- Importar tipos desde `../types`
+- Importar helpers desde `../helpers/[feature]Helpers`
+
+##### **Estándares de Calidad de Código**:
+
+- Mantener componentes simples, cortos y funcionales
+- Usar nombres significativos para todas las exportaciones
+- Mantener convenciones de nomenclatura consistentes
+- Evitar props `sx` inline en archivos de componentes principales
+- Extraer lógica compleja a funciones helper
+- Usar tipos TypeScript apropiados en todo el código
+
 ### TypeScript
 
 - **Strict Mode**: Habilitado

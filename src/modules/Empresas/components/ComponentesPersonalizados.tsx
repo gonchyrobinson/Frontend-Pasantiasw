@@ -16,6 +16,7 @@ import {
   CheckCircle,
   Cancel,
   Category,
+  Add,
 } from '@mui/icons-material';
 import {
   TituloPrincipalStyled,
@@ -27,6 +28,9 @@ import {
   ContenedorFiltrosInfoStyled,
   TarjetaEstadisticaStyled,
   CampoBusquedaStyled,
+  ContenedorHeaderStyled,
+  BotonNuevaEmpresaStyled,
+  FabStyled,
 } from './StyledComponents';
 import { Vigencia, TipoContrato } from '../types';
 
@@ -244,3 +248,26 @@ export const IconoInactivo = () => <Cancel />;
 export const IconoCategoria = () => <Category />;
 export const IconoBusqueda = () => <Search />;
 export const IconoLimpiar = () => <Clear />;
+
+// Componentes para el componente principal
+export const ContenedorHeader = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => <ContenedorHeaderStyled>{children}</ContenedorHeaderStyled>;
+
+export const BotonNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
+  <BotonNuevaEmpresaStyled
+    variant='contained'
+    startIcon={<Add />}
+    onClick={onClick}
+  >
+    Nueva Empresa
+  </BotonNuevaEmpresaStyled>
+);
+
+export const FabNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
+  <FabStyled color='primary' aria-label='add empresa' onClick={onClick}>
+    <Add />
+  </FabStyled>
+);

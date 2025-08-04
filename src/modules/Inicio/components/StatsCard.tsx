@@ -1,38 +1,19 @@
 import { TrendingUp, TrendingDown } from '@mui/icons-material';
-import { Card, CardContent, Box, Typography, Skeleton } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { CardContent, Skeleton } from '@mui/material';
 import React from 'react';
-
-const StyledStatsCard = styled(Card)(({ theme }) => ({
-  height: '100%',
-  transition: 'all 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    boxShadow: theme.shadows[8],
-  },
-}));
-
-const StatIcon = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 48,
-  height: 48,
-  borderRadius: '50%',
-  marginBottom: theme.spacing(1),
-}));
-
-interface StatsCardProps {
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-  color: string;
-  bgColor: string;
-  loading?: boolean;
-  error?: boolean;
-  trend: string;
-  trendDirection: 'up' | 'down';
-}
+import { StatsCardProps } from '../types';
+import {
+  TarjetaEstadistica,
+  IconoEstadisticaCard,
+  TituloEstadistica,
+  ValorEstadistica,
+  TextoTendencia,
+  TextoError,
+} from './ComponentesGenericos';
+import {
+  BoxFlexGapStyled,
+  BoxFlexBetweenStatsStyled,
+} from './StyledComponents';
 
 const StatsCard: React.FC<StatsCardProps> = ({
   title,
@@ -46,54 +27,31 @@ const StatsCard: React.FC<StatsCardProps> = ({
   trendDirection,
 }) => {
   return (
-    <StyledStatsCard>
+    <TarjetaEstadistica>
       <CardContent>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mb: 2,
-          }}
-        >
-          <StatIcon sx={{ backgroundColor: bgColor, color: color }}>
+        <BoxFlexBetweenStatsStyled>
+          <IconoEstadisticaCard bgColor={bgColor} color={color}>
             {icon}
-          </StatIcon>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          </IconoEstadisticaCard>
+          <BoxFlexGapStyled>
             {trendDirection === 'up' ? (
               <TrendingUp fontSize='small' color='success' />
             ) : (
               <TrendingDown fontSize='small' color='error' />
             )}
-            <Typography
-              variant='caption'
-              color={trendDirection === 'up' ? 'success.main' : 'error.main'}
-            >
-              {trend}
-            </Typography>
-          </Box>
-        </Box>
-        <Typography variant='h6' component='h2' gutterBottom>
-          {title}
-        </Typography>
+            <TextoTendencia direction={trendDirection}>{trend}</TextoTendencia>
+          </BoxFlexGapStyled>
+        </BoxFlexBetweenStatsStyled>
+        <TituloEstadistica>{title}</TituloEstadistica>
         {loading ? (
           <Skeleton variant='text' width='60%' />
         ) : error ? (
-          <Typography color='error' variant='body2'>
-            Error al cargar
-          </Typography>
+          <TextoError>Error al cargar</TextoError>
         ) : (
-          <Typography
-            variant='h4'
-            component='p'
-            color='primary'
-            sx={{ fontWeight: 600 }}
-          >
-            {value}
-          </Typography>
+          <ValorEstadistica>{value}</ValorEstadistica>
         )}
       </CardContent>
-    </StyledStatsCard>
+    </TarjetaEstadistica>
   );
 };
 

@@ -1,36 +1,5 @@
 import { Convenio, Pasantia, Pago } from '../../../types';
-
-export interface StatItem {
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-  color: string;
-  bgColor: string;
-  loading: boolean;
-  error: boolean;
-  trend: string;
-  trendDirection: 'up' | 'down';
-}
-
-export interface QuickAction {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  path: string;
-  color: string;
-}
-
-export interface SpeedDialAction {
-  icon: React.ReactNode;
-  name: string;
-  action: () => void;
-}
-
-export interface ProgressItem {
-  label: string;
-  value: number;
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
-}
+import { StatItem, QuickAction, SpeedDialAction, ProgressItem } from '../types';
 
 /**
  * Calculate statistics from API data
