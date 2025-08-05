@@ -2,7 +2,7 @@
 export const ROUTES = {
   // Rutas públicas
   LOGIN: '/login',
-  REGISTER: '/register',
+  REGISTRAR_USUARIO: '/register',
 
   // Rutas protegidas
   DASHBOARD: '/dashboard',
@@ -10,6 +10,8 @@ export const ROUTES = {
 
   // Módulos principales
   EMPRESAS: '/empresas',
+  EMPRESAS_CREAR: '/empresas/crear',
+  EMPRESAS_EDITAR: '/empresas/editar',
   CONVENIOS: '/convenios',
   PASANTIAS: '/pasantias',
   PAGOS: '/pagos',

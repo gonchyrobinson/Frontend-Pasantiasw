@@ -2,7 +2,9 @@ import { FormMetadata } from '../../../FormularioGenerico';
 import { RegisterData } from '../types';
 
 export const getRegistroMetadata = (): FormMetadata => ({
+  title: 'Crear Cuenta',
   submitButtonText: 'Registrarse',
+  cancelButtonText: 'Regresar',
   fields: [
     {
       name: 'username',

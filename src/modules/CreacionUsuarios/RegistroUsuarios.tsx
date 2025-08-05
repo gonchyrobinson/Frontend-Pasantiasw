@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../hooks/useNavigation';
 import { FormularioGenerico } from '../../FormularioGenerico';
+import { ROUTES } from '../../helpers/routesHelper';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import {
   ContenedorPrincipal,
   TarjetaRegistro,
-  TituloRegistro,
-  AlertaError,
 } from './components/ComponentesGenericos';
 import {
   getRegistroMetadata,
@@ -17,21 +19,21 @@ import {
 import { RegisterData } from './types';
 
 const RegistroUsuarios = () => {
-  const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { redirectAfterLogin } = useNavigation();
+  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
 
   const registerMetadata = getRegistroMetadata();
 
   const handleSubmit = async (data: Record<string, unknown>) => {
     const passwordError = validatePasswords(data);
     if (passwordError) {
-      setError(passwordError);
+      showError(passwordError);
       return;
     }
 
     setLoading(true);
-    setError('');
 
     try {
       const registerData = data as unknown as RegisterData;
@@ -40,28 +42,37 @@ const RegistroUsuarios = () => {
         email: registerData.email,
         password: registerData.password,
       });
+
       authHelper.saveToken(response.data.token);
-      redirectAfterLogin();
+      showSuccess('Usuario registrado exitosamente');
+
+      setTimeout(() => {
+        redirectAfterLogin();
+      }, 2000);
     } catch (error: unknown) {
-      setError(handleRegistrationError(error));
+      const errorMessage = handleRegistrationError(error);
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleRegresar = () => {
+    navigate(ROUTES.LOGIN);
+  };
+
   return (
     <ContenedorPrincipal>
       <TarjetaRegistro>
-        <TituloRegistro>Crear Cuenta</TituloRegistro>
-
-        {error && <AlertaError mensaje={error} />}
-
         <FormularioGenerico
           metadata={registerMetadata}
           onSubmit={handleSubmit}
           loading={loading}
+          onCancel={handleRegresar}
         />
       </TarjetaRegistro>
+
+      <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
     </ContenedorPrincipal>
   );
 };

@@ -23,6 +23,7 @@ import {
   AlertaError,
   SpeedDialRapido,
 } from './components/ComponentesGenericos';
+import { ROUTES } from '../../helpers/routesHelper';
 
 const Inicio: React.FC = () => {
   // Example API calls - replace with actual endpoints
@@ -30,17 +31,17 @@ const Inicio: React.FC = () => {
     data: conveniosData,
     isLoading: conveniosLoading,
     error: conveniosError,
-  } = useApiQuery<Convenio[]>('/convenios');
+  } = useApiQuery<Convenio[]>(ROUTES.CONVENIOS);
   const {
     data: pasantiasData,
     isLoading: pasantiasLoading,
     error: pasantiasError,
-  } = useApiQuery<Pasantia[]>('/pasantias');
+  } = useApiQuery<Pasantia[]>(ROUTES.PASANTIAS);
   const {
     data: pagosData,
     isLoading: pagosLoading,
     error: pagosError,
-  } = useApiQuery<Pago[]>('/pagos');
+  } = useApiQuery<Pago[]>(ROUTES.PAGOS);
 
   // Icons
   const icons = {

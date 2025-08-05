@@ -15,7 +15,7 @@ export const useNavigation = () => {
   };
 
   const goToRegister = () => {
-    navigate(ROUTES.REGISTER);
+    navigate(ROUTES.REGISTRAR_USUARIO);
   };
 
   const goBack = () => {

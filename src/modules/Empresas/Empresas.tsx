@@ -1,14 +1,17 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
   Box,
   Alert,
-  CircularProgress,
   Button,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
+import { useSnackbar } from '../../hooks/useSnackbar';
 import { EmpresaDto } from './types';
 import {
   processEmpresasResponse,
@@ -22,9 +25,13 @@ import {
   BotonNuevaEmpresa,
   FabNuevaEmpresa,
 } from './components/ComponentesPersonalizados';
-import { ContenedorLoading } from './components/StyledComponents';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
+import { ROUTES } from '../../helpers/routesHelper';
 
 const Empresas: React.FC = () => {
+  const navigate = useNavigate();
+  const { snackbar, showError, hideSnackbar } = useSnackbar();
   const [searchText, setSearchText] = useState('');
   const [vigenciaFilter, setVigenciaFilter] = useState('');
   const [tipoContratoFilter, setTipoContratoFilter] = useState('');
@@ -35,6 +42,8 @@ const Empresas: React.FC = () => {
     error,
     refetch,
   } = useApiQuery<EmpresaDto[]>('/empresas');
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const empresas = useMemo(() => {
     return processEmpresasResponse(empresasResponse);
@@ -55,15 +64,25 @@ const Empresas: React.FC = () => {
     setTipoContratoFilter('');
   };
 
-  if (isLoading) {
-    return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
-        <ContenedorLoading>
-          <CircularProgress size={60} />
-        </ContenedorLoading>
-      </Container>
-    );
-  }
+  const handleNuevaEmpresa = () => {
+    navigate(ROUTES.EMPRESAS_CREAR);
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      setIsRefreshing(true);
+      await refetch();
+    } catch (error) {
+      showError('Error al actualizar las empresas. Inténtalo de nuevo.');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  const handleEditarEmpresa = (empresa: EmpresaDto) => {
+    navigate(`${ROUTES.EMPRESAS_EDITAR}/${empresa.idEmpresa}`);
+  };
 
   if (error) {
     return (
@@ -94,11 +113,27 @@ const Empresas: React.FC = () => {
             Administra las empresas del sistema de pasantías
           </Typography>
         </Box>
-        <BotonNuevaEmpresa
-          onClick={() => {
-            // TODO: Implementar creación de empresa
-          }}
-        />
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Tooltip title='Actualizar empresas'>
+            <IconButton
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              color='primary'
+              size='large'
+            >
+              <Refresh
+                sx={{
+                  animation: isRefreshing ? 'spin 1s linear infinite' : 'none',
+                  '@keyframes spin': {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
+                  },
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+          <BotonNuevaEmpresa onClick={handleNuevaEmpresa} />
+        </Box>
       </ContenedorHeader>
 
       <EmpresasStats empresas={empresas} />
@@ -115,24 +150,26 @@ const Empresas: React.FC = () => {
         onClearFilters={handleClearFilters}
       />
 
-      <EmpresasGrid
-        empresas={filteredEmpresas}
-        onEmpresaClick={() => {
-          // TODO: Implementar vista detalle de empresa
-        }}
-        onEmpresaEdit={() => {
-          // TODO: Implementar edición de empresa
-        }}
-        onEmpresaDelete={() => {
-          // TODO: Implementar eliminación de empresa
-        }}
-      />
+      {isLoading || isRefreshing ? (
+        <Box sx={{ py: 4 }}>
+          <LoadingSpinner message='Cargando empresas...' />
+        </Box>
+      ) : (
+        <EmpresasGrid
+          empresas={filteredEmpresas}
+          onEmpresaClick={() => {
+            // TODO: Implementar vista detalle de empresa
+          }}
+          onEmpresaEdit={handleEditarEmpresa}
+          onEmpresaDelete={() => {
+            // TODO: Implementar eliminación de empresa
+          }}
+        />
+      )}
 
-      <FabNuevaEmpresa
-        onClick={() => {
-          // TODO: Implementar creación rápida de empresa
-        }}
-      />
+      <FabNuevaEmpresa onClick={handleNuevaEmpresa} />
+
+      <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
     </Container>
   );
 };

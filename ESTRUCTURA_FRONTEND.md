@@ -249,6 +249,32 @@ pages/[PageName]/
 - **Funciones**: camelCase (`fetchData`)
 - **Constantes**: UPPER_SNAKE_CASE (`API_BASE_URL`)
 
+## 🔄 Reglas de Reutilización
+
+### 🎨 StyledComponents
+
+- **Prioridad**: Reutilizar StyledComponents existentes antes de crear nuevos
+- **Ubicación**: Crear en `src/components/styled/` para componentes compartidos
+- **Nomenclatura**: Prefijo `Styled` (ej: `StyledButton`, `StyledCard`)
+- **Props**: Usar props para variaciones (ej: `variant="primary"`, `size="large"`)
+
+### 🧩 ComponentesGenéricos
+
+- **FormularioGenerico**: Usar para todos los formularios nuevos
+- **Campos**: Reutilizar campos existentes antes de crear nuevos
+- **Metadata**: Definir formularios mediante metadata para consistencia
+- **Validaciones**: Usar patrones de validación establecidos
+
+### 📋 Patrones de Reutilización
+
+| Tipo            | Estrategia                                  |
+| --------------- | ------------------------------------------- |
+| **UI Elements** | Crear StyledComponents genéricos con props  |
+| **Forms**       | Usar FormularioGenerico con metadata        |
+| **Layout**      | Reutilizar componentes de Layout existentes |
+| **Navigation**  | Usar componentes de Header/Sidebar          |
+| **Feedback**    | Reutilizar LoadingSpinner, ErrorBoundary    |
+
 ## 🔧 Configuración
 
 ### ⚙️ Vite

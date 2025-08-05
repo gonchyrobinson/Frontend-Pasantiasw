@@ -11,6 +11,8 @@ import {
   FooterFormulario,
   EnlaceRegistro,
 } from './StyledComponents';
+import { ROUTES } from '@/helpers/routesHelper';
+import { useNavigate } from 'react-router-dom';
 
 // Componentes para Login.tsx
 export const ContenedorLogin = ({
@@ -74,4 +76,14 @@ export const EnlaceRegistroLogin = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <EnlaceRegistro component='span'>{children}</EnlaceRegistro>;
+}) => {
+  const navigate = useNavigate();
+  return (
+    <EnlaceRegistro
+      variant='body2'
+      onClick={() => navigate(ROUTES.REGISTRAR_USUARIO)}
+    >
+      {children}
+    </EnlaceRegistro>
+  );
+};

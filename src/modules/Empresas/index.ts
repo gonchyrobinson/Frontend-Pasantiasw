@@ -1,5 +1,7 @@
 export { default as Empresas } from './Empresas';
-export type { EmpresaDto, EmpresasState } from './types';
+export { default as CreacionEmpresas } from './CreacionEmpresas';
+export { default as EditarEmpresa } from './EditarEmpresa';
+export type { EmpresaDto, CreacionEmpresaDto, EmpresasState } from './types';
 export {
   getEmpresaMetadata,
   getEmpresaCardTitle,
@@ -8,3 +10,7 @@ export {
   groupEmpresasByVigencia,
   getEmpresasStats,
 } from './helpers/empresaHelpers';
+export {
+  getCreacionEmpresaMetadata,
+  getEdicionEmpresaMetadata,
+} from './helpers/creacionEmpresaHelpers';

@@ -85,7 +85,7 @@ export const FooterFormulario = styled(Box)(() => ({
   borderTop: '1px solid rgba(0,0,0,0.1)',
 }));
 
-export const EnlaceRegistro = styled(Box)(() => ({
+export const EnlaceRegistro = styled(Typography)(() => ({
   color: 'primary.main',
   cursor: 'pointer',
   fontWeight: 600,

@@ -1,0 +1,154 @@
+# 🎨 React Code Style Guide
+
+## 🔄 Reglas de Reutilización
+
+### 🎨 StyledComponents
+
+- **Prioridad**: Reutilizar StyledComponents existentes antes de crear nuevos
+- **Ubicación**: Crear en `src/components/styled/` para componentes compartidos
+- **Nomenclatura**: Prefijo `Styled` (ej: `StyledButton`, `StyledCard`)
+- **Props**: Usar props para variaciones (ej: `variant="primary"`, `size="large"`)
+
+### 🧩 ComponentesGenéricos
+
+- **FormularioGenerico**: Usar para todos los formularios nuevos
+- **Campos**: Reutilizar campos existentes antes de crear nuevos
+- **Metadata**: Definir formularios mediante metadata para consistencia
+- **Validaciones**: Usar patrones de validación establecidos
+
+### 📋 Patrones de Reutilización
+
+| Tipo | Estrategia |
+|------|------------|
+| **UI Elements** | Crear StyledComponents genéricos con props |
+| **Forms** | Usar FormularioGenerico con metadata |
+| **Layout** | Reutilizar componentes de Layout existentes |
+| **Navigation** | Usar componentes de Header/Sidebar |
+| **Feedback** | Reutilizar LoadingSpinner, ErrorBoundary |
+
+## 🎯 Convenciones de Nomenclatura
+
+### 📁 Carpetas
+- **Páginas**: PascalCase (`Home/`)
+- **Componentes**: PascalCase (`components/`)
+- **Hooks**: camelCase (`hooks/`)
+
+### 📄 Archivos
+- **Componentes**: PascalCase (`Header.tsx`)
+- **Hooks**: camelCase (`useApi.ts`)
+- **Tipos**: PascalCase (`ApiResponse`)
+- **Tests**: `.test.tsx` o `.spec.tsx`
+
+### 🏷️ Variables y Funciones
+- **Componentes**: PascalCase (`UserProfile`)
+- **Hooks**: camelCase (`useApi`)
+- **Funciones**: camelCase (`fetchData`)
+- **Constantes**: UPPER_SNAKE_CASE (`API_BASE_URL`)
+
+## 🏗️ Patrones de Arquitectura
+
+### 📁 Estructura por Páginas
+Cada página sigue esta estructura:
+```
+pages/[PageName]/
+├── index.tsx              # Componente principal
+├── index.test.tsx         # Tests de la página
+├── components/            # Componentes específicos
+│   ├── ComponentName.tsx
+│   └── index.ts          # Export de componentes
+└── helpers/              # Funciones auxiliares
+    └── helperName.ts
+```
+
+### 🧩 Componentes
+- **Compartidos**: En `src/components/`
+- **Específicos**: En `pages/[PageName]/components/`
+- **Reutilizables**: Preferir componentes compartidos
+
+### 🎣 Hooks
+- **Personalizados**: En `src/hooks/`
+- **Convención**: Prefijo `use` (ej: `useApi`)
+
+### 🔄 Contextos
+- **Globales**: En `src/contexts/`
+- **Uso**: Para estado compartido entre componentes
+
+## 📦 Dependencias Principales
+
+### 🎨 UI Framework
+- **Material-UI**: Componentes de UI
+- **Emotion**: CSS-in-JS para estilos
+
+### 🔄 State Management
+- **React Query**: Gestión de estado del servidor
+- **React Context**: Estado global
+
+### 📋 Formularios
+- **React Hook Form**: Gestión de formularios
+- **FormularioGenerico**: Sistema de formularios genéricos
+
+### 🛣️ Routing
+- **React Router**: Navegación entre páginas
+
+### 🧪 Testing
+- **Vitest**: Framework de testing
+- **React Testing Library**: Testing de componentes
+
+### 🛠️ Development
+- **Vite**: Build tool y dev server
+- **TypeScript**: Tipado estático
+- **ESLint + Prettier**: Linting y formateo
+
+## 🔧 Configuración
+
+### ⚙️ Vite
+- **Dev Server**: Puerto 3000
+- **Hot Reload**: Habilitado
+- **Proxy**: Configurado para `/api/*`
+
+### 📝 TypeScript
+- **Target**: ES2020
+- **Strict Mode**: Habilitado
+- **Path Mapping**: `@/*` → `src/*`
+
+### 🧪 Testing
+- **Environment**: jsdom
+- **Setup**: `src/test/setup.ts`
+- **Coverage**: v8 provider
+
+## 🚀 Flujo de Desarrollo
+
+### 📝 Crear Nueva Página
+1. Crear carpeta en `src/pages/[PageName]/`
+2. Crear `index.tsx` con el componente principal
+3. Crear `index.test.tsx` para tests
+4. Agregar ruta en `AppRoutes.tsx`
+5. Crear componentes específicos en `components/`
+6. Crear helpers en `helpers/` si es necesario
+
+### 🧩 Crear Nuevo Componente
+1. Crear archivo en `src/components/` o `pages/[PageName]/components/`
+2. Usar PascalCase para el nombre
+3. Crear test correspondiente
+4. Exportar desde `index.ts` si es en carpeta
+
+### 📋 Crear Nuevo Campo de Formulario
+1. Crear archivo en `src/FormularioGenerico/components/`
+2. Seguir el patrón de los campos existentes
+3. Agregar tipo en `src/FormularioGenerico/types/index.ts`
+4. Integrar en `FormularioGenerico.tsx`
+5. Crear test correspondiente
+
+### 🎣 Crear Nuevo Hook
+1. Crear archivo en `src/hooks/`
+2. Usar prefijo `use` y camelCase
+3. Crear test correspondiente
+4. Documentar parámetros y retorno
+
+---
+
+**Este estilo de código sigue las mejores prácticas de React y facilita el mantenimiento y escalabilidad del proyecto.** 🎉
+description:
+globs:
+alwaysApply: false
+---

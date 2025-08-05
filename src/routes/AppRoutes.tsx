@@ -11,6 +11,8 @@ import Layout from '../modules/Shared/components/Layout';
 import Inicio from '../modules/Inicio/Inicio';
 import Login from '../modules/Login/Login';
 import Empresas from '../modules/Empresas/Empresas';
+import CreacionEmpresas from '../modules/Empresas/CreacionEmpresas';
+import EditarEmpresa from '../modules/Empresas/EditarEmpresa';
 import Convenios from '../modules/Convenios/Convenios';
 import Pasantias from '../modules/Pasantias/Pasantias';
 import Pagos from '../modules/Pagos/Pagos';
@@ -28,7 +30,7 @@ const AppRoutes: React.FC = () => {
 
         {/* Rutas públicas */}
         <Route path={ROUTES.LOGIN} element={<Login />} />
-        <Route path={ROUTES.REGISTER} element={<RegistroUsuarios />} />
+        <Route path={ROUTES.REGISTRAR_USUARIO} element={<RegistroUsuarios />} />
 
         {/* Rutas protegidas */}
         <Route
@@ -47,6 +49,26 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <Empresas />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.EMPRESAS_CREAR}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CreacionEmpresas />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.EMPRESAS_EDITAR}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditarEmpresa />
               </Layout>
             </ProtectedRoute>
           }

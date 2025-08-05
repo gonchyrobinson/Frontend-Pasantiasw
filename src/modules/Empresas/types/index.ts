@@ -26,6 +26,18 @@ export interface EmpresaDto {
   sudocu: string; // ISO format: YYYY-MM-DD
 }
 
+export interface CreacionEmpresaDto {
+  nombre: string;
+  vigencia: VigenciaType;
+  fechaInicio: string; // ISO format: YYYY-MM-DD
+  fechaFin: string; // ISO format: YYYY-MM-DD
+  tipoContrato: TipoContratoType;
+  encargado: string;
+  celular: string;
+  correoElectronico: string;
+  sudocu: string; // ISO format: YYYY-MM-DD
+}
+
 export interface EmpresasState {
   loading: boolean;
   error: string | null;
