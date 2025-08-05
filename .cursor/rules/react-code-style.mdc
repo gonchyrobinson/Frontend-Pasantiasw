@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Apex.UI Code Style and Practices
+# Code Style and Practices
 
 ## TypeScript and React Guidelines
 
@@ -163,3 +163,99 @@ src/
    - Use meaningful commit messages
    - Follow Git flow branching strategy
    - Keep PRs focused and smal
+
+## Module Organization Rules
+
+### **Four Essential Rules for Module Structure**
+
+When working with any module (e.g., `@Empresas/`, `@Inicio/`, `@Login/`, `@CreacionUsuarios/`), follow these **4 mandatory rules**:
+
+#### **1. StyledComponents.tsx Rule**
+- **Location**: `src/modules/[ModuleName]/components/StyledComponents.tsx`
+- **Purpose**: Centralize all styled components with `sx` properties
+- **Content**: All MUI components that use `sx` prop for styling
+- **Naming**: Use descriptive names ending with `Styled` (e.g., `ContenedorPrincipalStyled`, `TarjetaEstadisticaStyled`)
+- **Example**:
+  ```typescript
+  export const ContenedorPrincipalStyled = styled(Container)(({ theme }) => ({
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.background.default,
+  }));
+  ```
+
+#### **2. ComponentesGenericos.tsx Rule**
+- **Location**: `src/modules/[ModuleName]/components/ComponentesGenericos.tsx`
+- **Purpose**: House reusable MUI components with custom logic (NOT just `sx`)
+- **Content**: Components with properties like `elevation`, `fullWidth`, `variant`, etc.
+- **Naming**: Use descriptive names without `Styled` suffix (e.g., `ContenedorPrincipal`, `TarjetaEstadistica`)
+- **Example**:
+  ```typescript
+  export const TarjetaEstadistica = ({ children }: { children: React.ReactNode }) => (
+    <StyledStatsCard elevation={2}>{children}</StyledStatsCard>
+  );
+  ```
+
+#### **3. Types Organization Rule**
+- **Location**: `src/modules/[ModuleName]/types/index.ts`
+- **Purpose**: Centralize all TypeScript interfaces and types for the module
+- **Content**: All interfaces, types, enums, and type definitions
+- **Naming**: Use PascalCase for interfaces and types (e.g., `EmpresaDto`, `LoginCredentials`)
+- **Example**:
+  ```typescript
+  export interface EmpresaDto {
+    idEmpresa: number;
+    nombre: string;
+    // ... other properties
+  }
+  
+  export type VigenciaType = 'vigente' | 'no_vigente';
+  export const Vigencia = {
+    Vigente: 'vigente' as const,
+    NoVigente: 'no_vigente' as const,
+  } as const;
+  ```
+
+#### **4. Helpers Organization Rule**
+- **Location**: `src/modules/[ModuleName]/helpers/[feature]Helpers.ts`
+- **Purpose**: Extract business logic and complex functions from components
+- **Content**: Pure functions, data processing, validation logic, metadata generation
+- **Naming**: Use camelCase with descriptive names (e.g., `getEmpresaMetadata`, `filterEmpresas`)
+- **Example**:
+  ```typescript
+  export const getEmpresaMetadata = (): FieldMetadata[] => [
+    { name: 'nombre', label: 'Nombre de la Empresa' },
+    // ... other fields
+  ];
+  
+  export const filterEmpresas = (empresas: EmpresaDto[], searchText: string): EmpresaDto[] => {
+    // ... filtering logic
+  };
+  ```
+
+### **Implementation Guidelines**
+
+#### **When to Use Each File**:
+- **StyledComponents.tsx**: Components with `sx` prop for styling
+- **ComponentesGenericos.tsx**: Components with other MUI props (elevation, variant, etc.)
+- **types/index.ts**: All TypeScript interfaces and type definitions
+- **helpers/[feature]Helpers.ts**: Business logic and data processing functions
+
+#### **Component Extraction Priority**:
+1. **First**: Extract components with `sx` to `StyledComponents.tsx`
+2. **Second**: Extract components with other MUI props to `ComponentesGenericos.tsx`
+3. **Third**: Extract interfaces to `types/index.ts`
+4. **Fourth**: Extract business logic to `helpers/[feature]Helpers.ts`
+
+#### **Import Organization**:
+- Import styled components from `./StyledComponents`
+- Import generic components from `./ComponentesGenericos`
+- Import types from `../types`
+- Import helpers from `../helpers/[feature]Helpers`
+
+#### **Code Quality Standards**:
+- Keep components simple, short, and functional
+- Use meaningful names for all exports
+- Maintain consistent naming conventions
+- Avoid inline `sx` props in main component files
+- Extract complex logic to helper functions
+- Use proper TypeScript types throughout

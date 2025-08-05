@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from './modules/Shared/components/ErrorBoundary';
 import QueryProvider from './contexts/QueryProvider';
 import ThemeProvider from './contexts/ThemeProvider';
 import AppRoutes from './routes/AppRoutes';

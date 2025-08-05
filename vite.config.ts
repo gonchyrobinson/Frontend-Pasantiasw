@@ -14,6 +14,13 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_SERVER_BASE_URL || 'https://localhost:7001',
+        changeOrigin: true,
+        secure: false, // Permitir certificados autofirmados en desarrollo
+      },
+    },
   },
   build: {
     outDir: 'dist',

@@ -1,4 +1,4 @@
-# Apex.UI - Sistema de Gestión de Pasantías
+# Sistema de Gestión de Pasantías
 
 Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript, Material-UI y Vite.
 
@@ -6,6 +6,8 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 
 - **Frontend Moderno**: React 18 con TypeScript
 - **UI Framework**: Material-UI (MUI) con componentes personalizados
+- **Sistema de Formularios**: FormularioGenerico con validaciones avanzadas
+- **Autenticación**: Sistema completo de login/registro con JWT
 - **Estado Global**: React Query para gestión de estado del servidor
 - **Build Tool**: Vite para desarrollo rápido y builds optimizados
 - **Testing**: Vitest con React Testing Library
@@ -21,6 +23,12 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 - **TypeScript 4.9.5** - Tipado estático
 - **Vite 5.4.19** - Build tool y dev server
 
+### Formularios y Validación
+
+- **React Hook Form 7.48.2** - Gestión de formularios
+- **FormularioGenerico** - Sistema de formularios genéricos
+- **Validaciones Avanzadas** - Soporte para patrones, rangos y validaciones custom
+
 ### UI & Styling
 
 - **Material-UI 5.15.10** - Componentes de UI
@@ -31,6 +39,7 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 
 - **@tanstack/react-query 5.17.19** - Gestión de estado del servidor
 - **Axios 1.6.7** - Cliente HTTP
+- **react-hook-form 7.48.2** - Gestión de formularios
 
 ### Routing
 
@@ -50,6 +59,179 @@ Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript,
 - **Husky 9.0.11** - Git hooks
 - **lint-staged 15.2.2** - Linting de archivos staged
 
+## 📝 Sistema de Formularios Genéricos
+
+### Características Principales
+
+- ✅ **Formularios Dinámicos**: Basados en metadata JSON
+- ✅ **Componentes Reutilizables**: Para cada tipo de campo
+- ✅ **Validaciones Avanzadas**: Integradas con React Hook Form
+- ✅ **Dropdowns Dinámicos**: Carga de datos desde API
+- ✅ **Diseño Responsive**: Grid system de Material-UI
+- ✅ **TypeScript**: Type safety completo
+- ✅ **Accesibilidad**: Sin autoFocus y manejo de errores mejorado
+
+### Tipos de Campos Soportados
+
+| Tipo              | Descripción                   | Componente                    |
+| ----------------- | ----------------------------- | ----------------------------- |
+| `text`            | Campo de texto básico         | `TextField`                   |
+| `password`        | Campo de contraseña           | `TextField` (type="password") |
+| `email`           | Campo de email con validación | `EmailField`                  |
+| `currency`        | Campo numérico para moneda    | `CurrencyField`               |
+| `number`          | Campo numérico básico         | `NumberField`                 |
+| `date`            | Campo de fecha                | `DateField`                   |
+| `checkbox`        | Checkbox                      | `CheckboxField`               |
+| `textarea`        | Área de texto multilínea      | `TextField` (multiline)       |
+| `dropdown`        | Select con opciones estáticas | `DropdownField`               |
+| `dynamicDropdown` | Select con opciones desde API | `DynamicDropdownField`        |
+
+### Ejemplo de Uso
+
+```tsx
+import { FormularioGenerico, FormMetadata } from '../../FormularioGenerico';
+
+const loginMetadata: FormMetadata = {
+  submitButtonText: 'Iniciar Sesión',
+  fields: [
+    {
+      name: 'username',
+      type: 'text',
+      label: 'Usuario',
+      placeholder: 'Ingrese su usuario',
+      validations: {
+        required: 'El usuario es requerido',
+      },
+      gridSize: 12,
+    },
+    {
+      name: 'password',
+      type: 'password',
+      label: 'Contraseña',
+      placeholder: 'Ingrese su contraseña',
+      validations: {
+        required: 'La contraseña es requerida',
+      },
+      gridSize: 12,
+    },
+  ],
+};
+
+const Login = () => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
+    // Lógica de autenticación
+  };
+
+  return (
+    <FormularioGenerico
+      metadata={loginMetadata}
+      onSubmit={handleSubmit}
+      loading={loading}
+    />
+  );
+};
+```
+
+### Formularios Predefinidos
+
+El sistema incluye formularios predefinidos para entidades principales:
+
+```tsx
+import {
+  createConvenioFormMetadata,
+  createEmpresaFormMetadata,
+  createEstudianteFormMetadata,
+} from '../../FormularioGenerico';
+
+// Uso directo
+<FormularioGenerico
+  metadata={createConvenioFormMetadata()}
+  onSubmit={handleSubmit}
+/>;
+```
+
+### Validaciones Avanzadas
+
+```tsx
+validations: {
+  required: 'Campo requerido',
+  minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+  maxLength: { value: 50, message: 'Máximo 50 caracteres' },
+  pattern: {
+    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+    message: 'Email inválido'
+  },
+  min: { value: 0, message: 'Valor mínimo 0' },
+  max: { value: 100, message: 'Valor máximo 100' }
+}
+```
+
+## 🔐 Sistema de Autenticación
+
+### Características
+
+- ✅ **JWT Tokens**: Almacenamiento seguro en sessionStorage
+- ✅ **Interceptores Axios**: Inyección automática de tokens
+- ✅ **Rutas Protegidas**: Redirección automática a login
+- ✅ **Manejo de Errores**: Gestión centralizada de errores 401
+- ✅ **Navegación Inteligente**: Redirección después del login
+- ✅ **Sin Refresh**: Navegación fluida sin recargas de página
+
+### Componentes de Autenticación
+
+#### Login.tsx
+
+```tsx
+// Formulario de login con diseño moderno
+// Gradientes y efectos glassmorphism
+// Validaciones completas
+// Manejo de errores de API
+```
+
+#### RegistroUsuarios.tsx
+
+```tsx
+// Formulario de registro con validaciones
+// Confirmación de contraseña
+// Validaciones de email y longitud
+```
+
+### Helpers de Autenticación
+
+#### authHelper.ts
+
+```tsx
+export const authHelper = {
+  getToken: () => sessionStorage.getItem('auth_token'),
+  saveToken: (token: string) => sessionStorage.setItem('auth_token', token),
+  removeToken: () => sessionStorage.removeItem('auth_token'),
+  isAuthenticated: () => !!sessionStorage.getItem('auth_token'),
+};
+```
+
+#### interceptors.ts
+
+```tsx
+// Interceptores de Axios para:
+// - Inyección automática de tokens
+// - Manejo de errores 401
+// - Redirección sin refresh
+```
+
+### Rutas Protegidas
+
+```tsx
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+
+  if (!authHelper.isAuthenticated()) {
+    return <Navigate to='/login' state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
+```
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -67,10 +249,58 @@ frontend/
 │   ├── components/                   # Componentes compartidos
 │   ├── contexts/                     # Contextos de React
 │   ├── features/                     # Características específicas
+│   ├── FormularioGenerico/          # Sistema de formularios genéricos
+│   │   ├── components/               # Componentes de campos
+│   │   │   ├── TextField.tsx         # Campo de texto
+│   │   │   ├── EmailField.tsx        # Campo de email
+│   │   │   ├── CurrencyField.tsx     # Campo de moneda
+│   │   │   ├── NumberField.tsx       # Campo numérico
+│   │   │   ├── DateField.tsx         # Campo de fecha
+│   │   │   ├── CheckboxField.tsx     # Campo checkbox
+│   │   │   ├── DropdownField.tsx     # Select estático
+│   │   │   ├── DynamicDropdownField.tsx # Select dinámico
+│   │   │   └── FormularioGenerico.tsx # Componente principal
+│   │   ├── helpers/                  # Funciones auxiliares
+│   │   │   ├── validationHelpers.ts  # Helpers de validación
+│   │   │   └── formMetadataHelpers.ts # Helpers de metadata
+│   │   ├── types/                    # Tipos TypeScript
+│   │   │   └── index.ts              # Definiciones de tipos
+│   │   ├── index.ts                  # Exportaciones principales
+│   │   └── README.md                 # Documentación del sistema
 │   ├── helpers/                      # Funciones auxiliares
+│   │   ├── authHelper.ts             # Gestión de autenticación
+│   │   ├── interceptors.ts           # Interceptores de Axios
+│   │   └── routesHelper.ts           # Constantes de rutas
 │   ├── hooks/                        # Custom hooks
-│   ├── pages/                        # Páginas de la aplicación
+│   │   ├── useApi.ts                 # Hook para llamadas API
+│   │   ├── useNavigation.ts          # Hook de navegación
+│   │   └── useAuthForm.ts            # Hook para formularios de auth
+│   ├── modules/                      # Módulos de la aplicación
+│   │   ├── Login/                    # Módulo de autenticación
+│   │   │   ├── Login.tsx             # Componente de login
+│   │   │   ├── components/           # Componentes específicos
+│   │   │   ├── helpers/              # Helpers específicos
+│   │   │   └── types/                # Tipos específicos
+│   │   ├── CreacionUsuarios/         # Módulo de registro
+│   │   │   ├── RegistroUsuarios.tsx  # Componente de registro
+│   │   │   ├── components/           # Componentes específicos
+│   │   │   ├── helpers/              # Helpers específicos
+│   │   │   └── types/                # Tipos específicos
+│   │   ├── Convenios/                # Módulo de convenios
+│   │   ├── Pasantias/                # Módulo de pasantías
+│   │   ├── Pagos/                    # Módulo de pagos
+│   │   ├── Reportes/                 # Módulo de reportes
+│   │   ├── Inicio/                   # Módulo de inicio
+│   │   ├── Shared/                   # Componentes compartidos
+│   │   ├── SharedForms/              # Formularios compartidos
+│   │   └── PaginasError/             # Páginas de error
+│   ├── features/                     # Características específicas (vacío)
+│   ├── contexts/                     # Contextos de React
+│   │   ├── QueryProvider.tsx         # Provider de React Query
+│   │   └── ThemeProvider.tsx         # Provider del tema
 │   ├── routes/                       # Configuración de rutas
+│   │   ├── AppRoutes.tsx             # Configuración de rutas
+│   │   └── helpers/                  # Helpers de rutas
 │   ├── test/                         # Configuración de tests
 │   ├── types/                        # Definiciones de tipos
 │   ├── vite-env.d.ts                 # Tipos de Vite
@@ -88,6 +318,142 @@ frontend/
 ├── vite.config.ts                    # Configuración Vite
 └── vitest.config.ts                  # Configuración Vitest
 ```
+
+## 🔧 Configuración de Entornos
+
+### Estructura de Archivos de Entorno
+
+El proyecto utiliza archivos de entorno separados para diferentes ambientes:
+
+- `.env.development` - Configuración para desarrollo local
+- `.env.production` - Configuración para producción
+- `.env.example` - Plantilla de ejemplo
+
+### Variables de Entorno
+
+#### Desarrollo (.env.development)
+
+```env
+VITE_SERVER_BASE_URL=https://localhost:7001
+VITE_API_URL=https://localhost:7001/api
+VITE_ENVIRONMENT=development
+VITE_VERSION=1.0.0
+```
+
+#### Producción (.env.production)
+
+```env
+VITE_SERVER_BASE_URL=https://api.tudominio.com
+VITE_API_URL=https://api.tudominio.com/api
+VITE_ENVIRONMENT=production
+VITE_VERSION=1.0.0
+```
+
+### Configuración del Backend
+
+#### Desarrollo
+
+- **URL**: `https://localhost:7001`
+- **Protocolo**: HTTPS con certificado autofirmado
+- **CORS**: Configurado para `http://localhost:3000`
+
+#### Producción
+
+- **URL**: `https://api.tudominio.com`
+- **Protocolo**: HTTPS con certificado válido
+- **CORS**: Configurado para el dominio de producción
+
+## 🔗 Configuración de Conexión Frontend-Backend
+
+### Configuración Implementada
+
+#### 1. Proxy de Desarrollo
+
+- Configurado en `frontend/vite.config.ts`
+- Todas las peticiones a `/api/*` se redirigen a `https://localhost:7001`
+- Configuración: `changeOrigin: true, secure: false` (permite certificados autofirmados)
+
+#### 2. Cliente API Simplificado
+
+- Ubicado en `frontend/src/apis/apiClient.ts`
+- Configurado para usar la URL base `/api`
+- Maneja respuestas directas del backend sin estructura `ApiResponse` envolvente
+- Manejo básico de errores implementado
+
+#### 3. Tipos de Datos
+
+- Actualizados en `frontend/src/types/index.ts`
+- Mantiene compatibilidad con `ApiResponse<T>` para futuras implementaciones
+- Tipos básicos para el sistema de gestión de pasantías
+
+### Instrucciones para Probar
+
+#### 1. Iniciar el Backend
+
+```bash
+cd backend/Backend
+dotnet run
+```
+
+El backend debe estar ejecutándose en `https://localhost:7001`
+
+#### 2. Iniciar el Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+El frontend debe estar ejecutándose en `http://localhost:3000`
+
+#### 3. Probar la Conexión
+
+1. Abrir `http://localhost:3000` en el navegador
+2. La aplicación debería cargar correctamente sin errores de conexión
+
+### Solución de Problemas
+
+#### Problema: Error de CORS
+
+**Causa**: El navegador bloquea peticiones entre diferentes orígenes.
+
+**Solución**:
+
+- ✅ Proxy configurado en Vite
+- ✅ CORS configurado en el backend
+- ✅ Configuración HTTPS para desarrollo
+
+#### Problema: Certificados HTTPS
+
+**Causa**: Certificados autofirmados en desarrollo.
+
+**Solución**:
+
+- ✅ `secure: false` en la configuración del proxy
+- ✅ Configuración para permitir certificados autofirmados
+
+### Troubleshooting de Entornos
+
+#### Error de Certificado en Desarrollo
+
+Si tienes problemas con certificados autofirmados:
+
+1. El proxy está configurado con `secure: false`
+2. Acepta el certificado en el navegador
+3. Verifica que el backend esté ejecutándose en HTTPS
+
+#### Error de CORS
+
+- Verificar que el backend tenga CORS configurado correctamente
+- Verificar que las URLs coincidan entre frontend y backend
+
+#### Cambio de Ambiente
+
+Para cambiar entre ambientes:
+
+1. Modificar las variables en el archivo correspondiente
+2. Reiniciar el servidor de desarrollo
+3. Limpiar la caché del navegador si es necesario
 
 ## 🚀 Instalación y Configuración
 
@@ -199,11 +565,12 @@ npm --help
 3. **Configurar variables de entorno**
 
    ```bash
-   # Crear archivo .env
-   cp .env.example .env
+   # Crear archivo .env.development
+   cp .env.example .env.development
 
-   # Editar .env con tus valores
-   VITE_API_URL=http://localhost:5000/api
+   # Editar .env.development con tus valores
+   VITE_SERVER_BASE_URL=https://localhost:7001
+   VITE_API_URL=https://localhost:7001/api
    ```
 
 ### Solución de Problemas
@@ -368,6 +735,131 @@ src/pages/[PageName]/
 - **Components**: Usar componentes MUI como base
 - **Icons**: Importar desde `@mui/icons-material`
 
+### FormularioGenerico
+
+- **Metadata**: Definir formularios usando `FormMetadata`
+- **Validaciones**: Usar `ValidationRule` para validaciones complejas
+- **Tipos**: Usar `FieldType` para tipos de campos
+- **Helpers**: Usar helpers predefinidos para formularios comunes
+- **noValidate**: Siempre usar `noValidate` para control total
+
+### ElementCardGenerica
+
+- **Metadata**: Definir cartas usando `FieldMetadata` con auto-detección de tipos
+- **Formateo**: Automático para fechas, monedas, emails y booleanos
+- **Acciones**: Opcionales (editar, expandir, eliminar) usando callbacks
+- **Responsive**: Adaptable con Grid de MUI
+- **Exclusión**: Automática de campos como id, fechaCreacion, eliminado
+
+### Organización de Módulos
+
+#### **Cuatro Reglas Esenciales para Estructura de Módulos**
+
+Al trabajar con cualquier módulo (ej: `@Empresas/`, `@Inicio/`, `@Login/`, `@CreacionUsuarios/`), seguir estas **4 reglas obligatorias**:
+
+##### **1. Regla StyledComponents.tsx**
+
+- **Ubicación**: `src/modules/[ModuleName]/components/StyledComponents.tsx`
+- **Propósito**: Centralizar todos los componentes styled con propiedades `sx`
+- **Contenido**: Todos los componentes MUI que usan prop `sx` para estilos
+- **Nomenclatura**: Usar nombres descriptivos terminando con `Styled` (ej: `ContenedorPrincipalStyled`, `TarjetaEstadisticaStyled`)
+- **Ejemplo**:
+  ```typescript
+  export const ContenedorPrincipalStyled = styled(Container)(({ theme }) => ({
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.background.default,
+  }));
+  ```
+
+##### **2. Regla ComponentesGenericos.tsx**
+
+- **Ubicación**: `src/modules/[ModuleName]/components/ComponentesGenericos.tsx`
+- **Propósito**: Alojar componentes MUI reutilizables con lógica personalizada (NO solo `sx`)
+- **Contenido**: Componentes con propiedades como `elevation`, `fullWidth`, `variant`, etc.
+- **Nomenclatura**: Usar nombres descriptivos sin sufijo `Styled` (ej: `ContenedorPrincipal`, `TarjetaEstadistica`)
+- **Ejemplo**:
+  ```typescript
+  export const TarjetaEstadistica = ({ children }: { children: React.ReactNode }) => (
+    <StyledStatsCard elevation={2}>{children}</StyledStatsCard>
+  );
+  ```
+
+##### **3. Regla de Organización de Tipos**
+
+- **Ubicación**: `src/modules/[ModuleName]/types/index.ts`
+- **Propósito**: Centralizar todas las interfaces y tipos TypeScript del módulo
+- **Contenido**: Todas las interfaces, tipos, enums y definiciones de tipos
+- **Nomenclatura**: Usar PascalCase para interfaces y tipos (ej: `EmpresaDto`, `LoginCredentials`)
+- **Ejemplo**:
+
+  ```typescript
+  export interface EmpresaDto {
+    idEmpresa: number;
+    nombre: string;
+    // ... otras propiedades
+  }
+
+  export type VigenciaType = 'vigente' | 'no_vigente';
+  export const Vigencia = {
+    Vigente: 'vigente' as const,
+    NoVigente: 'no_vigente' as const,
+  } as const;
+  ```
+
+##### **4. Regla de Organización de Helpers**
+
+- **Ubicación**: `src/modules/[ModuleName]/helpers/[feature]Helpers.ts`
+- **Propósito**: Extraer lógica de negocio y funciones complejas de componentes
+- **Contenido**: Funciones puras, procesamiento de datos, lógica de validación, generación de metadata
+- **Nomenclatura**: Usar camelCase con nombres descriptivos (ej: `getEmpresaMetadata`, `filterEmpresas`)
+- **Ejemplo**:
+
+  ```typescript
+  export const getEmpresaMetadata = (): FieldMetadata[] => [
+    { name: 'nombre', label: 'Nombre de la Empresa' },
+    // ... otros campos
+  ];
+
+  export const filterEmpresas = (
+    empresas: EmpresaDto[],
+    searchText: string
+  ): EmpresaDto[] => {
+    // ... lógica de filtrado
+  };
+  ```
+
+#### **Guías de Implementación**
+
+##### **Cuándo Usar Cada Archivo**:
+
+- **StyledComponents.tsx**: Componentes con prop `sx` para estilos
+- **ComponentesGenericos.tsx**: Componentes con otras props de MUI (elevation, variant, etc.)
+- **types/index.ts**: Todas las interfaces y definiciones de tipos TypeScript
+- **helpers/[feature]Helpers.ts**: Lógica de negocio y funciones de procesamiento de datos
+
+##### **Prioridad de Extracción de Componentes**:
+
+1. **Primero**: Extraer componentes con `sx` a `StyledComponents.tsx`
+2. **Segundo**: Extraer componentes con otras props de MUI a `ComponentesGenericos.tsx`
+3. **Tercero**: Extraer interfaces a `types/index.ts`
+4. **Cuarto**: Extraer lógica de negocio a `helpers/[feature]Helpers.ts`
+
+##### **Organización de Imports**:
+
+- Importar componentes styled desde `./StyledComponents`
+- Importar componentes genéricos desde `./ComponentesGenericos`
+- Importar tipos desde `../types`
+- Importar helpers desde `../helpers/[feature]Helpers`
+
+##### **Estándares de Calidad de Código**:
+
+- Mantener componentes simples, cortos y funcionales
+- Usar nombres significativos para todas las exportaciones
+- Mantener convenciones de nomenclatura consistentes
+- Evitar props `sx` inline en archivos de componentes principales
+- Extraer lógica compleja a funciones helper
+- Usar tipos TypeScript apropiados en todo el código
+
 ### TypeScript
 
 - **Strict Mode**: Habilitado
@@ -407,15 +899,19 @@ src/pages/[PageName]/
 ### Desarrollo
 
 ```env
-VITE_API_URL=http://localhost:5000/api
-VITE_APP_TITLE=Apex.UI
+VITE_SERVER_BASE_URL=https://localhost:7001
+VITE_API_URL=https://localhost:7001/api
+VITE_ENVIRONMENT=development
+VITE_VERSION=1.0.0
 ```
 
 ### Producción
 
 ```env
-VITE_API_URL=https://api.com
-VITE_APP_TITLE=pASANTIAS Y pps
+VITE_SERVER_BASE_URL=https://api.tudominio.com
+VITE_API_URL=https://api.tudominio.com/api
+VITE_ENVIRONMENT=production
+VITE_VERSION=1.0.0
 ```
 
 ## 📦 Dependencias Principales

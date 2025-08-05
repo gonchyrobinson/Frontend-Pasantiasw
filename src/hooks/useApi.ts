@@ -5,7 +5,7 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query';
 
-import { apiClient } from '../apis/apiClient';
+import { apiClient } from '../modules/Shared/apis/apiClient';
 import { ApiResponse } from '../types';
 
 // Define a generic type for mutation variables (same as RequestData in apiClient)
@@ -18,7 +18,10 @@ export const useApiQuery = <T>(
 ) => {
   return useQuery({
     queryKey: [endpoint],
-    queryFn: () => apiClient.get<T>(endpoint),
+    queryFn: async () => {
+      const data = await apiClient.get<T>(endpoint);
+      return { data } as ApiResponse<T>;
+    },
     ...options,
   });
 };
@@ -32,7 +35,10 @@ export const useApiMutation = <T, TVariables extends RequestData = RequestData>(
   >
 ) => {
   return useMutation({
-    mutationFn: (data: TVariables) => apiClient.post<T>(endpoint, data),
+    mutationFn: async (data: TVariables) => {
+      const result = await apiClient.post<T>(endpoint, data);
+      return { data: result } as ApiResponse<T>;
+    },
     ...options,
   });
 };
@@ -46,7 +52,10 @@ export const useApiUpdate = <T, TVariables extends RequestData = RequestData>(
   >
 ) => {
   return useMutation({
-    mutationFn: (data: TVariables) => apiClient.put<T>(endpoint, data),
+    mutationFn: async (data: TVariables) => {
+      const result = await apiClient.put<T>(endpoint, data);
+      return { data: result } as ApiResponse<T>;
+    },
     ...options,
   });
 };
@@ -57,7 +66,10 @@ export const useApiDelete = <T>(
   options?: Omit<UseMutationOptions<ApiResponse<T>, Error, void>, 'mutationFn'>
 ) => {
   return useMutation({
-    mutationFn: () => apiClient.delete<T>(endpoint),
+    mutationFn: async () => {
+      const result = await apiClient.delete<T>(endpoint);
+      return { data: result } as ApiResponse<T>;
+    },
     ...options,
   });
 };
