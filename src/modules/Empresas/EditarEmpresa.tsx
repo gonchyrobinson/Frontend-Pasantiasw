@@ -36,7 +36,7 @@ const EditarEmpresa: React.FC = () => {
 
     try {
       const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
-      await axios.put(`/api/empresas/${id}`, empresaData);
+      await axios.put(`/api/empresas`, empresaData);
 
       showSuccess('Empresa actualizada exitosamente');
 

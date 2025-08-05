@@ -27,11 +27,13 @@ import {
 } from './components/ComponentesPersonalizados';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
+import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
 import { ROUTES } from '../../helpers/routesHelper';
 
 const Empresas: React.FC = () => {
   const navigate = useNavigate();
-  const { snackbar, showError, hideSnackbar } = useSnackbar();
+  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [searchText, setSearchText] = useState('');
   const [vigenciaFilter, setVigenciaFilter] = useState('');
   const [tipoContratoFilter, setTipoContratoFilter] = useState('');
@@ -44,6 +46,10 @@ const Empresas: React.FC = () => {
   } = useApiQuery<EmpresaDto[]>('/empresas');
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [empresaToDelete, setEmpresaToDelete] = useState<EmpresaDto | null>(
+    null
+  );
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const empresas = useMemo(() => {
     return processEmpresasResponse(empresasResponse);
@@ -82,6 +88,36 @@ const Empresas: React.FC = () => {
 
   const handleEditarEmpresa = (empresa: EmpresaDto) => {
     navigate(`${ROUTES.EMPRESAS_EDITAR}/${empresa.idEmpresa}`);
+  };
+
+  const { deleteEmpresa, isDeleting } = useDeleteEmpresa();
+
+  const handleDeleteEmpresa = (empresa: EmpresaDto) => {
+    setEmpresaToDelete(empresa);
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (empresaToDelete) {
+      try {
+        await deleteEmpresa(empresaToDelete.idEmpresa);
+        showSuccess('Empresa eliminada correctamente');
+        refetch();
+        setShowDeleteDialog(false);
+        setEmpresaToDelete(null);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Error al eliminar la empresa. Inténtalo de nuevo.';
+        showError(errorMessage);
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+    setEmpresaToDelete(null);
   };
 
   if (error) {
@@ -161,15 +197,38 @@ const Empresas: React.FC = () => {
             // TODO: Implementar vista detalle de empresa
           }}
           onEmpresaEdit={handleEditarEmpresa}
-          onEmpresaDelete={() => {
-            // TODO: Implementar eliminación de empresa
-          }}
+          onEmpresaDelete={handleDeleteEmpresa}
         />
       )}
 
       <FabNuevaEmpresa onClick={handleNuevaEmpresa} />
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
+
+      <DeleteConfirmationDialog
+        open={showDeleteDialog}
+        title='Confirmar eliminación'
+        message='¿Estás seguro de que quieres eliminar la empresa?'
+        itemName={empresaToDelete?.nombre || ''}
+        itemDetails={
+          empresaToDelete && (
+            <>
+              <Typography variant='body2' color='text.secondary'>
+                ID: {empresaToDelete.idEmpresa}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Encargado: {empresaToDelete.encargado}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                Correo: {empresaToDelete.correoElectronico}
+              </Typography>
+            </>
+          )
+        }
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        isDeleting={isDeleting}
+      />
     </Container>
   );
 };
