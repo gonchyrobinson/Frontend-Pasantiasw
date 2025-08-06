@@ -41,6 +41,10 @@ export const useNavigation = () => {
     navigate(ROUTES.EMPRESAS);
   };
 
+  const goToEstudiantes = () => {
+    navigate(ROUTES.ESTUDIANTES);
+  };
+
   const goToConvenios = () => {
     navigate(ROUTES.CONVENIOS);
   };
@@ -76,6 +80,7 @@ export const useNavigation = () => {
     redirectAfterLogin,
     logout,
     goToEmpresas,
+    goToEstudiantes,
     goToConvenios,
     goToPasantias,
     goToPagos,

@@ -13,6 +13,9 @@ import Login from '../modules/Login/Login';
 import Empresas from '../modules/Empresas/Empresas';
 import CreacionEmpresas from '../modules/Empresas/CreacionEmpresas';
 import EditarEmpresa from '../modules/Empresas/EditarEmpresa';
+import Estudiantes from '../modules/Estudiantes/Estudiantes';
+import CreacionEstudiantes from '../modules/Estudiantes/CreacionEstudiantes';
+import EditarEstudiante from '../modules/Estudiantes/EditarEstudiante';
 import Convenios from '../modules/Convenios/Convenios';
 import Pasantias from '../modules/Pasantias/Pasantias';
 import Pagos from '../modules/Pagos/Pagos';
@@ -69,6 +72,36 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <EditarEmpresa />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.ESTUDIANTES}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Estudiantes />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.ESTUDIANTES_CREAR}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CreacionEstudiantes />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.ESTUDIANTES_EDITAR}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditarEstudiante />
               </Layout>
             </ProtectedRoute>
           }

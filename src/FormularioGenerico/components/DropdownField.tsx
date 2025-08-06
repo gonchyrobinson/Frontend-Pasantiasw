@@ -36,8 +36,8 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
         label={label}
         readOnly={readonly}
         disabled={readonly}
-        value={value || ''}
-        displayEmpty
+        value={value !== undefined ? value : ''}
+        displayEmpty={false}
       >
         {placeholder && (
           <MenuItem value=''>

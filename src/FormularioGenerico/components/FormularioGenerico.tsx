@@ -15,6 +15,7 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
   metadata,
   onSubmit,
   onCancel,
+  onClear,
   initialValues = {},
   onChange,
   dynamicDropdownOptions = {},
@@ -37,6 +38,13 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
       onChange(watchedFields);
     }
   }, [watchedFields, onChange]);
+
+  // Update form values when initialValues change (for edit mode)
+  useEffect(() => {
+    if (initialValues && Object.keys(initialValues).length > 0) {
+      reset(initialValues);
+    }
+  }, [initialValues, reset]);
 
   const renderField = (field: FieldMetadata) => {
     const error = errors[field.name]?.message as string;
@@ -104,6 +112,22 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
     }
   };
 
+  const handleClear = () => {
+    // Crear un objeto vacío para todos los campos
+    const emptyValues = metadata.fields.reduce(
+      (acc, field) => {
+        acc[field.name] = '';
+        return acc;
+      },
+      {} as Record<string, unknown>
+    );
+
+    reset(emptyValues);
+    if (onClear) {
+      onClear();
+    }
+  };
+
   return (
     <Paper sx={{ p: 3 }}>
       {metadata.title && (
@@ -124,14 +148,14 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
         <Box
           sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'flex-end' }}
         >
-          {onCancel && (
+          {(onCancel || onClear) && (
             <Button
               type='button'
               variant='outlined'
-              onClick={handleCancel}
+              onClick={onClear ? handleClear : handleCancel}
               disabled={loading}
             >
-              {metadata.cancelButtonText || 'Cancelar'}
+              {onClear ? 'Limpiar' : metadata.cancelButtonText || 'Cancelar'}
             </Button>
           )}
           <Button type='submit' variant='contained' disabled={loading}>

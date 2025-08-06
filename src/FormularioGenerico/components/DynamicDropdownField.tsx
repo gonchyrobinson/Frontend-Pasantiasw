@@ -38,8 +38,8 @@ const DynamicDropdownField: React.FC<DynamicDropdownFieldProps> = ({
         label={label}
         readOnly={readonly || loading}
         disabled={readonly || loading}
-        value={value || ''}
-        displayEmpty
+        value={value !== undefined ? value : ''}
+        displayEmpty={false}
       >
         {placeholder && (
           <MenuItem value=''>

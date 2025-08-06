@@ -1,3 +1,5 @@
+import { EmpresaDto } from '.';
+
 export const Vigencia = {
   Vigente: 'vigente',
   NoVigente: 'no_vigente',
@@ -55,4 +57,10 @@ export interface EmpresasStats {
   activas: number;
   inactivas: number;
   porTipo: Record<string, number>;
+}
+export interface EmpresasGridProps {
+  empresas: EmpresaDto[];
+  onEmpresaClick?: (empresa: EmpresaDto) => void;
+  onEmpresaEdit?: (empresa: EmpresaDto) => void;
+  onEmpresaDelete?: (empresa: EmpresaDto) => void;
 }

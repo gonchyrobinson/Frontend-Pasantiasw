@@ -53,6 +53,7 @@ export type GenericFormProps = {
   metadata: FormMetadata;
   onSubmit: (data: Record<string, unknown>) => void;
   onCancel?: () => void;
+  onClear?: () => void;
   initialValues?: Record<string, unknown>;
   onChange?: (data: Record<string, unknown>) => void;
   dynamicDropdownOptions?: DynamicDropdownOptions;
