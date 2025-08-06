@@ -1,21 +1,21 @@
 import React from 'react';
 import { SearchDialog } from '../../../ElementCardGenerica';
 import {
-  getEmpresaSearchMetadata,
-  formatEmpresaSearchFilters,
-} from '../helpers/empresaSearchHelpers';
-import { EmpresaDto } from '../types';
+  getEstudianteSearchMetadata,
+  formatEstudianteSearchFilters,
+} from '../helpers/estudianteSearchHelpers';
+import { EstudianteDto } from '../types';
 import { useSnackbar } from '../../../hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 
-interface EmpresasFiltersProps {
-  onSearchResults: (empresas: EmpresaDto[]) => void;
+interface EstudiantesFiltersProps {
+  onSearchResults: (estudiantes: EstudianteDto[]) => void;
   onClearResults: () => void;
   loading?: boolean;
   hasResults?: boolean;
 }
 
-const EmpresasFilters: React.FC<EmpresasFiltersProps> = ({
+const EstudiantesFilters: React.FC<EstudiantesFiltersProps> = ({
   onSearchResults,
   onClearResults,
   hasResults = false,
@@ -25,24 +25,24 @@ const EmpresasFilters: React.FC<EmpresasFiltersProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
     try {
-      const searchFilters = formatEmpresaSearchFilters(filters);
-      const empresas = await apiClient.post<EmpresaDto[]>(
-        '/empresas/buscar/avanzado',
+      const searchFilters = formatEstudianteSearchFilters(filters);
+      const estudiantes = await apiClient.post<EstudianteDto[]>(
+        '/students/buscar-avanzado',
         searchFilters as Record<string, unknown>
       );
-      onSearchResults(empresas);
+      onSearchResults(estudiantes);
       showSuccess('Búsqueda completada exitosamente');
     } catch (error) {
-      showError('Error al realizar la búsqueda de empresas');
+      showError('Error al realizar la búsqueda de estudiantes');
       throw error; // Re-lanzar para que SearchDialog maneje el cierre
     }
   };
 
   return (
     <SearchDialog
-      title='Búsqueda Avanzada de Empresas'
+      title='Búsqueda Avanzada de Estudiantes'
       buttonText='Búsqueda Avanzada'
-      metadata={getEmpresaSearchMetadata()}
+      metadata={getEstudianteSearchMetadata()}
       onSubmit={handleSearchSubmit}
       onClearResults={onClearResults}
       hasResults={hasResults}
@@ -50,4 +50,4 @@ const EmpresasFilters: React.FC<EmpresasFiltersProps> = ({
   );
 };
 
-export default EmpresasFilters;
+export default EstudiantesFilters;

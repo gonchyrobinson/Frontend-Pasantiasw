@@ -2,32 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FormularioGenerico } from '../../FormularioGenerico';
-import { EmpresaDto } from './types';
-import { getEdicionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
+import { EstudianteDto } from './types';
+import { getEdicionEstudianteMetadata } from './helpers/estudianteHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../hooks/useSnackbar';
 
-const EditarEmpresa: React.FC = () => {
+const EditarEstudiante: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
-  const [initialData, setInitialData] = useState<EmpresaDto | null>(null);
+  const [initialData, setInitialData] = useState<EstudianteDto | null>(null);
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const fetchEmpresa = async () => {
+    const fetchEstudiante = async () => {
       try {
-        const response = await axios.get(`/api/empresas/${id}`);
+        const response = await axios.get(`/api/students/${id}`);
         setInitialData(response.data);
       } catch (error) {
-        showError('Error al cargar la empresa');
-        setTimeout(() => navigate(ROUTES.EMPRESAS), 2000);
+        showError('Error al cargar el estudiante');
+        setTimeout(() => navigate(ROUTES.ESTUDIANTES), 2000);
       }
     };
 
     if (id) {
-      fetchEmpresa();
+      fetchEstudiante();
     }
   }, [id, navigate, showError]);
 
@@ -35,29 +35,29 @@ const EditarEmpresa: React.FC = () => {
     setLoading(true);
 
     try {
-      const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
-      await axios.put(`/api/empresas`, empresaData);
+      const estudianteData = { ...data, idEstudiante: parseInt(id || '0') };
+      await axios.put(`/api/students`, estudianteData);
 
-      showSuccess('Empresa actualizada exitosamente');
+      showSuccess('Estudiante actualizado exitosamente');
 
       setTimeout(() => {
-        navigate(ROUTES.EMPRESAS);
+        navigate(ROUTES.ESTUDIANTES);
       }, 2000);
     } catch (error) {
-      showError('Error al actualizar la empresa');
+      showError('Error al actualizar el estudiante');
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = () => {
-    navigate(ROUTES.EMPRESAS);
+    navigate(ROUTES.ESTUDIANTES);
   };
 
   if (!initialData) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
-        Cargando datos de la empresa...
+        Cargando datos del estudiante...
       </div>
     );
   }
@@ -65,7 +65,7 @@ const EditarEmpresa: React.FC = () => {
   return (
     <>
       <FormularioGenerico
-        metadata={getEdicionEmpresaMetadata()}
+        metadata={getEdicionEstudianteMetadata()}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         loading={loading}
@@ -77,4 +77,4 @@ const EditarEmpresa: React.FC = () => {
   );
 };
 
-export default EditarEmpresa;
+export default EditarEstudiante;

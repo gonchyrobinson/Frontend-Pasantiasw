@@ -40,6 +40,7 @@ const Sidebar = () => {
   const {
     goToDashboard,
     goToEmpresas,
+    goToEstudiantes,
     goToConvenios,
     goToPasantias,
     goToPagos,
@@ -59,6 +60,12 @@ const Sidebar = () => {
       icon: <Domain />,
       onClick: goToEmpresas,
       path: ROUTES.EMPRESAS,
+    },
+    {
+      text: 'Estudiantes',
+      icon: <School />,
+      onClick: goToEstudiantes,
+      path: ROUTES.ESTUDIANTES,
     },
     {
       text: 'Convenios',

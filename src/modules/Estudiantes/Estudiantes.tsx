@@ -4,29 +4,30 @@ import { Container, Typography, Alert, Button } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
 import { useSnackbar } from '../../hooks/useSnackbar';
-import { EmpresaDto } from './types';
-import EmpresasGrid from './components/EmpresasGrid';
-import EmpresasFilters from './components/EmpresasFilters';
-import EmpresasStats from './components/EmpresasStats';
-import { FabNuevaEmpresa } from './components/ComponentesPersonalizados';
+import { EstudianteDto } from './types';
+import EstudiantesGrid from './components/EstudiantesGrid';
+import EstudiantesFilters from './components/EstudiantesFilters';
+import EstudiantesStats from './components/EstudiantesStats';
+import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
+import { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
 import { ROUTES } from '../../helpers/routesHelper';
 import { ModuleHeader, SearchableContent } from '../../ElementCardGenerica';
 
-const Empresas: React.FC = () => {
+const Estudiantes: React.FC = () => {
   const navigate = useNavigate();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
-  const [searchResults, setSearchResults] = useState<EmpresaDto[]>([]);
+  const [searchResults, setSearchResults] = useState<EstudianteDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const { isLoading, error, refetch } = useApiQuery<EmpresaDto[]>('/empresas');
+  const { isLoading, error, refetch } = useApiQuery<EstudianteDto[]>(
+    ROUTES.ESTUDIANTES as string
+  );
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [empresaToDelete, setEmpresaToDelete] = useState<EmpresaDto | null>(
-    null
-  );
+  const [estudianteToDelete, setEstudianteToDelete] =
+    useState<EstudianteDto | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const handleClearSearch = () => {
@@ -34,13 +35,13 @@ const Empresas: React.FC = () => {
     setHasSearched(false);
   };
 
-  const handleSearchResults = (empresas: EmpresaDto[]) => {
-    setSearchResults(empresas);
+  const handleSearchResults = (estudiantes: EstudianteDto[]) => {
+    setSearchResults(estudiantes);
     setHasSearched(true);
   };
 
-  const handleNuevaEmpresa = () => {
-    navigate(ROUTES.EMPRESAS_CREAR);
+  const handleNuevoEstudiante = () => {
+    navigate(ROUTES.ESTUDIANTES_CREAR);
   };
 
   const handleRefresh = async () => {
@@ -49,41 +50,41 @@ const Empresas: React.FC = () => {
       setIsRefreshing(true);
       await refetch();
     } catch (error) {
-      showError('Error al actualizar las empresas. Inténtalo de nuevo.');
+      showError('Error al actualizar los estudiantes. Inténtalo de nuevo.');
     } finally {
       setIsRefreshing(false);
     }
   };
 
-  const handleEditarEmpresa = (empresa: EmpresaDto) => {
-    navigate(`${ROUTES.EMPRESAS_EDITAR}/${empresa.idEmpresa}`);
+  const handleEditarEstudiante = (estudiante: EstudianteDto) => {
+    navigate(`${ROUTES.ESTUDIANTES_EDITAR}/${estudiante.idEstudiante}`);
   };
 
-  const { deleteEmpresa, isDeleting } = useDeleteEmpresa();
-
-  const handleDeleteEmpresa = (empresa: EmpresaDto) => {
-    setEmpresaToDelete(empresa);
+  const handleDeleteEstudiante = (estudiante: EstudianteDto) => {
+    setEstudianteToDelete(estudiante);
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = async () => {
-    if (empresaToDelete) {
-      try {
-        await deleteEmpresa(empresaToDelete.idEmpresa);
-        showSuccess('Empresa eliminada correctamente');
+  const { deleteEstudiante, isDeleting } = useDeleteEstudiante();
 
-        // Actualizar la lista de resultados si la empresa eliminada estaba en ella
+  const handleConfirmDelete = async () => {
+    if (estudianteToDelete) {
+      try {
+        await deleteEstudiante(estudianteToDelete.idEstudiante);
+        showSuccess('Estudiante eliminado correctamente');
+
+        // Actualizar la lista de resultados si el estudiante eliminado estaba en ella
         setSearchResults(prev =>
-          prev.filter(e => e.idEmpresa !== empresaToDelete.idEmpresa)
+          prev.filter(e => e.idEstudiante !== estudianteToDelete.idEstudiante)
         );
 
         setShowDeleteDialog(false);
-        setEmpresaToDelete(null);
+        setEstudianteToDelete(null);
       } catch (error) {
         const errorMessage =
           error instanceof Error
             ? error.message
-            : 'Error al eliminar la empresa. Inténtalo de nuevo.';
+            : 'Error al eliminar el estudiante. Inténtalo de nuevo.';
         showError(errorMessage);
       }
     }
@@ -91,7 +92,7 @@ const Empresas: React.FC = () => {
 
   const handleCancelDelete = () => {
     setShowDeleteDialog(false);
-    setEmpresaToDelete(null);
+    setEstudianteToDelete(null);
   };
 
   if (error) {
@@ -106,7 +107,8 @@ const Empresas: React.FC = () => {
             </Button>
           }
         >
-          Error al cargar las empresas: {error?.message || 'Error desconocido'}
+          Error al cargar los estudiantes:{' '}
+          {error?.message || 'Error desconocido'}
         </Alert>
       </Container>
     );
@@ -115,15 +117,15 @@ const Empresas: React.FC = () => {
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
       <ModuleHeader
-        title='Gestión de Empresas'
-        subtitle='Administra las empresas del sistema de pasantías'
+        title='Gestión de Estudiantes'
+        subtitle='Administra los estudiantes del sistema de pasantías'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
-        onAction={handleNuevaEmpresa}
-        actionButtonText='Nueva Empresa'
+        onAction={handleNuevoEstudiante}
+        actionButtonText='Nuevo Estudiante'
       />
 
-      <EmpresasFilters
+      <EstudiantesFilters
         onSearchResults={handleSearchResults}
         onClearResults={handleClearSearch}
         loading={isLoading || isRefreshing}
@@ -135,46 +137,52 @@ const Empresas: React.FC = () => {
         searchResults={searchResults}
         isLoading={isLoading}
         isRefreshing={isRefreshing}
-        emptyStateTitle='Búsqueda de Empresas'
-        emptyStateText='Utiliza la búsqueda avanzada para encontrar empresas específicas'
-        noResultsTitle='No se encontraron empresas'
+        emptyStateTitle='Búsqueda de Estudiantes'
+        emptyStateText='Utiliza la búsqueda avanzada para encontrar estudiantes específicos'
+        noResultsTitle='No se encontraron estudiantes'
         noResultsText='Intenta con diferentes criterios de búsqueda'
-        loadingMessage='Cargando empresas...'
+        loadingMessage='Cargando estudiantes...'
         statsComponent={
           hasSearched &&
-          searchResults.length > 0 && <EmpresasStats empresas={searchResults} />
+          searchResults.length > 0 && (
+            <EstudiantesStats estudiantes={searchResults} />
+          )
         }
       >
-        <EmpresasGrid
-          empresas={searchResults}
-          onEmpresaClick={() => {
-            // TODO: Implementar vista detalle de empresa
+        <EstudiantesGrid
+          estudiantes={searchResults}
+          onEstudianteClick={() => {
+            // TODO: Implementar vista detalle de estudiante
           }}
-          onEmpresaEdit={handleEditarEmpresa}
-          onEmpresaDelete={handleDeleteEmpresa}
+          onEstudianteEdit={handleEditarEstudiante}
+          onEstudianteDelete={handleDeleteEstudiante}
         />
       </SearchableContent>
 
-      <FabNuevaEmpresa onClick={handleNuevaEmpresa} />
+      <FabNuevoEstudiante onClick={handleNuevoEstudiante} />
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
 
       <DeleteConfirmationDialog
         open={showDeleteDialog}
         title='Confirmar eliminación'
-        message='¿Estás seguro de que quieres eliminar la empresa?'
-        itemName={empresaToDelete?.nombre || ''}
+        message='¿Estás seguro de que quieres eliminar el estudiante?'
+        itemName={
+          estudianteToDelete
+            ? `${estudianteToDelete.apellido}, ${estudianteToDelete.nombre}`
+            : ''
+        }
         itemDetails={
-          empresaToDelete && (
+          estudianteToDelete && (
             <>
               <Typography variant='body2' color='text.secondary'>
-                ID: {empresaToDelete.idEmpresa}
+                Documento: {estudianteToDelete.documento}
               </Typography>
               <Typography variant='body2' color='text.secondary'>
-                Encargado: {empresaToDelete.encargado}
+                Carrera: {estudianteToDelete.carrera}
               </Typography>
               <Typography variant='body2' color='text.secondary'>
-                Correo: {empresaToDelete.correoElectronico}
+                Email: {estudianteToDelete.email}
               </Typography>
             </>
           )
@@ -187,4 +195,4 @@ const Empresas: React.FC = () => {
   );
 };
 
-export default Empresas;
+export default Estudiantes;
