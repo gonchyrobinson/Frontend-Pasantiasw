@@ -16,6 +16,13 @@ export interface ElementCardProps {
   onClickEliminar?: () => void;
   title?: string;
   subtitle?: string;
+  extraButtons?: Array<{
+    label: string;
+    onClick: () => void;
+    color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+    variant?: 'text' | 'outlined' | 'contained';
+    icon?: React.ReactNode;
+  }>;
 }
 
 // Stats Component Types
@@ -59,6 +66,13 @@ export interface GridsProps<T = any> {
   onItemClick?: (item: T) => void;
   onItemEdit?: (item: T) => void;
   onItemDelete?: (item: T) => void;
+  getExtraButtons?: (item: T) => Array<{
+    label: string;
+    onClick: () => void;
+    color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+    variant?: 'text' | 'outlined' | 'contained';
+    icon?: React.ReactNode;
+  }>;
   emptyStateTitle: string;
   emptyStateText: string;
 }
@@ -76,6 +90,10 @@ export interface AdvancedSearchFormProps {
   onClear?: () => void;
   initialValues?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   loading?: boolean;
+  dynamicDropdownOptions?: Record<
+    string,
+    Array<{ value: string | number; label: string }>
+  >;
 }
 
 // Search Dialog Types
@@ -86,6 +104,11 @@ export interface SearchDialogProps {
   onSubmit: (filters: Record<string, any>) => Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
   onClearResults?: () => void;
   hasResults?: boolean;
+  dynamicDropdownOptions?: Record<
+    string,
+    Array<{ value: string | number; label: string }>
+  >;
+  loading?: boolean;
 }
 
 // Module Header Types

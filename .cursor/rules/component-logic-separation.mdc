@@ -1,0 +1,117 @@
+---
+description: Rule for separating component logic from presentation
+globs: *.tsx,*.jsx
+---
+
+# Component Logic Separation Rule
+
+## Core Principle
+
+Components should be separated into their own files ONLY when they contain business logic or complex state management. Pure presentational components that only receive and handle props should remain in the main component file.
+
+## When to Separate Components
+
+A component should be extracted to its own file if it contains ANY of:
+- Custom hooks usage
+- Complex state management (beyond simple useState)
+- Business logic in event handlers
+- Data transformation or processing
+- API calls or data fetching
+- Complex calculations or validations
+- Multiple useEffect dependencies
+- Complex conditional rendering logic
+
+## When to Keep Components Together
+
+Components should stay in the main file if they ONLY have:
+- Props handling
+- Basic conditional rendering based on props
+- Simple styling or layout logic
+- No internal state
+- No side effects
+
+## File Structure Example
+
+```
+components/
+  ├── MainComponent.tsx           # Contains simple presentational components
+  └── complex/
+      ├── ComplexComponent.tsx    # Component with business logic
+      └── DataComponent.tsx       # Component with data handling
+```
+
+## Examples
+
+### ✅ Keep in Main File:
+
+```tsx
+// Simple presentational component
+export const ConfirmDialog = ({
+  open,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  confirmText = 'Confirm',
+}) => (
+  <Dialog open={open} onClose={onCancel}>
+    <DialogTitle>{title}</DialogTitle>
+    <DialogContent>{message}</DialogContent>
+    <DialogActions>
+      <Button onClick={onCancel}>Cancel</Button>
+      <Button onClick={onConfirm}>{confirmText}</Button>
+    </DialogActions>
+  </Dialog>
+);
+```
+
+### ❌ Should be Separated:
+
+```tsx
+// Complex component with logic
+const DataGrid = ({ data }) => {
+  const [sortedData, setSortedData] = useState(data);
+  const [filters, setFilters] = useState({});
+  
+  useEffect(() => {
+    // Complex data processing
+    const processed = processData(data, filters);
+    setSortedData(processed);
+  }, [data, filters]);
+
+  const handleFilter = (newFilters) => {
+    // Business logic for filtering
+  };
+
+  return <Grid data={sortedData} onFilter={handleFilter} />;
+};
+```
+
+## Real Project Examples
+
+Current examples that follow this rule:
+
+1. `ComponentesGenericos.tsx`:
+   - ✅ `ConfirmDialog` - Kept in file (simple props)
+   - ✅ `FloatingActionButton` - Kept in file (simple props)
+   - ❌ `ConvenioGrid` - Separated (complex logic)
+   - ❌ `ConvenioFilters` - Separated (state management)
+
+2. `ConveniosFilters.tsx`:
+   - ❌ Main component separated (has state and event handling)
+
+## Benefits
+
+- Clearer code organization
+- Better file size management
+- Easier to understand component responsibilities
+- Simpler testing (pure components vs. logic components)
+- Better performance optimization opportunities
+
+## Implementation Guide
+
+1. Start with all components in one file
+2. Move components to separate files only when they develop complex logic
+3. Keep simple presentational components in the main file
+4. Use default exports for separated components
+5. Use named exports for components in the main file

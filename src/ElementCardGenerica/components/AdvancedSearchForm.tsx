@@ -9,6 +9,7 @@ const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({
   onClear,
   initialValues = {},
   loading = false,
+  dynamicDropdownOptions,
 }) => {
   return (
     <FormularioGenerico
@@ -18,6 +19,7 @@ const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({
       onClear={onClear}
       initialValues={initialValues}
       loading={loading}
+      dynamicDropdownOptions={dynamicDropdownOptions}
     />
   );
 };

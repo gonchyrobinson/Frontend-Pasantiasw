@@ -136,7 +136,20 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
         </Typography>
       )}
 
-      <Box component='form' onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Box
+        component='form'
+        onSubmit={handleSubmit((data: Record<string, unknown>) => {
+          // Transform empty strings to null
+          const transformedData = Object.fromEntries(
+            Object.entries(data).map(([key, value]) => [
+              key,
+              value === '' || value === undefined ? null : value,
+            ])
+          );
+          onSubmit(transformedData);
+        })}
+        noValidate
+      >
         <Grid container spacing={2}>
           {metadata.fields.map(field => (
             <Grid item xs={12} md={field.gridSize || 6} key={field.name}>

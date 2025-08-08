@@ -1,0 +1,475 @@
+---
+globs: *.ts,*.tsx
+description: API integration patterns and React Query usage guidelines
+---
+
+# API Integration and React Query Patterns
+
+## **Backend API Structure**
+
+### **C# Base Controller Endpoints**
+The backend uses a standardized RESTful API pattern with these endpoints for each module:
+
+```
+GET    /api/[controller]      - GetAll() - Retrieve all entities
+GET    /api/[controller]/{id} - GetById(int id) - Retrieve single entity
+POST   /api/[controller]      - Create(TCreateDto dto) - Create new entity
+PUT    /api/[controller]      - Update(TDto dto) - Update existing entity
+DELETE /api/[controller]/{id} - Delete(int id) - Delete entity
+```
+
+### **Standard API Response Format**
+```csharp
+// Success responses return data directly or wrapped in standard format
+// Error responses follow this pattern:
+// 400 Bad Request - AppException.Message
+// 404 Not Found - NotFoundException.Message  
+// 500 Internal Server Error - "Ocurrió un error inesperado. Por favor contacte al administrador."
+```
+
+## **API Client Configuration**
+
+### **Base Setup**
+Reference: [API Interceptors](mdc:src/helpers/interceptors.ts)
+
+```typescript
+// apiClient.ts
+import axios from 'axios';
+
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor for auth tokens
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor for error handling
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Handle unauthorized access
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+```
+
+## **React Query Integration**
+
+### **Query Provider Setup**
+Reference: [QueryProvider](mdc:src/contexts/QueryProvider.tsx)
+
+```typescript
+// QueryProvider.tsx
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000,   // 10 minutes
+      refetchOnWindowFocus: false,
+      retry: (failureCount, error) => {
+        if (error.response?.status === 404) return false;
+        return failureCount < 3;
+      },
+    },
+  },
+});
+```
+
+### **Custom API Hook**
+Reference: [useApi Hook](mdc:src/hooks/useApi.ts)
+
+```typescript
+// useApi.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '../apis/apiClient';
+
+// Generic API query hook
+export const useApiQuery = <T>(
+  endpoint: string,
+  options?: {
+    enabled?: boolean;
+    staleTime?: number;
+    select?: (data: any) => T;
+  }
+) => {
+  return useQuery({
+    queryKey: [endpoint],
+    queryFn: async () => {
+      const response = await apiClient.get(endpoint);
+      return response.data;
+    },
+    enabled: options?.enabled,
+    staleTime: options?.staleTime,
+    select: options?.select,
+  });
+};
+
+// Generic API mutation hook
+export const useApiMutation = <TData, TVariables>(
+  method: 'POST' | 'PUT' | 'DELETE',
+  endpoint: string,
+  options?: {
+    onSuccess?: (data: TData) => void;
+    onError?: (error: any) => void;
+    invalidateQueries?: string[];
+  }
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (variables: TVariables) => {
+      const response = await apiClient({
+        method,
+        url: endpoint,
+        data: variables,
+      });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      options?.onSuccess?.(data);
+      // Invalidate related queries
+      options?.invalidateQueries?.forEach(queryKey => {
+        queryClient.invalidateQueries({ queryKey: [queryKey] });
+      });
+    },
+    onError: options?.onError,
+  });
+};
+```
+
+## **API Usage Patterns**
+
+### **Data Fetching in Components**
+```typescript
+// Component using API data
+const EmpresasComponent = () => {
+  const {
+    data: empresas,
+    isLoading,
+    error,
+    refetch
+  } = useApiQuery<Empresa[]>(ROUTES.EMPRESAS, {
+    select: (data) => data.data, // Extract data from response wrapper
+    staleTime: 10 * 60 * 1000,   // 10 minutes for relatively static data
+  });
+
+  // Loading state
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <AlertaError 
+        mensaje="Error al cargar las empresas" 
+        onRetry={refetch}
+      />
+    );
+  }
+
+  // Success state
+  return (
+    <EmpresasGrid empresas={empresas || []} />
+  );
+};
+```
+
+### **Mutations with Optimistic Updates**
+```typescript
+const useUpdateEmpresa = () => {
+  const queryClient = useQueryClient();
+
+  return useApiMutation<Empresa, UpdateEmpresaDto>(
+    'PUT',
+    '/empresas',
+    {
+      onMutate: async (newEmpresa) => {
+        // Cancel outgoing refetches
+        await queryClient.cancelQueries({ queryKey: [ROUTES.EMPRESAS] });
+
+        // Snapshot previous value
+        const previousEmpresas = queryClient.getQueryData([ROUTES.EMPRESAS]);
+
+        // Optimistically update
+        queryClient.setQueryData([ROUTES.EMPRESAS], (old: any) => {
+          if (!old?.data) return old;
+          return {
+            ...old,
+            data: old.data.map((empresa: Empresa) =>
+              empresa.idEmpresa === newEmpresa.idEmpresa
+                ? { ...empresa, ...newEmpresa }
+                : empresa
+            ),
+          };
+        });
+
+        return { previousEmpresas };
+      },
+      onError: (error, variables, context) => {
+        // Rollback on error
+        if (context?.previousEmpresas) {
+          queryClient.setQueryData([ROUTES.EMPRESAS], context.previousEmpresas);
+        }
+      },
+      onSettled: () => {
+        // Refetch after mutation
+        queryClient.invalidateQueries({ queryKey: [ROUTES.EMPRESAS] });
+      },
+    }
+  );
+};
+```
+
+### **Pagination Support**
+```typescript
+const useEmpresasPaginated = (page: number, pageSize: number = 10) => {
+  return useApiQuery<PaginatedResponse<Empresa>>(
+    `${ROUTES.EMPRESAS}?page=${page}&pageSize=${pageSize}`,
+    {
+      keepPreviousData: true, // Keep previous data while fetching new page
+      staleTime: 5 * 60 * 1000,
+    }
+  );
+};
+
+// Infinite query for scroll-based pagination
+const useEmpresasInfinite = () => {
+  return useInfiniteQuery({
+    queryKey: [ROUTES.EMPRESAS, 'infinite'],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await apiClient.get(
+        `${ROUTES.EMPRESAS}?page=${pageParam}&pageSize=20`
+      );
+      return response.data;
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasNextPage ? lastPage.nextPage : undefined;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+};
+```
+
+## **Error Handling Patterns**
+
+### **Centralized Error Handling**
+```typescript
+// Error types
+interface ApiError {
+  message: string;
+  code: string;
+  details?: any;
+}
+
+// Error handling utility
+export const handleApiError = (error: any): ApiError => {
+  if (error.response) {
+    // Server responded with error status
+    return {
+      message: error.response.data?.message || 'Error en el servidor',
+      code: error.response.status.toString(),
+      details: error.response.data,
+    };
+  } else if (error.request) {
+    // Request was made but no response received
+    return {
+      message: 'Error de conexión con el servidor',
+      code: 'NETWORK_ERROR',
+    };
+  } else {
+    // Something else happened
+    return {
+      message: error.message || 'Error desconocido',
+      code: 'UNKNOWN_ERROR',
+    };
+  }
+};
+
+// Global error handler for React Query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError: (error) => {
+        const apiError = handleApiError(error);
+        console.error('Query error:', apiError);
+        // Could also show global error notification
+      },
+    },
+    mutations: {
+      onError: (error) => {
+        const apiError = handleApiError(error);
+        console.error('Mutation error:', apiError);
+      },
+    },
+  },
+});
+```
+
+### **Component-Level Error Handling**
+```typescript
+const ComponentWithErrorHandling = () => {
+  const { data, error, isLoading } = useApiQuery<Empresa[]>(ROUTES.EMPRESAS);
+
+  // Specific error handling based on error type
+  const renderError = () => {
+    const apiError = handleApiError(error);
+    
+    switch (apiError.code) {
+      case '404':
+        return <EmptyState message="No se encontraron empresas" />;
+      case 'NETWORK_ERROR':
+        return <NetworkError onRetry={() => window.location.reload()} />;
+      default:
+        return <AlertaError mensaje={apiError.message} />;
+    }
+  };
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return renderError();
+  
+  return <EmpresasGrid empresas={data || []} />;
+};
+```
+
+## **Performance Optimization**
+
+### **Query Key Management**
+```typescript
+// Centralized query keys
+export const queryKeys = {
+  empresas: {
+    all: ['empresas'] as const,
+    lists: () => [...queryKeys.empresas.all, 'list'] as const,
+    list: (filters: string) => [...queryKeys.empresas.lists(), { filters }] as const,
+    details: () => [...queryKeys.empresas.all, 'detail'] as const,
+    detail: (id: number) => [...queryKeys.empresas.details(), id] as const,
+  },
+  estudiantes: {
+    all: ['estudiantes'] as const,
+    // ... similar structure
+  },
+} as const;
+
+// Usage in hooks
+const { data } = useApiQuery<Empresa[]>(
+  queryKeys.empresas.list('active'),
+  // ...
+);
+```
+
+### **Background Updates**
+```typescript
+// Prefetch related data
+const usePrefetchEmpresaDetails = () => {
+  const queryClient = useQueryClient();
+
+  return (empresaId: number) => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.empresas.detail(empresaId),
+      queryFn: () => apiClient.get(`/empresas/${empresaId}`).then(res => res.data),
+      staleTime: 10 * 60 * 1000,
+    });
+  };
+};
+
+// Background sync
+const useBackgroundSync = () => {
+  useQuery({
+    queryKey: ['sync'],
+    queryFn: async () => {
+      // Sync critical data in background
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.empresas.all }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.estudiantes.all }),
+      ]);
+    },
+    refetchInterval: 5 * 60 * 1000, // Every 5 minutes
+    refetchIntervalInBackground: true,
+  });
+};
+```
+
+## **Type Safety**
+
+### **API Response Types**
+```typescript
+// Base API response wrapper
+interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  success: boolean;
+}
+
+// Paginated response type
+interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+// Typed API functions
+// API functions matching C# BaseController endpoints
+export const empresasApi = {
+  // GET /api/empresas - BaseController.GetAll()
+  getAll: (): Promise<ApiResponse<EmpresaDto[]>> =>
+    apiClient.get('/empresas').then(res => res.data),
+    
+  // GET /api/empresas/{id} - BaseController.GetById(int id)
+  getById: (id: number): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.get(`/empresas/${id}`).then(res => res.data),
+    
+  // POST /api/empresas - BaseController.Create(TCreateDto dto)
+  create: (empresa: CreateEmpresaDto): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.post('/empresas', empresa).then(res => res.data),
+    
+  // PUT /api/empresas - BaseController.Update(TDto dto)
+  update: (empresa: UpdateEmpresaDto): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.put('/empresas', empresa).then(res => res.data),
+    
+  // DELETE /api/empresas/{id} - BaseController.Delete(int id)
+  delete: (id: number): Promise<void> =>
+    apiClient.delete(`/empresas/${id}`).then(res => res.data),
+};
+```
+
+### **Hook Type Safety**
+```typescript
+// Strongly typed API hook
+export const useEmpresas = (filters?: EmpresaFilters) => {
+  const queryKey = filters 
+    ? queryKeys.empresas.list(JSON.stringify(filters))
+    : queryKeys.empresas.all;
+
+  return useQuery<ApiResponse<Empresa[]>, ApiError>({
+    queryKey,
+    queryFn: () => empresasApi.getAll(),
+    select: (data) => data.data, // Extract array from response wrapper
+  });
+};
+```

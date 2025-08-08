@@ -18,6 +18,11 @@ export interface SearchDialogProps {
   onSubmit: (filters: Record<string, any>) => Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
   onClearResults?: () => void;
   hasResults?: boolean;
+  dynamicDropdownOptions?: Record<
+    string,
+    Array<{ value: string | number; label: string }>
+  >;
+  loading?: boolean;
 }
 
 const SearchDialog: React.FC<SearchDialogProps> = ({
@@ -27,6 +32,8 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   onSubmit,
   onClearResults,
   hasResults = false,
+  dynamicDropdownOptions,
+  loading = false,
 }) => {
   const [isSearchFormOpen, setIsSearchFormOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,7 +69,8 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
     metadata,
     onSubmit: handleSearchSubmit,
     onClear: handleClear, // Función interna para limpiar campos
-    loading: isSubmitting,
+    loading: isSubmitting || loading,
+    dynamicDropdownOptions,
   };
 
   return (

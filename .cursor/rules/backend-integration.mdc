@@ -1,0 +1,267 @@
+---
+description: C# backend integration patterns and module generation guidelines
+---
+
+# Backend Integration with C# Base Controller Pattern
+
+## **Base Controller Architecture**
+
+### **C# Base Controller Pattern**
+The backend uses a generic base controller that provides CRUD operations for all modules:
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public abstract class BaseController<TEntity, TDto, TCreateDto> : ControllerBase 
+    where TEntity : class 
+    where TDto : class
+    where TCreateDto : class
+{
+    protected readonly IService<TEntity, TDto, TCreateDto> _service;
+
+    protected BaseController(IService<TEntity, TDto, TCreateDto> service)
+    {
+        _service = service;
+    }
+
+    // Standard CRUD operations:
+    // GET api/[controller] - GetAll()
+    // GET api/[controller]/{id} - GetById(int id)
+    // POST api/[controller] - Create(TCreateDto dto)
+    // PUT api/[controller] - Update(TDto dto)
+    // DELETE api/[controller]/{id} - Delete(int id)
+}
+```
+
+### **Error Handling Pattern**
+All controller methods follow this error handling pattern:
+- `AppException` → BadRequest (400)
+- `NotFoundException` → NotFound (404)  
+- General Exception → Internal Server Error (500)
+
+## **Module Creation Requirements**
+
+### **Before Creating a New Module, Ask These Questions:**
+
+#### **1. Entity Information**
+- What is the entity name? (e.g., "Empresa", "Estudiante", "Convenio")
+- What are the entity properties and their types?
+- Does the entity have a standard Id property (int)?
+- Are there any relationships to other entities?
+- Does it inherit from a base entity class?
+
+#### **2. DTO Structure**
+- Should Create and Update DTOs be different?
+- Are there any properties that should be excluded from Create/Update operations?
+- Are there any computed or read-only properties in the main DTO?
+- Do you need validation attributes on DTO properties?
+
+#### **3. Business Logic**
+- Are there any custom business rules for this entity?
+- Should any CRUD operations be overridden in the controller?
+- Are there additional endpoints needed beyond the base CRUD?
+- Any specific validation requirements?
+
+#### **4. Service Implementation**
+- Does this module need custom service logic?
+- Are there any specific database queries or operations?
+- Should it inherit from a base service?
+- Any special dependency requirements?
+
+#### **5. Database Configuration**
+- Entity Framework configuration needed?
+- Any specific database constraints or indexes?
+- Migration requirements?
+- Seed data needed?
+
+## **Standard Module Structure**
+
+### **Backend Files to Generate:**
+```
+Backend/
+├── Controllers/
+│   └── [ModuleName]Controller.cs
+├── Models/
+│   └── [ModuleName].cs              # Entity
+├── DTOs/
+│   ├── [ModuleName]Dto.cs           # Read DTO
+│   ├── Create[ModuleName]Dto.cs     # Create DTO
+│   └── Update[ModuleName]Dto.cs     # Update DTO (if different from main)
+├── Services/
+│   ├── I[ModuleName]Service.cs      # Service interface
+│   └── [ModuleName]Service.cs       # Service implementation
+└── Data/
+    └── Configurations/
+        └── [ModuleName]Configuration.cs  # EF Configuration
+```
+
+### **Frontend Files to Generate:**
+```
+src/modules/[ModuleName]/
+├── [ModuleName].tsx                 # Main module component
+├── Crear[ModuleName].tsx            # Create component
+├── Editar[ModuleName].tsx           # Edit component
+├── components/
+│   ├── StyledComponents.tsx         # Styled MUI components
+│   ├── ComponentesGenericos.tsx     # Generic components
+│   ├── [ModuleName]Grid.tsx         # Data grid component
+│   ├── [ModuleName]Stats.tsx        # Statistics component
+│   └── [ModuleName]Filters.tsx      # Filter component
+├── types/
+│   └── index.ts                     # TypeScript definitions
+├── helpers/
+│   ├── [moduleName]Helpers.ts       # Business logic helpers
+│   └── [moduleName]Api.ts           # API functions
+└── hooks/
+    └── use[ModuleName].ts           # Custom hooks
+```
+
+## **Implementation Patterns**
+
+### **Controller Implementation**
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class EmpresasController : BaseController<Empresa, EmpresaDto, CreateEmpresaDto>
+{
+    public EmpresasController(IEmpresaService service) : base(service)
+    {
+    }
+
+    protected override int GetIdFromDto(EmpresaDto dto)
+    {
+        return dto.IdEmpresa;
+    }
+
+    // Override methods only if custom logic is needed
+    // Add additional endpoints if required
+}
+```
+
+### **Service Interface Pattern**
+```csharp
+public interface IEmpresaService : IService<Empresa, EmpresaDto, CreateEmpresaDto>
+{
+    // Add custom methods if needed
+    Task<IEnumerable<EmpresaDto>> GetEmpresasVigentesAsync();
+}
+```
+
+### **Frontend TypeScript Types**
+```typescript
+// Match backend DTOs exactly
+export interface EmpresaDto {
+  idEmpresa: number;
+  nombre: string;
+  email: string;
+  telefono?: string;
+  direccion?: string;
+  vigencia: 'vigente' | 'no_vigente';
+  fechaCreacion: string;
+  fechaActualizacion: string;
+}
+
+export interface CreateEmpresaDto {
+  nombre: string;
+  email: string;
+  telefono?: string;
+  direccion?: string;
+  vigencia: 'vigente' | 'no_vigente';
+}
+
+// Use the same interface for updates unless specifically different
+export type UpdateEmpresaDto = EmpresaDto;
+```
+
+### **Frontend API Integration**
+```typescript
+// API functions matching backend endpoints
+export const empresasApi = {
+  getAll: (): Promise<ApiResponse<EmpresaDto[]>> =>
+    apiClient.get('/empresas').then(res => res.data),
+    
+  getById: (id: number): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.get(`/empresas/${id}`).then(res => res.data),
+    
+  create: (empresa: CreateEmpresaDto): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.post('/empresas', empresa).then(res => res.data),
+    
+  update: (empresa: UpdateEmpresaDto): Promise<ApiResponse<EmpresaDto>> =>
+    apiClient.put('/empresas', empresa).then(res => res.data),
+    
+  delete: (id: number): Promise<void> =>
+    apiClient.delete(`/empresas/${id}`).then(res => res.data),
+};
+
+// React Query hooks
+export const useEmpresas = () => {
+  return useApiQuery<EmpresaDto[]>('/empresas');
+};
+
+export const useCreateEmpresa = () => {
+  return useApiMutation<EmpresaDto, CreateEmpresaDto>('POST', '/empresas', {
+    invalidateQueries: ['/empresas'],
+  });
+};
+```
+
+## **Module Generation Workflow**
+
+### **Step-by-Step Process:**
+1. **Gather Requirements**: Ask all the questions listed above
+2. **Generate Backend Files**:
+   - Entity class with proper attributes
+   - DTOs with validation attributes
+   - Service interface and implementation
+   - Controller inheriting from BaseController
+   - EF configuration if needed
+3. **Generate Frontend Files**:
+   - Main module component with CRUD operations
+   - TypeScript types matching backend DTOs
+   - API functions and React Query hooks
+   - Form components using FormularioGenerico
+   - Grid component for data display
+4. **Update Configuration**:
+   - Add service registration to DI container
+   - Add route to frontend AppRoutes.tsx
+   - Update navigation if needed
+5. **Test Integration**:
+   - Verify API endpoints work
+   - Test frontend CRUD operations
+   - Validate error handling
+
+## **Best Practices**
+
+### **Backend Guidelines**
+- Always inherit from BaseController unless custom logic is required
+- Use proper HTTP status codes and error handling
+- Implement proper validation on DTOs
+- Follow consistent naming conventions
+- Use async/await for all operations
+
+### **Frontend Guidelines**
+- Match TypeScript types exactly with backend DTOs
+- Use the established module structure (StyledComponents, ComponentesGenericos, etc.)
+- Implement proper error handling and loading states
+- Use React Query for all API operations
+- Follow the FormularioGenerico pattern for forms
+
+### **Data Flow**
+```
+Frontend Form → CreateDto → Backend Controller → Service → Entity → Database
+Database → Entity → Service → Dto → Backend Controller → Frontend Display
+```
+
+## **Integration Checklist**
+
+When creating a new module, ensure:
+- [ ] Backend controller inherits from BaseController
+- [ ] GetIdFromDto method is implemented correctly
+- [ ] Frontend types match backend DTOs exactly
+- [ ] API endpoints follow RESTful conventions
+- [ ] Error handling follows established patterns
+- [ ] FormularioGenerico is used for forms
+- [ ] React Query hooks are implemented
+- [ ] Module follows the 4-file frontend pattern
+- [ ] Routes are added to AppRoutes.tsx
+- [ ] Services are registered in DI container

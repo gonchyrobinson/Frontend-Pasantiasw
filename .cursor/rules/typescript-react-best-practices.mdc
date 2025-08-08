@@ -1,0 +1,248 @@
+---
+globs: *.ts,*.tsx
+description: TypeScript and React best practices for the internship management system
+---
+
+# TypeScript and React Best Practices
+
+## TypeScript Guidelines
+
+### **Strict Typing**
+- Always use strict TypeScript configuration
+- Avoid `any` type - use proper type definitions
+- Use type inference where possible but be explicit for complex types
+- Define interfaces for all API responses and data models
+
+```typescript
+// Good
+interface EmpresaDto {
+  idEmpresa: number;
+  nombre: string;
+  email: string;
+  telefono?: string;
+}
+
+// Bad
+const empresa: any = { ... };
+```
+
+### **Interface vs Type**
+- Use `interface` for object shapes that might be extended
+- Use `type` for unions, primitives, and computed types
+- Follow the project pattern of using `interface` for component props
+
+```typescript
+// Component props - use interface
+interface StatsCardProps {
+  title: string;
+  value: number;
+  loading?: boolean;
+}
+
+// Union types - use type
+type VigenciaType = 'vigente' | 'no_vigente';
+```
+
+### **Enums and Constants**
+```typescript
+// Use const assertions for immutable objects
+export const Vigencia = {
+  Vigente: 'vigente' as const,
+  NoVigente: 'no_vigente' as const,
+} as const;
+
+// Or use proper enums for complex cases
+export enum EstadoPasantia {
+  Pendiente = 'pendiente',
+  Activa = 'activa',
+  Completada = 'completada',
+  Cancelada = 'cancelada'
+}
+```
+
+## React Component Guidelines
+
+### **Functional Components**
+- Always use functional components with TypeScript
+- Use React.FC sparingly - prefer explicit prop typing
+- Keep components focused and single-responsibility
+
+```typescript
+// Good - explicit prop typing
+interface Props {
+  title: string;
+  onEdit?: () => void;
+}
+
+const ComponentName = ({ title, onEdit }: Props) => {
+  return <div>{title}</div>;
+};
+
+// Alternative with React.FC (use sparingly)
+const ComponentName: React.FC<Props> = ({ title, onEdit }) => {
+  return <div>{title}</div>;
+};
+```
+
+### **Hooks Best Practices**
+- Custom hooks must start with `use`
+- Place custom hooks in `src/hooks/` for shared hooks
+- Place module-specific hooks in `src/modules/[Module]/hooks/`
+- Always type hook parameters and return values
+
+```typescript
+// Custom hook example
+export const useApi = <T>(url: string): ApiResponse<T> => {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Implementation...
+  
+  return { data, loading, error };
+};
+```
+
+### **State Management**
+- Use React Query for server state management
+- Use React Context for global UI state
+- Keep component state local when possible
+- Use proper typing for all state
+
+```typescript
+// React Query usage
+const { data, isLoading, error } = useApiQuery<Empresa[]>(ROUTES.EMPRESAS);
+
+// Local state with proper typing
+const [filteredData, setFilteredData] = useState<Empresa[]>([]);
+```
+
+## Component Structure
+
+### **Component File Organization**
+```typescript
+// Standard component structure
+import React from 'react';
+import { Typography } from '@mui/material';
+// Other imports...
+
+// Types (if small, otherwise move to types/index.ts)
+interface ComponentProps {
+  title: string;
+  data: DataType[];
+}
+
+// Component implementation
+const ComponentName = ({ title, data }: ComponentProps) => {
+  // Hooks
+  const [state, setState] = useState();
+  
+  // Event handlers
+  const handleClick = () => {
+    // Implementation
+  };
+  
+  // Render
+  return (
+    <div>
+      <Typography variant="h5">{title}</Typography>
+      {/* Rest of component */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### **Props and Event Handlers**
+- Use descriptive prop names
+- Prefix event handlers with `on` (e.g., `onEdit`, `onDelete`)
+- Use optional props with default values appropriately
+
+```typescript
+interface ActionCardProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  loading?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+```
+
+## Performance Best Practices
+
+### **Memoization**
+```typescript
+// Use React.memo for expensive components
+export const ExpensiveComponent = React.memo(({ data }: Props) => {
+  return <div>{/* Expensive rendering */}</div>;
+});
+
+// Use useMemo for expensive calculations
+const expensiveValue = useMemo(() => {
+  return heavyCalculation(data);
+}, [data]);
+
+// Use useCallback for event handlers passed to children
+const handleClick = useCallback(() => {
+  // Handler implementation
+}, [dependency]);
+```
+
+### **Key Props**
+```typescript
+// Always use stable, unique keys for lists
+{items.map(item => (
+  <ItemComponent 
+    key={item.id} // Use stable ID, not array index
+    data={item} 
+  />
+))}
+```
+
+## Error Handling
+
+### **Component Error Boundaries**
+- Use ErrorBoundary component for error handling
+- Reference: [ErrorBoundary](mdc:src/modules/Shared/components/ErrorBoundary.tsx)
+
+### **API Error Handling**
+```typescript
+// Handle errors gracefully in components
+if (error) {
+  return <AlertaError mensaje="Error al cargar los datos" />;
+}
+
+if (isLoading) {
+  return <LoadingSpinner />;
+}
+```
+
+## Code Quality
+
+### **Naming Conventions**
+- Components: PascalCase (e.g., `UserProfile.tsx`)
+- Hooks: camelCase with 'use' prefix (e.g., `useAuth.ts`)
+- Types/Interfaces: PascalCase (e.g., `UserProfileProps`)
+- Constants: UPPER_SNAKE_CASE
+- Functions: camelCase
+- Files: kebab-case for non-component files
+
+### **Documentation**
+```typescript
+/**
+ * Calculates statistics from API data for the dashboard
+ * @param conveniosData - Array of convenio data
+ * @param pasantiasData - Array of pasantia data
+ * @returns Formatted statistics array
+ */
+export const calculateStats = (
+  conveniosData: Convenio[] | undefined,
+  pasantiasData: Pasantia[] | undefined
+): StatItem[] => {
+  // Implementation
+};
+```
