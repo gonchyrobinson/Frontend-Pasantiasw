@@ -17,6 +17,8 @@ import Estudiantes from '../modules/Estudiantes/Estudiantes';
 import CreacionEstudiantes from '../modules/Estudiantes/CreacionEstudiantes';
 import EditarEstudiante from '../modules/Estudiantes/EditarEstudiante';
 import Convenios from '../modules/Convenios/Convenios';
+import CrearConvenio from '../modules/Convenios/components/CrearConvenio';
+import EditarConvenio from '../modules/Convenios/components/EditarConvenio';
 import Pasantias from '../modules/Pasantias/Pasantias';
 import Pagos from '../modules/Pagos/Pagos';
 import Reportes from '../modules/Reportes/Reportes';
@@ -112,6 +114,26 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <Convenios />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.CONVENIOS_CREAR}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CrearConvenio />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.CONVENIOS_EDITAR}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditarConvenio />
               </Layout>
             </ProtectedRoute>
           }

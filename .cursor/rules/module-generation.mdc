@@ -1,0 +1,278 @@
+---
+description: Complete module generation workflow for frontend and backend integration
+---
+
+# Module Generation Workflow
+
+## **Pre-Generation Questions**
+
+Before generating a new module, gather this information from the user:
+
+### **🏗️ Entity Structure**
+1. **What is the entity name?** (e.g., "Empresa", "Estudiante", "Convenio")
+2. **What are the entity properties?** (name, type, required/optional, validation rules)
+3. **Does it have relationships to other entities?** (foreign keys, navigation properties)
+4. **Should it inherit from a base entity class?**
+
+### **📝 DTO Configuration**  
+1. **Should Create and Update DTOs be different?** (some properties might be read-only or auto-generated)
+2. **Are there computed properties** that shouldn't be in Create/Update DTOs?
+3. **What validation rules are needed?** (required fields, string lengths, patterns, ranges)
+4. **Are there any enum properties?** (and their possible values)
+
+### **🔧 Business Logic**
+1. **Are there custom business rules?** (special validation, workflows)
+2. **Should any CRUD operations be overridden?** (custom create/update logic)
+3. **Are additional endpoints needed?** (search, filter, custom operations)
+4. **Any specific error handling requirements?**
+
+### **🎨 UI Requirements**
+1. **What fields should be displayed in the grid?** (table columns)
+2. **What fields are editable in forms?** (create/edit forms)
+3. **Are there special input types needed?** (date pickers, select dropdowns, file uploads)
+4. **Any custom validation messages?**
+5. **Should there be statistics/dashboard cards?**
+
+### **🔗 Integration**
+1. **Database table name and schema?**
+2. **Any specific EF Core configuration needed?** (indexes, constraints)
+3. **Navigation menu placement?**
+4. **Any dependencies on other modules?**
+
+## **Generation Checklist**
+
+Use this checklist when creating a new module:
+
+### **📋 Backend Generation**
+- [ ] **Entity Class** (`Models/[EntityName].cs`)
+  - [ ] Properties with correct types and attributes
+  - [ ] Base class inheritance if applicable
+  - [ ] Navigation properties for relationships
+  
+- [ ] **DTOs** (`DTOs/`)
+  - [ ] `[EntityName]Dto.cs` - Main read DTO
+  - [ ] `Create[EntityName]Dto.cs` - Creation DTO
+  - [ ] `Update[EntityName]Dto.cs` - Update DTO (if different)
+  - [ ] Validation attributes on properties
+  
+- [ ] **Service Interface** (`Services/I[EntityName]Service.cs`)
+  - [ ] Inherits from `IService<TEntity, TDto, TCreateDto>`
+  - [ ] Custom method signatures if needed
+  
+- [ ] **Service Implementation** (`Services/[EntityName]Service.cs`)
+  - [ ] Inherits from base service or implements interface
+  - [ ] Custom business logic implementation
+  - [ ] Proper dependency injection
+  
+- [ ] **Controller** (`Controllers/[EntityName]Controller.cs`)
+  - [ ] Inherits from `BaseController<TEntity, TDto, TCreateDto>`
+  - [ ] Implements `GetIdFromDto` method
+  - [ ] Custom endpoints if needed
+  
+- [ ] **EF Configuration** (`Data/Configurations/[EntityName]Configuration.cs`)
+  - [ ] Entity configuration for EF Core
+  - [ ] Indexes, constraints, relationships
+  
+- [ ] **DI Registration**
+  - [ ] Add service registration to Program.cs/Startup.cs
+
+### **🎨 Frontend Generation**
+- [ ] **Main Module Component** (`src/modules/[ModuleName]/[ModuleName].tsx`)
+  - [ ] Grid display with data fetching
+  - [ ] CRUD operation buttons
+  - [ ] Error handling and loading states
+  
+- [ ] **Create Component** (`src/modules/[ModuleName]/Crear[ModuleName].tsx`)
+  - [ ] Form using FormularioGenerico
+  - [ ] Validation and submission
+  - [ ] Navigation after success
+  
+- [ ] **Edit Component** (`src/modules/[ModuleName]/Editar[ModuleName].tsx`)
+  - [ ] Pre-populated form
+  - [ ] Update functionality
+  - [ ] Data refetching
+  
+- [ ] **Types** (`src/modules/[ModuleName]/types/index.ts`)
+  - [ ] Interface matching backend DTOs exactly
+  - [ ] Form data types
+  - [ ] Component prop types
+  
+- [ ] **API Functions** (`src/modules/[ModuleName]/helpers/[moduleName]Api.ts`)
+  - [ ] CRUD operations matching backend endpoints
+  - [ ] Proper TypeScript typing
+  - [ ] Error handling
+  
+- [ ] **React Query Hooks** (`src/modules/[ModuleName]/hooks/use[ModuleName].ts`)
+  - [ ] Query hooks for data fetching
+  - [ ] Mutation hooks for CRUD operations
+  - [ ] Proper cache invalidation
+  
+- [ ] **Styled Components** (`src/modules/[ModuleName]/components/StyledComponents.tsx`)
+  - [ ] MUI components with sx styling
+  - [ ] Consistent with design system
+  
+- [ ] **Generic Components** (`src/modules/[ModuleName]/components/ComponentesGenericos.tsx`)
+  - [ ] Reusable components with MUI props
+  - [ ] Grid, filters, stats components
+  
+- [ ] **Form Fields Configuration** (`src/modules/[ModuleName]/helpers/[moduleName]Helpers.ts`)
+  - [ ] FormularioGenerico field definitions
+  - [ ] Validation rules
+  - [ ] Helper functions
+  
+- [ ] **Routes** (`src/routes/AppRoutes.tsx`)
+  - [ ] Add module routes
+  - [ ] Protected route configuration
+  
+- [ ] **Navigation** (update as needed)
+  - [ ] Add menu items
+  - [ ] Update sidebar/header
+
+## **Standard Templates**
+
+### **Backend Controller Template**
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class [EntityName]Controller : BaseController<[EntityName], [EntityName]Dto, Create[EntityName]Dto>
+{
+    public [EntityName]Controller(I[EntityName]Service service) : base(service)
+    {
+    }
+
+    protected override int GetIdFromDto([EntityName]Dto dto)
+    {
+        return dto.Id[EntityName]; // Adjust property name as needed
+    }
+
+    // Add custom endpoints here if needed
+}
+```
+
+### **Frontend Module Component Template**
+```typescript
+import React from 'react';
+import { Typography, Grid, Button } from '@mui/material';
+import { Add } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
+import { use[EntityName]s } from './hooks/use[EntityName]';
+import { [EntityName]Grid } from './components/[EntityName]Grid';
+import { ContenedorPrincipal } from './components/ComponentesGenericos';
+import { ROUTES } from '../../helpers/routesHelper';
+
+const [EntityName]s: React.FC = () => {
+  const navigate = useNavigate();
+  const { data: [entityName]s, isLoading, error } = use[EntityName]s();
+
+  const handleCreate = () => {
+    navigate(ROUTES.[ENTITY_NAME]_CREAR);
+  };
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+
+  return (
+    <ContenedorPrincipal>
+      <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
+        <Grid item>
+          <Typography variant="h4" component="h1">
+            [EntityName]s
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={handleCreate}
+          >
+            Crear [EntityName]
+          </Button>
+        </Grid>
+      </Grid>
+
+      <[EntityName]Grid data={[entityName]s || []} />
+    </ContenedorPrincipal>
+  );
+};
+
+export default [EntityName]s;
+```
+
+### **API Functions Template**
+```typescript
+import { apiClient } from '../../apis/apiClient';
+import { ApiResponse } from '../../types';
+import { [EntityName]Dto, Create[EntityName]Dto, Update[EntityName]Dto } from '../types';
+
+export const [entityName]Api = {
+  getAll: (): Promise<ApiResponse<[EntityName]Dto[]>> =>
+    apiClient.get('/[entityname]s').then(res => res.data),
+    
+  getById: (id: number): Promise<ApiResponse<[EntityName]Dto>> =>
+    apiClient.get(`/[entityname]s/${id}`).then(res => res.data),
+    
+  create: ([entityName]: Create[EntityName]Dto): Promise<ApiResponse<[EntityName]Dto>> =>
+    apiClient.post('/[entityname]s', [entityName]).then(res => res.data),
+    
+  update: ([entityName]: Update[EntityName]Dto): Promise<ApiResponse<[EntityName]Dto>> =>
+    apiClient.put('/[entityname]s', [entityName]).then(res => res.data),
+    
+  delete: (id: number): Promise<void> =>
+    apiClient.delete(`/[entityname]s/${id}`).then(res => res.data),
+};
+```
+
+## **Post-Generation Verification**
+
+After generating a module, verify:
+
+### **🔧 Backend Verification**
+- [ ] Controller compiles without errors
+- [ ] Service is registered in DI container
+- [ ] Entity Framework recognizes the entity
+- [ ] API endpoints respond correctly
+- [ ] Validation works as expected
+
+### **🎨 Frontend Verification**  
+- [ ] TypeScript compiles without errors
+- [ ] Routes work correctly
+- [ ] API calls connect to backend
+- [ ] Forms submit and validate properly
+- [ ] Grid displays data correctly
+- [ ] Error handling works
+
+### **🔗 Integration Testing**
+- [ ] Full CRUD cycle works end-to-end
+- [ ] Error scenarios are handled properly
+- [ ] Navigation between views works
+- [ ] Data refreshes after operations
+- [ ] Loading states display correctly
+
+## **Common Patterns**
+
+### **ID Property Mapping**
+Most entities follow these patterns for the `GetIdFromDto` method:
+```csharp
+// Pattern 1: Id[EntityName]
+return dto.IdEmpresa;     // for Empresa
+return dto.IdEstudiante;  // for Estudiante
+
+// Pattern 2: Just Id
+return dto.Id;
+
+// Pattern 3: Custom property
+return dto.CustomId;      // Ask user for property name
+```
+
+### **Route Naming Convention**
+```typescript
+- Check the route of the endpoint to determine the route. If not provided ask me
+// In routesHelper.ts, add:
+[ENTITY_NAME]S: '/[entityname]s',
+[ENTITY_NAME]S_CREAR: '/[entityname]s/crear',
+[ENTITY_NAME]S_EDITAR: '/[entityname]s/editar',
+```
+
+### **Navigation Menu Integration**
+Ask user where in the navigation menu the new module should appear and update the appropriate navigation component.

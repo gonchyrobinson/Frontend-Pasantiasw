@@ -26,6 +26,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
   onClickEliminar,
   title,
   subtitle,
+  extraButtons = [],
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -75,7 +76,7 @@ const ElementCard: React.FC<ElementCardProps> = ({
                 >
                   {field.label}
                 </Typography>
-                {fieldType === 'boolean' ? (
+                {fieldType === 'checkbox' ? (
                   <Chip
                     label={formatValue(value, field)}
                     size='small'
@@ -112,7 +113,14 @@ const ElementCard: React.FC<ElementCardProps> = ({
 
       <CardActionsStyled isExpanded={isExpanded}>
         {isExpanded && (
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
             {onClickEdit && (
               <Button
                 size='small'
@@ -135,6 +143,18 @@ const ElementCard: React.FC<ElementCardProps> = ({
                 Eliminar
               </Button>
             )}
+            {extraButtons.map((button, index) => (
+              <Button
+                key={index}
+                size='small'
+                startIcon={button.icon}
+                onClick={button.onClick}
+                color={button.color || 'primary'}
+                variant={button.variant || 'outlined'}
+              >
+                {button.label}
+              </Button>
+            ))}
           </Box>
         )}
         <IconButton

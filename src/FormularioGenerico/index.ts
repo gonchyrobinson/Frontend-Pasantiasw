@@ -39,7 +39,4 @@ export {
   createCurrencyField,
   createDropdownField,
   createDynamicDropdownField,
-  createConvenioFormMetadata,
-  createEmpresaFormMetadata,
-  createEstudianteFormMetadata,
 } from './helpers/formMetadataHelpers';

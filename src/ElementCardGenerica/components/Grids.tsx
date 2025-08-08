@@ -16,6 +16,7 @@ const Grids: React.FC<GridsProps> = ({
   onItemClick,
   onItemEdit,
   onItemDelete,
+  getExtraButtons,
   emptyStateTitle,
   emptyStateText,
 }) => {
@@ -46,6 +47,7 @@ const Grids: React.FC<GridsProps> = ({
             onClickEliminar={
               onItemDelete ? () => onItemDelete(item) : undefined
             }
+            extraButtons={getExtraButtons ? getExtraButtons(item) : undefined}
           />
         </Grid>
       ))}

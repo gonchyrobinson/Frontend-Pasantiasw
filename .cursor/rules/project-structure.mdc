@@ -1,0 +1,195 @@
+---
+alwaysApply: true
+description: Project structure and file organization guidelines
+---
+
+# Project Structure and File Organization
+
+## **Root Level Structure**
+
+Reference: [Project Structure](mdc:ESTRUCTURA_FRONTEND.md)
+
+```
+frontend/
+├── 📁 src/                    # Source code
+├── 📁 public/                 # Static assets
+├── 📁 .cursor/                # Cursor IDE configuration
+│   └── 📁 rules/              # Cursor rules
+├── 📄 package.json            # Dependencies and scripts
+├── 📄 vite.config.ts          # Vite configuration
+├── 📄 tsconfig.json           # TypeScript configuration
+└── 📄 index.html              # HTML template
+```
+
+## **Source Code Organization**
+
+### **Main Entry Points**
+- [index.tsx](mdc:src/index.tsx) - Application entry point
+- [App.tsx](mdc:src/App.tsx) - Root component with providers
+- [index.css](mdc:src/index.css) - Global styles
+
+### **Core Directories**
+
+#### **1. Modules (`src/modules/`)**
+Each feature is organized as a module with consistent structure:
+
+```
+src/modules/[ModuleName]/
+├── [ModuleName].tsx           # Main module component
+├── index.ts                   # Module exports
+├── components/                # Module-specific components
+│   ├── StyledComponents.tsx   # Styled MUI components
+│   ├── ComponentesGenericos.tsx # Generic reusable components  
+│   └── [Feature]Component.tsx # Specific feature components
+├── types/                     # Module-specific TypeScript types
+│   └── index.ts              # Type definitions
+├── helpers/                   # Module-specific utilities
+│   └── [feature]Helpers.ts   # Business logic functions
+└── hooks/                     # Module-specific hooks (optional)
+    └── use[Feature].ts
+```
+
+#### **2. Shared Components (`src/modules/Shared/components/`)**
+- [Layout.tsx](mdc:src/modules/Shared/components/Layout.tsx) - Main application layout
+- [ErrorBoundary.tsx](mdc:src/modules/Shared/components/ErrorBoundary.tsx) - Error handling
+- [LoadingSpinner.tsx] - Loading states
+- [ComponentesGenericos.tsx](mdc:src/modules/Shared/components/ComponentesGenericos.tsx) - App-wide components
+
+#### **3. Routing (`src/routes/`)**
+- [AppRoutes.tsx](mdc:src/routes/AppRoutes.tsx) - Main routing configuration
+- helpers/ProtectedRoute.tsx - Route protection logic
+
+#### **4. Global Utilities**
+- **contexts/** - React contexts for global state
+- **hooks/** - Shared custom hooks
+- **helpers/** - Global utility functions
+- **types/** - Global TypeScript definitions
+- **apis/** - API integration and HTTP client setup
+
+## **File Naming Conventions**
+
+### **Components**
+- PascalCase for component files: `UserProfile.tsx`
+- Use descriptive names that indicate purpose
+- Include module context in name when necessary: `EmpresasGrid.tsx`
+
+### **Utilities and Helpers**
+- camelCase for utility files: `statsHelpers.ts`
+- Use descriptive suffixes: `*Helpers.ts`, `*Utils.ts`, `*Constants.ts`
+
+### **Types**
+- Use `index.ts` in type directories for clean imports
+- PascalCase for interface and type names
+- Use descriptive suffixes: `*Dto`, `*Props`, `*Config`
+
+### **Hooks**
+- Prefix with `use`: `useApi.ts`, `useAuth.ts`
+- camelCase for file names
+- Place in appropriate scope (global vs module-specific)
+
+## **Import Organization**
+
+### **Import Order**
+```typescript
+// 1. React and third-party libraries
+import React from 'react';
+import { Typography, Grid } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+
+// 2. Internal utilities and hooks
+import { useApiQuery } from '../../hooks/useApi';
+import { ROUTES } from '../../helpers/routesHelper';
+
+// 3. Types
+import { Empresa } from '../../types';
+import { StatsCardProps } from '../types';
+
+// 4. Components (local first, then external)
+import StatsCard from './components/StatsCard';
+import { ContenedorPrincipal } from './components/ComponentesGenericos';
+
+// 5. Helpers and utilities
+import { calculateStats } from './helpers/statsHelpers';
+```
+
+### **Path Mapping**
+- Use relative imports for module-internal files
+- Use absolute imports for cross-module dependencies
+- Leverage TypeScript path mapping when configured
+
+```typescript
+// Good - relative for same module
+import { ComponenteLocal } from './components/ComponenteLocal';
+
+// Good - absolute for external modules  
+import { useApi } from '../../hooks/useApi';
+```
+
+## **Module Development Workflow**
+
+### **Creating a New Module**
+1. Create module directory: `src/modules/[ModuleName]/`
+2. Create main component: `[ModuleName].tsx`
+3. Set up required directories: `components/`, `types/`, `helpers/`
+4. Create module-specific components following the 4-file pattern
+5. Add route configuration in [AppRoutes.tsx](mdc:src/routes/AppRoutes.tsx)
+6. Export module in `index.ts`
+
+### **Component Development Pattern**
+1. Start with main component implementation
+2. Extract styled elements to `StyledComponents.tsx`
+3. Create reusable components in `ComponentesGenericos.tsx`
+4. Define types in `types/index.ts`
+5. Extract business logic to `helpers/[feature]Helpers.ts`
+
+### **Testing Structure**
+```
+src/modules/[ModuleName]/
+├── [ModuleName].test.tsx      # Main component tests
+├── components/
+│   └── [Component].test.tsx   # Component-specific tests
+└── helpers/
+    └── [helpers].test.ts      # Helper function tests
+```
+
+## **Configuration Files**
+
+### **TypeScript Configuration**
+- [tsconfig.json](mdc:tsconfig.json) - Main TypeScript configuration
+- Strict mode enabled
+- Path mapping configured
+- Target ES2020
+
+### **Build Configuration**
+- [vite.config.ts](mdc:vite.config.ts) - Vite build configuration
+- Development server on port 3000
+- API proxy configuration
+- Hot module replacement enabled
+
+### **Code Quality**
+- ESLint configuration for TypeScript and React
+- Prettier for code formatting
+- Husky for pre-commit hooks
+- Lint-staged for staged file linting
+
+## **Environment and State Management**
+
+### **Environment Configuration**
+```typescript
+// Environment variables pattern
+VITE_API_URL=https://localhost:7001/api
+VITE_SERVER_BASE_URL=https://localhost:7001
+VITE_ENVIRONMENT=development
+```
+
+### **State Management Strategy**
+- **React Query**: Server state and API data caching
+- **React Context**: Global UI state and user preferences  
+- **Local State**: Component-specific state with useState/useReducer
+- **Form State**: React Hook Form for form management
+
+### **API Integration**
+- Centralized API client configuration
+- Interceptors for request/response handling
+- Type-safe API calls with proper error handling
+- Consistent error boundary implementation

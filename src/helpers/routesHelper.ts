@@ -16,6 +16,8 @@ export const ROUTES = {
   ESTUDIANTES_CREAR: '/students/crear',
   ESTUDIANTES_EDITAR: '/students/editar',
   CONVENIOS: '/convenios',
+  CONVENIOS_CREAR: '/convenios/crear',
+  CONVENIOS_EDITAR: '/convenios/editar',
   PASANTIAS: '/pasantias',
   PAGOS: '/pagos',
   REPORTES: '/reportes',

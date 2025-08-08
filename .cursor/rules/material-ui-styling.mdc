@@ -1,0 +1,284 @@
+---
+globs: *.tsx,*.ts
+description: Material-UI styling and component usage guidelines
+---
+
+# Material-UI Styling and Component Guidelines
+
+## MUI Component Usage
+
+### **Core Principles**
+- Use Material-UI components as the primary UI library
+- Follow MUI's theming system with `createTheme`
+- Use `sx` prop for one-off styling, styled components for reusable styles
+- Implement responsive design with Grid system
+- Follow accessibility guidelines with proper ARIA attributes
+- Reutilice always you can
+
+### **Theme Configuration**
+- Reference main theme configuration: [ThemeProvider](mdc:src/contexts/ThemeProvider.tsx)
+- Use theme values consistently across components
+- Avoid hardcoded colors and spacing
+
+```typescript
+// Use theme values
+const StyledCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(3),
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[4],
+}));
+
+// Avoid hardcoded values
+const BadCard = styled(Card)(() => ({
+  padding: '24px', // Bad - use theme.spacing(3)
+  backgroundColor: '#fff', // Bad - use theme.palette.background.paper
+}));
+```
+
+## Styling Architecture
+
+### **Styled Components Pattern**
+Following the project's established pattern:
+
+1. **StyledComponents.tsx**: All styled components with `sx` properties
+2. **ComponentesGenericos.tsx**: Reusable components with MUI props
+3. **Main Component**: Business logic and composition
+
+```typescript
+// StyledComponents.tsx
+export const ContenedorPrincipalStyled = styled(Container)(({ theme }) => ({
+  paddingTop: theme.spacing(3),
+  paddingBottom: theme.spacing(3),
+}));
+
+// ComponentesGenericos.tsx
+export const ContenedorPrincipal = ({ children }: { children: React.ReactNode }) => (
+  <ContenedorPrincipalStyled maxWidth="lg">
+    {children}
+  </ContenedorPrincipalStyled>
+);
+
+// Main component
+const ModuleComponent = () => (
+  <ContenedorPrincipal>
+    {/* Component content */}
+  </ContenedorPrincipal>
+);
+```
+
+### **When to Use Each Approach**
+
+#### **Styled Components** (in StyledComponents.tsx)
+```typescript
+// For components with complex styling
+export const StyledActionCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: theme.shadows[8],
+  },
+}));
+```
+
+#### **sx Prop** (for one-off styling)
+```typescript
+// For simple, component-specific styling
+<Typography 
+  variant="h4" 
+  sx={{ 
+    fontWeight: 600, 
+    color: 'primary.main',
+    mb: 2 
+  }}
+>
+  Title
+</Typography>
+```
+
+#### **MUI Props** (in ComponentesGenericos.tsx)
+```typescript
+// For components with standard MUI properties
+export const TarjetaEstadistica = ({ children }: { children: React.ReactNode }) => (
+  <Card elevation={2} sx={{ height: '100%' }}>
+    <CardContent>
+      {children}
+    </CardContent>
+  </Card>
+);
+```
+
+## Component Composition Patterns
+
+### **Grid System Usage**
+```typescript
+// Responsive grid layout
+<Grid container spacing={3}>
+  <Grid item xs={12} sm={6} md={4}>
+    <StatsCard {...statsData} />
+  </Grid>
+  <Grid item xs={12} md={8}>
+    <MainContent />
+  </Grid>
+</Grid>
+```
+
+### **Theme-Aware Components**
+```typescript
+// Access theme in styled components
+const ThemedBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  backgroundColor: theme.palette.mode === 'dark' 
+    ? theme.palette.grey[800] 
+    : theme.palette.grey[100],
+  borderRadius: theme.shape.borderRadius,
+}));
+```
+
+### **Responsive Design**
+```typescript
+// Use theme breakpoints for responsive design
+const ResponsiveContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(2),
+  [theme.breakpoints.up('md')]: {
+    padding: theme.spacing(4),
+  },
+  [theme.breakpoints.up('lg')]: {
+    padding: theme.spacing(6),
+  },
+}));
+```
+
+## Icon Usage
+
+### **MUI Icons**
+```typescript
+import { Business, School, Payment, Add } from '@mui/icons-material';
+
+// Use icons consistently
+const icons = {
+  business: <Business />,
+  school: <School />,
+  payment: <Payment />,
+  add: <Add />,
+};
+```
+
+### **Icon in Components**
+```typescript
+// Icon with proper styling
+const IconContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 48,
+  height: 48,
+  borderRadius: '50%',
+  backgroundColor: theme.palette.primary.light,
+  color: theme.palette.primary.main,
+}));
+```
+
+## Form Components
+
+### **FormularioGenerico Integration**
+- Use the project's FormularioGenerico system for all forms
+- Reference: [FormularioGenerico](mdc:src/components/FormularioGenerico)
+- Maintain consistent form styling and validation
+
+```typescript
+// Form field configuration
+const formFields = [
+  {
+    name: 'nombre',
+    label: 'Nombre de la Empresa',
+    type: 'text' as const,
+    required: true,
+    validation: {
+      minLength: 2,
+      maxLength: 100,
+    },
+  },
+];
+```
+
+## Color System
+
+### **Semantic Colors**
+```typescript
+// Use semantic color names
+const AlertMessage = styled(Alert)(({ theme, severity }) => ({
+  backgroundColor: severity === 'error' 
+    ? theme.palette.error.light 
+    : theme.palette.success.light,
+}));
+```
+
+### **Color Usage Guidelines**
+- **Primary**: Main brand colors, primary actions
+- **Secondary**: Secondary actions, accents
+- **Error**: Error states, destructive actions
+- **Warning**: Warning states, caution
+- **Info**: Informational content
+- **Success**: Success states, positive feedback
+
+## Accessibility
+
+### **ARIA Labels and Roles**
+```typescript
+// Proper accessibility attributes
+<SpeedDial 
+  ariaLabel="Acciones rápidas"
+  icon={<Add />}
+  sx={{ position: 'fixed', bottom: 16, right: 16 }}
+>
+  {actions.map(action => (
+    <SpeedDialAction
+      key={action.name}
+      icon={action.icon}
+      tooltipTitle={action.name}
+      onClick={action.action}
+    />
+  ))}
+</SpeedDial>
+```
+
+### **Keyboard Navigation**
+- Ensure all interactive elements are keyboard accessible
+- Use proper tab order
+- Implement focus management for modals and dialogs
+
+## Performance Considerations
+
+### **Theme Optimization**
+```typescript
+// Memoize theme-dependent calculations
+const memoizedStyles = useMemo(() => ({
+  container: {
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.background.paper,
+  },
+}), [theme]);
+```
+
+### **Component Optimization**
+```typescript
+// Avoid inline sx objects in render
+// Good
+const containerStyles = { 
+  p: 3, 
+  bgcolor: 'background.paper' 
+};
+
+const Component = () => (
+  <Box sx={containerStyles}>Content</Box>
+);
+
+// Bad - creates new object on every render
+const Component = () => (
+  <Box sx={{ p: 3, bgcolor: 'background.paper' }}>Content</Box>
+);
+```

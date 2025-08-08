@@ -1,0 +1,506 @@
+---
+globs: *.tsx,*.ts
+description: Form management patterns using React Hook Form and FormularioGenerico
+---
+
+# Form Management with React Hook Form and FormularioGenerico
+
+## **FormularioGenerico System**
+
+### **Core Concept**
+The project uses a centralized `FormularioGenerico` system for consistent form handling across all modules.
+
+Reference: [FormularioGenerico](mdc:src/components/FormularioGenerico)
+
+### **Field Configuration Pattern**
+```typescript
+// Form field metadata type
+interface FieldMetadata {
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'password' | 'number' | 'select' | 'multiselect' | 'date' | 'textarea';
+  required?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  helperText?: string;
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+    pattern?: RegExp;
+    custom?: (value: any) => string | true;
+  };
+  options?: Array<{ value: string | number; label: string }>; // For select fields
+  gridProps?: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+  };
+}
+
+// Example form configuration
+const empresaFormFields: FieldMetadata[] = [
+  {
+    name: 'nombre',
+    label: 'Nombre de la Empresa',
+    type: 'text',
+    required: true,
+    validation: {
+      minLength: 2,
+      maxLength: 100,
+    },
+    gridProps: { xs: 12, md: 6 },
+  },
+  {
+    name: 'email',
+    label: 'Correo Electrónico',
+    type: 'email',
+    required: true,
+    validation: {
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    },
+    gridProps: { xs: 12, md: 6 },
+  },
+  {
+    name: 'vigencia',
+    label: 'Estado de Vigencia',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'vigente', label: 'Vigente' },
+      { value: 'no_vigente', label: 'No Vigente' },
+    ],
+    gridProps: { xs: 12, md: 4 },
+  },
+];
+```
+
+## **Form Component Patterns**
+
+### **Basic Form Implementation**
+```typescript
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Box, Button } from '@mui/material';
+
+import FormularioGenerico from '../../components/FormularioGenerico';
+import { useApiMutation } from '../../hooks/useApi';
+
+interface EmpresaFormProps {
+  initialData?: Partial<Empresa>;
+  onSuccess?: (data: Empresa) => void;
+  onCancel?: () => void;
+}
+
+const EmpresaForm: React.FC<EmpresaFormProps> = ({
+  initialData,
+  onSuccess,
+  onCancel,
+}) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isDirty },
+    reset,
+  } = useForm<EmpresaFormData>({
+    defaultValues: initialData || getDefaultValues(),
+    mode: 'onChange',
+  });
+
+  const createMutation = useApiMutation<Empresa, EmpresaFormData>(
+    'POST',
+    '/empresas',
+    {
+      onSuccess: (data) => {
+        reset();
+        onSuccess?.(data);
+      },
+      onError: (error) => {
+        console.error('Error creating empresa:', error);
+      },
+    }
+  );
+
+  const onSubmit = (data: EmpresaFormData) => {
+    createMutation.mutate(data);
+  };
+
+  return (
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <FormularioGenerico
+        fields={empresaFormFields}
+        control={control}
+        errors={errors}
+      />
+      
+      <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+        <Button 
+          variant="outlined" 
+          onClick={onCancel}
+          disabled={createMutation.isLoading}
+        >
+          Cancelar
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={!isValid || !isDirty || createMutation.isLoading}
+        >
+          {createMutation.isLoading ? 'Guardando...' : 'Guardar'}
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+```
+
+### **Form with Dynamic Fields**
+```typescript
+const DynamicFormExample = () => {
+  const [formFields, setFormFields] = useState<FieldMetadata[]>(baseFields);
+  const [watchedValues, setWatchedValues] = useState<any>({});
+
+  const { control, watch } = useForm();
+
+  // Watch specific fields for dynamic behavior
+  const tipoEmpresa = watch('tipoEmpresa');
+  const vigencia = watch('vigencia');
+
+  useEffect(() => {
+    // Update form fields based on watched values
+    if (tipoEmpresa === 'publica') {
+      setFormFields(prev => [
+        ...prev,
+        {
+          name: 'numeroRegistroPublico',
+          label: 'Número de Registro Público',
+          type: 'text',
+          required: true,
+        },
+      ]);
+    } else {
+      setFormFields(prev => 
+        prev.filter(field => field.name !== 'numeroRegistroPublico')
+      );
+    }
+  }, [tipoEmpresa]);
+
+  return (
+    <FormularioGenerico
+      fields={formFields}
+      control={control}
+      errors={errors}
+    />
+  );
+};
+```
+
+## **Validation Patterns**
+
+### **Built-in Validation Rules**
+```typescript
+const validationExamples: FieldMetadata[] = [
+  {
+    name: 'telefono',
+    label: 'Teléfono',
+    type: 'text',
+    validation: {
+      pattern: /^\+?[\d\s\-\(\)]+$/,
+      minLength: 10,
+      maxLength: 15,
+    },
+  },
+  {
+    name: 'edad',
+    label: 'Edad',
+    type: 'number',
+    validation: {
+      min: 18,
+      max: 65,
+    },
+  },
+  {
+    name: 'descripcion',
+    label: 'Descripción',
+    type: 'textarea',
+    validation: {
+      maxLength: 500,
+    },
+  },
+];
+```
+
+### **Custom Validation Functions**
+```typescript
+const customValidationField: FieldMetadata = {
+  name: 'codigoEmpresa',
+  label: 'Código de Empresa',
+  type: 'text',
+  required: true,
+  validation: {
+    custom: (value: string) => {
+      if (!value) return 'El código es requerido';
+      if (!/^EMP-\d{4}$/.test(value)) {
+        return 'El código debe tener el formato EMP-XXXX';
+      }
+      return true;
+    },
+  },
+};
+
+// Async validation with debounce
+const asyncValidationField: FieldMetadata = {
+  name: 'emailUnico',
+  label: 'Email (debe ser único)',
+  type: 'email',
+  validation: {
+    custom: async (value: string) => {
+      if (!value) return true;
+      
+      // Debounced API call to check uniqueness
+      const isUnique = await checkEmailUniqueness(value);
+      return isUnique || 'Este email ya está en uso';
+    },
+  },
+};
+```
+
+## **Form State Management**
+
+### **Multi-step Forms**
+```typescript
+interface MultiStepFormProps {
+  steps: Array<{
+    title: string;
+    fields: FieldMetadata[];
+    validation?: any;
+  }>;
+}
+
+const MultiStepForm: React.FC<MultiStepFormProps> = ({ steps }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<any>({});
+
+  const { control, handleSubmit, trigger } = useForm({
+    defaultValues: formData,
+    mode: 'onChange',
+  });
+
+  const handleNextStep = async () => {
+    const currentFields = steps[currentStep].fields.map(f => f.name);
+    const isValid = await trigger(currentFields);
+    
+    if (isValid) {
+      setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+    }
+  };
+
+  const handlePreviousStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 0));
+  };
+
+  return (
+    <Box>
+      <Stepper activeStep={currentStep}>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <StepLabel>{step.title}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+
+      <FormularioGenerico
+        fields={steps[currentStep].fields}
+        control={control}
+        errors={errors}
+      />
+
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+        <Button 
+          disabled={currentStep === 0}
+          onClick={handlePreviousStep}
+        >
+          Anterior
+        </Button>
+        
+        {currentStep === steps.length - 1 ? (
+          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+            Enviar
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={handleNextStep}>
+            Siguiente
+          </Button>
+        )}
+      </Box>
+    </Box>
+  );
+};
+```
+
+### **Form with Auto-save**
+```typescript
+const AutoSaveForm = () => {
+  const { control, watch, getValues } = useForm();
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  
+  const saveDraftMutation = useApiMutation('POST', '/drafts');
+
+  // Auto-save draft every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const formData = getValues();
+      if (Object.keys(formData).length > 0) {
+        saveDraftMutation.mutate(formData);
+        setLastSaved(new Date());
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [getValues, saveDraftMutation]);
+
+  return (
+    <Box>
+      {lastSaved && (
+        <Typography variant="caption" color="text.secondary">
+          Guardado automáticamente: {lastSaved.toLocaleTimeString()}
+        </Typography>
+      )}
+      
+      <FormularioGenerico
+        fields={formFields}
+        control={control}
+        errors={errors}
+      />
+    </Box>
+  );
+};
+```
+
+## **Form Integration with API**
+
+### **Create/Edit Form Pattern**
+```typescript
+interface CrudFormProps {
+  mode: 'create' | 'edit';
+  entityId?: number;
+  onSuccess?: () => void;
+}
+
+const CrudForm: React.FC<CrudFormProps> = ({ mode, entityId, onSuccess }) => {
+  // Fetch existing data for edit mode
+  const { data: existingData, isLoading } = useApiQuery<Empresa>(
+    `/empresas/${entityId}`,
+    { enabled: mode === 'edit' && !!entityId }
+  );
+
+  const createMutation = useApiMutation<Empresa, EmpresaFormData>('POST', '/empresas');
+  const updateMutation = useApiMutation<Empresa, EmpresaFormData>('PUT', `/empresas/${entityId}`);
+
+  const { control, handleSubmit, reset } = useForm<EmpresaFormData>({
+    defaultValues: getDefaultValues(),
+  });
+
+  // Reset form when data loads
+  useEffect(() => {
+    if (existingData && mode === 'edit') {
+      reset(transformToFormData(existingData));
+    }
+  }, [existingData, mode, reset]);
+
+  const onSubmit = (data: EmpresaFormData) => {
+    const mutation = mode === 'create' ? createMutation : updateMutation;
+    mutation.mutate(data, {
+      onSuccess: () => {
+        onSuccess?.();
+      },
+    });
+  };
+
+  if (mode === 'edit' && isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return (
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <FormularioGenerico
+        fields={formFields}
+        control={control}
+        errors={errors}
+      />
+      
+      <Button 
+        type="submit" 
+        variant="contained"
+        disabled={createMutation.isLoading || updateMutation.isLoading}
+      >
+        {mode === 'create' ? 'Crear' : 'Actualizar'}
+      </Button>
+    </Box>
+  );
+};
+```
+
+## **Form Helper Functions**
+
+### **Field Metadata Generation**
+```typescript
+// Generate form fields from entity metadata
+export const generateFieldsFromEntity = <T>(
+  entitySchema: EntitySchema<T>,
+  options?: {
+    exclude?: (keyof T)[];
+    readonly?: (keyof T)[];
+    required?: (keyof T)[];
+  }
+): FieldMetadata[] => {
+  return Object.entries(entitySchema).map(([key, config]) => ({
+    name: key,
+    label: config.label || key,
+    type: config.type || 'text',
+    required: options?.required?.includes(key as keyof T) || config.required,
+    disabled: options?.readonly?.includes(key as keyof T),
+    validation: config.validation,
+  })).filter(field => 
+    !options?.exclude?.includes(field.name as keyof T)
+  );
+};
+
+// Transform API data to form data
+export const transformToFormData = <T, F>(
+  apiData: T,
+  transformMap?: Partial<Record<keyof T, (value: any) => any>>
+): F => {
+  const formData = { ...apiData } as any;
+  
+  if (transformMap) {
+    Object.entries(transformMap).forEach(([key, transformer]) => {
+      if (formData[key] !== undefined) {
+        formData[key] = transformer(formData[key]);
+      }
+    });
+  }
+  
+  return formData;
+};
+
+// Transform form data to API data
+export const transformToApiData = <F, T>(
+  formData: F,
+  transformMap?: Partial<Record<keyof F, (value: any) => any>>
+): T => {
+  const apiData = { ...formData } as any;
+  
+  if (transformMap) {
+    Object.entries(transformMap).forEach(([key, transformer]) => {
+      if (apiData[key] !== undefined) {
+        apiData[key] = transformer(apiData[key]);
+      }
+    });
+  }
+  
+  return apiData;
+};
+```

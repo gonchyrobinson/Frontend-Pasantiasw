@@ -1,0 +1,409 @@
+---
+globs: *.test.ts,*.test.tsx,*.spec.ts,*.spec.tsx
+description: Testing conventions and patterns for React components and TypeScript functions
+---
+
+# Testing Conventions and Patterns
+
+## **Testing Framework Stack**
+
+### **Core Technologies**
+- **Vitest**: Primary testing framework
+- **React Testing Library**: Component testing utilities
+- **jsdom**: DOM environment for tests
+- **@testing-library/jest-dom**: Additional matchers
+
+### **Configuration References**
+- [Vitest Config](mdc:vite.config.ts) - Test configuration
+- [Test Setup](mdc:src/test/setup.ts) - Global test setup
+
+## **Testing Structure**
+
+### **File Organization**
+```
+src/modules/[ModuleName]/
+├── [ModuleName].test.tsx      # Main component tests
+├── components/
+│   └── [Component].test.tsx   # Component tests
+├── helpers/
+│   └── [helpers].test.ts      # Helper function tests
+└── hooks/
+    └── [hook].test.ts         # Hook tests
+```
+
+### **Test File Naming**
+- Use `.test.tsx` for React component tests
+- Use `.test.ts` for utility function tests
+- Match the source file name exactly: `statsHelpers.ts` → `statsHelpers.test.ts`
+
+## **Component Testing Patterns**
+
+### **Basic Component Test Structure**
+```typescript
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import userEvent from '@testing-library/user-event';
+
+import ComponentName from './ComponentName';
+import { TestWrapper } from '../../test/TestWrapper';
+
+describe('ComponentName', () => {
+  const defaultProps = {
+    title: 'Test Title',
+    data: [],
+  };
+
+  const renderComponent = (props = {}) => {
+    return render(
+      <TestWrapper>
+        <ComponentName {...defaultProps} {...props} />
+      </TestWrapper>
+    );
+  };
+
+  it('renders component with required props', () => {
+    renderComponent();
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+  });
+
+  it('handles user interaction', async () => {
+    const user = userEvent.setup();
+    const onClickMock = vi.fn();
+    
+    renderComponent({ onClick: onClickMock });
+    
+    await user.click(screen.getByRole('button'));
+    expect(onClickMock).toHaveBeenCalledOnce();
+  });
+});
+```
+
+### **Testing with Context Providers**
+```typescript
+// TestWrapper for components that need providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <QueryClient client={testQueryClient}>
+    <ThemeProvider theme={testTheme}>
+      {children}
+    </ThemeProvider>
+  </QueryClient>
+);
+
+// Usage in tests
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(component, { wrapper: TestWrapper });
+};
+```
+
+### **Testing MUI Components**
+```typescript
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+describe('StyledComponent', () => {
+  const theme = createTheme();
+  
+  const renderWithTheme = (component: React.ReactElement) => {
+    return render(
+      <ThemeProvider theme={theme}>
+        {component}
+      </ThemeProvider>
+    );
+  };
+
+  it('applies correct theme styles', () => {
+    renderWithTheme(<StyledCard>Content</StyledCard>);
+    
+    const card = screen.getByTestId('styled-card');
+    expect(card).toHaveStyle({
+      padding: '24px', // theme.spacing(3)
+    });
+  });
+});
+```
+
+## **Hook Testing**
+
+### **Custom Hook Testing Pattern**
+```typescript
+import { renderHook, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+
+import { useApi } from './useApi';
+import { TestWrapper } from '../test/TestWrapper';
+
+describe('useApi', () => {
+  it('returns loading state initially', () => {
+    const { result } = renderHook(
+      () => useApi('/test-endpoint'),
+      { wrapper: TestWrapper }
+    );
+
+    expect(result.current.isLoading).toBe(true);
+    expect(result.current.data).toBeNull();
+    expect(result.current.error).toBeNull();
+  });
+
+  it('handles successful API response', async () => {
+    const mockData = { id: 1, name: 'Test' };
+    
+    const { result } = renderHook(
+      () => useApi('/test-endpoint'),
+      { wrapper: TestWrapper }
+    );
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.data).toEqual(mockData);
+    });
+  });
+});
+```
+
+## **Helper Function Testing**
+
+### **Pure Function Testing**
+```typescript
+import { describe, it, expect } from 'vitest';
+
+import { calculateStats, filterEmpresas } from './statsHelpers';
+import { mockEmpresasData, mockConveniosData } from '../__mocks__/data';
+
+describe('statsHelpers', () => {
+  describe('calculateStats', () => {
+    it('calculates correct statistics from data', () => {
+      const result = calculateStats(
+        mockConveniosData,
+        mockPasantiasData,
+        mockPagosData,
+        false, // loading
+        false, // loading
+        false, // loading
+        false, // error
+        false, // error
+        false, // error
+        mockIcons
+      );
+
+      expect(result).toHaveLength(3);
+      expect(result[0].title).toBe('Convenios Activos');
+      expect(result[0].value).toBe(mockConveniosData.length);
+    });
+
+    it('handles loading states correctly', () => {
+      const result = calculateStats(
+        undefined,
+        undefined,
+        undefined,
+        true,  // convenios loading
+        true,  // pasantias loading
+        false, // pagos loading
+        false,
+        false,
+        false,
+        mockIcons
+      );
+
+      expect(result[0].loading).toBe(true);
+      expect(result[1].loading).toBe(true);
+      expect(result[2].loading).toBe(false);
+    });
+  });
+
+  describe('filterEmpresas', () => {
+    it('filters empresas by search text', () => {
+      const result = filterEmpresas(mockEmpresasData, 'Tech');
+      
+      expect(result).toHaveLength(1);
+      expect(result[0].nombre).toContain('Tech');
+    });
+
+    it('returns empty array for no matches', () => {
+      const result = filterEmpresas(mockEmpresasData, 'NonexistentCompany');
+      
+      expect(result).toHaveLength(0);
+    });
+  });
+});
+```
+
+## **API and Query Testing**
+
+### **React Query Testing**
+```typescript
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { useApiQuery } from './useApiQuery';
+
+describe('useApiQuery', () => {
+  let queryClient: QueryClient;
+
+  beforeEach(() => {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+      },
+    });
+  });
+
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+
+  it('fetches data successfully', async () => {
+    const { result } = renderHook(
+      () => useApiQuery('/empresas'),
+      { wrapper }
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.data).toBeDefined();
+    });
+  });
+});
+```
+
+## **Mock Patterns**
+
+### **Mock Data Structure**
+```typescript
+// __mocks__/data.ts
+export const mockEmpresaData: Empresa = {
+  idEmpresa: 1,
+  nombre: 'Tech Company',
+  email: 'contact@techcompany.com',
+  telefono: '123-456-7890',
+  direccion: '123 Tech Street',
+  vigencia: 'vigente',
+};
+
+export const mockEmpresasData: Empresa[] = [
+  mockEmpresaData,
+  {
+    idEmpresa: 2,
+    nombre: 'Another Company',
+    email: 'info@another.com',
+    telefono: '098-765-4321',
+    direccion: '456 Business Ave',
+    vigencia: 'no_vigente',
+  },
+];
+```
+
+### **API Mock Setup**
+```typescript
+import { vi } from 'vitest';
+
+// Mock API calls
+vi.mock('../../apis/apiClient', () => ({
+  apiClient: {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+  },
+}));
+
+// Setup mock responses in tests
+beforeEach(() => {
+  vi.mocked(apiClient.get).mockResolvedValue({
+    data: mockEmpresasData,
+  });
+});
+```
+
+## **Error Testing**
+
+### **Error Boundary Testing**
+```typescript
+import { render, screen } from '@testing-library/react';
+import { ErrorBoundary } from './ErrorBoundary';
+
+const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
+  if (shouldThrow) {
+    throw new Error('Test error');
+  }
+  return <div>No error</div>;
+};
+
+describe('ErrorBoundary', () => {
+  it('catches and displays error', () => {
+    // Suppress console.error for this test
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <ErrorBoundary>
+        <ThrowError shouldThrow={true} />
+      </ErrorBoundary>
+    );
+
+    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+    
+    consoleSpy.mockRestore();
+  });
+});
+```
+
+### **API Error Testing**
+```typescript
+describe('Component with API errors', () => {
+  it('displays error message when API fails', async () => {
+    vi.mocked(apiClient.get).mockRejectedValue(
+      new Error('Network error')
+    );
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByText(/error al cargar/i)).toBeInTheDocument();
+    });
+  });
+});
+```
+
+## **Testing Best Practices**
+
+### **Test Organization**
+- Group related tests with `describe` blocks
+- Use descriptive test names that explain the expected behavior
+- Test both success and error scenarios
+- Test edge cases and boundary conditions
+
+### **Assertions**
+```typescript
+// Good - specific assertions
+expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
+expect(mockFunction).toHaveBeenCalledWith(expectedData);
+expect(result.current.data).toEqual(expectedData);
+
+// Avoid - too generic
+expect(component).toBeTruthy();
+```
+
+### **Async Testing**
+```typescript
+// Use waitFor for async operations
+await waitFor(() => {
+  expect(screen.getByText('Loaded data')).toBeInTheDocument();
+});
+
+// Use findBy for elements that appear asynchronously
+const loadedElement = await screen.findByText('Loaded data');
+expect(loadedElement).toBeInTheDocument();
+```
+
+### **Cleanup**
+```typescript
+// Clean up mocks after each test
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
+// Clean up timers and subscriptions
+afterEach(() => {
+  vi.useRealTimers();
+});
+```
