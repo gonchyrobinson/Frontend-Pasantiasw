@@ -27,6 +27,9 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
 
+      - name: Archive dist as zip
+        run: zip -r dist.zip dist
+
       # Login con Service Principal (requiere secret AZURE_CREDENTIALS)
       - name: Azure Login (Service Principal)
         uses: azure/login@v2
@@ -37,6 +40,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: gestionPasantias
-          package: dist
+          app-name: gestionPasantias # <-- nombre exacto del App Service
+          package: dist.zip
 
