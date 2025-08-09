@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -28,7 +28,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,13 +51,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AEDA837A6D914C07B4DD4AB9E45C46F4 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0EDFB33ABFCE4E80BB5E59E0C198CC73 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_791A58C5EAA34054BC814073F2F5CEA5 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F2B6CAED77474548A9F66B6E279BBF32 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_731A38A575C143B0864AC079B7ABF410 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7DE358A296A348C4BF7D6CA9B43F8A13 }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'gestionPasantias'
           slot-name: 'Production'
