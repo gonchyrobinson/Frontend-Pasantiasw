@@ -86,7 +86,9 @@ dist
 
 # Gatsby files
 .cache/
-public
+# No ignores para `public/web.config` (IIS rewrite)
+public/*
+!public/web.config
 
 # Storybook build outputs
 .out
