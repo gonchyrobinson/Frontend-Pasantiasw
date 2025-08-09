@@ -27,11 +27,16 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
 
-      # Deploy ONLY the contents of dist/ to wwwroot
+      # Login con Service Principal (requiere secret AZURE_CREDENTIALS)
+      - name: Azure Login (Service Principal)
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Despliegue del contenido de dist/ a App Service
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: gestionPasantias
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: dist
 
