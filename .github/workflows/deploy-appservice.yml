@@ -27,8 +27,10 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
 
-      - name: Archive dist as zip
-        run: zip -r dist.zip dist
+      - name: Archive dist as zip (root contents)
+        run: |
+          cd dist
+          zip -r ../site.zip .
 
       # Login con Service Principal (requiere secret AZURE_CREDENTIALS)
       - name: Azure Login (Service Principal)
@@ -36,10 +38,24 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Despliegue del contenido de dist/ a App Service
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: gestionPasantias # <-- nombre exacto del App Service
-          package: dist.zip
+      - name: Resolve Resource Group
+        id: resolve-rg
+        run: |
+          RG_NAME=$(az webapp list --query "[?name=='gestionPasantias'].resourceGroup | [0]" -o tsv)
+          echo "resourceGroup=$RG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Stop Web App (best effort)
+        run: |
+          az webapp stop -n gestionPasantias -g "${{ steps.resolve-rg.outputs.resourceGroup }}" || true
+
+      - name: Deploy via Zip Deploy (config-zip)
+        run: |
+          az webapp deployment source config-zip \
+            -g "${{ steps.resolve-rg.outputs.resourceGroup }}" \
+            -n gestionPasantias \
+            --src site.zip
+
+      - name: Start Web App
+        run: |
+          az webapp start -n gestionPasantias -g "${{ steps.resolve-rg.outputs.resourceGroup }}"
 
