@@ -56,9 +56,12 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_731A38A575C143B0864AC079B7ABF410 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7DE358A296A348C4BF7D6CA9B43F8A13 }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'gestionPasantias'
-          slot-name: 'Production'
-          package: build.zip
+      - name: Deploy (zip, clean)
+        run: |
+          RG=$(az webapp show -n gestionPasantias --query resourceGroup -o tsv)
+          az webapp deploy \
+            --resource-group "$RG" \
+            --name gestionPasantias \
+            --type zip \
+            --src-path build.zip \
+            --clean true
