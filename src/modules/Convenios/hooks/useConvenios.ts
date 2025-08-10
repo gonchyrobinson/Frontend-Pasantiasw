@@ -39,7 +39,9 @@ export const useConvenios = () => {
 export const useConvenio = (id: number) => {
   return useApiQuery<ConvenioDto>(`${ROUTES.CONVENIOS}/${id}`, {
     enabled: !!id,
-    staleTime: 5 * 60 * 1000,
+    // Forzar refetch en cada montaje/refresh con pocas líneas
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 };
 

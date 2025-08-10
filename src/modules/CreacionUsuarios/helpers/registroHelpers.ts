@@ -74,12 +74,6 @@ export const validatePasswords = (
 };
 
 export const handleRegistrationError = (error: unknown): string => {
-  if (error && typeof error === 'object' && 'response' in error) {
-    const axiosError = error as {
-      response?: { data?: { message?: string } };
-    };
-    return axiosError.response?.data?.message || 'Error de registro';
-  }
-
+  if (error instanceof Error && error.message) return error.message;
   return 'Error de registro';
 };

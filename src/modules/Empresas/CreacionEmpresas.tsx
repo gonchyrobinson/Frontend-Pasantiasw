@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../FormularioGenerico';
 import { CreacionEmpresaDto } from './types';
 import { getCreacionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
@@ -18,7 +18,7 @@ const CreacionEmpresas: React.FC = () => {
 
     try {
       const empresaData = data as unknown as CreacionEmpresaDto;
-      await axios.post('/api/empresas', empresaData);
+      await apiClient.post('/empresas', empresaData);
 
       showSuccess('Empresa creada exitosamente');
 

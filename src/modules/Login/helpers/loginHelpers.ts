@@ -28,15 +28,8 @@ export const getLoginMetadata = (): FormMetadata => ({
 });
 
 export const handleLoginError = (error: unknown): string => {
-  // Manejo específico para errores de Axios
-  if (error && typeof error === 'object' && 'response' in error) {
-    const axiosError = error as {
-      response?: { data?: { message?: string } };
-    };
-    return axiosError.response?.data?.message || 'Error de autenticación';
-  } else {
-    return 'Error de autenticación';
-  }
+  if (error instanceof Error && error.message) return error.message;
+  return 'Error de autenticación';
 };
 
 export const validateLoginData = (

@@ -17,7 +17,7 @@ const EditarConvenio: React.FC = () => {
   const convenioId = id ? parseInt(id, 10) : 0;
   const { data: convenioResponse, isLoading, error } = useConvenio(convenioId);
   const convenio = convenioResponse?.data;
-  const { empresasOptions, isLoading: empresasLoading } =
+  const { empresasParaAsignarOptions, isLoading: empresasLoading } =
     useEmpresasForDropdown();
   const updateMutation = useUpdateConvenio();
 
@@ -74,7 +74,7 @@ const EditarConvenio: React.FC = () => {
         onCancel={handleCancel}
         loading={updateMutation.isPending}
         dynamicDropdownOptions={{
-          idEmpresa: empresasOptions,
+          idEmpresa: empresasParaAsignarOptions,
         }}
       />
     </div>

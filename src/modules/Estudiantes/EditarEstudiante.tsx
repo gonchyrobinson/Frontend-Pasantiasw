@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../FormularioGenerico';
 import { EstudianteDto } from './types';
 import { getEdicionEstudianteMetadata } from './helpers/estudianteHelpers';
@@ -18,8 +18,8 @@ const EditarEstudiante: React.FC = () => {
   useEffect(() => {
     const fetchEstudiante = async () => {
       try {
-        const response = await axios.get(`/api/students/${id}`);
-        setInitialData(response.data);
+        const data = await apiClient.get<EstudianteDto>(`/students/${id}`);
+        setInitialData(data);
       } catch (error) {
         showError('Error al cargar el estudiante');
         setTimeout(() => navigate(ROUTES.ESTUDIANTES), 2000);
@@ -36,7 +36,7 @@ const EditarEstudiante: React.FC = () => {
 
     try {
       const estudianteData = { ...data, idEstudiante: parseInt(id || '0') };
-      await axios.put(`/api/students`, estudianteData);
+      await apiClient.put(`/students`, estudianteData);
 
       showSuccess('Estudiante actualizado exitosamente');
 

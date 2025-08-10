@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../FormularioGenerico';
 import { CreacionEstudianteDto } from './types';
 import { getCreacionEstudianteMetadata } from './helpers/estudianteHelpers';
@@ -18,7 +18,7 @@ const CreacionEstudiantes: React.FC = () => {
 
     try {
       const estudianteData = data as unknown as CreacionEstudianteDto;
-      await axios.post('/api/students', estudianteData);
+      await apiClient.post('/students', estudianteData);
 
       showSuccess('Estudiante creado exitosamente');
 

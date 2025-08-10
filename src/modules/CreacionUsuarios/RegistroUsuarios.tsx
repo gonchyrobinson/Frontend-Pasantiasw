@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../hooks/useNavigation';
 import { FormularioGenerico } from '../../FormularioGenerico';
@@ -37,13 +37,16 @@ const RegistroUsuarios = () => {
 
     try {
       const registerData = data as unknown as RegisterData;
-      const response = await axios.post('/api/v1/authn/register', {
-        username: registerData.username,
-        email: registerData.email,
-        password: registerData.password,
-      });
+      const result = await apiClient.post<{ token: string }>(
+        '/v1/authn/register',
+        {
+          username: registerData.username,
+          email: registerData.email,
+          password: registerData.password,
+        }
+      );
 
-      authHelper.saveToken(response.data.token);
+      authHelper.saveToken(result.token);
       showSuccess('Usuario registrado exitosamente');
 
       setTimeout(() => {
