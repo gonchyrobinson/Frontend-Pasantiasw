@@ -56,6 +56,11 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_731A38A575C143B0864AC079B7ABF410 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7DE358A296A348C4BF7D6CA9B43F8A13 }}
 
+      - name: Configure startup (Linux static SPA)
+        run: |
+          ID=$(az webapp list --query "[?name=='gestionPasantias'].id | [0]" -o tsv)
+          az webapp config set --ids "$ID" --startup-file "pm2 serve /home/site/wwwroot --no-daemon --spa"
+
       - name: Deploy (zip, clean)
         run: |
           ID=$(az webapp list --query "[?name=='gestionPasantias'].id | [0]" -o tsv)
