@@ -22,7 +22,7 @@ jobs:
           npm run build
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-          VITE_SERVER_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       # 👉 Empaquetar SOLO el contenido de dist/ (no la carpeta dist)
       - name: Create deploy artifact (build.zip)

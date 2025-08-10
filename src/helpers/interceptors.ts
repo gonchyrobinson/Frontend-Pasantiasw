@@ -1,10 +1,12 @@
 import axios from 'axios';
-// Configure base URL (dev uses Vite proxy '/api'; prod should use VITE_SERVER_BASE_URL)
-const serverBaseUrl = import.meta.env.VITE_SERVER_BASE_URL;
-axios.defaults.baseURL = serverBaseUrl
-  ? `${serverBaseUrl.replace(/\/$/, '')}/api`
-  : '/api';
+// Base única: VITE_API_URL (prod) o '/api' (dev)
+const envApiUrl =
+  (import.meta.env.VITE_API_URL as string | undefined) ?? '/api';
+axios.defaults.baseURL = envApiUrl.replace(/\/$/, '');
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+// eslint-disable-next-line no-console
+if (import.meta.env.PROD)
+  console.log('[axios] baseURL:', axios.defaults.baseURL);
 
 import { authHelper } from './authHelper';
 
@@ -19,14 +21,8 @@ const goToLogin = () => {
   }
 };
 
-// Reescribir URL absoluta '/api/..' hacia el backend en prod y añadir token
+// Añadir token
 axios.interceptors.request.use(config => {
-  if (serverBaseUrl && config.url && config.url.startsWith('/api/')) {
-    // Forzar URL absoluta al backend cuando se usa "/api/..."
-    const trimmedBase = serverBaseUrl.replace(/\/$/, '');
-    config.baseURL = undefined;
-    config.url = `${trimmedBase}${config.url}`;
-  }
   const token = authHelper.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
