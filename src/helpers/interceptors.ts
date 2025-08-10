@@ -5,8 +5,12 @@ const envApiUrl =
 axios.defaults.baseURL = envApiUrl.replace(/\/$/, '');
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 // eslint-disable-next-line no-console
-if (import.meta.env.PROD)
-  console.log('[axios] baseURL:', axios.defaults.baseURL);
+console.log(
+  '[axios] baseURL:',
+  axios.defaults.baseURL,
+  'VITE_API_URL=',
+  import.meta.env.VITE_API_URL
+);
 
 import { authHelper } from './authHelper';
 
