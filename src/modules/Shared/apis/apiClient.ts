@@ -1,13 +1,10 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { authHelper } from '../../../helpers/authHelper';
 
-// Usar la URL base del backend en prod y el proxy "/api" en dev
-const serverBaseUrl = import.meta.env.VITE_SERVER_BASE_URL as
-  | string
-  | undefined;
-const API_BASE_URL = serverBaseUrl
-  ? `${serverBaseUrl.replace(/\/$/, '')}/api`
-  : '/api';
+// Base única: VITE_API_URL (prod) o '/api' (dev)
+const envApiUrl =
+  (import.meta.env.VITE_API_URL as string | undefined) ?? '/api';
+const API_BASE_URL = envApiUrl.replace(/\/$/, '');
 
 // Define a generic type for request data
 type RequestData = Record<string, unknown>;
@@ -24,7 +21,7 @@ class ApiClient {
       timeout: 10000,
     });
 
-    // Request interceptor - agrega autenticación y asegura URL absoluta en prod
+    // Request interceptor - agrega autenticación
     this.client.interceptors.request.use(
       config => {
         // Autenticación
@@ -34,16 +31,10 @@ class ApiClient {
           (config.headers as Record<string, string>).Authorization =
             `Bearer ${token}`;
         }
-        // Asegurar URL absoluta cuando el endpoint comience con "/api/" y haya base en prod
-        if (
-          serverBaseUrl &&
-          config.url &&
-          (config.url.startsWith('/api/') || config.url.startsWith('api/'))
-        ) {
-          const trimmedBase = serverBaseUrl.replace(/\/$/, '');
-          config.baseURL = undefined;
-          config.url = `${trimmedBase}${config.url.startsWith('/') ? '' : '/'}${config.url}`;
-        }
+        // Log para verificar base en prod
+        // eslint-disable-next-line no-console
+        if (import.meta.env.PROD)
+          console.log('[api] baseURL:', this.client.defaults.baseURL);
         return config;
       },
       error => {
