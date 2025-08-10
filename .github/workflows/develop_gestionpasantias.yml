@@ -58,10 +58,9 @@ jobs:
 
       - name: Deploy (zip, clean)
         run: |
-          RG=$(az webapp show -n gestionPasantias --query resourceGroup -o tsv)
+          ID=$(az webapp list --query "[?name=='gestionPasantias'].id | [0]" -o tsv)
           az webapp deploy \
-            --resource-group "$RG" \
-            --name gestionPasantias \
+            --ids "$ID" \
             --type zip \
             --src-path build.zip \
             --clean true
