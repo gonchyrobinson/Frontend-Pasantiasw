@@ -6,8 +6,8 @@ const envApiUrl =
   (import.meta.env.VITE_API_URL as string | undefined) ?? '/api';
 const API_BASE_URL = envApiUrl.replace(/\/$/, '');
 
-// Define a generic type for request data
-type RequestData = Record<string, unknown>;
+// Relaxed to accept any JSON-serializable payload
+type RequestData = unknown;
 
 class ApiClient {
   private client: AxiosInstance;
@@ -97,7 +97,21 @@ class ApiClient {
 
   private handleError(error: unknown): Error {
     if (axios.isAxiosError(error)) {
-      const message = error.response?.data?.message || error.message;
+      const data = error.response?.data as unknown;
+      // Soportar backend que devuelve mensaje como string o en distintas claves
+      const respMsg =
+        (typeof data === 'string' ? data : undefined) ||
+        (typeof (data as any)?.message === 'string'
+          ? (data as any).message
+          : undefined) ||
+        (typeof (data as any)?.detail === 'string'
+          ? (data as any).detail
+          : undefined) ||
+        (typeof (data as any)?.title === 'string'
+          ? (data as any).title
+          : undefined);
+      const message =
+        respMsg || error.message || 'An unexpected error occurred';
       return new Error(message);
     }
     return new Error('An unexpected error occurred');

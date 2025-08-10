@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../hooks/useNavigation';
 import { FormularioGenerico } from '../../FormularioGenerico';
@@ -37,8 +37,11 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('/api/v1/authn/login', loginData);
-      authHelper.saveToken(response.data.token);
+      const result = await apiClient.post<{ token: string }>(
+        '/v1/authn/login',
+        loginData
+      );
+      authHelper.saveToken(result.token);
       redirectAfterLogin();
     } catch (error: unknown) {
       setError(handleLoginError(error));

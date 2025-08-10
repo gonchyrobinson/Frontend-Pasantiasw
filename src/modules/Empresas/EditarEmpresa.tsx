@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../FormularioGenerico';
 import { EmpresaDto } from './types';
 import { getEdicionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
@@ -18,8 +18,8 @@ const EditarEmpresa: React.FC = () => {
   useEffect(() => {
     const fetchEmpresa = async () => {
       try {
-        const response = await axios.get(`/api/empresas/${id}`);
-        setInitialData(response.data);
+        const data = await apiClient.get<EmpresaDto>(`/empresas/${id}`);
+        setInitialData(data);
       } catch (error) {
         showError('Error al cargar la empresa');
         setTimeout(() => navigate(ROUTES.EMPRESAS), 2000);
@@ -36,7 +36,7 @@ const EditarEmpresa: React.FC = () => {
 
     try {
       const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
-      await axios.put(`/api/empresas`, empresaData);
+      await apiClient.put(`/empresas`, empresaData);
 
       showSuccess('Empresa actualizada exitosamente');
 
