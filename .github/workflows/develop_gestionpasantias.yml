@@ -66,6 +66,6 @@ jobs:
           ID=$(az webapp list --query "[?name=='gestionPasantias'].id | [0]" -o tsv)
           az webapp deploy \
             --ids "$ID" \
-            --type zip \
+            --type static \
             --src-path build.zip \
             --clean true
