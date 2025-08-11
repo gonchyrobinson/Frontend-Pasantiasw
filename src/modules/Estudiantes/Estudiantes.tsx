@@ -13,7 +13,7 @@ import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
 import { ROUTES } from '../../helpers/routesHelper';
-import { ModuleHeader, SearchableContent } from '../../ElementCardGenerica';
+import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
 
 const Estudiantes: React.FC = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grids, GridsProps } from '../../../ElementCardGenerica';
+import { Grids, GridsProps } from '../../../lib/ElementCardGenerica';
 import { EmpresasGridProps, EmpresaDto } from '../types';
 import {
   getEmpresaMetadata,

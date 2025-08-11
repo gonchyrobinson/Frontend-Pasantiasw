@@ -1,15 +1,17 @@
-import { FieldMetadata } from '../../../ElementCardGenerica';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 import { EstudianteDto } from '../types';
 
 export const getEstudianteMetadata = (): FieldMetadata[] => [
-  { name: 'apellido', label: 'Apellido' },
-  { name: 'nombre', label: 'Nombre' },
-  { name: 'documento', label: 'Documento' },
-  { name: 'domicilio', label: 'Domicilio' },
-  { name: 'libreta', label: 'Libreta' },
-  { name: 'carrera', label: 'Carrera' },
-  { name: 'areaTrabajo', label: 'Área de Trabajo' },
-  { name: 'email', label: 'Email', type: 'email' },
+  { name: 'apellido', label: 'Apellido', type: 'text' },
+  { name: 'nombre', label: 'Nombre', type: 'text' },
+  { name: 'documento', label: 'Documento', type: 'text' },
+  { name: 'domicilio', label: 'Domicilio', type: 'text' },
+  { name: 'libreta', label: 'Libreta', type: 'text' },
+  { name: 'telefono', label: 'Teléfono', type: 'text' },
+  { name: 'email', label: 'Email', type: 'text' },
+  { name: 'carrera', label: 'Carrera', type: 'text' },
+  { name: 'universidad', label: 'Universidad', type: 'text' },
+  { name: 'estado', label: 'Estado', type: 'text' },
 ];
 
 export const getCreacionEstudianteMetadata = () => ({
@@ -102,11 +104,15 @@ export const getEdicionEstudianteMetadata = () => ({
   submitButtonText: 'Actualizar Estudiante',
 });
 
-export const getEstudianteCardTitle = (estudiante: EstudianteDto): string =>
-  `${estudiante.apellido}, ${estudiante.nombre}`;
+export const getEstudianteCardTitle = (estudiante: EstudianteDto): string => {
+  return `${estudiante.apellido}, ${estudiante.nombre}`;
+};
 
-export const getEstudianteCardSubtitle = (estudiante: EstudianteDto): string =>
-  `${estudiante.carrera} - ${estudiante.areaTrabajo}`;
+export const getEstudianteCardSubtitle = (
+  estudiante: EstudianteDto
+): string => {
+  return `${estudiante.carrera} - ${estudiante.areaTrabajo}`;
+};
 
 export const filterEstudiantes = (
   estudiantes: EstudianteDto[],
@@ -191,3 +197,10 @@ export const applyEstudiantesFilters = (
 
   return filtered;
 };
+
+export const getEstudianteSearchFields = (): FieldMetadata[] => [
+  { name: 'nombre', label: 'Nombre', type: 'text' },
+  { name: 'apellido', label: 'Apellido', type: 'text' },
+  { name: 'carrera', label: 'Carrera', type: 'text' },
+  { name: 'areaTrabajo', label: 'Área de Trabajo', type: 'text' },
+];

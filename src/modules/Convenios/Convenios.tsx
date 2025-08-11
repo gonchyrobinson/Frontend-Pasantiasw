@@ -15,7 +15,7 @@ import ConveniosFilters from './components/ConveniosFilters';
 import { useConvenioStats, useCaducarConvenio } from './hooks/useConvenios';
 import { useDeleteConvenio } from './hooks/useDeleteConvenio';
 import { ConvenioEmpresaDto } from './types';
-import { ModuleHeader, SearchableContent } from '../../ElementCardGenerica';
+import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import AsignarAEmpresaDialog from './components/AsignarAEmpresaDialog';
 

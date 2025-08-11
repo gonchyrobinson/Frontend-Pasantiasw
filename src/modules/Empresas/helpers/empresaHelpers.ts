@@ -1,38 +1,45 @@
-import { FieldMetadata } from '../../../ElementCardGenerica';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 import { EmpresaDto, Vigencia, VigenciaType } from '../types';
 
 export const getEmpresaMetadata = (): FieldMetadata[] => [
-  { name: 'nombre', label: 'Nombre de la Empresa' },
-  { name: 'encargado', label: 'Encargado' },
-  { name: 'celular', label: 'Teléfono' },
-  { name: 'correoElectronico', label: 'Email', type: 'email' },
-  { name: 'vigencia', label: 'Vigencia' },
-  { name: 'tipoContrato', label: 'Tipo de Contrato' },
-  { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
-  { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
-  { name: 'sudocu', label: 'SUDOCU', type: 'date' },
+  { name: 'nombre', label: 'Nombre de la Empresa', type: 'text' },
+  { name: 'encargado', label: 'Encargado', type: 'text' },
+  { name: 'celular', label: 'Teléfono', type: 'text' },
+  { name: 'email', label: 'Email', type: 'text' },
+  { name: 'vigencia', label: 'Estado de Vigencia', type: 'text' },
+  { name: 'areaTrabajo', label: 'Área de Trabajo', type: 'text' },
 ];
 
-export const getEmpresaCardTitle = (empresa: EmpresaDto): string =>
-  empresa.nombre;
-export const getEmpresaCardSubtitle = (empresa: EmpresaDto): string =>
-  `Contrato ${empresa.tipoContrato} - ${empresa.vigencia}`;
+export const getEmpresaCardTitle = (empresa: EmpresaDto): string => {
+  return empresa.nombre;
+};
+
+export const getEmpresaCardSubtitle = (empresa: EmpresaDto): string => {
+  return empresa.encargado || '';
+};
 
 export const filterEmpresas = (
   empresas: EmpresaDto[],
   searchText: string
 ): EmpresaDto[] => {
   if (!searchText.trim()) return empresas;
-  const search = searchText.toLowerCase();
+
+  const searchLower = searchText.toLowerCase();
   return empresas.filter(
     empresa =>
-      empresa.nombre.toLowerCase().includes(search) ||
-      empresa.encargado.toLowerCase().includes(search) ||
-      empresa.correoElectronico.toLowerCase().includes(search) ||
-      empresa.tipoContrato.toLowerCase().includes(search) ||
-      empresa.vigencia.toLowerCase().includes(search)
+      empresa.nombre.toLowerCase().includes(searchLower) ||
+      empresa.encargado.toLowerCase().includes(searchLower) ||
+      empresa.correoElectronico.toLowerCase().includes(searchLower) ||
+      empresa.tipoContrato.toLowerCase().includes(searchLower) ||
+      empresa.vigencia.toLowerCase().includes(searchLower)
   );
 };
+
+export const getEmpresaSearchFields = (): FieldMetadata[] => [
+  { name: 'nombre', label: 'Nombre de la Empresa', type: 'text' },
+  { name: 'encargado', label: 'Encargado', type: 'text' },
+  { name: 'tipoContrato', label: 'Tipo de Contrato', type: 'text' },
+];
 
 export const groupEmpresasByVigencia = (empresas: EmpresaDto[]) => {
   return empresas.reduce(
