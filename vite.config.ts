@@ -4,9 +4,11 @@ import { defineConfig, loadEnv } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), 'VITE_');
-  // Única fuente de verdad
-  const apiUrl = (env.VITE_API_URL ?? 'https://localhost:7001/api').trim();
+  const env = loadEnv(mode, process.cwd(), ''); // 👈 carga todo el .env.*, no filtra por prefijo
+  // Única fuente de verdad - Forzando URL de Azure
+  const apiUrl =
+    env.VITE_API_URL ||
+    'https://gestion-pasantias-facet-g9ascqg9ckd5eggd.centralus-01.azurewebsites.net/api';
   const targetOrigin = apiUrl.replace(/\/api\/?$/, '');
 
   // Logs de build para verificar valores

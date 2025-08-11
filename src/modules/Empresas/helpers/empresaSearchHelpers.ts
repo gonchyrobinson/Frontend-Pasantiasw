@@ -1,4 +1,4 @@
-import { FieldMetadata } from '../../../ElementCardGenerica';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 
 export interface EmpresaBusquedaAvanzadaDto {
   Nombre?: string;

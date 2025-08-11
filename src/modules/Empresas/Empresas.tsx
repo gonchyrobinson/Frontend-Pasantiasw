@@ -13,7 +13,7 @@ import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
 import { ROUTES } from '../../helpers/routesHelper';
-import { ModuleHeader, SearchableContent } from '../../ElementCardGenerica';
+import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
 
 const Empresas: React.FC = () => {
   const navigate = useNavigate();
