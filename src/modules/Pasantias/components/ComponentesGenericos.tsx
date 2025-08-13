@@ -10,8 +10,6 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
-export { ConvenioStats, ConvenioFilters } from './genericos';
-
 // Componente de diálogo de confirmación - Componente presentacional simple
 export const ConfirmDialog = ({
   open,
@@ -61,7 +59,7 @@ export const ConfirmDialog = ({
 // Componente de botón flotante - Componente presentacional simple
 export const FloatingActionButton = ({ onClick }: { onClick: () => void }) => {
   return (
-    <Tooltip title='Crear nuevo convenio'>
+    <Tooltip title='Crear nueva pasantía'>
       <Fab
         color='primary'
         aria-label='add'

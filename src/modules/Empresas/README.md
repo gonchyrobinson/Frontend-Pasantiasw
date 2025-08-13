@@ -1,15 +1,15 @@
 # Módulo de Empresas
 
-Módulo completo para la gestión de empresas en el sistema de pasantías, implementando el componente genérico `ElementCard`.
+Módulo completo para la gestión de empresas en el sistema de pasantías, implementando el componente genérico `TablaGenerica`.
 
 ## 📁 Estructura
 
 ```
 Empresas/
 ├── components/
-│   ├── EmpresasGrid.tsx      # Grid de cartas de empresas
 │   ├── EmpresasFilters.tsx   # Filtros y búsqueda
-│   └── EmpresasStats.tsx     # Estadísticas y métricas
+│   ├── EmpresasStats.tsx     # Estadísticas y métricas
+│   └── EmpresasTabla.tsx     # Tabla principal de empresas
 ├── helpers/
 │   └── empresaHelpers.ts     # Funciones auxiliares
 ├── types/
@@ -23,31 +23,34 @@ Empresas/
 
 ### ✨ Funcionalidades Principales
 
-- **Visualización en cartas**: Uso del componente `ElementCard` para mostrar empresas
-- **Filtros inteligentes**: Búsqueda por texto, vigencia y tipo de contrato
+- **Visualización en tabla**: Uso del componente `TablaGenerica` para mostrar empresas
+- **Filtros inteligentes**: Búsqueda avanzada por múltiples criterios
 - **Estadísticas en tiempo real**: Métricas de empresas activas/inactivas y distribución por tipo
-- **Acciones por carta**: Ver, editar, eliminar y expandir (ver convenios asociados)
+- **Acciones por fila**: Ver, editar, eliminar y botones personalizados
 - **Responsive**: Adaptable a todos los tamaños de pantalla
+- **Ordenamiento y filtrado**: Funcionalidades avanzadas de tabla
 
 ### 🛠️ Componentes
 
-#### EmpresasGrid
+#### EmpresasTabla
 
-Grid responsivo que muestra las empresas como cartas usando `ElementCard`:
+Tabla principal que muestra las empresas usando `TablaGenerica`:
 
 - **Metadata automática**: Configuración predefinida de campos para mostrar
 - **Formateo inteligente**: Fechas, emails y estados se muestran con formato apropiado
 - **Acciones dinámicas**: Botones condicionales según los handlers proporcionados
+- **Ordenamiento**: Por defecto ordenado por nombre
+- **Paginación**: Configurada para 15 elementos por página
 
 #### EmpresasFilters
 
 Sistema de filtros avanzado:
 
-- **Búsqueda de texto**: Busca en nombre, representante, email, tipo y vigencia
-- **Filtro por vigencia**: Activo/Inactivo
-- **Filtro por tipo**: Pasantía/PPS/Otro
+- **Búsqueda avanzada**: Múltiples criterios de búsqueda
+- **Filtros por fecha**: Rango de fechas de inicio y fin
+- **Filtros por estado**: Vigente/No vigente
+- **Filtros por tipo**: Tipo de contrato
 - **Indicador de resultados**: Muestra cantidad filtrada vs total
-- **Limpiar filtros**: Botón para resetear todos los filtros
 
 #### EmpresasStats
 
@@ -73,68 +76,69 @@ Response: Array<EmpresaDto>
 interface EmpresaDto {
   idEmpresa: number;
   nombre: string;
-  direccion: string;
-  telefono: string;
-  email: string;
-  representante: string;
-  vigencia: 'Activo' | 'Inactivo';
-  tipoContrato: 'Pasantia' | 'PPS' | 'otro';
+  vigencia: 'vigente' | 'no_vigente';
   fechaInicio: string; // ISO: YYYY-MM-DD
   fechaFin: string; // ISO: YYYY-MM-DD
-  observaciones?: string;
+  tipoContrato: 'indefinido' | 'temporal' | 'otro';
+  encargado: string;
+  celular: string;
+  correoElectronico: string;
+  sudocu: string; // ISO: YYYY-MM-DD
 }
 ```
 
-## 💡 Uso del ElementCard
+## 💡 Uso del TablaGenerica
 
-El módulo aprovecha al máximo las características del `ElementCard`:
+El módulo aprovecha al máximo las características del `TablaGenerica`:
 
 ### Metadata Automática
 
 ```typescript
 const metadata = [
-  { name: 'nombre', label: 'Nombre de la Empresa' },
-  { name: 'direccion', label: 'Dirección' },
-  { name: 'telefono', label: 'Teléfono' },
-  { name: 'email', label: 'Email', type: 'email' },
-  { name: 'representante', label: 'Representante' },
-  { name: 'vigencia', label: 'Vigencia' },
-  { name: 'tipoContrato', label: 'Tipo de Contrato' },
+  { name: 'nombre', label: 'Nombre', type: 'text' },
+  { name: 'vigencia', label: 'Vigencia', type: 'text' },
   { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
   { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
-  { name: 'observaciones', label: 'Observaciones' },
+  { name: 'tipoContrato', label: 'Tipo de Contrato', type: 'text' },
+  { name: 'encargado', label: 'Encargado', type: 'text' },
+  { name: 'celular', label: 'Celular', type: 'text' },
+  { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
+  { name: 'sudocu', label: 'SUDOCU', type: 'date' },
 ];
 ```
 
 ### Formateo Inteligente
 
-- **Fechas**: Se muestran en formato DD/MM/YYYY
-- **Emails**: Se detectan automáticamente y se formatean como enlaces
+- **Fechas**: Se muestran en formato local
+- **Emails**: Se detectan automáticamente y se formatean apropiadamente
 - **Estados**: La vigencia se muestra con formato apropiado
 - **Campos excluidos**: `idEmpresa` se excluye automáticamente
 
 ### Acciones Dinámicas
 
 ```typescript
-<ElementCard
-  metadata={metadata}
-  data={empresa}
-  title={empresa.nombre}
-  subtitle={`${empresa.tipoContrato} - ${empresa.vigencia}`}
-  onClick={() => handleViewDetails(empresa)}
-  onClickEdit={() => handleEdit(empresa)}
-  onClickEliminar={() => handleDelete(empresa)}
-  onClickExpandir={() => handleViewConvenios(empresa)}
+<EmpresasTabla
+  empresas={empresas}
+  onRowEdit={handleEdit}
+  onRowDelete={handleDelete}
+  extraButtons={[
+    {
+      label: "Ver Detalles",
+      onClick: (empresa) => handleVerDetalles(empresa),
+      color: "info",
+      icon: <VisibilityIcon />,
+    }
+  ]}
 />
 ```
 
 ## 🎨 Beneficios del Diseño
 
-1. **Reutilización**: Aprovecha el componente genérico `ElementCard`
+1. **Simplicidad**: Solo un componente de visualización (TablaGenerica)
 2. **Consistencia**: Misma apariencia que otros módulos del sistema
 3. **Mantenibilidad**: Código organizado y helpers reutilizables
-4. **Escalabilidad**: Fácil agregar nuevos filtros o acciones
-5. **Performance**: Filtros en memoria con useMemo
+4. **Escalabilidad**: Fácil agregar nuevos campos o acciones
+5. **Performance**: Tabla optimizada con ordenamiento y filtrado
 6. **UX**: Interfaz intuitiva con estadísticas y feedback visual
 
 ## 🔗 Integración con el Sistema
@@ -155,6 +159,6 @@ Para completar el módulo se pueden implementar:
 2. **Detalles**: Vista detallada de empresa individual
 3. **Convenios asociados**: Módulo de convenios por empresa
 4. **Exportación**: Funcionalidad para exportar datos
-5. **Paginación**: Para manejar grandes cantidades de empresas
+5. **Filtros adicionales**: Más criterios de búsqueda
 
-Este módulo demuestra el poder y flexibilidad del componente `ElementCard` en un caso de uso real del sistema de pasantías.
+Este módulo demuestra el poder y flexibilidad del componente `TablaGenerica` en un caso de uso real del sistema de pasantías, proporcionando una interfaz limpia y funcional para la gestión de empresas.

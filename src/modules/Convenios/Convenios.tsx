@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Typography, Alert, Container, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Typography, Alert, Container, Button, Box } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
 import {
   ConvenioStats,
-  ConvenioGrid,
   ConfirmDialog,
   FloatingActionButton,
 } from './components/ComponentesGenericos';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import ConveniosFilters from './components/ConveniosFilters';
-import { useConvenioStats, useCaducarConvenio } from './hooks/useConvenios';
+import ConveniosTabla from './components/ConveniosTabla';
+import {
+  useConvenioStats,
+  useCaducarConvenio,
+  useConvenios,
+} from './hooks/useConvenios';
 import { useDeleteConvenio } from './hooks/useDeleteConvenio';
 import { ConvenioEmpresaDto } from './types';
-import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
+import { PageHeader } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import AsignarAEmpresaDialog from './components/AsignarAEmpresaDialog';
 
 const Convenios: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [searchResults, setSearchResults] = useState<ConvenioEmpresaDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -34,8 +39,34 @@ const Convenios: React.FC = () => {
     useState(false);
 
   const { stats, isLoading: statsLoading, error } = useConvenioStats();
+  const { data: conveniosResponse, refetch: refetchConvenios } = useConvenios();
   const { deleteConvenio, isDeleting } = useDeleteConvenio();
   const { mutate: caducarConvenio } = useCaducarConvenio();
+
+  // Mostrar todos los convenios al cargar la página por primera vez
+  useEffect(() => {
+    if (
+      !hasSearched &&
+      conveniosResponse?.data &&
+      conveniosResponse.data.length > 0
+    ) {
+      setHasSearched(true);
+      setSearchResults(conveniosResponse.data);
+    }
+  }, [conveniosResponse, hasSearched]);
+
+  // Al regresar a la página, hacer GET a la API y mostrar todos los convenios
+  useEffect(() => {
+    if (
+      location.pathname === ROUTES.CONVENIOS &&
+      conveniosResponse?.data &&
+      conveniosResponse.data.length > 0
+    ) {
+      // Refrescar datos y mostrar todos los convenios
+      setHasSearched(true);
+      setSearchResults(conveniosResponse.data);
+    }
+  }, [location.pathname, conveniosResponse]);
 
   const handleClearSearch = () => {
     setSearchResults([]);
@@ -50,12 +81,13 @@ const Convenios: React.FC = () => {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      // Simular refresh - en un caso real, invalidarías las queries
-      setTimeout(() => {
-        setIsRefreshing(false);
-      }, 1000);
+      // Refetch data and clear search results to show fresh data
+      await Promise.all([refetchConvenios(), handleClearSearch()]);
+      showSuccess('Datos actualizados exitosamente');
     } catch (error) {
       showError('Error al actualizar los convenios. Inténtalo de nuevo.');
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -93,7 +125,6 @@ const Convenios: React.FC = () => {
         await deleteConvenio(selectedConvenio.idConvenio);
         showSuccess('Convenio eliminado exitosamente');
 
-        // Actualizar la lista de resultados si el convenio eliminado estaba en ella
         setSearchResults(prev =>
           prev.filter(c => c.idConvenio !== selectedConvenio.idConvenio)
         );
@@ -160,7 +191,7 @@ const Convenios: React.FC = () => {
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
-      <ModuleHeader
+      <PageHeader
         title='Gestión de Convenios'
         subtitle='Administra los convenios del sistema de pasantías'
         onRefresh={handleRefresh}
@@ -176,32 +207,47 @@ const Convenios: React.FC = () => {
         hasResults={hasSearched && searchResults.length > 0}
       />
 
-      <SearchableContent
-        hasSearched={hasSearched}
-        searchResults={searchResults}
-        isLoading={statsLoading}
-        isRefreshing={isRefreshing}
-        emptyStateTitle='Búsqueda de Convenios'
-        emptyStateText='Utiliza la búsqueda avanzada para encontrar convenios específicos'
-        noResultsTitle='No se encontraron convenios'
-        noResultsText='Intenta con diferentes criterios de búsqueda'
-        loadingMessage='Cargando convenios...'
-        statsComponent={
-          hasSearched &&
-          searchResults.length > 0 && (
+      {/* Vista principal con TablaGenerica */}
+      {hasSearched && searchResults.length > 0 && (
+        <>
+          <Box sx={{ mb: 3 }}>
             <ConvenioStats stats={stats} loading={statsLoading} />
-          )
-        }
-      >
-        <ConvenioGrid
-          convenios={searchResults}
-          loading={statsLoading}
-          onEdit={handleEdit}
-          onDelete={confirmDelete}
-          onCaducar={confirmCaducar}
-          onAsignarEmpresa={handleAsignarEmpresa}
-        />
-      </SearchableContent>
+          </Box>
+
+          <ConveniosTabla
+            convenios={searchResults}
+            loading={statsLoading}
+            onEdit={handleEdit}
+            onDelete={confirmDelete}
+            onCaducar={confirmCaducar}
+            onAsignarEmpresa={handleAsignarEmpresa}
+          />
+        </>
+      )}
+
+      {/* Estado vacío cuando no hay búsqueda */}
+      {!hasSearched && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            Búsqueda de Convenios
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Utiliza la búsqueda avanzada para encontrar convenios específicos
+          </Typography>
+        </Box>
+      )}
+
+      {/* Estado vacío cuando no hay resultados */}
+      {hasSearched && searchResults.length === 0 && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            No se encontraron convenios
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Intenta con diferentes criterios de búsqueda
+          </Typography>
+        </Box>
+      )}
 
       <FloatingActionButton onClick={handleCreate} />
 

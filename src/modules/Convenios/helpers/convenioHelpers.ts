@@ -290,35 +290,3 @@ export const getDefaultConvenioValues = () => ({
   fechaFirma: '',
   fechaCaducidad: '',
 });
-
-// Metadata para ElementCard
-export const getConvenioMetadata = () => [
-  { name: 'expediente', label: 'Expediente', type: 'text' as const },
-  { name: 'nombreEmpresa', label: 'Empresa', type: 'text' as const },
-  {
-    name: 'representanteEmpresa',
-    label: 'Representante Empresa',
-    type: 'text' as const,
-  },
-  {
-    name: 'representanteFacultad',
-    label: 'Representante Facultad',
-    type: 'text' as const,
-  },
-  { name: 'fechaFirma', label: 'Fecha de Firma', type: 'date' as const },
-  {
-    name: 'fechaCaducidad',
-    label: 'Fecha de Caducidad',
-    type: 'date' as const,
-  },
-];
-
-// Función para obtener el título de la tarjeta
-export const getConvenioCardTitle = (convenio: ConvenioEmpresaDto) => {
-  return convenio.expediente || 'Sin expediente';
-};
-
-// Función para obtener el subtítulo de la tarjeta
-export const getConvenioCardSubtitle = (convenio: ConvenioEmpresaDto) => {
-  return convenio.nombreEmpresa || 'Sin empresa asignada';
-};

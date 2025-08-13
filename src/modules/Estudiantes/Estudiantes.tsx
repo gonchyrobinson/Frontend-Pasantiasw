@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Alert, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Container, Typography, Alert, Button, Box } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { EstudianteDto } from './types';
-import EstudiantesGrid from './components/EstudiantesGrid';
 import EstudiantesFilters from './components/EstudiantesFilters';
 import EstudiantesStats from './components/EstudiantesStats';
+import EstudiantesTabla from './components/EstudiantesTabla';
 import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
 import { ROUTES } from '../../helpers/routesHelper';
-import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
+import { PageHeader } from '../../lib/components';
 
 const Estudiantes: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [searchResults, setSearchResults] = useState<EstudianteDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const { isLoading, error, refetch } = useApiQuery<EstudianteDto[]>(
-    ROUTES.ESTUDIANTES as string
-  );
+  const {
+    data: estudiantes,
+    isLoading,
+    error,
+    refetch,
+  } = useApiQuery<EstudianteDto[]>(ROUTES.ESTUDIANTES as string);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [estudianteToDelete, setEstudianteToDelete] =
@@ -47,8 +51,9 @@ const Estudiantes: React.FC = () => {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      setIsRefreshing(true);
-      await refetch();
+      // Refetch data and clear search results to show fresh data
+      await Promise.all([refetch(), handleClearSearch()]);
+      showSuccess('Datos actualizados exitosamente');
     } catch (error) {
       showError('Error al actualizar los estudiantes. Inténtalo de nuevo.');
     } finally {
@@ -67,13 +72,33 @@ const Estudiantes: React.FC = () => {
 
   const { deleteEstudiante, isDeleting } = useDeleteEstudiante();
 
+  // Mostrar todos los estudiantes al cargar la página por primera vez
+  useEffect(() => {
+    if (!hasSearched && estudiantes?.data && estudiantes.data.length > 0) {
+      setHasSearched(true);
+      setSearchResults(estudiantes.data);
+    }
+  }, [estudiantes, hasSearched]);
+
+  // Al regresar a la página, hacer GET a la API y mostrar todos los estudiantes
+  useEffect(() => {
+    if (
+      location.pathname === ROUTES.ESTUDIANTES &&
+      estudiantes?.data &&
+      estudiantes.data.length > 0
+    ) {
+      // Refrescar datos y mostrar todos los estudiantes
+      setHasSearched(true);
+      setSearchResults(estudiantes.data);
+    }
+  }, [location.pathname, estudiantes]);
+
   const handleConfirmDelete = async () => {
     if (estudianteToDelete) {
       try {
         await deleteEstudiante(estudianteToDelete.idEstudiante);
         showSuccess('Estudiante eliminado correctamente');
 
-        // Actualizar la lista de resultados si el estudiante eliminado estaba en ella
         setSearchResults(prev =>
           prev.filter(e => e.idEstudiante !== estudianteToDelete.idEstudiante)
         );
@@ -116,7 +141,7 @@ const Estudiantes: React.FC = () => {
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
-      <ModuleHeader
+      <PageHeader
         title='Gestión de Estudiantes'
         subtitle='Administra los estudiantes del sistema de pasantías'
         onRefresh={handleRefresh}
@@ -132,32 +157,48 @@ const Estudiantes: React.FC = () => {
         hasResults={hasSearched && searchResults.length > 0}
       />
 
-      <SearchableContent
-        hasSearched={hasSearched}
-        searchResults={searchResults}
-        isLoading={isLoading}
-        isRefreshing={isRefreshing}
-        emptyStateTitle='Búsqueda de Estudiantes'
-        emptyStateText='Utiliza la búsqueda avanzada para encontrar estudiantes específicos'
-        noResultsTitle='No se encontraron estudiantes'
-        noResultsText='Intenta con diferentes criterios de búsqueda'
-        loadingMessage='Cargando estudiantes...'
-        statsComponent={
-          hasSearched &&
-          searchResults.length > 0 && (
+      {/* Vista principal con TablaGenerica */}
+      {hasSearched && searchResults.length > 0 && (
+        <>
+          <Box sx={{ mb: 3 }}>
             <EstudiantesStats estudiantes={searchResults} />
-          )
-        }
-      >
-        <EstudiantesGrid
-          estudiantes={searchResults}
-          onEstudianteClick={() => {
-            // TODO: Implementar vista detalle de estudiante
-          }}
-          onEstudianteEdit={handleEditarEstudiante}
-          onEstudianteDelete={handleDeleteEstudiante}
-        />
-      </SearchableContent>
+          </Box>
+
+          <EstudiantesTabla
+            estudiantes={searchResults}
+            loading={isLoading || isRefreshing}
+            onRowClick={() => {
+              // TODO: Implementar vista detalle de estudiante
+            }}
+            onRowEdit={handleEditarEstudiante}
+            onRowDelete={handleDeleteEstudiante}
+          />
+        </>
+      )}
+
+      {/* Estado vacío cuando no hay búsqueda */}
+      {!hasSearched && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            Búsqueda de Estudiantes
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Utiliza la búsqueda avanzada para encontrar estudiantes específicos
+          </Typography>
+        </Box>
+      )}
+
+      {/* Estado vacío cuando no hay resultados */}
+      {hasSearched && searchResults.length === 0 && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            No se encontraron estudiantes
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Intenta con diferentes criterios de búsqueda
+          </Typography>
+        </Box>
+      )}
 
       <FabNuevoEstudiante onClick={handleNuevoEstudiante} />
 
