@@ -31,10 +31,6 @@ class ApiClient {
           (config.headers as Record<string, string>).Authorization =
             `Bearer ${token}`;
         }
-        // Log para verificar base en prod
-        // eslint-disable-next-line no-console
-        if (import.meta.env.PROD)
-          console.log('[api] baseURL:', this.client.defaults.baseURL);
         return config;
       },
       error => {
@@ -48,6 +44,13 @@ class ApiClient {
         return response;
       },
       (error: AxiosError) => {
+        // Auto-logout on JWT expiration (401 Unauthorized)
+        if (error.response?.status === 401) {
+          authHelper.removeToken();
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
+
         // Manejo básico de errores - se expandirá más adelante
         console.error(
           'API Error:',
@@ -101,14 +104,20 @@ class ApiClient {
       // Soportar backend que devuelve mensaje como string o en distintas claves
       const respMsg =
         (typeof data === 'string' ? data : undefined) ||
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (typeof (data as any)?.message === 'string'
-          ? (data as any).message
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (data as any).message
           : undefined) ||
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (typeof (data as any)?.detail === 'string'
-          ? (data as any).detail
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (data as any).detail
           : undefined) ||
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (typeof (data as any)?.title === 'string'
-          ? (data as any).title
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (data as any).title
           : undefined);
       const message =
         respMsg || error.message || 'An unexpected error occurred';

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { API_BASE } from '../lib/api';
 
 // Base única: API_BASE (dev: '/api', prod: VITE_API_URL)
-console.log('API_BASE:', API_BASE);
 axios.defaults.baseURL = API_BASE;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 // eslint-disable-next-line no-console

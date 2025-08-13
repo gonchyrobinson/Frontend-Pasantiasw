@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Alert, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Container, Typography, Alert, Button, Box } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { EmpresaDto } from './types';
-import EmpresasGrid from './components/EmpresasGrid';
 import EmpresasFilters from './components/EmpresasFilters';
 import EmpresasStats from './components/EmpresasStats';
+import EmpresasTabla from './components/EmpresasTabla';
 import { FabNuevaEmpresa } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
 import { ROUTES } from '../../helpers/routesHelper';
-import { ModuleHeader, SearchableContent } from '../../lib/ElementCardGenerica';
+import { PageHeader } from '../../lib/components';
 
 const Empresas: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [searchResults, setSearchResults] = useState<EmpresaDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const { isLoading, error, refetch } = useApiQuery<EmpresaDto[]>('/empresas');
+  const {
+    data: empresas,
+    isLoading,
+    error,
+    refetch,
+  } = useApiQuery<EmpresaDto[]>('/empresas');
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [empresaToDelete, setEmpresaToDelete] = useState<EmpresaDto | null>(
@@ -46,8 +52,9 @@ const Empresas: React.FC = () => {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      setIsRefreshing(true);
-      await refetch();
+      // Refetch data and clear search results to show fresh data
+      await Promise.all([refetch(), handleClearSearch()]);
+      showSuccess('Datos actualizados exitosamente');
     } catch (error) {
       showError('Error al actualizar las empresas. Inténtalo de nuevo.');
     } finally {
@@ -60,6 +67,27 @@ const Empresas: React.FC = () => {
   };
 
   const { deleteEmpresa, isDeleting } = useDeleteEmpresa();
+
+  // Mostrar todas las empresas al cargar la página por primera vez
+  useEffect(() => {
+    if (!hasSearched && empresas?.data && empresas.data.length > 0) {
+      setHasSearched(true);
+      setSearchResults(empresas.data);
+    }
+  }, [empresas, hasSearched]);
+
+  // Al regresar a la página, hacer GET a la API y mostrar todas las empresas
+  useEffect(() => {
+    if (
+      location.pathname === ROUTES.EMPRESAS &&
+      empresas?.data &&
+      empresas.data.length > 0
+    ) {
+      // Refrescar datos y mostrar todas las empresas
+      setHasSearched(true);
+      setSearchResults(empresas.data);
+    }
+  }, [location.pathname, empresas]);
 
   const handleDeleteEmpresa = (empresa: EmpresaDto) => {
     setEmpresaToDelete(empresa);
@@ -114,7 +142,7 @@ const Empresas: React.FC = () => {
 
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
-      <ModuleHeader
+      <PageHeader
         title='Gestión de Empresas'
         subtitle='Administra las empresas del sistema de pasantías'
         onRefresh={handleRefresh}
@@ -130,30 +158,48 @@ const Empresas: React.FC = () => {
         hasResults={hasSearched && searchResults.length > 0}
       />
 
-      <SearchableContent
-        hasSearched={hasSearched}
-        searchResults={searchResults}
-        isLoading={isLoading}
-        isRefreshing={isRefreshing}
-        emptyStateTitle='Búsqueda de Empresas'
-        emptyStateText='Utiliza la búsqueda avanzada para encontrar empresas específicas'
-        noResultsTitle='No se encontraron empresas'
-        noResultsText='Intenta con diferentes criterios de búsqueda'
-        loadingMessage='Cargando empresas...'
-        statsComponent={
-          hasSearched &&
-          searchResults.length > 0 && <EmpresasStats empresas={searchResults} />
-        }
-      >
-        <EmpresasGrid
-          empresas={searchResults}
-          onEmpresaClick={() => {
-            // TODO: Implementar vista detalle de empresa
-          }}
-          onEmpresaEdit={handleEditarEmpresa}
-          onEmpresaDelete={handleDeleteEmpresa}
-        />
-      </SearchableContent>
+      {/* Vista principal con TablaGenerica */}
+      {hasSearched && searchResults.length > 0 && (
+        <>
+          <Box sx={{ mb: 3 }}>
+            <EmpresasStats empresas={searchResults} />
+          </Box>
+
+          <EmpresasTabla
+            empresas={searchResults}
+            loading={isLoading || isRefreshing}
+            onRowClick={() => {
+              // TODO: Implementar vista detalle de empresa
+            }}
+            onRowEdit={handleEditarEmpresa}
+            onRowDelete={handleDeleteEmpresa}
+          />
+        </>
+      )}
+
+      {/* Estado vacío cuando no hay búsqueda */}
+      {!hasSearched && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            Búsqueda de Empresas
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Utiliza la búsqueda avanzada para encontrar empresas específicas
+          </Typography>
+        </Box>
+      )}
+
+      {/* Estado vacío cuando no hay resultados */}
+      {hasSearched && searchResults.length === 0 && (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography variant='h6' color='text.secondary' gutterBottom>
+            No se encontraron empresas
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            Intenta con diferentes criterios de búsqueda
+          </Typography>
+        </Box>
+      )}
 
       <FabNuevaEmpresa onClick={handleNuevaEmpresa} />
 

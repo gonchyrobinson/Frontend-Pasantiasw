@@ -7,13 +7,8 @@ export type {
   EstudiantesState,
 } from './types';
 export {
-  getEstudianteMetadata,
   getCreacionEstudianteMetadata,
   getEdicionEstudianteMetadata,
-  getEstudianteCardTitle,
-  getEstudianteCardSubtitle,
-  filterEstudiantes,
-  groupEstudiantesByCarrera,
   getEstudiantesStats,
 } from './helpers/estudianteHelpers';
 export { useDeleteEstudiante } from './hooks/useDeleteEstudiante';

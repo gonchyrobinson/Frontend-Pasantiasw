@@ -20,6 +20,8 @@ import Convenios from '../modules/Convenios/Convenios';
 import CrearConvenio from '../modules/Convenios/components/CrearConvenio';
 import EditarConvenio from '../modules/Convenios/components/EditarConvenio';
 import Pasantias from '../modules/Pasantias/Pasantias';
+import CrearPasantia from '../modules/Pasantias/components/CrearPasantia';
+import EditarPasantia from '../modules/Pasantias/components/EditarPasantia';
 import Pagos from '../modules/Pagos/Pagos';
 import Reportes from '../modules/Reportes/Reportes';
 import RegistroUsuarios from '../modules/CreacionUsuarios/RegistroUsuarios';
@@ -144,6 +146,26 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <Pasantias />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.PASANTIAS_CREAR}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <CrearPasantia />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.PASANTIAS_EDITAR}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditarPasantia />
               </Layout>
             </ProtectedRoute>
           }

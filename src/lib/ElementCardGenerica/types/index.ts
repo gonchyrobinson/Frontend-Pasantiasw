@@ -4,6 +4,7 @@ export interface FieldMetadata {
   name: string;
   label: string;
   type: FieldType;
+  required?: boolean;
   placeholder?: string;
   options?: { value: string | number; label: string }[];
 }

@@ -11,7 +11,6 @@ export const useDeleteEmpresa = () => {
       // Usar el apiClient para mantener consistencia con el resto de la app
       await apiClient.delete<void>(`/empresas/${idEmpresa}`);
     } catch (error: unknown) {
-      console.log(error);
       const message =
         error instanceof Error && error.message
           ? error.message
