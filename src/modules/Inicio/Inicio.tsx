@@ -1,5 +1,6 @@
 import { Business, School, Payment, Add } from '@mui/icons-material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useApiQuery } from '../../hooks/useApi';
 import { Convenio, Pasantia, Pago } from '../../types';
@@ -26,6 +27,8 @@ import {
 import { ROUTES } from '../../helpers/routesHelper';
 
 const Inicio: React.FC = () => {
+  const navigate = useNavigate();
+
   // Example API calls - replace with actual endpoints
   const {
     data: conveniosData,
@@ -62,14 +65,15 @@ const Inicio: React.FC = () => {
     !!conveniosError,
     !!pasantiasError,
     !!pagosError,
-    icons
+    icons,
+    navigate
   );
 
   // Get quick actions using helper
-  const quickActions = getQuickActions(icons);
+  const quickActions = getQuickActions(icons, navigate);
 
   // Get speed dial actions using helper
-  const speedDialActions = getSpeedDialActions(icons);
+  const speedDialActions = getSpeedDialActions(icons, navigate);
 
   // Get progress items using helper
   const progressItems = getProgressItems();
@@ -97,6 +101,7 @@ const Inicio: React.FC = () => {
               error={stat.error}
               trend={stat.trend}
               trendDirection={stat.trendDirection}
+              onClick={stat.onClick}
             />
           </ItemGrid>
         ))}
@@ -115,6 +120,7 @@ const Inicio: React.FC = () => {
               description={action.description}
               icon={action.icon}
               color={action.color}
+              onClick={action.onClick}
             />
           </ItemGrid>
         ))}

@@ -10,6 +10,7 @@ export interface StatItem {
   error: boolean;
   trend: string;
   trendDirection: 'up' | 'down';
+  onClick?: () => void;
 }
 
 export interface QuickAction {
@@ -18,6 +19,7 @@ export interface QuickAction {
   icon: React.ReactNode;
   path: string;
   color: string;
+  onClick?: () => void;
 }
 
 export interface SpeedDialAction {
@@ -55,6 +57,7 @@ export interface StatsCardProps {
   error?: boolean;
   trend: string;
   trendDirection: 'up' | 'down';
+  onClick?: () => void;
 }
 
 export interface WelcomeSectionProps {
