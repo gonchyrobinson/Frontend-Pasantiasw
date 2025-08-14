@@ -1,0 +1,89 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Typography, Breadcrumbs, Link, Box } from '@mui/material';
+import { NavigateNext, ArrowBack } from '@mui/icons-material';
+import { useSnackbar } from '../../../hooks/useSnackbar';
+import { ROUTES } from '../../../helpers/routesHelper';
+import { FormularioGenerico } from '../../../FormularioGenerico';
+import { useCreatePago } from '../hooks/usePagos';
+import { getPagosFormMetadata } from '../helpers/pagosHelpers';
+import { PagosFormData } from '../types';
+import { usePasantias } from '../../Pasantias/hooks/usePasantias';
+import { LoadingSpinner } from '../../../lib/components';
+
+const CrearPago: React.FC = () => {
+  const navigate = useNavigate();
+  const { showSuccess, showError } = useSnackbar();
+  const createMutation = useCreatePago();
+  const { data: pasantiasResponse, isLoading: pasantiasLoading } =
+    usePasantias();
+
+  const handleSubmit = (data: PagosFormData) => {
+    createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
+      onSuccess: () => {
+        showSuccess('Pago creado exitosamente');
+        navigate(ROUTES.PAGOS);
+      },
+      onError: () => {
+        showError('Error al crear el pago');
+      },
+    });
+  };
+
+  const handleCancel = () => {
+    navigate(ROUTES.PAGOS);
+  };
+
+  // Preparar opciones para el dropdown de pasantías
+  const pasantias = pasantiasResponse || [];
+  const dynamicDropdownOptions = {
+    idPasantia: pasantias.map(pasantia => ({
+      value: pasantia.idPasantia,
+      label: `${pasantia.expediente}`,
+    })),
+  };
+
+  if (pasantiasLoading) {
+    return <LoadingSpinner message='Cargando opciones...' />;
+  }
+
+  return (
+    <div>
+      {/* Breadcrumb */}
+      <Box sx={{ mb: 3 }}>
+        <Breadcrumbs
+          separator={<NavigateNext fontSize='small' />}
+          aria-label='breadcrumb'
+        >
+          <Link
+            color='inherit'
+            href='#'
+            onClick={e => {
+              e.preventDefault();
+              navigate(ROUTES.PAGOS);
+            }}
+            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+          >
+            <ArrowBack sx={{ mr: 0.5 }} fontSize='small' />
+            Pagos
+          </Link>
+          <Typography color='text.primary'>Crear Nuevo Pago</Typography>
+        </Breadcrumbs>
+      </Box>
+
+      <Typography variant='h4' component='h1' gutterBottom>
+        Crear Nuevo Pago
+      </Typography>
+
+      <FormularioGenerico
+        metadata={getPagosFormMetadata()}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        loading={createMutation.isPending || pasantiasLoading}
+        dynamicDropdownOptions={dynamicDropdownOptions}
+      />
+    </div>
+  );
+};
+
+export default CrearPago;
