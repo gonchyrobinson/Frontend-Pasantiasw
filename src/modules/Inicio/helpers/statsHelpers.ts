@@ -1,5 +1,6 @@
 import { Convenio, Pasantia, Pago } from '../../../types';
 import { StatItem, QuickAction, SpeedDialAction, ProgressItem } from '../types';
+import { ROUTES } from '../../../helpers/routesHelper';
 
 /**
  * Calculate statistics from API data
@@ -18,7 +19,8 @@ export const calculateStats = (
     business: React.ReactNode;
     school: React.ReactNode;
     payment: React.ReactNode;
-  }
+  },
+  navigate: (path: string) => void
 ): StatItem[] => {
   return [
     {
@@ -31,6 +33,7 @@ export const calculateStats = (
       error: conveniosError,
       trend: '+12%',
       trendDirection: 'up',
+      onClick: () => navigate(ROUTES.CONVENIOS),
     },
     {
       title: 'Pasantías Activas',
@@ -42,6 +45,7 @@ export const calculateStats = (
       error: pasantiasError,
       trend: '+8%',
       trendDirection: 'up',
+      onClick: () => navigate(ROUTES.PASANTIAS),
     },
     {
       title: 'Pagos Pendientes',
@@ -53,6 +57,7 @@ export const calculateStats = (
       error: pagosError,
       trend: '-5%',
       trendDirection: 'down',
+      onClick: () => navigate(ROUTES.PAGOS),
     },
   ];
 };
@@ -60,32 +65,38 @@ export const calculateStats = (
 /**
  * Get quick actions configuration
  */
-export const getQuickActions = (icons: {
-  business: React.ReactNode;
-  school: React.ReactNode;
-  payment: React.ReactNode;
-}): QuickAction[] => {
+export const getQuickActions = (
+  icons: {
+    business: React.ReactNode;
+    school: React.ReactNode;
+    payment: React.ReactNode;
+  },
+  navigate: (path: string) => void
+): QuickAction[] => {
   return [
     {
       title: 'Nuevo Convenio',
       description: 'Crear un nuevo convenio con empresa',
       icon: icons.business,
-      path: '/convenios/nuevo',
+      path: ROUTES.CONVENIOS_CREAR,
       color: 'primary',
+      onClick: () => navigate(ROUTES.CONVENIOS_CREAR),
     },
     {
       title: 'Nueva Pasantía',
       description: 'Registrar una nueva pasantía',
       icon: icons.school,
-      path: '/pasantias/nueva',
+      path: ROUTES.PASANTIAS_CREAR,
       color: 'secondary',
+      onClick: () => navigate(ROUTES.PASANTIAS_CREAR),
     },
     {
       title: 'Registrar Pago',
       description: 'Registrar un nuevo pago',
       icon: icons.payment,
-      path: '/pagos/nuevo',
+      path: ROUTES.PAGOS_CREAR,
       color: 'warning',
+      onClick: () => navigate(ROUTES.PAGOS_CREAR),
     },
   ];
 };
@@ -93,36 +104,30 @@ export const getQuickActions = (icons: {
 /**
  * Get speed dial actions configuration
  */
-export const getSpeedDialActions = (icons: {
-  add: React.ReactNode;
-  business: React.ReactNode;
-  school: React.ReactNode;
-  payment: React.ReactNode;
-}): SpeedDialAction[] => {
+export const getSpeedDialActions = (
+  icons: {
+    add: React.ReactNode;
+    business: React.ReactNode;
+    school: React.ReactNode;
+    payment: React.ReactNode;
+  },
+  navigate: (path: string) => void
+): SpeedDialAction[] => {
   return [
     {
-      icon: icons.add,
+      icon: icons.business,
       name: 'Nuevo Convenio',
-      action: () => {
-        // TODO: Implement navigation to new convenio form
-        // window.location.href = '/convenios/nuevo';
-      },
+      action: () => navigate(ROUTES.CONVENIOS_CREAR),
     },
     {
       icon: icons.school,
       name: 'Nueva Pasantía',
-      action: () => {
-        // TODO: Implement navigation to new pasantia form
-        // window.location.href = '/pasantias/nueva';
-      },
+      action: () => navigate(ROUTES.PASANTIAS_CREAR),
     },
     {
       icon: icons.payment,
       name: 'Registrar Pago',
-      action: () => {
-        // TODO: Implement navigation to new payment form
-        // window.location.href = '/pagos/nuevo';
-      },
+      action: () => navigate(ROUTES.PAGOS_CREAR),
     },
   ];
 };

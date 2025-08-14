@@ -46,6 +46,7 @@ const Header: React.FC = () => {
   const {
     goToDashboard,
     goToEmpresas,
+    goToEstudiantes,
     goToConvenios,
     goToPasantias,
     goToPagos,
@@ -74,6 +75,7 @@ const Header: React.FC = () => {
   const navItems = [
     { label: 'Inicio', icon: <Dashboard />, onClick: goToDashboard },
     { label: 'Empresas', icon: <Domain />, onClick: goToEmpresas },
+    { label: 'Estudiantes', icon: <School />, onClick: goToEstudiantes },
     { label: 'Convenios', icon: <Business />, onClick: goToConvenios },
     { label: 'Pasantías', icon: <School />, onClick: goToPasantias },
     { label: 'Pagos', icon: <Payment />, onClick: goToPagos },

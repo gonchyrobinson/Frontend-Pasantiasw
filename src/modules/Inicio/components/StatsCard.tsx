@@ -1,5 +1,10 @@
-import { TrendingUp, TrendingDown } from '@mui/icons-material';
-import { CardContent, Skeleton } from '@mui/material';
+import {
+  TrendingUp,
+  TrendingDown,
+  ArrowForward,
+  TouchApp,
+} from '@mui/icons-material';
+import { CardContent, Skeleton, Tooltip, Box } from '@mui/material';
 import React from 'react';
 import { StatsCardProps } from '../types';
 import {
@@ -25,9 +30,40 @@ const StatsCard: React.FC<StatsCardProps> = ({
   error = false,
   trend,
   trendDirection,
+  onClick,
 }) => {
-  return (
-    <TarjetaEstadistica>
+  const cardContent = (
+    <TarjetaEstadistica
+      onClick={onClick}
+      sx={{
+        cursor: onClick ? 'pointer' : 'default',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        position: 'relative',
+        overflow: 'hidden',
+        '&:hover': onClick
+          ? {
+              transform: 'translateY(-4px)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              '&::before': {
+                opacity: 1,
+              },
+            }
+          : {},
+        '&::before': onClick
+          ? {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              background: `linear-gradient(90deg, ${color}, ${bgColor})`,
+              opacity: 0,
+              transition: 'opacity 0.3s ease',
+            }
+          : {},
+      }}
+    >
       <CardContent>
         <BoxFlexBetweenStatsStyled>
           <IconoEstadisticaCard bgColor={bgColor} color={color}>
@@ -42,7 +78,33 @@ const StatsCard: React.FC<StatsCardProps> = ({
             <TextoTendencia direction={trendDirection}>{trend}</TextoTendencia>
           </BoxFlexGapStyled>
         </BoxFlexBetweenStatsStyled>
-        <TituloEstadistica>{title}</TituloEstadistica>
+
+        <TituloEstadistica>
+          {title}
+          {onClick && (
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 1 }}>
+              <TouchApp
+                fontSize='small'
+                color='action'
+                sx={{
+                  mr: 0.5,
+                  opacity: 0.7,
+                  transition: 'opacity 0.2s ease',
+                }}
+              />
+              <ArrowForward
+                fontSize='small'
+                color='action'
+                sx={{
+                  opacity: 0.7,
+                  transition: 'all 0.2s ease',
+                  transform: 'translateX(0)',
+                }}
+              />
+            </Box>
+          )}
+        </TituloEstadistica>
+
         {loading ? (
           <Skeleton variant='text' width='60%' />
         ) : error ? (
@@ -50,8 +112,43 @@ const StatsCard: React.FC<StatsCardProps> = ({
         ) : (
           <ValorEstadistica>{value}</ValorEstadistica>
         )}
+
+        {onClick && (
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 8,
+              right: 8,
+              opacity: 0.3,
+              transition: 'opacity 0.2s ease',
+              '&:hover': {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <TouchApp fontSize='small' color='action' />
+          </Box>
+        )}
       </CardContent>
     </TarjetaEstadistica>
+  );
+
+  return onClick ? (
+    <Tooltip
+      title={`Ver ${title.toLowerCase()}`}
+      arrow
+      placement='top'
+      sx={{
+        '& .MuiTooltip-tooltip': {
+          fontSize: '0.875rem',
+          backgroundColor: 'rgba(0, 0, 0, 0.87)',
+        },
+      }}
+    >
+      {cardContent}
+    </Tooltip>
+  ) : (
+    cardContent
   );
 };
 

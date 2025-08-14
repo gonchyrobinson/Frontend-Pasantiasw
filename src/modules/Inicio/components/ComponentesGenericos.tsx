@@ -59,13 +59,41 @@ export const SpeedDialRapido = ({
   actions: Array<{ icon: React.ReactNode; name: string; action: () => void }>;
   icon: React.ReactNode;
 }) => (
-  <SpeedDialStyled ariaLabel='Acciones rápidas' icon={icon}>
+  <SpeedDialStyled
+    ariaLabel='Acciones rápidas'
+    icon={icon}
+    sx={{
+      '& .MuiSpeedDial-fab': {
+        backgroundColor: 'primary.main',
+        '&:hover': {
+          backgroundColor: 'primary.dark',
+          transform: 'scale(1.1)',
+        },
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      '& .MuiSpeedDialAction-fab': {
+        backgroundColor: 'secondary.main',
+        '&:hover': {
+          backgroundColor: 'secondary.dark',
+          transform: 'scale(1.05)',
+        },
+        transition: 'all 0.2s ease',
+      },
+    }}
+  >
     {actions.map(action => (
       <SpeedDialAction
         key={action.name}
         icon={action.icon}
         tooltipTitle={action.name}
         onClick={action.action}
+        sx={{
+          '& .MuiSpeedDialAction-staticTooltip': {
+            backgroundColor: 'rgba(0, 0, 0, 0.87)',
+            color: 'white',
+            fontSize: '0.875rem',
+          },
+        }}
       />
     ))}
   </SpeedDialStyled>
@@ -75,10 +103,17 @@ export const SpeedDialRapido = ({
 export const ActionCardContainer = ({
   children,
   onClick,
+  sx,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
-}) => <StyledActionCard onClick={onClick}>{children}</StyledActionCard>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sx?: any;
+}) => (
+  <StyledActionCard onClick={onClick} sx={sx}>
+    {children}
+  </StyledActionCard>
+);
 
 export const IconoEstadistica = ({
   children,
@@ -160,9 +195,17 @@ export const ItemProgreso = ({
 // Componentes para StatsCard.tsx
 export const TarjetaEstadistica = ({
   children,
+  onClick,
+  ...props
 }: {
   children: React.ReactNode;
-}) => <StyledStatsCard>{children}</StyledStatsCard>;
+  onClick?: () => void;
+  [key: string]: unknown;
+}) => (
+  <StyledStatsCard onClick={onClick} {...props}>
+    {children}
+  </StyledStatsCard>
+);
 
 export const IconoEstadisticaCard = ({
   children,
