@@ -22,6 +22,8 @@ export const ROUTES = {
   PASANTIAS_CREAR: '/pasantias/crear',
   PASANTIAS_EDITAR: '/pasantias/editar',
   PAGOS: '/pagos',
+  PAGOS_CREAR: '/pagos/crear',
+  PAGOS_EDITAR: '/pagos/editar',
   REPORTES: '/reportes',
 
   // Usuario y configuración
