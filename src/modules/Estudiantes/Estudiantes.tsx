@@ -17,7 +17,7 @@ import EstudiantesTabla from './components/EstudiantesTabla';
 import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
+import { useDeleteEstudiante } from '../../hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
 import { PageHeader } from '../../lib/components';
 

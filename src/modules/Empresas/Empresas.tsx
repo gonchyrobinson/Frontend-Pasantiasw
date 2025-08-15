@@ -17,7 +17,7 @@ import EmpresasTabla from './components/EmpresasTabla';
 import { FabNuevaEmpresa } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
+import { useDeleteEmpresa } from '../../hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
 import { PageHeader } from '../../lib/components';
 

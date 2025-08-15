@@ -1,34 +1,54 @@
 import React from 'react';
-import { Alert } from '@mui/material';
 import {
-  ContenedorPrincipalStyled,
-  TarjetaRegistroStyled,
-  TituloRegistroStyled,
-} from './StyledComponents';
+  ContenedorPrincipal as ContenedorBase,
+  TarjetaCentral,
+  TituloGradiente,
+  AlertaError as AlertaErrorBase,
+} from '../../../components/ComponentesGenericos';
 
-// Container Components
+// Container Components con configuración específica para CreacionUsuarios
 export const ContenedorPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorPrincipalStyled>{children}</ContenedorPrincipalStyled>;
+}) => (
+  <ContenedorBase
+    background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    {children}
+  </ContenedorBase>
+);
 
 export const TarjetaRegistro = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <TarjetaRegistroStyled elevation={6}>{children}</TarjetaRegistroStyled>;
+}) => (
+  <TarjetaCentral
+    maxWidth={450}
+    padding={4}
+    borderRadius={2}
+    background='rgba(255, 255, 255, 0.95)'
+    sx={{
+      backdropFilter: 'blur(10px)',
+      boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
+    }}
+  >
+    {children}
+  </TarjetaCentral>
+);
 
 // Typography Components
 export const TituloRegistro = ({ children }: { children: React.ReactNode }) => (
-  <TituloRegistroStyled variant='h4' component='h1' gutterBottom align='center'>
+  <TituloGradiente variant='h4' fontWeight={600} sx={{ mb: 3 }}>
     {children}
-  </TituloRegistroStyled>
+  </TituloGradiente>
 );
 
 // Alert Components
-export const AlertaError = ({ mensaje }: { mensaje: string }) => (
-  <Alert severity='error' sx={{ mb: 3, borderRadius: 1 }}>
-    {mensaje}
-  </Alert>
-);
+export const AlertaError = AlertaErrorBase;

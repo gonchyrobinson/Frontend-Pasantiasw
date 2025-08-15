@@ -11,4 +11,4 @@ export {
   getEdicionEstudianteMetadata,
   getEstudiantesStats,
 } from './helpers/estudianteHelpers';
-export { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
+export { useDeleteEstudiante } from '../../hooks/useDelete';

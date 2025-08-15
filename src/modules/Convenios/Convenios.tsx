@@ -10,11 +10,11 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
+import ConvenioStats from './components/ConvenioStats';
 import {
-  ConvenioStats,
   ConfirmDialog,
   FloatingActionButton,
-} from './components/ComponentesGenericos';
+} from '../../components/ComponentesGenericos';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import ConveniosFilters from './components/ConveniosFilters';
 import ConveniosTabla from './components/ConveniosTabla';

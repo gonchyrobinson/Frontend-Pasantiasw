@@ -18,7 +18,7 @@ import {
   SpeedDialStyled,
   SubtituloBienvenidaStyled,
 } from './StyledComponents';
-import { AlertaErrorStyled } from '../../../lib/components/StyledComponents';
+
 import { MainContainer } from '../../../lib/components/StyledContainers';
 
 // Componentes para Inicio.tsx
@@ -54,9 +54,8 @@ export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (
   </SectionTitle>
 );
 
-export const AlertaError = ({ mensaje }: { mensaje: string }) => (
-  <AlertaErrorStyled severity='error'>{mensaje}</AlertaErrorStyled>
-);
+// Re-exportar desde componentes centralizados
+export { AlertaError } from '../../../components/ComponentesGenericos';
 
 export const SpeedDialRapido = ({
   actions,

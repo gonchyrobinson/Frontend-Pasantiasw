@@ -10,18 +10,17 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
-import {
-  PasantiaStats,
-  FloatingActionButton,
-  PasantiaFilters,
-  PasantiasTabla,
-} from './components';
+
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 import { usePasantiaStats, usePasantias } from './hooks/usePasantias';
 import { useDeletePasantia } from './hooks/usePasantias';
 import { PasantiaDto } from './types';
 import { PageHeader } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
+import PasantiaFilters from './components/PasantiaFilters';
+import PasantiaStats from './components/PasantiaStats';
+import PasantiasTabla from './components/PasantiasTabla';
+import { FloatingActionButton } from '@/components';
 
 const Pasantias: React.FC = () => {
   const navigate = useNavigate();

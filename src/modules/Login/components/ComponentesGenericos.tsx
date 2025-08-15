@@ -1,73 +1,90 @@
 import React from 'react';
-import { PageTitle, CaptionText } from '../../../lib/components/StyledText';
+import { useNavigate } from 'react-router-dom';
+import { Subtitle } from '../../../lib/components/StyledText';
 import {
-  ContenedorPrincipal,
-  ElementoDecorativo1,
-  ElementoDecorativo2,
-  TarjetaLogin,
+  ContenedorPrincipal as ContenedorBase,
+  ElementoDecorativo,
+  TarjetaCentral,
   HeaderFormulario,
-  SubtituloBienvenida,
+  TituloGradiente,
   AlertaError,
   FooterFormulario,
-  EnlaceRegistro,
-} from './StyledComponents';
-import { ROUTES } from '@/helpers/routesHelper';
-import { useNavigate } from 'react-router-dom';
+} from '../../../components/ComponentesGenericos';
+import { BodyText } from '../../../lib/components/StyledText';
+import { ROUTES } from '../../../helpers/routesHelper';
 
-// Componentes para Login.tsx
+// Componentes para Login.tsx con configuración específica
 export const ContenedorLogin = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorPrincipal>{children}</ContenedorPrincipal>;
+}) => (
+  <ContenedorBase
+    background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    sx={{
+      position: 'relative',
+      overflow: 'hidden',
+    }}
+  >
+    {children}
+  </ContenedorBase>
+);
 
-export const DecoracionFondo1 = () => <ElementoDecorativo1 />;
+export const DecoracionFondo1 = () => <ElementoDecorativo variant={1} />;
 
-export const DecoracionFondo2 = () => <ElementoDecorativo2 />;
+export const DecoracionFondo2 = () => <ElementoDecorativo variant={2} />;
 
 export const TarjetaPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <TarjetaLogin elevation={8}>{children}</TarjetaLogin>;
+}) => (
+  <TarjetaCentral
+    maxWidth={420}
+    borderRadius={3}
+    background='rgba(255, 255, 255, 0.95)'
+    sx={{
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+    }}
+  >
+    {children}
+  </TarjetaCentral>
+);
 
 export const HeaderLogin = ({ children }: { children: React.ReactNode }) => (
   <HeaderFormulario>{children}</HeaderFormulario>
 );
 
 export const TituloLogin = ({ children }: { children: React.ReactNode }) => (
-  <PageTitle
-    component='h1'
-    sx={{
-      fontWeight: 700,
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      backgroundClip: 'text',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      mb: 1,
-    }}
-  >
+  <TituloGradiente component='h1' fontWeight={700}>
     {children}
-  </PageTitle>
+  </TituloGradiente>
 );
 
 export const SubtituloLogin = ({ children }: { children: React.ReactNode }) => (
-  <SubtituloBienvenida variant='body2' color='text.secondary'>
-    {children}
-  </SubtituloBienvenida>
+  <Subtitle sx={{ opacity: 0.8 }}>{children}</Subtitle>
 );
 
 export const AlertaErrorLogin = ({ mensaje }: { mensaje: string }) => (
-  <AlertaError severity='error'>{mensaje}</AlertaError>
+  <AlertaError
+    mensaje={mensaje}
+    sx={{
+      mb: 3,
+      borderRadius: 2,
+      '& .MuiAlert-icon': {
+        color: 'error.main',
+      },
+    }}
+  />
 );
 
 export const FooterLogin = ({ children }: { children: React.ReactNode }) => (
   <FooterFormulario>{children}</FooterFormulario>
 );
 
-export const TextoFooter = ({ children }: { children: React.ReactNode }) => (
-  <CaptionText color='text.secondary'>{children}</CaptionText>
-);
+export { TextoFooter } from '../../../components/ComponentesGenericos';
 
 export const EnlaceRegistroLogin = ({
   children,
@@ -76,11 +93,18 @@ export const EnlaceRegistroLogin = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <EnlaceRegistro
-      variant='body2'
+    <BodyText
+      sx={{
+        color: 'primary.main',
+        cursor: 'pointer',
+        fontWeight: 600,
+        '&:hover': {
+          textDecoration: 'underline',
+        },
+      }}
       onClick={() => navigate(ROUTES.REGISTRAR_USUARIO)}
     >
       {children}
-    </EnlaceRegistro>
+    </BodyText>
   );
 };
