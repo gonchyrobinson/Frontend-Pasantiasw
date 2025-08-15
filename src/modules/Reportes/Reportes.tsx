@@ -1,16 +1,17 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
+import { PageTitle, Subtitle } from '../../lib/components/StyledText';
 
 const Reportes: React.FC = () => {
   return (
     <Container maxWidth='lg' sx={{ py: 3 }}>
       <Box>
-        <Typography variant='h4' component='h1' gutterBottom>
+        <PageTitle component='h1' gutterBottom>
           Reportes y Estadísticas
-        </Typography>
-        <Typography variant='body1' color='text.secondary'>
+        </PageTitle>
+        <Subtitle>
           Módulo para generar reportes y visualizar estadísticas.
-        </Typography>
+        </Subtitle>
       </Box>
     </Container>
   );

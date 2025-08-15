@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { PageTitle, CaptionText } from '../../../lib/components/StyledText';
 import {
   ContenedorPrincipal,
   ElementoDecorativo1,
@@ -36,8 +36,7 @@ export const HeaderLogin = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const TituloLogin = ({ children }: { children: React.ReactNode }) => (
-  <Typography
-    variant='h4'
+  <PageTitle
     component='h1'
     sx={{
       fontWeight: 700,
@@ -49,7 +48,7 @@ export const TituloLogin = ({ children }: { children: React.ReactNode }) => (
     }}
   >
     {children}
-  </Typography>
+  </PageTitle>
 );
 
 export const SubtituloLogin = ({ children }: { children: React.ReactNode }) => (
@@ -67,9 +66,7 @@ export const FooterLogin = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const TextoFooter = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='caption' color='text.secondary'>
-    {children}
-  </Typography>
+  <CaptionText color='text.secondary'>{children}</CaptionText>
 );
 
 export const EnlaceRegistroLogin = ({

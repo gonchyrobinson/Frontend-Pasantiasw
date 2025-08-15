@@ -4,10 +4,10 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
   Fab,
   Tooltip,
 } from '@mui/material';
+import { BodyText } from '../../../lib/components/StyledText';
 import { Add } from '@mui/icons-material';
 
 export { ConvenioStats, ConvenioFilters } from './genericos';
@@ -36,7 +36,7 @@ export const ConfirmDialog = ({
     <Dialog open={open} onClose={onCancel} maxWidth='sm' fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <Typography>{message}</Typography>
+        <BodyText>{message}</BodyText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>{cancelText}</Button>

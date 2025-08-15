@@ -4,10 +4,10 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
   Fab,
   Tooltip,
 } from '@mui/material';
+import { BodyText } from '../../../lib/components/StyledText';
 import { Add } from '@mui/icons-material';
 
 // Componente de diálogo de confirmación - Componente presentacional simple
@@ -34,7 +34,7 @@ export const ConfirmDialog = ({
     <Dialog open={open} onClose={onCancel} maxWidth='sm' fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <Typography>{message}</Typography>
+        <BodyText>{message}</BodyText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>{cancelText}</Button>

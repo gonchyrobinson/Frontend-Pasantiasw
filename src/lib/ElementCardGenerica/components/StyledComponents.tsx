@@ -1,13 +1,11 @@
 import { styled } from '@mui/material/styles';
+import { Card, CardActions, Box, Chip, Grid, TextField } from '@mui/material';
 import {
-  Card,
-  CardActions,
-  Box,
-  Typography,
-  Chip,
-  Grid,
-  TextField,
-} from '@mui/material';
+  StatValue,
+  CaptionText,
+  CardTitle,
+  BodyText,
+} from '../../components/StyledText';
 
 export const ElementCardStyled = styled(Card)<{ hasClickHandler?: boolean }>(
   ({ theme, hasClickHandler }) => ({
@@ -109,10 +107,8 @@ export const StatIconContainerStyled = styled(Box)<{ color?: string }>(
   })
 );
 
-export const StatValueStyled = styled(Typography)<{ color?: string }>(
+export const StatValueStyled = styled(StatValue)<{ color?: string }>(
   ({ theme, color = 'primary' }) => ({
-    fontSize: '2rem',
-    fontWeight: 'bold',
     color: (() => {
       switch (color) {
         case 'primary':
@@ -133,8 +129,7 @@ export const StatValueStyled = styled(Typography)<{ color?: string }>(
   })
 );
 
-export const StatTitleStyled = styled(Typography)(({ theme }) => ({
-  fontSize: '0.875rem',
+export const StatTitleStyled = styled(CaptionText)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
@@ -142,9 +137,7 @@ export const DistributionSectionStyled = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(3),
 }));
 
-export const DistributionTitleStyled = styled(Typography)(({ theme }) => ({
-  fontSize: '1rem',
-  fontWeight: 600,
+export const DistributionTitleStyled = styled(CardTitle)(({ theme }) => ({
   marginBottom: theme.spacing(1.5),
 }));
 
@@ -175,11 +168,11 @@ export const EmptyStateStyled = styled(Box)(({ theme }) => ({
   minHeight: '200px',
 }));
 
-export const EmptyStateTitleStyled = styled(Typography)(({ theme }) => ({
+export const EmptyStateTitleStyled = styled(CardTitle)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-export const EmptyStateTextStyled = styled(Typography)(({ theme }) => ({
+export const EmptyStateTextStyled = styled(BodyText)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
@@ -214,8 +207,7 @@ export const FilterFieldStyled = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export const FiltersInfoTextStyled = styled(Typography)(({ theme }) => ({
-  fontSize: '0.875rem',
+export const FiltersInfoTextStyled = styled(BodyText)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 

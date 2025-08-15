@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import {
   CardContent,
-  Typography,
   Button,
   Box,
   Chip,
   CardActionArea,
   IconButton,
 } from '@mui/material';
+import {
+  CardTitle,
+  Subtitle,
+  CaptionText,
+  BodyText,
+} from '../../lib/components/StyledText';
 import {
   Edit as EditIcon,
   ExpandMore as ExpandIcon,
@@ -36,15 +41,11 @@ const ElementCard: React.FC<ElementCardProps> = ({
   const cardContent = (
     <CardContent>
       {title && (
-        <Typography variant='h6' component='h2' gutterBottom>
+        <CardTitle component='h2' gutterBottom>
           {title}
-        </Typography>
+        </CardTitle>
       )}
-      {subtitle && (
-        <Typography variant='subtitle2' color='text.secondary' gutterBottom>
-          {subtitle}
-        </Typography>
-      )}
+      {subtitle && <Subtitle gutterBottom>{subtitle}</Subtitle>}
 
       <Box
         sx={{
@@ -68,14 +69,9 @@ const ElementCard: React.FC<ElementCardProps> = ({
                   backgroundColor: 'background.paper',
                 }}
               >
-                <Typography
-                  variant='caption'
-                  color='text.secondary'
-                  display='block'
-                  sx={{ mb: 0.25, fontWeight: 600 }}
-                >
+                <CaptionText display='block' sx={{ mb: 0.25, fontWeight: 600 }}>
                   {field.label}
-                </Typography>
+                </CaptionText>
                 {fieldType === 'checkbox' ? (
                   <Chip
                     label={formatValue(value, field)}
@@ -84,13 +80,9 @@ const ElementCard: React.FC<ElementCardProps> = ({
                     variant='outlined'
                   />
                 ) : (
-                  <Typography
-                    variant='body2'
-                    fontWeight={500}
-                    sx={{ wordBreak: 'break-word' }}
-                  >
+                  <BodyText fontWeight={500} sx={{ wordBreak: 'break-word' }}>
                     {formatValue(value, field)}
-                  </Typography>
+                  </BodyText>
                 )}
               </Box>
               {index < fieldsToShow.length - 1 && <Box sx={{ height: 2 }} />}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Typography, Alert, Button, Box } from '@mui/material';
+import { Container, Alert, Button, Box } from '@mui/material';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
 import { useSnackbar } from '../../hooks/useSnackbar';
@@ -180,24 +181,24 @@ const Empresas: React.FC = () => {
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Empresas
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar empresas específicas
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron empresas
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
@@ -213,15 +214,15 @@ const Empresas: React.FC = () => {
         itemDetails={
           empresaToDelete && (
             <>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 ID: {empresaToDelete.idEmpresa}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Encargado: {empresaToDelete.encargado}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Correo: {empresaToDelete.correoElectronico}
-              </Typography>
+              </BodyText>
             </>
           )
         }

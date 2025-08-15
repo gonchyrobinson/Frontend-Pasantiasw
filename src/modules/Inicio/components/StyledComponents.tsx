@@ -4,12 +4,18 @@ import {
   Box,
   Container,
   Grid,
-  Typography,
   Alert,
   SpeedDial,
   CardContent,
   Chip,
 } from '@mui/material';
+import {
+  SectionTitle,
+  BodyText,
+  StatValue,
+  PageTitle,
+  Subtitle,
+} from '../../../lib/components/StyledText';
 
 // Styled components para ActionCard
 export const StyledActionCard = styled(Card)(({ theme }) => ({
@@ -73,7 +79,7 @@ export const ContenedorGridStyled = styled(Grid)(() => ({
   marginBottom: 32, // mb: 4
 }));
 
-export const TituloSeccionStyled = styled(Typography)(() => ({
+export const TituloSeccionStyled = styled(SectionTitle)(() => ({
   marginTop: 32, // mt: 4
 }));
 
@@ -91,25 +97,25 @@ export const IconoEstadisticaStyled = styled(StatIcon)(() => ({
   marginRight: 16, // mr: 2
 }));
 
-export const DescripcionAccionStyled = styled(Typography)(() => ({
+export const DescripcionAccionStyled = styled(BodyText)(() => ({
   marginBottom: 16, // mb: 2
 }));
 
-export const BotonAccionStyled = styled(Typography)(() => ({
+export const BotonAccionStyled = styled(BodyText)(() => ({
   textTransform: 'none',
 }));
 
 export const IconoEstadisticaCardStyled = styled(StatIcon)(() => ({}));
 
-export const ValorEstadisticaStyled = styled(Typography)(() => ({
+export const ValorEstadisticaStyled = styled(StatValue)(() => ({
   fontWeight: 600,
 }));
 
-export const TituloBienvenidaStyled = styled(Typography)(() => ({
+export const TituloBienvenidaStyled = styled(PageTitle)(() => ({
   fontWeight: 600,
 }));
 
-export const SubtituloBienvenidaStyled = styled(Typography)(() => ({
+export const SubtituloBienvenidaStyled = styled(Subtitle)(() => ({
   opacity: 0.9,
 }));
 

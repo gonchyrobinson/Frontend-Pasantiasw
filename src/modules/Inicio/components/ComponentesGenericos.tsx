@@ -1,5 +1,13 @@
 import React from 'react';
-import { Typography, Grid, SpeedDialAction } from '@mui/material';
+import { Grid, SpeedDialAction } from '@mui/material';
+import {
+  SectionTitle,
+  CardTitle,
+  BodyText,
+  StatValue,
+  CaptionText,
+  PageTitle,
+} from '../../../lib/components/StyledText';
 import {
   StyledContainer,
   StyledActionCard,
@@ -43,9 +51,9 @@ export const ItemGrid = ({
 );
 
 export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h5' component='h2' gutterBottom sx={{ mt: 4 }}>
+  <SectionTitle component='h2' gutterBottom sx={{ mt: 4 }}>
     {children}
-  </Typography>
+  </SectionTitle>
 );
 
 export const AlertaError = ({ mensaje }: { mensaje: string }) => (
@@ -135,9 +143,7 @@ export const IconoEstadistica = ({
 );
 
 export const TituloAccion = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h6' component='h3'>
-    {children}
-  </Typography>
+  <CardTitle component='h3'>{children}</CardTitle>
 );
 
 export const DescripcionAccion = ({
@@ -156,11 +162,7 @@ export const BotonAccion = ({
 }: {
   children: React.ReactNode;
   _icon: React.ReactNode;
-}) => (
-  <Typography variant='body1' sx={{ textTransform: 'none' }}>
-    {children}
-  </Typography>
-);
+}) => <BodyText sx={{ textTransform: 'none' }}>{children}</BodyText>;
 
 // Componentes para ProgressSection.tsx
 export const ContenedorProgreso = ({
@@ -170,9 +172,7 @@ export const ContenedorProgreso = ({
 }) => <StyledProgressSection>{children}</StyledProgressSection>;
 
 export const TituloProgreso = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h6' gutterBottom>
-    {children}
-  </Typography>
+  <CardTitle gutterBottom>{children}</CardTitle>
 );
 
 export const ItemProgreso = ({
@@ -185,10 +185,8 @@ export const ItemProgreso = ({
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
 }) => (
   <React.Fragment>
-    <Typography variant='body2'>{label}</Typography>
-    <Typography variant='body2' color={color}>
-      {value}%
-    </Typography>
+    <BodyText>{label}</BodyText>
+    <BodyText color={color}>{value}%</BodyText>
   </React.Fragment>
 );
 
@@ -226,9 +224,9 @@ export const TituloEstadistica = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography variant='h6' component='h2' gutterBottom>
+  <CardTitle component='h2' gutterBottom>
     {children}
-  </Typography>
+  </CardTitle>
 );
 
 export const ValorEstadistica = ({
@@ -236,14 +234,9 @@ export const ValorEstadistica = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography
-    variant='h4'
-    component='p'
-    color='primary'
-    sx={{ fontWeight: 600 }}
-  >
+  <StatValue component='p' color='primary' sx={{ fontWeight: 600 }}>
     {children}
-  </Typography>
+  </StatValue>
 );
 
 export const TextoTendencia = ({
@@ -253,18 +246,13 @@ export const TextoTendencia = ({
   children: React.ReactNode;
   direction: 'up' | 'down';
 }) => (
-  <Typography
-    variant='caption'
-    color={direction === 'up' ? 'success.main' : 'error.main'}
-  >
+  <CaptionText color={direction === 'up' ? 'success.main' : 'error.main'}>
     {children}
-  </Typography>
+  </CaptionText>
 );
 
 export const TextoError = ({ children }: { children: React.ReactNode }) => (
-  <Typography color='error' variant='body2'>
-    {children}
-  </Typography>
+  <BodyText color='error'>{children}</BodyText>
 );
 
 // Componentes para WelcomeSection.tsx
@@ -279,9 +267,9 @@ export const TituloBienvenida = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography variant='h4' component='h1' gutterBottom sx={{ fontWeight: 600 }}>
+  <PageTitle component='h1' gutterBottom sx={{ fontWeight: 600 }}>
     {children}
-  </Typography>
+  </PageTitle>
 );
 
 export const SubtituloBienvenida = ({

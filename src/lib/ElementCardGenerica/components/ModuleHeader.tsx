@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography, Box, IconButton, Tooltip, Button } from '@mui/material';
+import { Box, IconButton, Tooltip, Button } from '@mui/material';
 import { Refresh, Add } from '@mui/icons-material';
+import { PageTitle, Subtitle } from '../../components/StyledText';
 
 export interface ModuleHeaderProps {
   title: string;
@@ -29,12 +30,10 @@ const ModuleHeader: React.FC<ModuleHeaderProps> = ({
       }}
     >
       <Box>
-        <Typography variant='h4' component='h1' gutterBottom>
+        <PageTitle component='h1' gutterBottom>
           {title}
-        </Typography>
-        <Typography variant='body1' color='text.secondary'>
-          {subtitle}
-        </Typography>
+        </PageTitle>
+        <Subtitle>{subtitle}</Subtitle>
       </Box>
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Tooltip title='Actualizar datos'>

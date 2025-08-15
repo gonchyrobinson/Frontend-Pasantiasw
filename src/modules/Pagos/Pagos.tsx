@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
+import { Alert, Container, Button, Box } from '@mui/material';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -163,25 +164,25 @@ const Pagos: React.FC = () => {
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Pagos por Pasantía
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda para encontrar pagos seleccionando una pasantía
             específica del dropdown
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron pagos
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
@@ -195,21 +196,21 @@ const Pagos: React.FC = () => {
         itemDetails={
           selectedPago && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>ID Pasantía:</strong> {selectedPago.idPasantia || 'N/A'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Monto:</strong>{' '}
                 {selectedPago.monto
                   ? `$${selectedPago.monto.toLocaleString()}`
                   : 'N/A'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Pago:</strong>{' '}
                 {selectedPago.fechaPago
                   ? new Date(selectedPago.fechaPago).toLocaleDateString()
                   : 'N/A'}
-              </Typography>
+              </BodyText>
             </div>
           )
         }

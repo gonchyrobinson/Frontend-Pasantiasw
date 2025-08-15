@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Typography,
   Grid,
   Box,
   Chip,
@@ -9,6 +8,12 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import {
+  CardTitle,
+  Subtitle,
+  BodyText,
+  StatValue,
+} from '../../../lib/components/StyledText';
 import {
   Search,
   Clear,
@@ -49,31 +54,21 @@ export const TituloSecundario = ({
   children,
 }: {
   children: React.ReactNode;
-}) => (
-  <Typography variant='h6' gutterBottom>
-    {children}
-  </Typography>
-);
+}) => <CardTitle gutterBottom>{children}</CardTitle>;
 
 export const Subtitulo = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='subtitle2' gutterBottom>
-    {children}
-  </Typography>
+  <Subtitle gutterBottom>{children}</Subtitle>
 );
 
 export const TextoPrincipal = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='body2'>{children}</Typography>
+  <BodyText>{children}</BodyText>
 );
 
 export const TextoSecundario = ({
   children,
 }: {
   children: React.ReactNode;
-}) => (
-  <Typography variant='body2' color='text.secondary'>
-    {children}
-  </Typography>
-);
+}) => <BodyText color='text.secondary'>{children}</BodyText>;
 
 export const ValorEstadistica = ({
   children,
@@ -82,14 +77,9 @@ export const ValorEstadistica = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <Typography
-    variant='h4'
-    component='div'
-    color={`${color}.main`}
-    fontWeight='bold'
-  >
+  <StatValue component='div' color={`${color}.main`} fontWeight='bold'>
     {children}
-  </Typography>
+  </StatValue>
 );
 
 // Grid Components

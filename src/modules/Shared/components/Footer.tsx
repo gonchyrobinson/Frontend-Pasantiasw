@@ -1,4 +1,5 @@
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
+import { BodyText } from '../../../lib/components/StyledText';
 
 const Footer = () => {
   return (
@@ -15,10 +16,10 @@ const Footer = () => {
       }}
     >
       <Container maxWidth='sm'>
-        <Typography variant='body2' color='text.secondary' align='center'>
+        <BodyText color='text.secondary' align='center'>
           © {new Date().getFullYear()} Sistema de Pasantías. Todos los derechos
           reservados.
-        </Typography>
+        </BodyText>
       </Container>
     </Box>
   );

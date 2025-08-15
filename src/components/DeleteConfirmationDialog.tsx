@@ -5,11 +5,11 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
   CircularProgress,
 } from '@mui/material';
 import { Warning } from '@mui/icons-material';
 import { ItemDetailsBoxStyled } from './StyledComponents';
+import { BodyText, CardTitle, WarningText } from '../lib/components/StyledText';
 
 interface DeleteConfirmationDialogProps {
   open: boolean;
@@ -44,20 +44,16 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
       </DialogTitle>
 
       <DialogContent>
-        <Typography variant='body1' sx={{ mb: 2 }}>
-          {message}
-        </Typography>
+        <BodyText sx={{ mb: 2 }}>{message}</BodyText>
 
         <ItemDetailsBoxStyled>
-          <Typography variant='h6' gutterBottom>
-            {itemName}
-          </Typography>
+          <CardTitle gutterBottom>{itemName}</CardTitle>
           {itemDetails}
         </ItemDetailsBoxStyled>
 
-        <Typography variant='body2' color='warning.main' sx={{ mt: 2 }}>
+        <WarningText sx={{ mt: 2 }}>
           ⚠️ Esta acción no se puede deshacer.
-        </Typography>
+        </WarningText>
       </DialogContent>
 
       <DialogActions sx={{ p: 2 }}>

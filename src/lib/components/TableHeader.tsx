@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Divider } from '@mui/material';
+import { SectionTitle, CardTitle, Subtitle } from './StyledText';
 
 interface TableHeaderProps {
   title?: string;
@@ -20,54 +21,27 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
     return null;
   }
 
-  const getTitleVariant = () => {
-    switch (variant) {
-      case 'compact':
-        return 'h6';
-      case 'detailed':
-        return 'h4';
-      default:
-        return 'h5';
-    }
-  };
-
-  const getSubtitleVariant = () => {
-    switch (variant) {
-      case 'compact':
-        return 'caption';
-      case 'detailed':
-        return 'body1';
-      default:
-        return 'body2';
-    }
-  };
-
   return (
     <Box sx={{ mb: 3 }}>
       {title && (
-        <Typography
-          variant={getTitleVariant()}
-          component='h2'
-          gutterBottom
-          sx={{
-            fontWeight: variant === 'detailed' ? 600 : 500,
-            color: 'text.primary',
-          }}
-        >
-          {title}
-        </Typography>
+        <Box component='h2' sx={{ m: 0, p: 0 }}>
+          {variant === 'detailed' ? (
+            <SectionTitle>{title}</SectionTitle>
+          ) : variant === 'compact' ? (
+            <CardTitle>{title}</CardTitle>
+          ) : (
+            <SectionTitle>{title}</SectionTitle>
+          )}
+        </Box>
       )}
       {subtitle && (
-        <Typography
-          variant={getSubtitleVariant()}
-          color='text.secondary'
-          gutterBottom
+        <Subtitle
           sx={{
             lineHeight: variant === 'compact' ? 1.2 : 1.5,
           }}
         >
           {subtitle}
-        </Typography>
+        </Subtitle>
       )}
       {children}
       {showDivider && (title || subtitle || children) && (

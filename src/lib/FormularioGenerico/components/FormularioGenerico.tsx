@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Typography, Grid, Paper } from '@mui/material';
+import { Box, Button, Grid, Paper } from '@mui/material';
+import { SectionTitle } from '../../components/StyledText';
 import { GenericFormProps, FieldMetadata } from '../types';
 import TextField from './TextField';
 import EmailField from './EmailField';
@@ -131,9 +132,9 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
   return (
     <Paper sx={{ p: 3 }}>
       {metadata.title && (
-        <Typography variant='h5' component='h2' gutterBottom>
+        <SectionTitle component='h2' gutterBottom>
           {metadata.title}
-        </Typography>
+        </SectionTitle>
       )}
 
       <Box

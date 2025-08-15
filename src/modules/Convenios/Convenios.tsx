@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
+import { Alert, Container, Button, Box } from '@mui/material';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -228,24 +229,24 @@ const Convenios: React.FC = () => {
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Convenios
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar convenios específicos
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron convenios
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
@@ -261,24 +262,24 @@ const Convenios: React.FC = () => {
         itemDetails={
           selectedConvenio && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>Empresa:</strong>{' '}
                 {selectedConvenio.nombreEmpresa || 'Sin empresa asignada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Firma:</strong>{' '}
                 {selectedConvenio.fechaFirma
                   ? new Date(selectedConvenio.fechaFirma).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Caducidad:</strong>{' '}
                 {selectedConvenio.fechaCaducidad
                   ? new Date(
                       selectedConvenio.fechaCaducidad
                     ).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
+              </BodyText>
             </div>
           )
         }

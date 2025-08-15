@@ -3,11 +3,16 @@ import {
   Container,
   Card,
   CardContent,
-  Typography,
   Box,
   Chip,
   IconButton,
 } from '@mui/material';
+import {
+  CardTitle,
+  BodyText,
+  CaptionText,
+  StatValue,
+} from '../../../lib/components/StyledText';
 
 // Contenedor principal del módulo
 export const ContenedorPrincipalStyled = styled(Container)(({ theme }) => ({
@@ -37,14 +42,14 @@ export const ContenidoTarjetaStyled = styled(CardContent)(({ theme }) => ({
 }));
 
 // Título del expediente
-export const TituloExpedienteStyled = styled(Typography)(({ theme }) => ({
+export const TituloExpedienteStyled = styled(CardTitle)(({ theme }) => ({
   fontWeight: 600,
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(1),
 }));
 
 // Información de la empresa
-export const InfoEmpresaStyled = styled(Typography)(({ theme }) => ({
+export const InfoEmpresaStyled = styled(BodyText)(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontSize: '0.875rem',
 }));
@@ -58,7 +63,7 @@ export const FechasConvenioStyled = styled(Box)(({ theme }) => ({
 }));
 
 // Fecha individual
-export const FechaStyled = styled(Typography)(({ theme }) => ({
+export const FechaStyled = styled(CaptionText)(({ theme }) => ({
   fontSize: '0.75rem',
   color: theme.palette.text.secondary,
 }));
@@ -104,14 +109,14 @@ export const TarjetaEstadisticaStyled = styled(Card)(({ theme }) => ({
 }));
 
 // Título de estadística
-export const TituloEstadisticaStyled = styled(Typography)(({ theme }) => ({
+export const TituloEstadisticaStyled = styled(CaptionText)(({ theme }) => ({
   fontSize: '0.875rem',
   color: theme.palette.text.secondary,
   marginBottom: theme.spacing(1),
 }));
 
 // Valor de estadística
-export const ValorEstadisticaStyled = styled(Typography)(({ theme }) => ({
+export const ValorEstadisticaStyled = styled(StatValue)(({ theme }) => ({
   fontSize: '2rem',
   fontWeight: 600,
   color: theme.palette.primary.main,
@@ -150,7 +155,7 @@ export const ContenedorFormularioStyled = styled(Box)(({ theme }) => ({
 }));
 
 // Título del formulario
-export const TituloFormularioStyled = styled(Typography)(({ theme }) => ({
+export const TituloFormularioStyled = styled(CardTitle)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   color: theme.palette.primary.main,
   fontWeight: 600,
@@ -179,7 +184,7 @@ export const ContenedorConfirmacionStyled = styled(Box)(({ theme }) => ({
 }));
 
 // Mensaje de confirmación
-export const MensajeConfirmacionStyled = styled(Typography)(({ theme }) => ({
+export const MensajeConfirmacionStyled = styled(BodyText)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   color: theme.palette.text.primary,
 }));

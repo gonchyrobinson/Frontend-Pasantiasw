@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
+import { CaptionText } from '../lib/components/StyledText';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -24,11 +25,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       }}
     >
       <CircularProgress size={size} color={color} />
-      {message && (
-        <Typography variant='body2' color='text.secondary'>
-          {message}
-        </Typography>
-      )}
+      {message && <CaptionText>{message}</CaptionText>}
     </Box>
   );
 };

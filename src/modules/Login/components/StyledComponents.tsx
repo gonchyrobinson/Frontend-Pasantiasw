@@ -1,5 +1,10 @@
 import { styled } from '@mui/material/styles';
-import { Box, Paper, Typography, Alert } from '@mui/material';
+import { Box, Paper, Alert } from '@mui/material';
+import {
+  PageTitle,
+  Subtitle,
+  BodyText,
+} from '../../../lib/components/StyledText';
 
 // Styled components para Login.tsx
 export const ContenedorPrincipal = styled(Box)(() => ({
@@ -57,7 +62,7 @@ export const HeaderFormulario = styled(Box)(() => ({
   marginBottom: 24, // mb: 3
 }));
 
-export const TituloBienvenida = styled(Typography)(() => ({
+export const TituloBienvenida = styled(PageTitle)(() => ({
   fontWeight: 700,
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   backgroundClip: 'text',
@@ -66,7 +71,7 @@ export const TituloBienvenida = styled(Typography)(() => ({
   marginBottom: 8, // mb: 1
 }));
 
-export const SubtituloBienvenida = styled(Typography)(() => ({
+export const SubtituloBienvenida = styled(Subtitle)(() => ({
   opacity: 0.8,
 }));
 
@@ -85,7 +90,7 @@ export const FooterFormulario = styled(Box)(() => ({
   borderTop: '1px solid rgba(0,0,0,0.1)',
 }));
 
-export const EnlaceRegistro = styled(Typography)(() => ({
+export const EnlaceRegistro = styled(BodyText)(() => ({
   color: 'primary.main',
   cursor: 'pointer',
   fontWeight: 600,

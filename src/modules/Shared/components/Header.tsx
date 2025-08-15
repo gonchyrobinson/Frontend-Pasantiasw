@@ -9,7 +9,8 @@ import {
   Person,
   Domain,
 } from '@mui/icons-material';
-import { AppBar, Toolbar, Typography, Box } from '@mui/material';
+import { AppBar, Toolbar, Box } from '@mui/material';
+import { CardTitle } from '../../../lib/components/StyledText';
 import CustomMenu from './menu/CustomMenu';
 import MenuElement from './menu/MenuElement';
 import type { MenuItemData } from './menu/MenuElement';
@@ -125,13 +126,9 @@ const Header: React.FC = () => {
   return (
     <StyledAppBar position='static'>
       <StyledToolbar>
-        <Typography
-          variant='h6'
-          component='div'
-          sx={{ flexGrow: 1, fontWeight: 600 }}
-        >
+        <CardTitle component='div' sx={{ flexGrow: 1, fontWeight: 600 }}>
           Sistema de Pasantías
-        </Typography>
+        </CardTitle>
 
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           {navItems.map((item, index) => (

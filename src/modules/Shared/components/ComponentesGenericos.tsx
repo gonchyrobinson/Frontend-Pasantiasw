@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { CardTitle } from '../../../lib/components/StyledText';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   MobileToggleButtonStyled,
@@ -60,9 +56,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   return (
     <HeaderContainerStyled>
       {!isCollapsed && (
-        <Typography variant='h6' component='div'>
-          Sistema de Pasantías
-        </Typography>
+        <CardTitle component='div'>Sistema de Pasantías</CardTitle>
       )}
       {!isMobile && (
         <CollapseButton isCollapsed={isCollapsed} onClick={onToggleCollapse} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { PageTitle } from '../../../lib/components/StyledText';
 import { useSnackbar } from '../../../hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../FormularioGenerico';
@@ -34,9 +34,9 @@ const CrearConvenio: React.FC = () => {
 
   return (
     <div>
-      <Typography variant='h4' component='h1' gutterBottom>
+      <PageTitle component='h1' gutterBottom>
         Crear Nuevo Convenio
-      </Typography>
+      </PageTitle>
 
       <FormularioGenerico
         metadata={getConvenioFormMetadata()}

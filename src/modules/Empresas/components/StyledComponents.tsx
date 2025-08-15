@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
-import { Box, Typography, Paper, TextField, Button, Fab } from '@mui/material';
+import { Box, Paper, TextField, Button, Fab } from '@mui/material';
+import { SectionTitle } from '../../../lib/components/StyledText';
 
 export const EmptyStateStyled = styled(Box)(({ theme }) => ({
   textAlign: 'center',
@@ -8,7 +9,7 @@ export const EmptyStateStyled = styled(Box)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const TituloPrincipalStyled = styled(Typography)(({ theme }) => ({
+export const TituloPrincipalStyled = styled(SectionTitle)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(1),

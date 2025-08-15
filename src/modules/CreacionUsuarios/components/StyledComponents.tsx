@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Paper } from '@mui/material';
+import { PageTitle } from '../../../lib/components/StyledText';
 
 export const ContenedorPrincipalStyled = styled(Box)(() => ({
   display: 'flex',
@@ -19,7 +20,7 @@ export const TarjetaRegistroStyled = styled(Paper)(({ theme }) => ({
   boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
 }));
 
-export const TituloRegistroStyled = styled(Typography)(({ theme }) => ({
+export const TituloRegistroStyled = styled(PageTitle)(({ theme }) => ({
   fontWeight: 600,
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   backgroundClip: 'text',

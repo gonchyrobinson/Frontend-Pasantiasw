@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { Box, Typography, Button, Paper } from '@mui/material';
+import { Box, Button, Paper } from '@mui/material';
+import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { Refresh as RefreshIcon } from '@mui/icons-material';
 
 interface Props {
@@ -49,18 +50,18 @@ class ErrorBoundary extends Component<Props, State> {
               maxWidth: 500,
             }}
           >
-            <Typography variant='h4' component='h1' gutterBottom color='error'>
+            <PageTitle component='h1' gutterBottom color='error'>
               Algo salió mal
-            </Typography>
-            <Typography variant='body1' color='text.secondary' sx={{ mb: 3 }}>
+            </PageTitle>
+            <BodyText color='text.secondary' sx={{ mb: 3 }}>
               Ha ocurrido un error inesperado. Por favor, intenta recargar la
               página.
-            </Typography>
+            </BodyText>
             {this.state.error && (
               <Box sx={{ mb: 3, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-                <Typography variant='body2' color='text.secondary'>
+                <BodyText color='text.secondary'>
                   Error: {this.state.error.message}
-                </Typography>
+                </BodyText>
               </Box>
             )}
             <Button

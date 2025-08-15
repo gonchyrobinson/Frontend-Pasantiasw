@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
+import { Alert, Container, Button, Box } from '@mui/material';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -176,24 +177,24 @@ const Pasantias: React.FC = () => {
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Pasantías
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza los filtros para encontrar pasantías específicas
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
         <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron pasantías
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
+          </BodyText>
         </Box>
       )}
 
@@ -209,20 +210,20 @@ const Pasantias: React.FC = () => {
         itemDetails={
           selectedPasantia && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>Obra Social:</strong>{' '}
                 {selectedPasantia.obraSocial || 'No especificada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>ART:</strong>{' '}
                 {selectedPasantia.art || 'No especificado'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Inicio:</strong>{' '}
                 {selectedPasantia.fechaInicio
                   ? new Date(selectedPasantia.fechaInicio).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
+              </BodyText>
             </div>
           )
         }

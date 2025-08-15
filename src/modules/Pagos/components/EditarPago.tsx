@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Alert, Breadcrumbs, Link, Box } from '@mui/material';
+import { Alert, Breadcrumbs, Link, Box } from '@mui/material';
+import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
@@ -119,13 +120,13 @@ const EditarPago: React.FC = () => {
             <ArrowBack sx={{ mr: 0.5 }} fontSize='small' />
             Pagos
           </Link>
-          <Typography color='text.primary'>Editar Pago #{id}</Typography>
+          <BodyText color='text.primary'>Editar Pago #{id}</BodyText>
         </Breadcrumbs>
       </Box>
 
-      <Typography variant='h4' component='h1' gutterBottom>
+      <PageTitle component='h1' gutterBottom>
         Editar Pago #{id}
-      </Typography>
+      </PageTitle>
 
       <FormularioGenerico
         metadata={getPagosFormMetadata()}

@@ -2,7 +2,8 @@ import { GridColDef } from '@mui/x-data-grid';
 import { ColumnMetadata } from '../types';
 import { formatValue } from '../../ElementCardGenerica/helpers/elementCardHelper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import { BodyText } from '../../components/StyledText';
 
 export const createColumnDefinitions = (
   columns: ColumnMetadata[],
@@ -38,13 +39,9 @@ export const createColumnDefinitions = (
       // Note: checkbox/boolean types are not supported in ColumnMetadata
 
       return (
-        <Typography
-          variant='body2'
-          fontWeight={500}
-          sx={{ wordBreak: 'break-word' }}
-        >
+        <BodyText fontWeight={500} sx={{ wordBreak: 'break-word' }}>
           {formattedValue}
-        </Typography>
+        </BodyText>
       );
     },
   }));
