@@ -1,6 +1,7 @@
 import React from 'react';
-import { FormControlLabel, Checkbox, FormHelperText, Box } from '@mui/material';
+import { FormControlLabel, Checkbox, FormHelperText } from '@mui/material';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { SectionContainer } from '../../lib/components/StyledContainers';
 
 type CheckboxFieldProps = {
   register: UseFormRegisterReturn;
@@ -16,13 +17,13 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
   readonly = false,
 }) => {
   return (
-    <Box sx={{ mt: 2, mb: 1 }}>
+    <SectionContainer sx={{ mt: 2, mb: 1 }}>
       <FormControlLabel
         control={<Checkbox {...register} disabled={readonly} color='primary' />}
         label={label}
       />
       {error && <FormHelperText error>{error}</FormHelperText>}
-    </Box>
+    </SectionContainer>
   );
 };
 

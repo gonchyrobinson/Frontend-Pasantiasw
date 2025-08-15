@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Grid, Paper } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
+import {
+  FormContainer,
+  ActionContainer,
+} from '../../components/StyledContainers';
 import { SectionTitle } from '../../components/StyledText';
 import { GenericFormProps, FieldMetadata } from '../types';
 import TextField from './TextField';
@@ -130,7 +134,7 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
   };
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <FormContainer>
       {metadata.title && (
         <SectionTitle component='h2' gutterBottom>
           {metadata.title}
@@ -159,9 +163,7 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
           ))}
         </Grid>
 
-        <Box
-          sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'flex-end' }}
-        >
+        <ActionContainer>
           {(onCancel || onClear) && (
             <Button
               type='button'
@@ -175,9 +177,9 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
           <Button type='submit' variant='contained' disabled={loading}>
             {loading ? 'Procesando...' : metadata.submitButtonText || 'Guardar'}
           </Button>
-        </Box>
+        </ActionContainer>
       </Box>
-    </Paper>
+    </FormContainer>
   );
 };
 

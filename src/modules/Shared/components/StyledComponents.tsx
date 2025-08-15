@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
-import { IconButton, Box } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { FlexContainer } from '../../../lib/components/StyledContainers';
 
 // Styled components with sx properties
 export const MobileToggleButtonStyled = styled(IconButton)(({ theme }) => ({
@@ -18,7 +19,7 @@ export const CollapseButtonStyled = styled(IconButton)(() => ({
   // size is handled as a prop, not in styled component
 }));
 
-export const HeaderContainerStyled = styled(Box)(({ theme }) => ({
+export const HeaderContainerStyled = styled(FlexContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   display: 'flex',
   alignItems: 'center',

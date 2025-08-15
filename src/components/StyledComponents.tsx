@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { SectionContainer } from '../lib/components/StyledContainers';
 
 // Styled components with sx properties
-export const ItemDetailsBoxStyled = styled(Box)(({ theme }) => ({
+export const ItemDetailsBoxStyled = styled(SectionContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.palette.grey[100],
   borderRadius: theme.spacing(1),

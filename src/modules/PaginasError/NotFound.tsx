@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
+import {
+  CenteredContainer,
+  CardContainer,
+} from '../../lib/components/StyledContainers';
 import {
   PageTitle,
   SectionTitle,
@@ -11,17 +15,13 @@ import { ROUTES } from '@/helpers/routesHelper';
 
 const NotFound = () => {
   return (
-    <Box
+    <CenteredContainer
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         minHeight: '100vh',
         bgcolor: 'background.default',
       }}
     >
-      <Paper
-        elevation={3}
+      <CardContainer
         sx={{
           p: 4,
           textAlign: 'center',
@@ -45,8 +45,8 @@ const NotFound = () => {
         >
           Volver al inicio
         </Button>
-      </Paper>
-    </Box>
+      </CardContainer>
+    </CenteredContainer>
   );
 };
 

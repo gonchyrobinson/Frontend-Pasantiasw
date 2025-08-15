@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box, Chip, TextField } from '@mui/material';
+import { Chip, TextField } from '@mui/material';
 import {
   CardTitle,
   Subtitle,
@@ -7,6 +7,10 @@ import {
   StatValue,
 } from '../../../lib/components/StyledText';
 import { Search, Clear, School, Person, Add } from '@mui/icons-material';
+import {
+  GridContainer,
+  FlexContainer,
+} from '../../../lib/components/StyledContainers';
 import {
   TituloPrincipalStyled,
   ContenedorPrincipalStyled,
@@ -67,9 +71,9 @@ export const ValorEstadistica = ({
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
-  <Grid container spacing={3}>
+  <GridContainer container spacing={3}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 export const ItemGrid = ({
@@ -79,9 +83,9 @@ export const ItemGrid = ({
   children: React.ReactNode;
   [key: string]: unknown;
 }) => (
-  <Grid item {...props}>
+  <GridContainer item {...props}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 export const ContenedorGridFiltros = ({
@@ -89,9 +93,9 @@ export const ContenedorGridFiltros = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Grid container spacing={2} alignItems='center'>
+  <GridContainer container spacing={2} alignItems='center'>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 // Box Components
@@ -121,7 +125,7 @@ export const ContenedorIcono = ({
   color?: string;
 }) => (
   <ContenedorIconoStyled>
-    <Box
+    <FlexContainer
       sx={{
         p: 1,
         borderRadius: '50%',
@@ -130,7 +134,7 @@ export const ContenedorIcono = ({
       }}
     >
       {children}
-    </Box>
+    </FlexContainer>
   </ContenedorIconoStyled>
 );
 

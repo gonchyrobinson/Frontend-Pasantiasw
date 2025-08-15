@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, IconButton, Tooltip, Button } from '@mui/material';
+import { IconButton, Tooltip, Button } from '@mui/material';
+import { FlexContainer } from './StyledContainers';
 import { Refresh, Add } from '@mui/icons-material';
 import { PageTitle, Subtitle } from './StyledText';
 
@@ -21,21 +22,20 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   actionButtonText = 'Nuevo',
 }) => {
   return (
-    <Box
+    <FlexContainer
       sx={{
-        display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         mb: 4,
       }}
     >
-      <Box>
+      <FlexContainer sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
         <PageTitle component='h1' gutterBottom>
           {title}
         </PageTitle>
         <Subtitle>{subtitle}</Subtitle>
-      </Box>
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      </FlexContainer>
+      <FlexContainer sx={{ gap: 1 }}>
         {onRefresh && (
           <Tooltip title='Actualizar datos'>
             <IconButton
@@ -66,7 +66,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
             {actionButtonText}
           </Button>
         )}
-      </Box>
-    </Box>
+      </FlexContainer>
+    </FlexContainer>
   );
 };

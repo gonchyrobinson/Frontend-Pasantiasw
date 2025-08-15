@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { CenteredContainer } from './StyledContainers';
 import { Section } from './Section';
 import { CardTitle, Subtitle } from './StyledText';
 
@@ -18,18 +18,20 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <Section>
-      <Box sx={{ textAlign: 'center', py: 4 }}>
+      <CenteredContainer sx={{ textAlign: 'center', py: 4 }}>
         {icon && (
-          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+          <CenteredContainer sx={{ mb: 2, justifyContent: 'center' }}>
             {icon}
-          </Box>
+          </CenteredContainer>
         )}
         <CardTitle color='text.secondary' gutterBottom>
           {title}
         </CardTitle>
         {subtitle && <Subtitle sx={{ mb: 2 }}>{subtitle}</Subtitle>}
-        {action && <Box sx={{ mt: 2 }}>{action}</Box>}
-      </Box>
+        {action && (
+          <CenteredContainer sx={{ mt: 2 }}>{action}</CenteredContainer>
+        )}
+      </CenteredContainer>
     </Section>
   );
 };

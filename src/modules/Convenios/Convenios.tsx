@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Alert, Container, Button, Box } from '@mui/material';
+import { Alert, Button } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
@@ -174,7 +179,7 @@ const Convenios: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
@@ -186,12 +191,12 @@ const Convenios: React.FC = () => {
         >
           Error al cargar los convenios: {error.message}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Convenios'
         subtitle='Administra los convenios del sistema de pasantías'
@@ -211,9 +216,9 @@ const Convenios: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <ConvenioStats stats={stats} loading={statsLoading} />
-          </Box>
+          </SectionContainer>
 
           <ConveniosTabla
             convenios={searchResults}
@@ -228,26 +233,34 @@ const Convenios: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Convenios
           </CardTitle>
           <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar convenios específicos
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
             No se encontraron convenios
           </CardTitle>
           <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       <FloatingActionButton onClick={handleCreate} />
@@ -306,7 +319,7 @@ const Convenios: React.FC = () => {
         onClose={handleCloseAsignarEmpresa}
         convenio={selectedConvenio}
       />
-    </Container>
+    </MainContainer>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import { CardTitle, BodyText } from '../../components/StyledText';
+import { SectionContainer } from '../../components/StyledContainers';
 
 export interface SearchableContentProps {
   hasSearched: boolean;
@@ -31,33 +31,33 @@ const SearchableContent: React.FC<SearchableContentProps> = ({
 }) => {
   if (isLoading || isRefreshing) {
     return (
-      <Box sx={{ py: 4 }}>
+      <SectionContainer sx={{ py: 4 }}>
         <CardTitle color='text.secondary' gutterBottom>
           {loadingMessage}
         </CardTitle>
-      </Box>
+      </SectionContainer>
     );
   }
 
   if (!hasSearched) {
     return (
-      <Box sx={{ py: 8, textAlign: 'center' }}>
+      <SectionContainer sx={{ py: 8, textAlign: 'center' }}>
         <CardTitle color='text.secondary' gutterBottom>
           {emptyStateTitle}
         </CardTitle>
         <BodyText color='text.secondary'>{emptyStateText}</BodyText>
-      </Box>
+      </SectionContainer>
     );
   }
 
   if (searchResults.length === 0) {
     return (
-      <Box sx={{ py: 8, textAlign: 'center' }}>
+      <SectionContainer sx={{ py: 8, textAlign: 'center' }}>
         <CardTitle color='text.secondary' gutterBottom>
           {noResultsTitle}
         </CardTitle>
         <BodyText color='text.secondary'>{noResultsText}</BodyText>
-      </Box>
+      </SectionContainer>
     );
   }
 

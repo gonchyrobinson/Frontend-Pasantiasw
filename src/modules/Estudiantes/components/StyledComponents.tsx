@@ -1,8 +1,14 @@
 import { styled } from '@mui/material/styles';
-import { Box, Paper, TextField, Button, Fab } from '@mui/material';
+import { TextField, Button, Fab } from '@mui/material';
+import {
+  SectionContainer,
+  CardContainer,
+  FlexContainer,
+  CenteredContainer,
+} from '../../../lib/components/StyledContainers';
 import { SectionTitle } from '../../../lib/components/StyledText';
 
-export const EmptyStateStyled = styled(Box)(({ theme }) => ({
+export const EmptyStateStyled = styled(CenteredContainer)(({ theme }) => ({
   textAlign: 'center',
   paddingTop: theme.spacing(8),
   paddingBottom: theme.spacing(8),
@@ -15,56 +21,58 @@ export const TituloPrincipalStyled = styled(SectionTitle)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-export const ContenedorPrincipalStyled = styled(Box)(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-}));
+export const ContenedorPrincipalStyled = styled(SectionContainer)(
+  ({ theme }) => ({
+    marginBottom: theme.spacing(4),
+  })
+);
 
-export const ContenedorFiltrosStyled = styled(Box)(({ theme }) => ({
-  marginBottom: theme.spacing(3),
-}));
+export const ContenedorFiltrosStyled = styled(SectionContainer)(
+  ({ theme }) => ({
+    marginBottom: theme.spacing(3),
+  })
+);
 
-export const ContenedorEstadisticasStyled = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+export const ContenedorEstadisticasStyled = styled(SectionContainer)(
+  ({ theme }) => ({
+    marginTop: theme.spacing(2),
+  })
+);
 
-export const ContenedorIconoStyled = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
+export const ContenedorIconoStyled = styled(CenteredContainer)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-export const ContenedorChipsStyled = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
+export const ContenedorChipsStyled = styled(FlexContainer)(() => ({
   flexWrap: 'wrap',
 }));
 
-export const ContenedorFiltrosInfoStyled = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-}));
-
-export const TarjetaEstadisticaStyled = styled(Paper)<{ color?: string }>(
-  ({ theme, color = 'primary' }) => ({
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    border: `1px solid`,
-    borderColor:
-      color === 'primary'
-        ? theme.palette.primary.light
-        : color === 'success'
-          ? theme.palette.success.light
-          : color === 'error'
-            ? theme.palette.error.light
-            : color === 'warning'
-              ? theme.palette.warning.light
-              : theme.palette.primary.light,
-    '&:hover': {
-      boxShadow: theme.shadows[4],
-    },
+export const ContenedorFiltrosInfoStyled = styled(FlexContainer)(
+  ({ theme }) => ({
+    alignItems: 'center',
+    gap: theme.spacing(2),
   })
 );
+
+export const TarjetaEstadisticaStyled = styled(CardContainer)<{
+  color?: string;
+}>(({ theme, color = 'primary' }) => ({
+  textAlign: 'center',
+  border: `1px solid`,
+  borderColor:
+    color === 'primary'
+      ? theme.palette.primary.light
+      : color === 'success'
+        ? theme.palette.success.light
+        : color === 'error'
+          ? theme.palette.error.light
+          : color === 'warning'
+            ? theme.palette.warning.light
+            : theme.palette.primary.light,
+  '&:hover': {
+    boxShadow: theme.shadows[4],
+  },
+}));
 
 export const CampoBusquedaStyled = styled(TextField)(({ theme }) => ({
   '& .MuiInputAdornment-root': {
@@ -73,15 +81,11 @@ export const CampoBusquedaStyled = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export const ContenedorLoadingStyled = styled(Box)(() => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+export const ContenedorLoadingStyled = styled(CenteredContainer)(() => ({
   minHeight: 400,
 }));
 
-export const ContenedorHeaderStyled = styled(Box)(({ theme }) => ({
-  display: 'flex',
+export const ContenedorHeaderStyled = styled(FlexContainer)(({ theme }) => ({
   justifyContent: 'space-between',
   alignItems: 'center',
   marginBottom: theme.spacing(4),
@@ -97,9 +101,6 @@ export const FabStyled = styled(Fab)(() => ({
   right: 16,
 }));
 
-export const ContenedorLoading = styled(Box)(() => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+export const ContenedorLoading = styled(CenteredContainer)(() => ({
   minHeight: 400,
 }));

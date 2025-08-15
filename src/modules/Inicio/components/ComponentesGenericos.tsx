@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, SpeedDialAction } from '@mui/material';
+import { SpeedDialAction } from '@mui/material';
 import {
   SectionTitle,
   CardTitle,
@@ -8,6 +8,7 @@ import {
   CaptionText,
   PageTitle,
 } from '../../../lib/components/StyledText';
+import { GridContainer } from '../../../lib/components/StyledContainers';
 import {
   StyledContainer,
   StyledActionCard,
@@ -45,9 +46,9 @@ export const ItemGrid = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }) => (
-  <Grid item xs={12} sm={6} md={4} {...props}>
+  <GridContainer item xs={12} sm={6} md={4} {...props}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (

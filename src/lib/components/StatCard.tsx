@@ -1,5 +1,6 @@
 import React from 'react';
-import { Paper, CircularProgress, Box, styled } from '@mui/material';
+import { CircularProgress, styled } from '@mui/material';
+import { CenteredContainer, CardContainer } from './StyledContainers';
 import { StatValue, CaptionText } from './StyledText';
 
 interface StatCardProps {
@@ -9,7 +10,7 @@ interface StatCardProps {
   color?: string;
 }
 
-const StyledStatCard = styled(Paper)(({ theme }) => ({
+const StyledStatCard = styled(CardContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   textAlign: 'center',
   height: '100%',
@@ -24,16 +25,13 @@ export const StatCard: React.FC<StatCardProps> = ({
   if (loading) {
     return (
       <StyledStatCard variant='outlined'>
-        <Box
+        <CenteredContainer
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             height: '100%',
           }}
         >
           <CircularProgress size={40} />
-        </Box>
+        </CenteredContainer>
       </StyledStatCard>
     );
   }

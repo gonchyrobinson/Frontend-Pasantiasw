@@ -1,5 +1,10 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { Box, Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
+import {
+  CenteredContainer,
+  CardContainer,
+  ContentContainer,
+} from '../../../lib/components/StyledContainers';
 import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { Refresh as RefreshIcon } from '@mui/icons-material';
 
@@ -33,17 +38,13 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Box
+        <CenteredContainer
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             minHeight: '100vh',
             bgcolor: 'background.default',
           }}
         >
-          <Paper
-            elevation={3}
+          <CardContainer
             sx={{
               p: 4,
               textAlign: 'center',
@@ -58,11 +59,13 @@ class ErrorBoundary extends Component<Props, State> {
               página.
             </BodyText>
             {this.state.error && (
-              <Box sx={{ mb: 3, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+              <ContentContainer
+                sx={{ mb: 3, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}
+              >
                 <BodyText color='text.secondary'>
                   Error: {this.state.error.message}
                 </BodyText>
-              </Box>
+              </ContentContainer>
             )}
             <Button
               variant='contained'
@@ -71,8 +74,8 @@ class ErrorBoundary extends Component<Props, State> {
             >
               Recargar Página
             </Button>
-          </Paper>
-        </Box>
+          </CardContainer>
+        </CenteredContainer>
       );
     }
 

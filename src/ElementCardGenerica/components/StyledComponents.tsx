@@ -1,11 +1,18 @@
 import { styled } from '@mui/material/styles';
-import { Card, CardActions, Box, Chip, Grid, TextField } from '@mui/material';
+import { Card, CardActions, Chip, TextField } from '@mui/material';
 import {
   StatValue,
   CaptionText,
   CardTitle,
   BodyText,
 } from '../../lib/components/StyledText';
+import {
+  SectionContainer,
+  FlexContainer,
+  CenteredContainer,
+  CardContainer,
+  GridContainer,
+} from '../../lib/components/StyledContainers';
 
 export const ElementCardStyled = styled(Card)<{ hasClickHandler?: boolean }>(
   ({ theme, hasClickHandler }) => ({
@@ -35,11 +42,11 @@ export const CardActionsStyled = styled(CardActions)<{ isExpanded?: boolean }>(
 );
 
 // Stats Component Styled Components
-export const StatsContainerStyled = styled(Box)(({ theme }) => ({
+export const StatsContainerStyled = styled(SectionContainer)(({ theme }) => ({
   padding: theme.spacing(3),
 }));
 
-export const StatsTitleStyled = styled(Box)(({ theme }) => ({
+export const StatsTitleStyled = styled(FlexContainer)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(1),
@@ -63,49 +70,49 @@ export const StatCardStyled = styled(Card)<{ color?: string }>(
   })
 );
 
-export const StatIconContainerStyled = styled(Box)<{ color?: string }>(
-  ({ theme, color = 'primary' }) => ({
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(1),
-    '& > div': {
-      padding: theme.spacing(1),
-      borderRadius: '50%',
-      backgroundColor: (() => {
-        switch (color) {
-          case 'primary':
-            return theme.palette.primary.light;
-          case 'success':
-            return theme.palette.success.light;
-          case 'error':
-            return theme.palette.error.light;
-          case 'warning':
-            return theme.palette.warning.light;
-          case 'info':
-            return theme.palette.info.light;
-          default:
-            return theme.palette.primary.light;
-        }
-      })(),
-      color: (() => {
-        switch (color) {
-          case 'primary':
-            return theme.palette.primary.main;
-          case 'success':
-            return theme.palette.success.main;
-          case 'error':
-            return theme.palette.error.main;
-          case 'warning':
-            return theme.palette.warning.main;
-          case 'info':
-            return theme.palette.info.main;
-          default:
-            return theme.palette.primary.main;
-        }
-      })(),
-    },
-  })
-);
+export const StatIconContainerStyled = styled(FlexContainer)<{
+  color?: string;
+}>(({ theme, color = 'primary' }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: theme.spacing(1),
+  '& > div': {
+    padding: theme.spacing(1),
+    borderRadius: '50%',
+    backgroundColor: (() => {
+      switch (color) {
+        case 'primary':
+          return theme.palette.primary.light;
+        case 'success':
+          return theme.palette.success.light;
+        case 'error':
+          return theme.palette.error.light;
+        case 'warning':
+          return theme.palette.warning.light;
+        case 'info':
+          return theme.palette.info.light;
+        default:
+          return theme.palette.primary.light;
+      }
+    })(),
+    color: (() => {
+      switch (color) {
+        case 'primary':
+          return theme.palette.primary.main;
+        case 'success':
+          return theme.palette.primary.main;
+        case 'error':
+          return theme.palette.error.main;
+        case 'warning':
+          return theme.palette.warning.main;
+        case 'info':
+          return theme.palette.info.main;
+        default:
+          return theme.palette.primary.main;
+      }
+    })(),
+  },
+}));
 
 export const StatValueStyled = styled(StatValue)<{ color?: string }>(
   ({ theme, color = 'primary' }) => ({
@@ -136,9 +143,11 @@ export const StatTitleStyled = styled(CaptionText)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const DistributionSectionStyled = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(3),
-}));
+export const DistributionSectionStyled = styled(SectionContainer)(
+  ({ theme }) => ({
+    marginTop: theme.spacing(3),
+  })
+);
 
 export const DistributionTitleStyled = styled(CardTitle)(({ theme }) => ({
   fontSize: '1rem',
@@ -146,24 +155,26 @@ export const DistributionTitleStyled = styled(CardTitle)(({ theme }) => ({
   marginBottom: theme.spacing(1.5),
 }));
 
-export const DistributionChipsContainerStyled = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: theme.spacing(1),
-}));
+export const DistributionChipsContainerStyled = styled(FlexContainer)(
+  ({ theme }) => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(1),
+  })
+);
 
 export const DistributionChipStyled = styled(Chip)(({ theme: _theme }) => ({
   fontSize: '0.75rem',
 }));
 
 // Grids Component Styled Components
-export const GridContainerStyled = styled(Grid)(({ theme }) => ({
+export const GridContainerStyled = styled(GridContainer)(({ theme }) => ({
   gap: theme.spacing(3),
 }));
 
-export const GridItemStyled = styled(Grid)(() => ({}));
+export const GridItemStyled = styled(GridContainer)(() => ({}));
 
-export const EmptyStateStyled = styled(Box)(({ theme }) => ({
+export const EmptyStateStyled = styled(CenteredContainer)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -182,18 +193,18 @@ export const EmptyStateTextStyled = styled(BodyText)(({ theme }) => ({
 }));
 
 // FiltersForm Component Styled Components
-export const FiltersContainerStyled = styled(Box)(({ theme }) => ({
+export const FiltersContainerStyled = styled(CardContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius,
   marginBottom: theme.spacing(2),
 }));
 
-export const FiltersGridStyled = styled(Grid)(({ theme: _theme }) => ({
+export const FiltersGridStyled = styled(GridContainer)(({ theme: _theme }) => ({
   alignItems: 'center',
 }));
 
-export const FiltersInfoStyled = styled(Box)(({ theme }) => ({
+export const FiltersInfoStyled = styled(FlexContainer)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',

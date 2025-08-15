@@ -1,7 +1,7 @@
 import React from 'react';
-import { Grid } from '@mui/material';
 import { ElementCard } from '../index';
 import { GridsProps } from '../types';
+import { GridContainer } from '../../components/StyledContainers';
 import {
   EmptyStateStyled,
   EmptyStateTitleStyled,
@@ -34,9 +34,9 @@ const Grids: React.FC<GridsProps> = ({
   }
 
   return (
-    <Grid container spacing={3}>
+    <GridContainer container spacing={3}>
       {items.map((item, index) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+        <GridContainer item xs={12} sm={6} md={4} lg={3} key={index}>
           <ElementCard
             metadata={metadata}
             data={item as Record<string, unknown>}
@@ -49,9 +49,9 @@ const Grids: React.FC<GridsProps> = ({
             }
             extraButtons={getExtraButtons ? getExtraButtons(item) : undefined}
           />
-        </Grid>
+        </GridContainer>
       ))}
-    </Grid>
+    </GridContainer>
   );
 };
 

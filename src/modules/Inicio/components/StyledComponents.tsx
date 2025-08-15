@@ -94,7 +94,8 @@ export const SpeedDialStyled = styled(SpeedDial)(() => ({
 }));
 
 export const IconoEstadisticaStyled = styled(StatIcon)(() => ({
-  marginRight: 16, // mr: 2
+  marginRight: 16,
+  // mr: 2
 }));
 
 export const DescripcionAccionStyled = styled(BodyText)(() => ({
@@ -151,6 +152,7 @@ export const BoxFlexBetweenStatsStyled = styled(Box)(() => ({
 // Styled components para ProgressSection.tsx
 export const BoxFlexBetweenStyled = styled(Box)(() => ({
   display: 'flex',
+  alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: 8, // mb: 1
+  marginBottom: 16, // mb: 1
 }));

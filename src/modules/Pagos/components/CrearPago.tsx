@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Link, Box } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../hooks/useSnackbar';
@@ -51,7 +52,7 @@ const CrearPago: React.FC = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <Box sx={{ mb: 3 }}>
+      <SectionContainer sx={{ mb: 3 }}>
         <Breadcrumbs
           separator={<NavigateNext fontSize='small' />}
           aria-label='breadcrumb'
@@ -70,7 +71,7 @@ const CrearPago: React.FC = () => {
           </Link>
           <BodyText color='text.primary'>Crear Nuevo Pago</BodyText>
         </Breadcrumbs>
-      </Box>
+      </SectionContainer>
 
       <PageTitle component='h1' gutterBottom>
         Crear Nuevo Pago

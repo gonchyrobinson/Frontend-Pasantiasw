@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid } from '@mui/material';
 import { StatsProps, StatCardProps, DistributionData } from '../types';
+import { GridContainer } from '../../lib/components/StyledContainers';
 import {
   StatsContainerStyled,
   StatsTitleStyled,
@@ -65,18 +65,18 @@ const Stats: React.FC<StatsProps> = ({
         {titleIcon} {title}
       </StatsTitleStyled>
 
-      <Grid container spacing={3}>
+      <GridContainer container spacing={3}>
         {stats.map((stat, index) => (
-          <Grid item xs={6} sm={3} key={index}>
+          <GridContainer item xs={6} sm={3} key={index}>
             <StatCard
               icon={stat.icon}
               title={stat.title}
               value={stat.value}
               color={stat.color}
             />
-          </Grid>
+          </GridContainer>
         ))}
-      </Grid>
+      </GridContainer>
 
       {distributions.map((distribution, index) => (
         <DistributionSection

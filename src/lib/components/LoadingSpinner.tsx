@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import { CenteredContainer } from './StyledContainers';
 import { CaptionText } from './StyledText';
 
 interface LoadingSpinnerProps {
@@ -14,19 +15,16 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color = 'primary',
 }) => {
   return (
-    <Box
+    <CenteredContainer
       sx={{
-        display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
         gap: 2,
         py: 4,
       }}
     >
       <CircularProgress size={size} color={color} />
       {message && <CaptionText>{message}</CaptionText>}
-    </Box>
+    </CenteredContainer>
   );
 };
 

@@ -9,7 +9,8 @@ import {
   Person,
   Domain,
 } from '@mui/icons-material';
-import { AppBar, Toolbar, Box } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
+import { FlexContainer } from '../../../lib/components/StyledContainers';
 import { CardTitle } from '../../../lib/components/StyledText';
 import CustomMenu from './menu/CustomMenu';
 import MenuElement from './menu/MenuElement';
@@ -34,8 +35,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const UserSection = styled(Box)(({ theme }) => ({
-  display: 'flex',
+const UserSection = styled(FlexContainer)(({ theme }) => ({
   alignItems: 'center',
   gap: theme.spacing(1),
 }));
@@ -130,7 +130,7 @@ const Header: React.FC = () => {
           Sistema de Pasantías
         </CardTitle>
 
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+        <FlexContainer sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           {navItems.map((item, index) => (
             <NavButtonComponent
               key={index}
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
               onClick={item.onClick}
             />
           ))}
-        </Box>
+        </FlexContainer>
 
         <UserSection>
           {/* Notifications */}

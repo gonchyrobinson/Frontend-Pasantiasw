@@ -2,7 +2,8 @@ import { GridColDef } from '@mui/x-data-grid';
 import { ColumnMetadata } from '../types';
 import { formatValue } from '../../ElementCardGenerica/helpers/elementCardHelper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
+import { ActionContainer } from '../../components/StyledContainers';
 import { BodyText } from '../../components/StyledText';
 
 export const createColumnDefinitions = (
@@ -66,18 +67,7 @@ export const createColumnDefinitions = (
       sortable: false,
       filterable: false,
       renderCell: params => (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            alignItems: 'center',
-            flexWrap: 'nowrap',
-            justifyContent: 'flex-start',
-            width: '100%',
-            minWidth: minWidth - padding,
-            overflow: 'hidden',
-          }}
-        >
+        <ActionContainer>
           {onRowEdit && (
             <Button
               size='small'
@@ -138,7 +128,7 @@ export const createColumnDefinitions = (
               {button.label}
             </Button>
           ))}
-        </Box>
+        </ActionContainer>
       ),
     });
   }

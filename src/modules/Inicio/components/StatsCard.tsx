@@ -4,7 +4,7 @@ import {
   ArrowForward,
   TouchApp,
 } from '@mui/icons-material';
-import { CardContent, Skeleton, Tooltip, Box } from '@mui/material';
+import { CardContent, Skeleton, Tooltip } from '@mui/material';
 import React from 'react';
 import { StatsCardProps } from '../types';
 import {
@@ -19,6 +19,7 @@ import {
   BoxFlexGapStyled,
   BoxFlexBetweenStatsStyled,
 } from './StyledComponents';
+import { FlexContainer } from '../../../lib/components/StyledContainers';
 
 const StatsCard: React.FC<StatsCardProps> = ({
   title,
@@ -82,7 +83,9 @@ const StatsCard: React.FC<StatsCardProps> = ({
         <TituloEstadistica>
           {title}
           {onClick && (
-            <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 1 }}>
+            <FlexContainer
+              sx={{ display: 'inline-flex', alignItems: 'center', ml: 1 }}
+            >
               <TouchApp
                 fontSize='small'
                 color='action'
@@ -101,7 +104,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
                   transform: 'translateX(0)',
                 }}
               />
-            </Box>
+            </FlexContainer>
           )}
         </TituloEstadistica>
 
@@ -114,7 +117,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
         )}
 
         {onClick && (
-          <Box
+          <FlexContainer
             sx={{
               position: 'absolute',
               bottom: 8,
@@ -127,7 +130,7 @@ const StatsCard: React.FC<StatsCardProps> = ({
             }}
           >
             <TouchApp fontSize='small' color='action' />
-          </Box>
+          </FlexContainer>
         )}
       </CardContent>
     </TarjetaEstadistica>

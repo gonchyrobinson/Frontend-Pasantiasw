@@ -5,7 +5,7 @@ import {
   GridSortModel,
   GridFilterModel,
 } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
+import { SectionContainer } from '../../components/StyledContainers';
 import { TablaGenericaProps } from '../types';
 import {
   createColumnDefinitions,
@@ -106,7 +106,7 @@ const TablaGenerica: React.FC<TablaGenericaProps> = ({
   }
 
   return (
-    <Box sx={{ height: 600, width: '100%' }}>
+    <SectionContainer sx={{ height: 600, width: '100%' }}>
       <TablePageHeader
         title={title}
         subtitle={subtitle}
@@ -147,7 +147,7 @@ const TablaGenerica: React.FC<TablaGenericaProps> = ({
           },
         }}
       />
-    </Box>
+    </SectionContainer>
   );
 };
 

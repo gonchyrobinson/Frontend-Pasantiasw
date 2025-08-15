@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Breadcrumbs, Link, Box } from '@mui/material';
+import { Alert, Breadcrumbs, Link } from '@mui/material';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../hooks/useSnackbar';
@@ -53,18 +54,15 @@ const EditarPago: React.FC = () => {
       idPago: Number(id),
     };
 
-    updateMutation.mutate(
-      updateData as PagosFormData & Record<string, unknown>,
-      {
-        onSuccess: () => {
-          showSuccess('Pago actualizado exitosamente');
-          navigate(ROUTES.PAGOS);
-        },
-        onError: () => {
-          showError('Error al actualizar el pago');
-        },
-      }
-    );
+    updateMutation.mutate(updateData, {
+      onSuccess: () => {
+        showSuccess('Pago actualizado exitosamente');
+        navigate(ROUTES.PAGOS);
+      },
+      onError: () => {
+        showError('Error al actualizar el pago');
+      },
+    });
   };
 
   const handleCancel = () => {
@@ -103,7 +101,7 @@ const EditarPago: React.FC = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <Box sx={{ mb: 3 }}>
+      <SectionContainer sx={{ mb: 3 }}>
         <Breadcrumbs
           separator={<NavigateNext fontSize='small' />}
           aria-label='breadcrumb'
@@ -122,7 +120,7 @@ const EditarPago: React.FC = () => {
           </Link>
           <BodyText color='text.primary'>Editar Pago #{id}</BodyText>
         </Breadcrumbs>
-      </Box>
+      </SectionContainer>
 
       <PageTitle component='h1' gutterBottom>
         Editar Pago #{id}

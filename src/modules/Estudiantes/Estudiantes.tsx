@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Alert, Button, Box } from '@mui/material';
+import { Alert, Button } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useApiQuery } from '../../hooks/useApi';
@@ -123,7 +128,7 @@ const Estudiantes: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
@@ -136,12 +141,12 @@ const Estudiantes: React.FC = () => {
           Error al cargar los estudiantes:{' '}
           {error?.message || 'Error desconocido'}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Estudiantes'
         subtitle='Administra los estudiantes del sistema de pasantías'
@@ -161,9 +166,9 @@ const Estudiantes: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <EstudiantesStats estudiantes={searchResults} />
-          </Box>
+          </SectionContainer>
 
           <EstudiantesTabla
             estudiantes={searchResults}
@@ -179,26 +184,26 @@ const Estudiantes: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Estudiantes
           </CardTitle>
           <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar estudiantes específicos
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
             No se encontraron estudiantes
           </CardTitle>
           <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       <FabNuevoEstudiante onClick={handleNuevoEstudiante} />
@@ -233,7 +238,7 @@ const Estudiantes: React.FC = () => {
         onConfirm={handleConfirmDelete}
         isDeleting={isDeleting}
       />
-    </Container>
+    </MainContainer>
   );
 };
 

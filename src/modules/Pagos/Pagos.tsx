@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Alert, Container, Button, Box } from '@mui/material';
+import { Alert, Button } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
 import { useSnackbar } from '../../hooks/useSnackbar';
@@ -111,7 +116,7 @@ const Pagos: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
@@ -123,12 +128,12 @@ const Pagos: React.FC = () => {
         >
           Error al cargar los pagos: {error.message}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Pagos'
         subtitle='Administra los pagos del sistema de pasantías. Use la búsqueda para encontrar pagos por ID de pasantía.'
@@ -148,9 +153,9 @@ const Pagos: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <PagosStats stats={stats} loading={statsLoading} />
-          </Box>
+          </SectionContainer>
 
           <PagosTabla
             pagos={searchResults}
@@ -163,7 +168,7 @@ const Pagos: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Pagos por Pasantía
           </CardTitle>
@@ -171,19 +176,19 @@ const Pagos: React.FC = () => {
             Utiliza la búsqueda para encontrar pagos seleccionando una pasantía
             específica del dropdown
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
             No se encontraron pagos
           </CardTitle>
           <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
           </BodyText>
-        </Box>
+        </CenteredContainer>
       )}
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
@@ -220,7 +225,7 @@ const Pagos: React.FC = () => {
         confirmButtonText='Eliminar'
         cancelButtonText='Cancelar'
       />
-    </Container>
+    </MainContainer>
   );
 };
 

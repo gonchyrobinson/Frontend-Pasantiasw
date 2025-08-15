@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, IconButton, Tooltip, Button } from '@mui/material';
+import { IconButton, Tooltip, Button } from '@mui/material';
 import { Refresh, Add } from '@mui/icons-material';
 import { PageTitle, Subtitle } from '../../components/StyledText';
+import { FlexContainer } from '../../components/StyledContainers';
 
 export interface ModuleHeaderProps {
   title: string;
@@ -21,7 +22,7 @@ const ModuleHeader: React.FC<ModuleHeaderProps> = ({
   actionButtonText = 'Nuevo',
 }) => {
   return (
-    <Box
+    <FlexContainer
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -29,13 +30,13 @@ const ModuleHeader: React.FC<ModuleHeaderProps> = ({
         mb: 3,
       }}
     >
-      <Box>
+      <FlexContainer>
         <PageTitle component='h1' gutterBottom>
           {title}
         </PageTitle>
         <Subtitle>{subtitle}</Subtitle>
-      </Box>
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      </FlexContainer>
+      <FlexContainer sx={{ display: 'flex', gap: 1 }}>
         <Tooltip title='Actualizar datos'>
           <IconButton
             onClick={onRefresh}
@@ -64,8 +65,8 @@ const ModuleHeader: React.FC<ModuleHeaderProps> = ({
             {actionButtonText}
           </Button>
         )}
-      </Box>
-    </Box>
+      </FlexContainer>
+    </FlexContainer>
   );
 };
 
