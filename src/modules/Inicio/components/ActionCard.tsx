@@ -8,7 +8,7 @@ import {
   DescripcionAccion,
   BotonAccion,
 } from './ComponentesGenericos';
-import { CardContentStyled, BoxFlexStyled } from './StyledComponents';
+import { CardContent, Box } from '@mui/material';
 
 const ActionCard: React.FC<ActionCardProps> = ({
   title,
@@ -58,13 +58,13 @@ const ActionCard: React.FC<ActionCardProps> = ({
           : {},
       }}
     >
-      <CardContentStyled>
-        <BoxFlexStyled>
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
           <IconoEstadistica color={color} bgColor={color}>
             {icon}
           </IconoEstadistica>
           <TituloAccion>{title}</TituloAccion>
-        </BoxFlexStyled>
+        </Box>
         <DescripcionAccion>{description}</DescripcionAccion>
         <BotonAccion _icon={<Add />}>
           {title}
@@ -95,7 +95,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
             <TouchApp fontSize='small' color='action' sx={{ opacity: 0.7 }} />
           </div>
         )}
-      </CardContentStyled>
+      </CardContent>
     </ActionCardContainer>
   );
 };

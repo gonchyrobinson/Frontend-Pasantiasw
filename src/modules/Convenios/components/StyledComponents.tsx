@@ -1,27 +1,11 @@
 import { styled } from '@mui/material/styles';
-import { Card, CardContent, Chip, IconButton } from '@mui/material';
+import { Card, CardContent, Chip } from '@mui/material';
 import {
-  MainContainer,
-  SectionContainer,
-  CardContainer,
   FlexContainer,
   ActionContainer,
-  FormContainer,
-  DialogContainer,
   CenteredContainer,
 } from '../../../lib/components/StyledContainers';
-import {
-  CardTitle,
-  BodyText,
-  CaptionText,
-  StatValue,
-} from '../../../lib/components/StyledText';
-
-// Contenedor principal del módulo
-export const ContenedorPrincipalStyled = styled(MainContainer)(({ theme }) => ({
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-}));
+import { CardTitle, BodyText } from '../../../lib/components/StyledText';
 
 // Tarjeta de convenio
 export const TarjetaConvenioStyled = styled(Card)(({ theme }) => ({
@@ -44,39 +28,38 @@ export const ContenidoTarjetaStyled = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-// Título del expediente
+// Título del expediente - específico con color primary
 export const TituloExpedienteStyled = styled(CardTitle)(({ theme }) => ({
   fontWeight: 600,
   color: theme.palette.primary.main,
   marginBottom: theme.spacing(1),
 }));
 
-// Información de la empresa
+// Información de la empresa - específico
 export const InfoEmpresaStyled = styled(BodyText)(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontSize: '0.875rem',
 }));
 
-// Fechas del convenio
+// Fechas del convenio - específico
 export const FechasConvenioStyled = styled(FlexContainer)(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(0.5),
   marginTop: theme.spacing(1),
 }));
 
-// Fecha individual
-export const FechaStyled = styled(CaptionText)(({ theme }) => ({
-  fontSize: '0.75rem',
-  color: theme.palette.text.secondary,
-}));
-
-// Chip de estado
+// Chip de estado - específico
 export const ChipEstadoStyled = styled(Chip)(({ theme }) => ({
   alignSelf: 'flex-start',
   marginTop: theme.spacing(1),
 }));
 
-// Contenedor de acciones
+// Contenedor de búsqueda - específico para convenios
+export const ContenedorBusquedaStyled = styled(FlexContainer)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
+// Contenedor de acciones - específico con border top
 export const ContenedorAccionesStyled = styled(ActionContainer)(
   ({ theme }) => ({
     gap: theme.spacing(1),
@@ -86,73 +69,14 @@ export const ContenedorAccionesStyled = styled(ActionContainer)(
   })
 );
 
-// Botón de acción
-export const BotonAccionStyled = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
-
-// Contenedor de estadísticas
-export const ContenedorEstadisticasStyled = styled(SectionContainer)(
-  ({ theme }) => ({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: theme.spacing(2),
-    marginBottom: theme.spacing(3),
-  })
-);
-
-// Tarjeta de estadística
-export const TarjetaEstadisticaStyled = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  backgroundColor: theme.palette.background.paper,
-  border: `1px solid ${theme.palette.divider}`,
-}));
-
-// Título de estadística
-export const TituloEstadisticaStyled = styled(CaptionText)(({ theme }) => ({
-  fontSize: '0.875rem',
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-// Valor de estadística
-export const ValorEstadisticaStyled = styled(StatValue)(({ theme }) => ({
-  fontSize: '2rem',
-  fontWeight: 600,
-  color: theme.palette.primary.main,
-}));
-
-// Contenedor de filtros
-export const ContenedorFiltrosStyled = styled(CardContainer)(({ theme }) => ({
-  marginBottom: theme.spacing(3),
-}));
-
-// Contenedor de búsqueda
-export const ContenedorBusquedaStyled = styled(FlexContainer)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-}));
-
-// Contenedor de grid
-export const ContenedorGridStyled = styled(SectionContainer)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-  gap: theme.spacing(2),
-}));
-
-// Contenedor de formulario
-export const ContenedorFormularioStyled = styled(FormContainer);
-// Título del formulario
+// Título del formulario - específico con color primary
 export const TituloFormularioStyled = styled(CardTitle)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   color: theme.palette.primary.main,
   fontWeight: 600,
 }));
 
-// Contenedor de botones del formulario
+// Contenedor de botones del formulario - específico con border top
 export const ContenedorBotonesFormularioStyled = styled(ActionContainer)(
   ({ theme }) => ({
     gap: theme.spacing(2),
@@ -162,26 +86,10 @@ export const ContenedorBotonesFormularioStyled = styled(ActionContainer)(
   })
 );
 
-// Contenedor de diálogo
-export const ContenedorDialogoStyled = styled(DialogContainer);
-
-// Contenedor de confirmación
+// Contenedor de confirmación - específico
 export const ContenedorConfirmacionStyled = styled(CenteredContainer)(
   ({ theme }) => ({
     textAlign: 'center',
     padding: theme.spacing(2),
-  })
-);
-
-// Mensaje de confirmación
-export const MensajeConfirmacionStyled = styled(BodyText)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
-  color: theme.palette.text.primary,
-}));
-
-// Contenedor de acciones de confirmación
-export const ContenedorAccionesConfirmacionStyled = styled(ActionContainer)(
-  () => ({
-    justifyContent: 'center',
   })
 );

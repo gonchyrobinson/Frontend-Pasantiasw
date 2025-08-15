@@ -5,7 +5,7 @@ import {
   TituloBienvenida,
   SubtituloBienvenida,
 } from './ComponentesGenericos';
-import { ChipStyled } from './StyledComponents';
+import { Chip } from '@mui/material';
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   title,
@@ -17,7 +17,12 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
     <ContenedorBienvenida>
       <TituloBienvenida>{title}</TituloBienvenida>
       <SubtituloBienvenida>{subtitle}</SubtituloBienvenida>
-      <ChipStyled label={statusLabel} color={statusColor} size='small' />
+      <Chip
+        label={statusLabel}
+        color={statusColor}
+        size='small'
+        sx={{ marginTop: 2 }}
+      />
     </ContenedorBienvenida>
   );
 };

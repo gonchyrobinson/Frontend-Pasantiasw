@@ -1,18 +1,7 @@
 import { styled } from '@mui/material/styles';
-import {
-  Card,
-  Box,
-  Container,
-  Grid,
-  Alert,
-  SpeedDial,
-  CardContent,
-  Chip,
-} from '@mui/material';
+import { Card, Box, Grid, SpeedDial, CardContent, Chip } from '@mui/material';
 import {
   SectionTitle,
-  BodyText,
-  StatValue,
   PageTitle,
   Subtitle,
 } from '../../../lib/components/StyledText';
@@ -68,23 +57,15 @@ export const StyledWelcomeSection = styled(Box)(({ theme }) => ({
   textAlign: 'center',
 }));
 
-// Styled components para Inicio
-export const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-}));
+// Solo mantener componentes específicos de Inicio
 
-// Styled components para ComponentesGenericos.tsx
+// Componentes específicos para el dashboard
 export const ContenedorGridStyled = styled(Grid)(() => ({
-  marginBottom: 32, // mb: 4
+  marginBottom: 32,
 }));
 
 export const TituloSeccionStyled = styled(SectionTitle)(() => ({
-  marginTop: 32, // mt: 4
-}));
-
-export const AlertaErrorStyled = styled(Alert)(() => ({
-  marginTop: 24, // mt: 3
+  marginTop: 32,
 }));
 
 export const SpeedDialStyled = styled(SpeedDial)(() => ({
@@ -93,25 +74,7 @@ export const SpeedDialStyled = styled(SpeedDial)(() => ({
   right: 16,
 }));
 
-export const IconoEstadisticaStyled = styled(StatIcon)(() => ({
-  marginRight: 16,
-  // mr: 2
-}));
-
-export const DescripcionAccionStyled = styled(BodyText)(() => ({
-  marginBottom: 16, // mb: 2
-}));
-
-export const BotonAccionStyled = styled(BodyText)(() => ({
-  textTransform: 'none',
-}));
-
-export const IconoEstadisticaCardStyled = styled(StatIcon)(() => ({}));
-
-export const ValorEstadisticaStyled = styled(StatValue)(() => ({
-  fontWeight: 600,
-}));
-
+// Componentes específicos del Welcome section
 export const TituloBienvenidaStyled = styled(PageTitle)(() => ({
   fontWeight: 600,
 }));
@@ -121,7 +84,7 @@ export const SubtituloBienvenidaStyled = styled(Subtitle)(() => ({
 }));
 
 export const ChipStyled = styled(Chip)(() => ({
-  marginTop: 16, // mt: 2
+  marginTop: 16,
 }));
 
 // Styled components para ActionCard.tsx

@@ -25,18 +25,21 @@ import {
 } from '@mui/icons-material';
 import {
   TituloPrincipalStyled,
-  ContenedorPrincipalStyled,
-  ContenedorFiltrosStyled,
+  BotonNuevaEmpresaStyled,
+} from './StyledComponents';
+import {
   ContenedorEstadisticasStyled,
-  ContenedorIconoStyled,
-  ContenedorChipsStyled,
-  ContenedorFiltrosInfoStyled,
   TarjetaEstadisticaStyled,
   CampoBusquedaStyled,
   ContenedorHeaderStyled,
-  BotonNuevaEmpresaStyled,
   FabStyled,
-} from './StyledComponents';
+  ContenedorFiltrosStyled,
+} from '../../../lib/components/StyledComponents';
+import {
+  SectionContainer,
+  FlexContainer,
+  CenteredContainer,
+} from '../../../lib/components/StyledContainers';
 import { Vigencia, TipoContrato } from '../types';
 
 // Typography Components
@@ -116,7 +119,7 @@ export const ContenedorPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorPrincipalStyled>{children}</ContenedorPrincipalStyled>;
+}) => <SectionContainer sx={{ marginBottom: 4 }}>{children}</SectionContainer>;
 
 export const ContenedorFiltros = ({
   children,
@@ -137,7 +140,7 @@ export const ContenedorIcono = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <ContenedorIconoStyled>
+  <CenteredContainer sx={{ marginBottom: 1 }}>
     <Box
       sx={{
         p: 1,
@@ -148,20 +151,24 @@ export const ContenedorIcono = ({
     >
       {children}
     </Box>
-  </ContenedorIconoStyled>
+  </CenteredContainer>
 );
 
 export const ContenedorChips = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorChipsStyled>{children}</ContenedorChipsStyled>;
+}) => <FlexContainer sx={{ flexWrap: 'wrap' }}>{children}</FlexContainer>;
 
 export const ContenedorFiltrosInfo = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosInfoStyled>{children}</ContenedorFiltrosInfoStyled>;
+}) => (
+  <FlexContainer sx={{ alignItems: 'center', gap: 2 }}>
+    {children}
+  </FlexContainer>
+);
 
 // Paper Components
 export const TarjetaEstadistica = ({

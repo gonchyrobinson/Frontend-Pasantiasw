@@ -1,10 +1,8 @@
 import React from 'react';
 import { Button, TextField } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import {
-  ContenedorFiltrosStyled,
-  ContenedorBusquedaStyled,
-} from '../StyledComponents';
+import { ContenedorFiltrosStyled } from '../../../../lib/components/StyledComponents';
+import { ContenedorBusquedaStyled } from '../StyledComponents';
 import { ConvenioFilters as ConvenioFiltersType } from '../../types';
 import { GridContainer } from '../../../../lib/components/StyledContainers';
 

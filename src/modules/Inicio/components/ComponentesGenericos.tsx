@@ -10,26 +10,23 @@ import {
 } from '../../../lib/components/StyledText';
 import { GridContainer } from '../../../lib/components/StyledContainers';
 import {
-  StyledContainer,
   StyledActionCard,
   StyledProgressSection,
   StyledStatsCard,
   StyledWelcomeSection,
   ContenedorGridStyled,
-  AlertaErrorStyled,
   SpeedDialStyled,
-  IconoEstadisticaStyled,
-  DescripcionAccionStyled,
-  IconoEstadisticaCardStyled,
   SubtituloBienvenidaStyled,
 } from './StyledComponents';
+import { AlertaErrorStyled } from '../../../lib/components/StyledComponents';
+import { MainContainer } from '../../../lib/components/StyledContainers';
 
 // Componentes para Inicio.tsx
 export const ContenedorPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <StyledContainer maxWidth='lg'>{children}</StyledContainer>;
+}) => <MainContainer maxWidth='lg'>{children}</MainContainer>;
 
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
   <ContenedorGridStyled container spacing={3}>
@@ -126,21 +123,23 @@ export const ActionCardContainer = ({
 
 export const IconoEstadistica = ({
   children,
-  color,
-  bgColor,
 }: {
   children: React.ReactNode;
   color: string;
   bgColor: string;
 }) => (
-  <IconoEstadisticaStyled
-    sx={{
-      backgroundColor: `${bgColor}.light`,
-      color: `${color}.main`,
+  <div
+    style={{
+      marginRight: '16px',
+      padding: '8px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
     {children}
-  </IconoEstadisticaStyled>
+  </div>
 );
 
 export const TituloAccion = ({ children }: { children: React.ReactNode }) => (
@@ -152,9 +151,9 @@ export const DescripcionAccion = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <DescripcionAccionStyled variant='body2' color='text.secondary'>
+  <BodyText variant='body2' color='text.secondary' sx={{ marginBottom: 2 }}>
     {children}
-  </DescripcionAccionStyled>
+  </BodyText>
 );
 
 export const BotonAccion = ({
@@ -214,11 +213,7 @@ export const IconoEstadisticaCard = ({
   children: React.ReactNode;
   bgColor: string;
   color: string;
-}) => (
-  <IconoEstadisticaCardStyled sx={{ backgroundColor: bgColor, color: color }}>
-    {children}
-  </IconoEstadisticaCardStyled>
-);
+}) => <div style={{ backgroundColor: bgColor, color: color }}>{children}</div>;
 
 export const TituloEstadistica = ({
   children,

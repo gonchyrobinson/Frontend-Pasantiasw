@@ -36,7 +36,7 @@ const Pasantias: React.FC = () => {
   );
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const { stats, isLoading: statsLoading, error } = usePasantiaStats();
+  const { isLoading: statsLoading, error } = usePasantiaStats();
   const {
     data: pasantias,
     isLoading: pasantiasLoading,
@@ -167,7 +167,7 @@ const Pasantias: React.FC = () => {
       {hasSearched && searchResults.length > 0 && (
         <>
           <SectionContainer sx={{ mb: 3 }}>
-            <PasantiaStats stats={stats} loading={statsLoading} />
+            <PasantiaStats pasantias={searchResults} />
           </SectionContainer>
 
           <PasantiasTabla

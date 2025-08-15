@@ -3,9 +3,8 @@ import { CircularProgress } from '@mui/material';
 import {
   ContenedorEstadisticasStyled,
   TarjetaEstadisticaStyled,
-  TituloEstadisticaStyled,
-  ValorEstadisticaStyled,
-} from '../StyledComponents';
+} from '../../../../lib/components/StyledComponents';
+import { CaptionText, StatValue } from '../../../../lib/components/StyledText';
 import { ConvenioStats as ConvenioStatsType } from '../../types';
 
 interface ConvenioStatsProps {
@@ -29,29 +28,29 @@ const ConvenioStats: React.FC<ConvenioStatsProps> = ({ stats, loading }) => {
   return (
     <ContenedorEstadisticasStyled>
       <TarjetaEstadisticaStyled>
-        <TituloEstadisticaStyled>Total Convenios</TituloEstadisticaStyled>
-        <ValorEstadisticaStyled>{stats.totalConvenios}</ValorEstadisticaStyled>
+        <CaptionText>Total Convenios</CaptionText>
+        <StatValue>{stats.totalConvenios}</StatValue>
       </TarjetaEstadisticaStyled>
 
       <TarjetaEstadisticaStyled>
-        <TituloEstadisticaStyled>Vigentes</TituloEstadisticaStyled>
-        <ValorEstadisticaStyled color='success.main'>
+        <CaptionText>Vigentes</CaptionText>
+        <StatValue sx={{ color: 'success.main' }}>
           {stats.conveniosVigentes}
-        </ValorEstadisticaStyled>
+        </StatValue>
       </TarjetaEstadisticaStyled>
 
       <TarjetaEstadisticaStyled>
-        <TituloEstadisticaStyled>Caducados</TituloEstadisticaStyled>
-        <ValorEstadisticaStyled color='error.main'>
+        <CaptionText>Caducados</CaptionText>
+        <StatValue sx={{ color: 'error.main' }}>
           {stats.conveniosCaducados}
-        </ValorEstadisticaStyled>
+        </StatValue>
       </TarjetaEstadisticaStyled>
 
       <TarjetaEstadisticaStyled>
-        <TituloEstadisticaStyled>Por Vencer</TituloEstadisticaStyled>
-        <ValorEstadisticaStyled color='warning.main'>
+        <CaptionText>Por Vencer</CaptionText>
+        <StatValue sx={{ color: 'warning.main' }}>
           {stats.conveniosPorVencer}
-        </ValorEstadisticaStyled>
+        </StatValue>
       </TarjetaEstadisticaStyled>
     </ContenedorEstadisticasStyled>
   );
