@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Grid,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import {
   Search,
   Clear,
@@ -26,7 +19,6 @@ import {
   CenteredContainer,
   CardContainer,
 } from '../../../lib/components/StyledContainers';
-import { Vigencia, TipoContrato } from '../types';
 import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
 import { CreateButton } from '../../../lib/components/StyledButtons';
 
@@ -163,31 +155,6 @@ export const CampoBusqueda = ({ register }: { register: any }) => (
     }}
     size='small'
   />
-);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const SelectorVigencia = ({ field }: { field: any }) => (
-  <FormControl fullWidth size='small'>
-    <InputLabel>Vigencia</InputLabel>
-    <Select {...field} label='Vigencia'>
-      <MenuItem value=''>Todas</MenuItem>
-      <MenuItem value={Vigencia.Vigente}>Vigente</MenuItem>
-      <MenuItem value={Vigencia.NoVigente}>No Vigente</MenuItem>
-    </Select>
-  </FormControl>
-);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const SelectorTipoContrato = ({ field }: { field: any }) => (
-  <FormControl fullWidth size='small'>
-    <InputLabel>Tipo de Contrato</InputLabel>
-    <Select {...field} label='Tipo de Contrato'>
-      <MenuItem value=''>Todos</MenuItem>
-      <MenuItem value={TipoContrato.Indefinido}>Indefinido</MenuItem>
-      <MenuItem value={TipoContrato.Temporal}>Temporal</MenuItem>
-      <MenuItem value={TipoContrato.Otro}>Otro</MenuItem>
-    </Select>
-  </FormControl>
 );
 
 // Icon Components

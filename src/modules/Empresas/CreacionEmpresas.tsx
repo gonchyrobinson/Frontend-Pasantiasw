@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
-import { CreacionEmpresaDto } from './types';
-import { getCreacionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
+import {
+  getCreacionEmpresaMetadata,
+  convertToPascalCaseForBackend,
+} from './helpers/creacionEmpresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
@@ -17,7 +19,7 @@ const CreacionEmpresas: React.FC = () => {
     setLoading(true);
 
     try {
-      const empresaData = data as unknown as CreacionEmpresaDto;
+      const empresaData = convertToPascalCaseForBackend(data);
       await apiClient.post('/empresas', empresaData);
 
       showSuccess('Empresa creada exitosamente');

@@ -1,3 +1,5 @@
+// Removed circular import
+
 export const Vigencia = {
   Vigente: 'vigente',
   NoVigente: 'no_vigente',
@@ -23,19 +25,33 @@ export interface EmpresaDto {
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO format: YYYY-MM-DD
+  sudocu: string; // Text field, not date
 }
 
+// DTO para envío al backend (PascalCase)
 export interface CreacionEmpresaDto {
+  Nombre: string;
+  Vigencia: VigenciaType;
+  FechaInicio: string; // ISO format: YYYY-MM-DD
+  FechaFin: string; // ISO format: YYYY-MM-DD
+  TipoContrato: TipoContratoType;
+  Encargado: string;
+  Celular: string;
+  CorreoElectronico: string;
+  Sudocu: string; // Text field, not date
+}
+
+// DTO para recepción del backend (camelCase)
+export interface EmpresaCreateFormData {
   nombre: string;
   vigencia: VigenciaType;
-  fechaInicio: string; // ISO format: YYYY-MM-DD
-  fechaFin: string; // ISO format: YYYY-MM-DD
+  fechaInicio: string;
+  fechaFin: string;
   tipoContrato: TipoContratoType;
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO format: YYYY-MM-DD
+  sudocu: string;
 }
 
 export interface EmpresasState {

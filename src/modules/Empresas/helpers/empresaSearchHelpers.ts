@@ -2,7 +2,7 @@ import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 
 export interface EmpresaBusquedaAvanzadaDto {
   Nombre?: string;
-  Vigencia?: string;
+  Vigencia?: boolean; // true = vigente, false = no vigente, undefined = todas
   TipoContrato?: string;
   FechaInicioDesde?: string;
   FechaInicioHasta?: string;
@@ -19,13 +19,13 @@ export const getEmpresaSearchMetadata = (): {
   title: 'Búsqueda Avanzada de Empresas',
   fields: [
     {
-      name: 'Nombre',
+      name: 'nombre',
       label: 'Nombre de la Empresa',
       type: 'text',
       placeholder: 'Buscar por nombre...',
     },
     {
-      name: 'Vigencia',
+      name: 'vigencia',
       label: 'Vigencia',
       type: 'dropdown',
       options: [
@@ -35,7 +35,7 @@ export const getEmpresaSearchMetadata = (): {
       ],
     },
     {
-      name: 'TipoContrato',
+      name: 'tipoContrato',
       label: 'Tipo de Contrato',
       type: 'dropdown',
       options: [
@@ -46,22 +46,22 @@ export const getEmpresaSearchMetadata = (): {
       ],
     },
     {
-      name: 'FechaInicioDesde',
+      name: 'fechaInicioDesde',
       label: 'Fecha de Inicio Desde',
       type: 'date',
     },
     {
-      name: 'FechaInicioHasta',
+      name: 'fechaInicioHasta',
       label: 'Fecha de Inicio Hasta',
       type: 'date',
     },
     {
-      name: 'FechaFinDesde',
+      name: 'fechaFinDesde',
       label: 'Fecha de Fin Desde',
       type: 'date',
     },
     {
-      name: 'FechaFinHasta',
+      name: 'fechaFinHasta',
       label: 'Fecha de Fin Hasta',
       type: 'date',
     },
@@ -75,26 +75,32 @@ export const formatEmpresaSearchFilters = (
 ): EmpresaBusquedaAvanzadaDto => {
   const formattedFilters: EmpresaBusquedaAvanzadaDto = {};
 
-  if (filters.Nombre) {
-    formattedFilters.Nombre = filters.Nombre;
+  if (filters.nombre) {
+    formattedFilters.Nombre = filters.nombre;
   }
-  if (filters.Vigencia) {
-    formattedFilters.Vigencia = filters.Vigencia;
+  if (filters.vigencia) {
+    // Convertir string del frontend a boolean esperado por el backend
+    if (filters.vigencia === 'vigente') {
+      formattedFilters.Vigencia = true;
+    } else if (filters.vigencia === 'no_vigente') {
+      formattedFilters.Vigencia = false;
+    }
+    // Si es empty string o 'todas', no se incluye el filtro
   }
-  if (filters.TipoContrato) {
-    formattedFilters.TipoContrato = filters.TipoContrato;
+  if (filters.tipoContrato) {
+    formattedFilters.TipoContrato = filters.tipoContrato;
   }
-  if (filters.FechaInicioDesde) {
-    formattedFilters.FechaInicioDesde = filters.FechaInicioDesde;
+  if (filters.fechaInicioDesde) {
+    formattedFilters.FechaInicioDesde = filters.fechaInicioDesde;
   }
-  if (filters.FechaInicioHasta) {
-    formattedFilters.FechaInicioHasta = filters.FechaInicioHasta;
+  if (filters.fechaInicioHasta) {
+    formattedFilters.FechaInicioHasta = filters.fechaInicioHasta;
   }
-  if (filters.FechaFinDesde) {
-    formattedFilters.FechaFinDesde = filters.FechaFinDesde;
+  if (filters.fechaFinDesde) {
+    formattedFilters.FechaFinDesde = filters.fechaFinDesde;
   }
-  if (filters.FechaFinHasta) {
-    formattedFilters.FechaFinHasta = filters.FechaFinHasta;
+  if (filters.fechaFinHasta) {
+    formattedFilters.FechaFinHasta = filters.fechaFinHasta;
   }
 
   return formattedFilters;

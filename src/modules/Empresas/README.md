@@ -73,6 +73,7 @@ Response: Array<EmpresaDto>
 ### Modelo EmpresaDto
 
 ```typescript
+// Response del backend (camelCase - serialización automática)
 interface EmpresaDto {
   idEmpresa: number;
   nombre: string;
@@ -83,7 +84,20 @@ interface EmpresaDto {
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO: YYYY-MM-DD
+  sudocu: string; // Text field
+}
+
+// Request al backend (PascalCase - esperado por DTOs)
+interface CreacionEmpresaDto {
+  Nombre: string;
+  Vigencia: 'vigente' | 'no_vigente';
+  FechaInicio: string; // ISO: YYYY-MM-DD
+  FechaFin: string; // ISO: YYYY-MM-DD
+  TipoContrato: 'indefinido' | 'temporal' | 'otro';
+  Encargado: string;
+  Celular: string;
+  CorreoElectronico: string;
+  Sudocu: string; // Text field
 }
 ```
 
@@ -103,7 +117,7 @@ const metadata = [
   { name: 'encargado', label: 'Encargado', type: 'text' },
   { name: 'celular', label: 'Celular', type: 'text' },
   { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
-  { name: 'sudocu', label: 'SUDOCU', type: 'date' },
+  { name: 'sudocu', label: 'SUDOCU', type: 'text' },
 ];
 ```
 
