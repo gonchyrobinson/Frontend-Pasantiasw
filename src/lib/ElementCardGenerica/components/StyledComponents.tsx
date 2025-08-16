@@ -5,14 +5,14 @@ import {
   CaptionText,
   CardTitle,
   BodyText,
-} from '../../lib/components/StyledText';
+} from '../../components/StyledText';
 import {
   SectionContainer,
   FlexContainer,
   CenteredContainer,
   CardContainer,
   GridContainer,
-} from '../../lib/components/StyledContainers';
+} from '../../components/StyledContainers';
 
 export const ElementCardStyled = styled(Card)<{ hasClickHandler?: boolean }>(
   ({ theme, hasClickHandler }) => ({

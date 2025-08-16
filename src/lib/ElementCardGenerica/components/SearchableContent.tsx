@@ -1,6 +1,6 @@
 import React from 'react';
-import { CardTitle, BodyText } from '../../lib/components/StyledText';
-import { SectionContainer } from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../components/StyledText';
+import { SectionContainer } from '../../components/StyledContainers';
 
 export interface SearchableContentProps {
   hasSearched: boolean;

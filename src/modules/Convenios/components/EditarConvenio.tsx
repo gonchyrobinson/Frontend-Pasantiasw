@@ -4,7 +4,7 @@ import { Alert, CircularProgress } from '@mui/material';
 import { PageTitle } from '../../../lib/components/StyledText';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useConvenio, useUpdateConvenio } from '../hooks/useConvenios';
 import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
 import { getConvenioFormMetadata } from '../helpers/convenioHelpers';

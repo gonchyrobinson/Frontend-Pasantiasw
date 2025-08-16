@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
-import { FormularioGenerico } from '../../FormularioGenerico';
+import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { EstudianteDto } from './types';
 import { getEdicionEstudianteMetadata } from './helpers/estudianteHelpers';
 import { ROUTES } from '../../helpers/routesHelper';

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import {
   usePasantia,
   useUpdatePasantia,

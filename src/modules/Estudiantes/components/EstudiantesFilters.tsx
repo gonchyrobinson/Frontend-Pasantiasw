@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchDialog } from '../../../../src/ElementCardGenerica';
+import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getEstudianteSearchMetadata,
   formatEstudianteSearchFilters,

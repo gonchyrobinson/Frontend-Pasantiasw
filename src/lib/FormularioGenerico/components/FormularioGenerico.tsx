@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
-import { SectionTitle } from '../../lib/components/StyledText';
+import { SectionTitle } from '../../components/StyledText';
 import { GenericFormProps, FieldMetadata } from '../types';
 import {
   FormContainer,
   ActionContainer,
   GridContainer,
-} from '../../lib/components/StyledContainers';
+} from '../../components/StyledContainers';
 import TextField from './TextField';
 import EmailField from './EmailField';
 import CurrencyField from './CurrencyField';

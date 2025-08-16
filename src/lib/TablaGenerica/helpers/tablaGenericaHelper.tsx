@@ -1,6 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid';
 import { ColumnMetadata } from '../types';
-import { formatValue } from '../../../ElementCardGenerica/helpers/elementCardHelper';
+import { formatValue } from '../../ElementCardGenerica/helpers/elementCardHelper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { ActionContainer } from '../../../lib/components/StyledContainers';

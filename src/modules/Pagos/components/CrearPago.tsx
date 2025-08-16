@@ -6,7 +6,7 @@ import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useCreatePago } from '../hooks/usePagos';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
 import { PagosFormData } from '../types';

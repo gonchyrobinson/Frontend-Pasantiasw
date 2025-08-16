@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../lib/hooks/useNavigation';
-import { FormularioGenerico } from '../../FormularioGenerico';
+import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { ROUTES } from '../../helpers/routesHelper';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';

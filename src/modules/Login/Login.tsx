@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../lib/hooks/useNavigation';
-import { FormularioGenerico } from '../../FormularioGenerico';
+import { FormularioGenerico } from '../../lib/FormularioGenerico';
 
 import {
   getLoginMetadata,

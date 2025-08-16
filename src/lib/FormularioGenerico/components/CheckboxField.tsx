@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControlLabel, Checkbox, FormHelperText } from '@mui/material';
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { SectionContainer } from '../../lib/components/StyledContainers';
+import { SectionContainer } from '../../components/StyledContainers';
 
 type CheckboxFieldProps = {
   register: UseFormRegisterReturn;

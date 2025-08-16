@@ -1,7 +1,7 @@
 import React from 'react';
 import { ElementCard } from '../index';
 import { GridsProps } from '../types';
-import { GridContainer } from '../../lib/components/StyledContainers';
+import { GridContainer } from '../../components/StyledContainers';
 import {
   EmptyStateStyled,
   EmptyStateTitleStyled,

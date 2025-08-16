@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stats, StatsProps } from '../../../../src/ElementCardGenerica';
+import { Stats, StatsProps } from '../../../lib/ElementCardGenerica';
 import { calculatePasantiaStats } from '../helpers/pasantiaHelpers';
 import { PasantiaDto } from '../types';
 import { Work, CheckCircle, Cancel, Warning } from '@mui/icons-material';

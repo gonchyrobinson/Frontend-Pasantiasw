@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatsProps, StatCardProps, DistributionData } from '../types';
-import { GridContainer } from '../../lib/components/StyledContainers';
+import { GridContainer } from '../../components/StyledContainers';
 import {
   StatsContainerStyled,
   StatsTitleStyled,

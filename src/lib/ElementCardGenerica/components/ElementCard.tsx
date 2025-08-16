@@ -12,7 +12,7 @@ import {
   Subtitle,
   CaptionText,
   BodyText,
-} from '../../lib/components/StyledText';
+} from '../../components/StyledText';
 import {
   Edit as EditIcon,
   ExpandMore as ExpandIcon,

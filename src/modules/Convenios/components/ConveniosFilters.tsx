@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchDialog } from '../../../ElementCardGenerica';
+import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getConvenioSearchMetadata,
   formatConvenioSearchFilters,

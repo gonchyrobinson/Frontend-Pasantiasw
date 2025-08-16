@@ -1,8 +1,8 @@
 import React from 'react';
 import { IconButton, Tooltip, Button } from '@mui/material';
 import { Refresh, Add } from '@mui/icons-material';
-import { PageTitle, Subtitle } from '../../lib/components/StyledText';
-import { FlexContainer } from '../../lib/components/StyledContainers';
+import { PageTitle, Subtitle } from '../../components/StyledText';
+import { FlexContainer } from '../../components/StyledContainers';
 
 export interface ModuleHeaderProps {
   title: string;

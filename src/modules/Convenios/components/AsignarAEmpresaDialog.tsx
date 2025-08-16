@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { FormularioGenerico } from '../../../FormularioGenerico';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
 import { useAsignarEmpresa } from '../hooks/useAsignarEmpresa';

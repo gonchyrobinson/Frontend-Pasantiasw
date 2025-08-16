@@ -1,4 +1,4 @@
-import { FormMetadata } from '../../../FormularioGenerico';
+import { FormMetadata } from '../../../lib/FormularioGenerico';
 import { LoginCredentials } from '../types';
 
 export const getLoginMetadata = (): FormMetadata => ({
