@@ -1,22 +1,5 @@
 import { Vigencia, TipoContrato } from '../types';
 
-// Helper function para convertir camelCase form data a PascalCase para el backend
-export const convertToPascalCaseForBackend = (
-  data: Record<string, unknown>
-) => {
-  return {
-    Nombre: data.nombre,
-    Vigencia: data.vigencia,
-    TipoContrato: data.tipoContrato,
-    FechaInicio: data.fechaInicio,
-    FechaFin: data.fechaFin,
-    Encargado: data.encargado,
-    Celular: data.celular,
-    CorreoElectronico: data.correoElectronico,
-    Sudocu: data.sudocu,
-  };
-};
-
 export const getCreacionEmpresaMetadata = () => ({
   title: 'Crear Nueva Empresa',
   submitButtonText: 'Crear Empresa',

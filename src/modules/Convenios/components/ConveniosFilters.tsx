@@ -34,7 +34,7 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
     try {
       const searchFilters = formatConvenioSearchFilters(filters);
       const convenios = await apiClient.post<ConvenioEmpresaDto[]>(
-        '/Convenios/conEmpresa',
+        '/convenios/conEmpresa',
         searchFilters as Record<string, unknown>
       );
       onSearchResults(convenios);

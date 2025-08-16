@@ -1,5 +1,31 @@
 import { EstudianteDto } from '../types';
 
+// Carreras válidas según el backend
+export const CARRERAS_VALIDAS = [
+  'AGRIMENSURA',
+  'INGENIERÍA AZUCARERA',
+  'INGENIERÍA BIOMÉDICA',
+  'INGENIERÍA CIVIL',
+  'INGENIERÍA EN COMPUTACIÓN',
+  'INGENIERÍA EN INFORMÁTICA',
+  'INGENIERÍA ELÉCTRICA',
+  'INGENIERÍA ELECTRÓNICA',
+  'INGENIERÍA GEODÉSICA Y GEOFÍSICA',
+  'INGENIERÍA INDUSTRIAL',
+  'INGENIERÍA MECÁNICA',
+  'INGENIERÍA QUÍMICA',
+  'LICENCIATURA EN FÍSICA',
+  'LICENCIATURA EN MATEMÁTICA',
+  'LICENCIATURA EN INFORMÁTICA',
+  'DISEÑO DE ILUMINACIÓN',
+  'PROGRAMADOR UNIVERSITARIO',
+  'TECNICATURA UNIVERSITARIA EN TECNOLOGÍA',
+  'AZUCARERA E INDUSTRIAS DERIVADAS',
+  'TECNICATURA UNIVERSITARIA EN FÍSICA',
+  'TECNICATURA UNIVERSITARIA EN FÍSICA AMBIENTAL',
+  'OTRA',
+] as const;
+
 export const getCreacionEstudianteMetadata = () => ({
   title: 'Crear Nuevo Estudiante',
   submitButtonText: 'Crear Estudiante',
@@ -53,7 +79,11 @@ export const getCreacionEstudianteMetadata = () => ({
     {
       name: 'carrera',
       label: 'Carrera',
-      type: 'text' as const,
+      type: 'dropdown' as const,
+      options: CARRERAS_VALIDAS.map(carrera => ({
+        value: carrera,
+        label: carrera,
+      })),
       validations: {
         required: 'La carrera es requerida',
       },

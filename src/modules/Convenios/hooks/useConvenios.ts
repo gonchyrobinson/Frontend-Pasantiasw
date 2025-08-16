@@ -23,10 +23,10 @@ import { apiClient } from '../../Shared/apis/apiClient';
 // Este es un caso especial que requiere POST en lugar de GET
 export const useConvenios = () => {
   return useQuery({
-    queryKey: ['/Convenios/conEmpresa'],
+    queryKey: ['/convenios/conEmpresa'],
     queryFn: async () => {
       const response = await apiClient.post<ConvenioEmpresaDto[]>(
-        '/Convenios/conEmpresa',
+        '/convenios/conEmpresa',
         getDefaultConvenioValues()
       );
       return response as unknown as ConvenioEmpresaDto[];
@@ -57,7 +57,7 @@ export const useCreateConvenio = () => {
   >(ROUTES.CONVENIOS, {
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['/Convenios/conEmpresa'],
+        queryKey: ['/convenios/conEmpresa'],
       });
     },
   });
@@ -72,7 +72,7 @@ export const useUpdateConvenio = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['/Convenios/conEmpresa'],
+          queryKey: ['/convenios/conEmpresa'],
         });
       },
     }
@@ -94,13 +94,12 @@ export const useCaducarConvenio = () => {
       id: number;
       fechaCaducidad: string;
     }) =>
-      apiClient.post<void>(
-        `/Convenios/caducar/${id}`,
-        fechaCaducidad as unknown as Record<string, unknown>
-      ),
+      apiClient.post<void>(`/convenios/caducar/${id}`, {
+        fechaCaducidad,
+      } as unknown as Record<string, unknown>),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['/Convenios/conEmpresa'],
+        queryKey: ['/convenios/conEmpresa'],
       });
     },
   });
@@ -111,11 +110,11 @@ export const useAsignarEmpresa = () => {
   const queryClient = useQueryClient();
 
   return useApiMutation<void, AsignarEmpresaDto & Record<string, unknown>>(
-    `${ROUTES.CONVENIOS}/asignar-empresa`,
+    '/convenios/asignar-empresa',
     {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['/Convenios/conEmpresa'],
+          queryKey: ['/convenios/conEmpresa'],
         });
       },
     }

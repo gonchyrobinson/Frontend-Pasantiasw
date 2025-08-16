@@ -3,10 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { EmpresaDto } from './types';
-import {
-  getEdicionEmpresaMetadata,
-  convertToPascalCaseForBackend,
-} from './helpers/creacionEmpresaHelpers';
+import { getEdicionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
@@ -38,8 +35,7 @@ const EditarEmpresa: React.FC = () => {
     setLoading(true);
 
     try {
-      const convertedData = convertToPascalCaseForBackend(data);
-      const empresaData = { ...convertedData, IdEmpresa: parseInt(id || '0') };
+      const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
       await apiClient.put(`/empresas`, empresaData);
 
       showSuccess('Empresa actualizada exitosamente');

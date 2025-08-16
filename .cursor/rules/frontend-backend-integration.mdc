@@ -1,0 +1,52 @@
+---
+alwaysApply: true
+---
+
+# Frontend-Backend Integration Philosophy
+
+## 🎯 Simplicity First
+**"Let the framework do the heavy lifting"** - Don't reinvent what ASP.NET Core already handles automatically.
+
+## 🏗️ Architecture Principles
+
+### 1. Consistent Naming Convention
+- **Frontend**: camelCase everywhere (`idEmpresa`, `nombre`, `fechaInicio`)
+- **Backend**: PascalCase in C# DTOs (`IdEmpresa`, `Nombre`, `FechaInicio`)
+- **Runtime**: ASP.NET Core bridges the gap automatically
+
+### 2. Single Source of Truth
+- One DTO interface per entity in frontend
+- No separate request/response types unless genuinely needed
+- No manual conversion functions between cases
+
+### 3. Trust the Framework
+```typescript
+// ✅ This works perfectly - no conversion needed
+interface CreacionEmpresaDto {
+  nombre: string;        // Maps to backend's 'Nombre'
+  fechaInicio: string;   // Maps to backend's 'FechaInicio'
+}
+
+const data: CreacionEmpresaDto = { nombre: "Test", fechaInicio: "2024-01-01" };
+await apiClient.post('/empresas', data); // ASP.NET Core handles the mapping
+```
+
+## 🚫 Code Smells to Avoid
+- Functions named `convertTo*Case*`
+- Multiple DTO interfaces for the same entity (request/response)
+- Manual property mapping in API calls
+- Inconsistent naming conventions within the same module
+
+## ✅ Green Flags
+- camelCase consistently used in frontend
+- Direct DTO usage in API calls
+- Form field names matching DTO properties
+- Clean, readable code without unnecessary transformations
+
+## 🔧 When to Add Complexity
+Only add transformation logic when:
+- ✅ Business logic requires data transformation (e.g., date formatting)
+- ✅ Frontend needs computed properties not in backend DTO
+- ✅ API response structure genuinely differs from what's expected
+
+**Never** add complexity just for case conversion - ASP.NET Core handles this automatically.

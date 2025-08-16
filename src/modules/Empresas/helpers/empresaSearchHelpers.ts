@@ -1,13 +1,14 @@
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface EmpresaBusquedaAvanzadaDto {
-  Nombre?: string;
-  Vigencia?: boolean; // true = vigente, false = no vigente, undefined = todas
-  TipoContrato?: string;
-  FechaInicioDesde?: string;
-  FechaInicioHasta?: string;
-  FechaFinDesde?: string;
-  FechaFinHasta?: string;
+  nombre?: string;
+  vigencia?: boolean; // true = vigente, false = no vigente, undefined = todas
+  tipoContrato?: string;
+  fechaInicioDesde?: string;
+  fechaInicioHasta?: string;
+  fechaFinDesde?: string;
+  fechaFinHasta?: string;
 }
 
 export const getEmpresaSearchMetadata = (): {
@@ -76,31 +77,31 @@ export const formatEmpresaSearchFilters = (
   const formattedFilters: EmpresaBusquedaAvanzadaDto = {};
 
   if (filters.nombre) {
-    formattedFilters.Nombre = filters.nombre;
+    formattedFilters.nombre = filters.nombre;
   }
   if (filters.vigencia) {
     // Convertir string del frontend a boolean esperado por el backend
     if (filters.vigencia === 'vigente') {
-      formattedFilters.Vigencia = true;
+      formattedFilters.vigencia = true;
     } else if (filters.vigencia === 'no_vigente') {
-      formattedFilters.Vigencia = false;
+      formattedFilters.vigencia = false;
     }
     // Si es empty string o 'todas', no se incluye el filtro
   }
   if (filters.tipoContrato) {
-    formattedFilters.TipoContrato = filters.tipoContrato;
+    formattedFilters.tipoContrato = filters.tipoContrato;
   }
   if (filters.fechaInicioDesde) {
-    formattedFilters.FechaInicioDesde = filters.fechaInicioDesde;
+    formattedFilters.fechaInicioDesde = filters.fechaInicioDesde;
   }
   if (filters.fechaInicioHasta) {
-    formattedFilters.FechaInicioHasta = filters.fechaInicioHasta;
+    formattedFilters.fechaInicioHasta = filters.fechaInicioHasta;
   }
   if (filters.fechaFinDesde) {
-    formattedFilters.FechaFinDesde = filters.fechaFinDesde;
+    formattedFilters.fechaFinDesde = filters.fechaFinDesde;
   }
   if (filters.fechaFinHasta) {
-    formattedFilters.FechaFinHasta = filters.fechaFinHasta;
+    formattedFilters.fechaFinHasta = filters.fechaFinHasta;
   }
 
   return formattedFilters;

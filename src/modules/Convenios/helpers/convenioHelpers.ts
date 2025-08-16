@@ -7,23 +7,6 @@ export const getConvenioFormMetadata = () => ({
   cancelButtonText: 'Cancelar',
   fields: [
     {
-      name: 'expediente',
-      label: 'Expediente',
-      type: 'text' as const,
-      required: true,
-      validations: {
-        minLength: {
-          value: 3,
-          message: 'El expediente debe tener al menos 3 caracteres',
-        },
-        maxLength: {
-          value: 50,
-          message: 'El expediente no puede exceder 50 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
       name: 'idEmpresa',
       label: 'Empresa',
       type: 'dynamicDropdown' as const,
@@ -90,25 +73,33 @@ export const getConvenioFormMetadata = () => ({
           message: 'El domicilio no puede exceder 200 caracteres',
         },
       },
-      gridSize: 12,
+      gridSize: 6,
     },
     {
-      name: 'representanteFacultad',
-      label: 'Representante de la Facultad',
-      type: 'text' as const,
-      required: true,
+      name: 'domicilioAlternativo',
+      label: 'Domicilio Alternativo',
+      type: 'textarea' as const,
       validations: {
-        minLength: {
-          value: 2,
-          message: 'El representante debe tener al menos 2 caracteres',
-        },
         maxLength: {
-          value: 100,
-          message: 'El representante no puede exceder 100 caracteres',
+          value: 200,
+          message: 'El domicilio no puede exceder 200 caracteres',
         },
       },
       gridSize: 6,
     },
+    {
+      name: 'caracter',
+      label: 'Carácter',
+      type: 'text' as const,
+      gridSize: 6,
+    },
+    {
+      name: 'sudocu',
+      label: 'SUDOCU',
+      type: 'text' as const,
+      gridSize: 6,
+    },
+
     {
       name: 'docRepresentanteFacultad',
       label: 'Documento del Representante Facultad',
@@ -279,14 +270,15 @@ export const getConvenioEstado = (fechaCaducidad?: string): string => {
 
 // Función para obtener valores por defecto del formulario
 export const getDefaultConvenioValues = () => ({
-  expediente: '',
   idEmpresa: undefined,
   representanteEmpresa: '',
   docRepresentanteEmpresa: '',
   nroAcuerdoMarco: undefined,
   domicilioLegal: '',
-  representanteFacultad: '',
+  domicilioAlternativo: '',
   docRepresentanteFacultad: '',
   fechaFirma: '',
   fechaCaducidad: '',
+  caracter: '',
+  sudocu: '',
 });

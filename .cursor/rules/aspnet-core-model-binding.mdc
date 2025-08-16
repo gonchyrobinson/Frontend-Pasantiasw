@@ -1,0 +1,51 @@
+---
+alwaysApply: true
+description: ASP.NET Core model binding and JSON serialization guidelines
+---
+
+# ASP.NET Core Model Binding & JSON Serialization
+
+## 🎯 Key Principle
+ASP.NET Core with System.Text.Json handles serialization automatically and flexibly.
+
+## 📤 Response Serialization (Automatic)
+- Backend DTOs (PascalCase) → JSON responses (camelCase)
+- Example: `IdEmpresa` → `idEmpresa`, `Nombre` → `nombre`
+
+## 📥 Request Model Binding (Flexible)
+ASP.NET Core model binding accepts **BOTH**:
+- ✅ PascalCase: `{ "Nombre": "value", "IdEmpresa": 123 }`
+- ✅ camelCase: `{ "nombre": "value", "idEmpresa": 123 }`
+
+## 🏆 Best Practice - Frontend Consistency
+**Use camelCase consistently throughout the frontend:**
+
+```typescript
+// ✅ GOOD - Single DTO in camelCase
+interface EmpresaDto {
+  idEmpresa: number;
+  nombre: string;
+  fechaInicio: string;
+}
+
+// ❌ AVOID - Multiple DTOs with case conversions
+interface EmpresaDtoResponse { idEmpresa: number; }
+interface EmpresaDtoRequest { IdEmpresa: number; }
+```
+
+## 🚫 What NOT to Do
+- ❌ Don't create conversion functions like `convertToPascalCase()`
+- ❌ Don't maintain separate PascalCase and camelCase types
+- ❌ Don't manually convert field names in requests
+
+## ✅ What TO Do
+```typescript
+// Direct usage - ASP.NET Core handles the rest
+const empresaData = data as unknown as CreacionEmpresaDto;
+await apiClient.post('/empresas', empresaData);
+```
+
+## 💡 Why This Works
+ASP.NET Core's model binding is case-insensitive and automatically maps:
+- `nombre` (frontend) → `Nombre` (backend DTO)
+- `idEmpresa` (frontend) → `IdEmpresa` (backend DTO)

@@ -73,7 +73,7 @@ Response: Array<EmpresaDto>
 ### Modelo EmpresaDto
 
 ```typescript
-// Response del backend (camelCase - serialización automática)
+// DTO unificado - camelCase (ASP.NET Core hace model binding automático)
 interface EmpresaDto {
   idEmpresa: number;
   nombre: string;
@@ -87,17 +87,17 @@ interface EmpresaDto {
   sudocu: string; // Text field
 }
 
-// Request al backend (PascalCase - esperado por DTOs)
+// Mismo DTO para requests - ASP.NET Core acepta camelCase
 interface CreacionEmpresaDto {
-  Nombre: string;
-  Vigencia: 'vigente' | 'no_vigente';
-  FechaInicio: string; // ISO: YYYY-MM-DD
-  FechaFin: string; // ISO: YYYY-MM-DD
-  TipoContrato: 'indefinido' | 'temporal' | 'otro';
-  Encargado: string;
-  Celular: string;
-  CorreoElectronico: string;
-  Sudocu: string; // Text field
+  nombre: string;
+  vigencia: 'vigente' | 'no_vigente';
+  fechaInicio: string; // ISO: YYYY-MM-DD
+  fechaFin: string; // ISO: YYYY-MM-DD
+  tipoContrato: 'indefinido' | 'temporal' | 'otro';
+  encargado: string;
+  celular: string;
+  correoElectronico: string;
+  sudocu: string; // Text field
 }
 ```
 

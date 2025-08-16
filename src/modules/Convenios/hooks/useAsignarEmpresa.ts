@@ -11,11 +11,11 @@ export const useAsignarEmpresa = () => {
 
   return useMutation({
     mutationFn: async (data: AsignarEmpresaDto) => {
-      await apiClient.post('/Convenios/asignar-empresa', data);
+      await apiClient.post('/convenios/asignar-empresa', data);
     },
     onSuccess: () => {
       // Invalidar la caché de convenios para forzar una recarga
-      queryClient.invalidateQueries({ queryKey: ['convenios'] });
+      queryClient.invalidateQueries({ queryKey: ['/convenios/conEmpresa'] });
     },
   });
 };

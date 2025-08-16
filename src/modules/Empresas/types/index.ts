@@ -28,30 +28,17 @@ export interface EmpresaDto {
   sudocu: string; // Text field, not date
 }
 
-// DTO para envío al backend (PascalCase)
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface CreacionEmpresaDto {
-  Nombre: string;
-  Vigencia: VigenciaType;
-  FechaInicio: string; // ISO format: YYYY-MM-DD
-  FechaFin: string; // ISO format: YYYY-MM-DD
-  TipoContrato: TipoContratoType;
-  Encargado: string;
-  Celular: string;
-  CorreoElectronico: string;
-  Sudocu: string; // Text field, not date
-}
-
-// DTO para recepción del backend (camelCase)
-export interface EmpresaCreateFormData {
   nombre: string;
   vigencia: VigenciaType;
-  fechaInicio: string;
-  fechaFin: string;
+  fechaInicio: string; // ISO format: YYYY-MM-DD
+  fechaFin: string; // ISO format: YYYY-MM-DD
   tipoContrato: TipoContratoType;
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string;
+  sudocu: string; // Text field, not date
 }
 
 export interface EmpresasState {
