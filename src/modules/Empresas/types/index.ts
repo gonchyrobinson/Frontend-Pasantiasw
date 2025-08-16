@@ -1,5 +1,3 @@
-import { EmpresaDto } from '.';
-
 export const Vigencia = {
   Vigente: 'vigente',
   NoVigente: 'no_vigente',

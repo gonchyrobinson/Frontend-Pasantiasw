@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-import { Search, Clear, School, Person, Add } from '@mui/icons-material';
+import { Search, Clear, School, Person } from '@mui/icons-material';
 import {
   GridContainer,
   FlexContainer,
@@ -8,8 +8,8 @@ import {
   CenteredContainer,
   CardContainer,
 } from '../../../lib/components/StyledContainers';
-import { BotonNuevoEstudianteStyled } from './StyledComponents';
 import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
+import { CreateButton } from '../../../lib/components/StyledButtons';
 
 // Re-export common components from central location
 export {
@@ -182,13 +182,7 @@ export const ContenedorHeader = ({
 }) => <SectionContainer>{children}</SectionContainer>;
 
 export const BotonNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
-  <BotonNuevoEstudianteStyled
-    variant='contained'
-    startIcon={<Add />}
-    onClick={onClick}
-  >
-    Nuevo Estudiante
-  </BotonNuevoEstudianteStyled>
+  <CreateButton onClick={onClick}>Nuevo Estudiante</CreateButton>
 );
 
 export const FabNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (

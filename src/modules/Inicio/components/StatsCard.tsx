@@ -15,7 +15,6 @@ import {
   TextoTendencia,
   TextoError,
 } from './ComponentesGenericos';
-import { Box } from '@mui/material';
 import { FlexContainer } from '../../../lib/components/StyledContainers';
 
 const StatsCard: React.FC<StatsCardProps> = ({
@@ -63,9 +62,8 @@ const StatsCard: React.FC<StatsCardProps> = ({
       }}
     >
       <CardContent>
-        <Box
+        <FlexContainer
           sx={{
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             marginBottom: 2,
@@ -74,15 +72,15 @@ const StatsCard: React.FC<StatsCardProps> = ({
           <IconoEstadisticaCard bgColor={bgColor} color={color}>
             {icon}
           </IconoEstadisticaCard>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <FlexContainer sx={{ alignItems: 'center', gap: 0.5 }}>
             {trendDirection === 'up' ? (
               <TrendingUp fontSize='small' color='success' />
             ) : (
               <TrendingDown fontSize='small' color='error' />
             )}
             <TextoTendencia direction={trendDirection}>{trend}</TextoTendencia>
-          </Box>
-        </Box>
+          </FlexContainer>
+        </FlexContainer>
 
         <TituloEstadistica>
           {title}

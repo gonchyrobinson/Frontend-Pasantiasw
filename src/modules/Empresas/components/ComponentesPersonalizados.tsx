@@ -14,10 +14,8 @@ import {
   CheckCircle,
   Cancel,
   Category,
-  Add,
 } from '@mui/icons-material';
 import {
-  BotonNuevaEmpresaStyled,
   TarjetaEstadisticaStyled,
   CampoBusquedaStyled,
   ContenedorHeaderStyled,
@@ -30,6 +28,7 @@ import {
 } from '../../../lib/components/StyledContainers';
 import { Vigencia, TipoContrato } from '../types';
 import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
+import { CreateButton } from '../../../lib/components/StyledButtons';
 
 // Re-export common components from central location
 export {
@@ -207,13 +206,7 @@ export const ContenedorHeader = ({
 }) => <ContenedorHeaderStyled>{children}</ContenedorHeaderStyled>;
 
 export const BotonNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
-  <BotonNuevaEmpresaStyled
-    variant='contained'
-    startIcon={<Add />}
-    onClick={onClick}
-  >
-    Nueva Empresa
-  </BotonNuevaEmpresaStyled>
+  <CreateButton onClick={onClick}>Nueva Empresa</CreateButton>
 );
 
 export const FabNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (

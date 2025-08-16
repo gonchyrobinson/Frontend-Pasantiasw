@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Alert, Button } from '@mui/material';
+import { Alert } from '@mui/material';
 import {
   MainContainer,
   CenteredContainer,
   SectionContainer,
 } from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
-import { Refresh } from '@mui/icons-material';
+import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { EmpresaDto } from './types';
@@ -134,10 +134,9 @@ const Empresas: React.FC = () => {
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={() => refetch()}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={() => refetch()} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar las empresas: {error?.message || 'Error desconocido'}

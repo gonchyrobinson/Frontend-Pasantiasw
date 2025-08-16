@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Alert, Button } from '@mui/material';
+import { Alert } from '@mui/material';
 import {
   MainContainer,
   CenteredContainer,
   SectionContainer,
 } from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
-import { Refresh } from '@mui/icons-material';
+import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
 
@@ -132,10 +132,9 @@ const Pasantias: React.FC = () => {
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={handleRefresh}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={handleRefresh} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar las pasantías: {(error || pasantiasError)?.message}
