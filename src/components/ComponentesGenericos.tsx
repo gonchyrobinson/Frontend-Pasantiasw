@@ -9,9 +9,15 @@ import {
   Tooltip,
   Alert,
   Box,
+  Chip,
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { BodyText, PageTitle, CaptionText } from '../lib/components/StyledText';
+import { Add, Clear } from '@mui/icons-material';
+import {
+  BodyText,
+  PageTitle,
+  CaptionText,
+  CardTitle,
+} from '../lib/components/StyledText';
 import { CenteredContainer } from '../lib/components/StyledContainers';
 
 // ===== DIALOG COMPONENTS =====
@@ -322,6 +328,71 @@ export const FooterFormulario: React.FC<FooterFormularioProps> = ({
   >
     {children}
   </Box>
+);
+
+// ===== COMMON MODULE COMPONENTS =====
+
+// Typography Components
+export const TituloPrincipal = ({
+  children,
+  variant = 'h6',
+}: {
+  children: React.ReactNode;
+  variant?: 'h4' | 'h5' | 'h6';
+}) => (
+  <PageTitle variant={variant} gutterBottom>
+    {children}
+  </PageTitle>
+);
+
+export const TituloSecundario = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => <CardTitle gutterBottom>{children}</CardTitle>;
+
+export const Subtitulo = ({ children }: { children: React.ReactNode }) => (
+  <BodyText color='text.secondary' gutterBottom>
+    {children}
+  </BodyText>
+);
+
+export const TextoPrincipal = ({ children }: { children: React.ReactNode }) => (
+  <BodyText>{children}</BodyText>
+);
+
+export const TextoSecundario = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => <BodyText color='text.secondary'>{children}</BodyText>;
+
+export const ValorEstadistica = ({
+  children,
+  color = 'primary',
+}: {
+  children: React.ReactNode;
+  color?: string;
+}) => (
+  <BodyText component='div' sx={{ color: `${color}.main`, fontWeight: 'bold' }}>
+    {children}
+  </BodyText>
+);
+
+// Common Chip Components
+export const ChipEstadistica = ({ label }: { label: string }) => (
+  <Chip label={label} variant='outlined' size='small' color='primary' />
+);
+
+export const ChipLimpiarFiltros = ({ onDelete }: { onDelete: () => void }) => (
+  <Chip
+    label='Limpiar filtros'
+    size='small'
+    variant='outlined'
+    deleteIcon={<Clear />}
+    onDelete={onDelete}
+    onClick={onDelete}
+  />
 );
 
 // ===== KEYFRAMES FOR ANIMATIONS =====

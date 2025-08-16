@@ -11,7 +11,7 @@ import { ApiResponse } from '../types';
 // Define a generic type for mutation variables (same as RequestData in apiClient)
 type RequestData = Record<string, unknown>;
 
-// Query hook for GET requests
+// Query hook for GET requests - mantiene compatibilidad con formato ApiResponse
 export const useApiQuery = <T>(
   endpoint: string,
   options?: Omit<UseQueryOptions<ApiResponse<T>, Error>, 'queryKey' | 'queryFn'>

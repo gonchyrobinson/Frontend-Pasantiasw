@@ -1,30 +1,24 @@
 import React from 'react';
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { PagosDto, CreatePagosDto } from '../types';
 import { calculatePagosStats } from '../helpers/pagosHelpers';
-import { ApiResponse } from '../../../types';
-import { apiClient } from '../../Shared/apis/apiClient';
+import {
+  useApiQuery,
+  useApiMutation,
+  useApiUpdate,
+  useApiDelete,
+} from '../../../hooks/useApi';
 
 // Hook para obtener todos los pagos
 export const usePagos = () => {
-  return useQuery({
-    queryKey: ['pagos'],
-    queryFn: async () => {
-      const data = await apiClient.get<PagosDto[]>('pagos');
-      return { data } as ApiResponse<PagosDto[]>;
-    },
+  return useApiQuery<PagosDto[]>('pagos', {
     staleTime: 5 * 60 * 1000, // 5 minutos
   });
 };
 
 // Hook para obtener un pago específico
 export const usePago = (id: number) => {
-  return useQuery({
-    queryKey: ['pago', id],
-    queryFn: async () => {
-      const data = await apiClient.get<PagosDto>(`pagos/${id}`);
-      return { data } as ApiResponse<PagosDto>;
-    },
+  return useApiQuery<PagosDto>(`pagos/${id}`, {
     enabled: !!id,
     staleTime: 0,
     refetchOnMount: 'always',
@@ -35,11 +29,7 @@ export const usePago = (id: number) => {
 export const useCreatePago = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (data: CreatePagosDto & Record<string, unknown>) => {
-      const result = await apiClient.post<PagosDto>('pagos', data);
-      return result;
-    },
+  return useApiMutation<PagosDto, CreatePagosDto>('pagos', {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
@@ -50,11 +40,7 @@ export const useCreatePago = () => {
 export const useUpdatePago = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (data: PagosDto & Record<string, unknown>) => {
-      const result = await apiClient.put<PagosDto>('pagos', data);
-      return result;
-    },
+  return useApiUpdate<PagosDto, PagosDto>('pagos', {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
@@ -65,10 +51,7 @@ export const useUpdatePago = () => {
 export const useDeletePago = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete<void>(`pagos/${id}`);
-    },
+  return useApiDelete<void>('pagos', {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },

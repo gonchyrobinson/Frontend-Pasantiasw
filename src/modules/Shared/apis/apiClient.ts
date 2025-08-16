@@ -100,27 +100,17 @@ class ApiClient {
 
   private handleError(error: unknown): Error {
     if (axios.isAxiosError(error)) {
-      const data = error.response?.data as unknown;
-      // Soportar backend que devuelve mensaje como string o en distintas claves
-      const respMsg =
-        (typeof data === 'string' ? data : undefined) ||
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (typeof (data as any)?.message === 'string'
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (data as any).message
-          : undefined) ||
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (typeof (data as any)?.detail === 'string'
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (data as any).detail
-          : undefined) ||
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (typeof (data as any)?.title === 'string'
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (data as any).title
-          : undefined);
+      const data = error.response?.data;
+
+      // Extract error message from various possible formats
       const message =
-        respMsg || error.message || 'An unexpected error occurred';
+        (typeof data === 'string' && data) ||
+        (data as { message?: string })?.message ||
+        (data as { detail?: string })?.detail ||
+        (data as { title?: string })?.title ||
+        error.message ||
+        'An unexpected error occurred';
+
       return new Error(message);
     }
     return new Error('An unexpected error occurred');

@@ -1,19 +1,21 @@
 // DTOs del backend
 export interface PagosDto {
   idPago: number;
-  idPasantia?: number;
-  fechaPago?: string;
-  fechaVencimiento?: string;
-  monto?: number;
+  idPasantia: number;
+  monto: number;
+  fechaPago: string;
+  numeroReferencia: string;
   observaciones?: string;
+  [key: string]: unknown;
 }
 
 export interface CreatePagosDto {
-  idPasantia?: number;
-  fechaPago?: string;
-  fechaVencimiento?: string;
-  monto?: number;
+  idPasantia: number;
+  monto: number;
+  fechaPago: string;
+  numeroReferencia: string;
   observaciones?: string;
+  [key: string]: unknown;
 }
 
 // Tipos para formularios

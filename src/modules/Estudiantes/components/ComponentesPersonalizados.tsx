@@ -1,20 +1,11 @@
 import React from 'react';
-import { Chip, TextField } from '@mui/material';
-import {
-  CardTitle,
-  Subtitle,
-  BodyText,
-  StatValue,
-} from '../../../lib/components/StyledText';
+import { TextField } from '@mui/material';
 import { Search, Clear, School, Person, Add } from '@mui/icons-material';
 import {
   GridContainer,
   FlexContainer,
 } from '../../../lib/components/StyledContainers';
-import {
-  TituloPrincipalStyled,
-  BotonNuevoEstudianteStyled,
-} from './StyledComponents';
+import { BotonNuevoEstudianteStyled } from './StyledComponents';
 import {
   ContenedorEstadisticasStyled,
   TarjetaEstadisticaStyled,
@@ -28,48 +19,17 @@ import {
   CenteredContainer,
 } from '../../../lib/components/StyledContainers';
 
-// Typography Components
-export const TituloPrincipal = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <TituloPrincipalStyled variant='h6' gutterBottom>
-    {children}
-  </TituloPrincipalStyled>
-);
-
-export const TituloSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <CardTitle gutterBottom>{children}</CardTitle>;
-
-export const Subtitulo = ({ children }: { children: React.ReactNode }) => (
-  <Subtitle gutterBottom>{children}</Subtitle>
-);
-
-export const TextoPrincipal = ({ children }: { children: React.ReactNode }) => (
-  <BodyText>{children}</BodyText>
-);
-
-export const TextoSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <BodyText color='text.secondary'>{children}</BodyText>;
-
-export const ValorEstadistica = ({
-  children,
-  color = 'primary',
-}: {
-  children: React.ReactNode;
-  color?: string;
-}) => (
-  <StatValue component='div' color={`${color}.main`} fontWeight='bold'>
-    {children}
-  </StatValue>
-);
+// Re-export common components from central location
+export {
+  TituloPrincipal,
+  TituloSecundario,
+  Subtitulo,
+  TextoPrincipal,
+  TextoSecundario,
+  ValorEstadistica,
+  ChipEstadistica,
+  ChipLimpiarFiltros,
+} from '../../../components/ComponentesGenericos';
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
@@ -167,22 +127,6 @@ export const TarjetaEstadistica = ({
   <TarjetaEstadisticaStyled elevation={2} color={color}>
     {children}
   </TarjetaEstadisticaStyled>
-);
-
-// Chip Components
-export const ChipEstadistica = ({ label }: { label: string }) => (
-  <Chip label={label} variant='outlined' size='small' color='primary' />
-);
-
-export const ChipLimpiarFiltros = ({ onDelete }: { onDelete: () => void }) => (
-  <Chip
-    label='Limpiar filtros'
-    size='small'
-    variant='outlined'
-    deleteIcon={<Clear />}
-    onDelete={onDelete}
-    onClick={onDelete}
-  />
 );
 
 // Form Components

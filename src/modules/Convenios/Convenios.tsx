@@ -45,34 +45,30 @@ const Convenios: React.FC = () => {
     useState(false);
 
   const { stats, isLoading: statsLoading, error } = useConvenioStats();
-  const { data: conveniosResponse, refetch: refetchConvenios } = useConvenios();
+  const { data: convenios, refetch: refetchConvenios } = useConvenios();
   const { deleteConvenio, isDeleting } = useDeleteConvenio();
   const { mutate: caducarConvenio } = useCaducarConvenio();
 
   // Mostrar todos los convenios al cargar la página por primera vez
   useEffect(() => {
-    if (
-      !hasSearched &&
-      conveniosResponse?.data &&
-      conveniosResponse.data.length > 0
-    ) {
+    if (!hasSearched && convenios && convenios.length > 0) {
       setHasSearched(true);
-      setSearchResults(conveniosResponse.data);
+      setSearchResults(convenios);
     }
-  }, [conveniosResponse, hasSearched]);
+  }, [convenios, hasSearched]);
 
   // Al regresar a la página, hacer GET a la API y mostrar todos los convenios
   useEffect(() => {
     if (
       location.pathname === ROUTES.CONVENIOS &&
-      conveniosResponse?.data &&
-      conveniosResponse.data.length > 0
+      convenios &&
+      convenios.length > 0
     ) {
       // Refrescar datos y mostrar todos los convenios
       setHasSearched(true);
-      setSearchResults(conveniosResponse.data);
+      setSearchResults(convenios);
     }
-  }, [location.pathname, conveniosResponse]);
+  }, [location.pathname, convenios]);
 
   const handleClearSearch = () => {
     setSearchResults([]);
