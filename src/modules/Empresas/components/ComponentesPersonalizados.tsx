@@ -16,21 +16,20 @@ import {
   Category,
   Add,
 } from '@mui/icons-material';
-import { BotonNuevaEmpresaStyled } from './StyledComponents';
 import {
-  ContenedorEstadisticasStyled,
+  BotonNuevaEmpresaStyled,
   TarjetaEstadisticaStyled,
   CampoBusquedaStyled,
   ContenedorHeaderStyled,
-  FabStyled,
-  ContenedorFiltrosStyled,
-} from '../../../lib/components/StyledComponents';
+} from './StyledComponents';
 import {
   SectionContainer,
   FlexContainer,
   CenteredContainer,
+  CardContainer,
 } from '../../../lib/components/StyledContainers';
 import { Vigencia, TipoContrato } from '../types';
+import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
 
 // Re-export common components from central location
 export {
@@ -42,7 +41,7 @@ export {
   ValorEstadistica,
   ChipEstadistica,
   ChipLimpiarFiltros,
-} from '../../../components/ComponentesGenericos';
+} from '../../../lib/components/ComponentesGenericos';
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
@@ -84,13 +83,24 @@ export const ContenedorFiltros = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosStyled>{children}</ContenedorFiltrosStyled>;
+}) => <CardContainer sx={{ mb: 3 }}>{children}</CardContainer>;
 
 export const ContenedorEstadisticas = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorEstadisticasStyled>{children}</ContenedorEstadisticasStyled>;
+}) => (
+  <SectionContainer
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: 2,
+      mb: 3,
+    }}
+  >
+    {children}
+  </SectionContainer>
+);
 
 export const ContenedorIcono = ({
   children,
@@ -207,7 +217,5 @@ export const BotonNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
 );
 
 export const FabNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
-  <FabStyled color='primary' aria-label='add empresa' onClick={onClick}>
-    <Add />
-  </FabStyled>
+  <FloatingActionButton onClick={onClick} tooltip='Crear nueva empresa' />
 );

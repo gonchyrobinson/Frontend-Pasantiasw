@@ -1,11 +1,17 @@
 import React from 'react';
-import { WelcomeSectionProps } from '../types';
+import { Chip } from '@mui/material';
 import {
   ContenedorBienvenida,
-  TituloBienvenida,
   SubtituloBienvenida,
+  TituloBienvenida,
 } from './ComponentesGenericos';
-import { Chip } from '@mui/material';
+
+interface WelcomeSectionProps {
+  title: string;
+  subtitle: string;
+  statusLabel?: string;
+  statusColor?: 'success' | 'error' | 'warning' | 'info';
+}
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   title,

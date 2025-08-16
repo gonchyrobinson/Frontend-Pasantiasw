@@ -4,7 +4,7 @@ import { Breadcrumbs, Link } from '@mui/material';
 import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../FormularioGenerico';
 import { useCreatePago } from '../hooks/usePagos';
@@ -20,7 +20,7 @@ const CrearPago: React.FC = () => {
   const { data: pasantiasResponse, isLoading: pasantiasLoading } =
     usePasantias();
 
-  const handleSubmit = (data: PagosFormData) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
       onSuccess: () => {
         showSuccess('Pago creado exitosamente');

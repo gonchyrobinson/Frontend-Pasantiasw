@@ -18,7 +18,7 @@ import {
   Menu,
 } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
-import { useNavigation } from '../../../hooks/useNavigation';
+import { useNavigation } from '../../../lib/hooks/useNavigation';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { useState } from 'react';
 import {

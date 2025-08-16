@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stats, StatsProps } from '../../../lib/ElementCardGenerica';
+import { Stats, StatsProps } from '../../../../src/ElementCardGenerica';
 import { getEstudiantesStats } from '../helpers/estudianteHelpers';
 import { EstudianteDto } from '../types';
 import { IconoEstudiante, IconoPersona } from './ComponentesPersonalizados';

@@ -7,7 +7,7 @@ import {
   useApiMutation,
   useApiUpdate,
   useApiDelete,
-} from '../../../hooks/useApi';
+} from '../../../lib/hooks/useApi';
 
 // Hook para obtener todos los pagos
 export const usePagos = () => {

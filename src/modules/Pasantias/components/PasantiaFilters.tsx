@@ -1,11 +1,11 @@
 import React from 'react';
-import { SearchDialog } from '../../../lib/ElementCardGenerica';
+import { SearchDialog } from '../../../../src/ElementCardGenerica';
 import {
   getPasantiaSearchMetadata,
   formatPasantiaSearchFilters,
 } from '../helpers/pasantiaSearchHelpers';
 import { PasantiaDto } from '../types';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 
 interface PasantiaFiltersProps {
   pasantias: PasantiaDto[];

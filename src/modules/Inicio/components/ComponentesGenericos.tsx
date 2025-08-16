@@ -1,7 +1,6 @@
 import React from 'react';
 import { SpeedDialAction } from '@mui/material';
 import {
-  SectionTitle,
   CardTitle,
   BodyText,
   StatValue,
@@ -19,14 +18,12 @@ import {
   SubtituloBienvenidaStyled,
 } from './StyledComponents';
 
-import { MainContainer } from '../../../lib/components/StyledContainers';
-
 // Componentes para Inicio.tsx
-export const ContenedorPrincipal = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <MainContainer maxWidth='lg'>{children}</MainContainer>;
+export {
+  ContenedorPrincipal,
+  AlertaError,
+  TituloSeccion,
+} from '../../../lib/components/ComponentesGenericos';
 
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
   <ContenedorGridStyled container spacing={3}>
@@ -48,14 +45,10 @@ export const ItemGrid = ({
   </GridContainer>
 );
 
-export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (
-  <SectionTitle component='h2' gutterBottom sx={{ mt: 4 }}>
-    {children}
-  </SectionTitle>
-);
+// Section Title
+// Ya no es necesario, se exporta desde lib/
 
 // Re-exportar desde componentes centralizados
-export { AlertaError } from '../../../components/ComponentesGenericos';
 
 export const SpeedDialRapido = ({
   actions,

@@ -3,8 +3,8 @@ import React from 'react';
 import { ProgressSectionProps } from '../types';
 import {
   ContenedorProgreso,
-  TituloProgreso,
   ItemProgreso,
+  TituloProgreso,
 } from './ComponentesGenericos';
 import { Box } from '@mui/material';
 import { SectionContainer } from '../../../lib/components/StyledContainers';

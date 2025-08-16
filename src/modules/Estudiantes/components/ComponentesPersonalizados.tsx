@@ -4,20 +4,12 @@ import { Search, Clear, School, Person, Add } from '@mui/icons-material';
 import {
   GridContainer,
   FlexContainer,
-} from '../../../lib/components/StyledContainers';
-import { BotonNuevoEstudianteStyled } from './StyledComponents';
-import {
-  ContenedorEstadisticasStyled,
-  TarjetaEstadisticaStyled,
-  CampoBusquedaStyled,
-  ContenedorHeaderStyled,
-  FabStyled,
-  ContenedorFiltrosStyled,
-} from '../../../lib/components/StyledComponents';
-import {
   SectionContainer,
   CenteredContainer,
+  CardContainer,
 } from '../../../lib/components/StyledContainers';
+import { BotonNuevoEstudianteStyled } from './StyledComponents';
+import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
 
 // Re-export common components from central location
 export {
@@ -29,7 +21,7 @@ export {
   ValorEstadistica,
   ChipEstadistica,
   ChipLimpiarFiltros,
-} from '../../../components/ComponentesGenericos';
+} from '../../../lib/components/ComponentesGenericos';
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
@@ -71,13 +63,24 @@ export const ContenedorFiltros = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosStyled>{children}</ContenedorFiltrosStyled>;
+}) => <CardContainer sx={{ mb: 3 }}>{children}</CardContainer>;
 
 export const ContenedorEstadisticas = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorEstadisticasStyled>{children}</ContenedorEstadisticasStyled>;
+}) => (
+  <SectionContainer
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: 2,
+      mb: 3,
+    }}
+  >
+    {children}
+  </SectionContainer>
+);
 
 export const ContenedorIcono = ({
   children,
@@ -124,15 +127,15 @@ export const TarjetaEstadistica = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <TarjetaEstadisticaStyled elevation={2} color={color}>
+  <CardContainer elevation={2} color={color}>
     {children}
-  </TarjetaEstadisticaStyled>
+  </CardContainer>
 );
 
 // Form Components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const CampoBusqueda = ({ register }: { register: any }) => (
-  <CampoBusquedaStyled
+  <TextField
     fullWidth
     placeholder='Buscar estudiantes...'
     {...register}
@@ -176,7 +179,7 @@ export const ContenedorHeader = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorHeaderStyled>{children}</ContenedorHeaderStyled>;
+}) => <SectionContainer>{children}</SectionContainer>;
 
 export const BotonNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
   <BotonNuevoEstudianteStyled
@@ -189,7 +192,5 @@ export const BotonNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
 );
 
 export const FabNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
-  <FabStyled color='primary' aria-label='add estudiante' onClick={onClick}>
-    <Add />
-  </FabStyled>
+  <FloatingActionButton onClick={onClick} tooltip='Crear nuevo estudiante' />
 );

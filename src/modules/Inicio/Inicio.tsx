@@ -2,7 +2,7 @@ import { Business, School, Payment, Add } from '@mui/icons-material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useApiQuery } from '../../hooks/useApi';
+import { useApiQuery } from '../../lib/hooks/useApi';
 import { Convenio, Pasantia, Pago } from '../../types';
 
 import WelcomeSection from './components/WelcomeSection';
@@ -79,7 +79,9 @@ const Inicio: React.FC = () => {
   const progressItems = getProgressItems();
 
   return (
-    <ContenedorPrincipal>
+    <ContenedorPrincipal
+      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+    >
       <WelcomeSection
         title='Bienvenido al Sistema de Gestión de Pasantías'
         subtitle='Secretaría de Bienestar Estudiantil'

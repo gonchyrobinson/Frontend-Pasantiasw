@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { LoginCredentials } from '../types';
+import { LoginCredentials } from '../../types';
 
 export const useAuthForm = () => {
   const {

@@ -6,7 +6,7 @@ import { CreacionEstudianteDto } from './types';
 import { getCreacionEstudianteMetadata } from './helpers/estudianteHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 
 const CreacionEstudiantes: React.FC = () => {
   const navigate = useNavigate();

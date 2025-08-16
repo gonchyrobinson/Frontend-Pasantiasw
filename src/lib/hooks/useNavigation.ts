@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { authHelper } from '../helpers/authHelper';
-import { ROUTES } from '../helpers/routesHelper';
+import { authHelper } from '../../helpers/authHelper';
+import { ROUTES } from '../../helpers/routesHelper';
 
 export const useNavigation = () => {
   const navigate = useNavigate();

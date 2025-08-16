@@ -6,7 +6,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { CardTitle } from '../../../lib/components/StyledText';
-import { ContenedorHeaderStyled } from '../../../lib/components/StyledComponents';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 // Generic components with custom logic
@@ -68,14 +68,22 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   onToggleCollapse,
 }) => {
   return (
-    <ContenedorHeaderStyled sx={{ padding: 2, marginBottom: 0 }}>
+    <SectionContainer
+      sx={{
+        padding: 2,
+        marginBottom: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
       {!isCollapsed && (
         <CardTitle component='div'>Sistema de Pasantías</CardTitle>
       )}
       {!isMobile && (
         <CollapseButton isCollapsed={isCollapsed} onClick={onToggleCollapse} />
       )}
-    </ContenedorHeaderStyled>
+    </SectionContainer>
   );
 };
 

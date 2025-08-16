@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiClient } from '../modules/Shared/apis/apiClient';
+import { apiClient } from '../../modules/Shared/apis/apiClient';
 
 interface UseDeleteOptions {
   endpoint: string;

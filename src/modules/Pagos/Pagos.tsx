@@ -8,9 +8,9 @@ import {
 } from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import PagosStats from './components/PagosStats';
 import PagosTabla from './components/PagosTabla';
 import { usePagosStats, usePagos, useDeletePago } from './hooks/usePagos';
@@ -93,7 +93,7 @@ const Pagos: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (selectedPago) {
       try {
-        deletePago(selectedPago.idPago, {
+        deletePago(undefined, {
           onSuccess: () => {
             showSuccess('Pago eliminado exitosamente');
             setShowDeleteDialog(false);

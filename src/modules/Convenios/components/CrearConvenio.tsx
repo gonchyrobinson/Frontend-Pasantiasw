@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageTitle } from '../../../lib/components/StyledText';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../FormularioGenerico';
 import { useCreateConvenio } from '../hooks/useConvenios';

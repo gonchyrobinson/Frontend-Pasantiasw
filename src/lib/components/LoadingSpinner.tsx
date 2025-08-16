@@ -1,7 +1,7 @@
 import React from 'react';
 import { CircularProgress } from '@mui/material';
-import { CenteredContainer } from './StyledContainers';
 import { CaptionText } from './StyledText';
+import { CenteredContainer } from './StyledContainers';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -17,7 +17,10 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   return (
     <CenteredContainer
       sx={{
+        display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         gap: 2,
         py: 4,
       }}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
-import { useNavigation } from '../../hooks/useNavigation';
+import { useNavigation } from '../../lib/hooks/useNavigation';
 import { FormularioGenerico } from '../../FormularioGenerico';
 
 import {

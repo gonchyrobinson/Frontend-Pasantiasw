@@ -9,7 +9,7 @@ import {
   TituloGradiente,
   AlertaError,
   FooterFormulario,
-} from '../../../components/ComponentesGenericos';
+} from '../../../lib/components/ComponentesGenericos';
 import { BodyText } from '../../../lib/components/StyledText';
 import { ROUTES } from '../../../helpers/routesHelper';
 
@@ -84,7 +84,7 @@ export const FooterLogin = ({ children }: { children: React.ReactNode }) => (
   <FooterFormulario>{children}</FooterFormulario>
 );
 
-export { TextoFooter } from '../../../components/ComponentesGenericos';
+export { TextoFooter } from '../../../lib/components/ComponentesGenericos';
 
 export const EnlaceRegistroLogin = ({
   children,

@@ -5,7 +5,7 @@ import {
   formatConvenioSearchFilters,
 } from '../helpers/convenioSearchHelpers';
 import { ConvenioEmpresaDto } from '../types';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
 import AsignarAEmpresaDialog from './AsignarAEmpresaDialog';

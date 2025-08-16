@@ -3,12 +3,11 @@ import React from 'react';
 import { ActionCardProps } from '../types';
 import {
   ActionCardContainer,
-  IconoEstadistica,
-  TituloAccion,
   DescripcionAccion,
-  BotonAccion,
+  TituloAccion,
 } from './ComponentesGenericos';
-import { CardContent, Box } from '@mui/material';
+import { CardContent } from '@mui/material';
+import { FlexContainer } from '../../../lib/components/StyledContainers';
 
 const ActionCard: React.FC<ActionCardProps> = ({
   title,
@@ -59,15 +58,24 @@ const ActionCard: React.FC<ActionCardProps> = ({
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-          <IconoEstadistica color={color} bgColor={color}>
-            {icon}
-          </IconoEstadistica>
+        <FlexContainer
+          sx={{ width: '100%', alignItems: 'center', marginBottom: 2 }}
+        >
+          {icon}
           <TituloAccion>{title}</TituloAccion>
-        </Box>
+        </FlexContainer>
         <DescripcionAccion>{description}</DescripcionAccion>
-        <BotonAccion _icon={<Add />}>
-          {title}
+        <FlexContainer
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mt: 2,
+          }}
+        >
+          <FlexContainer sx={{ alignItems: 'center' }}>
+            <Add fontSize='small' sx={{ mr: 0.5 }} />
+            {title}
+          </FlexContainer>
           {onClick && (
             <ArrowForward
               className='action-arrow'
@@ -78,7 +86,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
               }}
             />
           )}
-        </BotonAccion>
+        </FlexContainer>
 
         {onClick && (
           <div

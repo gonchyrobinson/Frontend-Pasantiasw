@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
-import { useNavigation } from '../../hooks/useNavigation';
+import { useNavigation } from '../../lib/hooks/useNavigation';
 import { FormularioGenerico } from '../../FormularioGenerico';
 import { ROUTES } from '../../helpers/routesHelper';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import {
   ContenedorPrincipal,

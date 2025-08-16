@@ -35,6 +35,7 @@ export const StyledProgressSection = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(1),
+  width: '100%',
 }));
 
 // Styled components para StatsCard
@@ -55,6 +56,7 @@ export const StyledWelcomeSection = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
   borderRadius: theme.spacing(2),
   textAlign: 'center',
+  width: '100%',
 }));
 
 // Solo mantener componentes específicos de Inicio

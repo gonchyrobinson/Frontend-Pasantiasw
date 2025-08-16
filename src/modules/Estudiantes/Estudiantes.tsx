@@ -8,16 +8,16 @@ import {
 } from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { Refresh } from '@mui/icons-material';
-import { useApiQuery } from '../../hooks/useApi';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useApiQuery } from '../../lib/hooks/useApi';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { EstudianteDto } from './types';
 import EstudiantesFilters from './components/EstudiantesFilters';
 import EstudiantesStats from './components/EstudiantesStats';
 import EstudiantesTabla from './components/EstudiantesTabla';
 import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEstudiante } from '../../hooks/useDelete';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
+import { useDeleteEstudiante } from '../../lib/hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
 import { PageHeader } from '../../lib/components';
 

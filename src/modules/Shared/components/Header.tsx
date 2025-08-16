@@ -20,7 +20,7 @@ import UserAvatarButton from './header/UserAvatarButton';
 import NavButtonComponent from './header/NavButton';
 import { styled } from '@mui/material/styles';
 import React, { MouseEvent, useState } from 'react';
-import { useNavigation } from '../../../hooks/useNavigation';
+import { useNavigation } from '../../../lib/hooks/useNavigation';
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({

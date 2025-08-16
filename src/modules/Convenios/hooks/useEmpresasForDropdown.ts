@@ -1,5 +1,5 @@
 import React from 'react';
-import { useApiQuery } from '../../../hooks/useApi';
+import { useApiQuery } from '../../../lib/hooks/useApi';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { DropdownOption } from '../../../FormularioGenerico/types';
 

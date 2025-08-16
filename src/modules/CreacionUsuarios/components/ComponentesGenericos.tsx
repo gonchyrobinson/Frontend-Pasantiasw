@@ -4,7 +4,7 @@ import {
   TarjetaCentral,
   TituloGradiente,
   AlertaError as AlertaErrorBase,
-} from '../../../components/ComponentesGenericos';
+} from '../../../lib/components/ComponentesGenericos';
 
 // Container Components con configuración específica para CreacionUsuarios
 export const ContenedorPrincipal = ({

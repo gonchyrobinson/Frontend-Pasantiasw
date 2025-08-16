@@ -4,7 +4,7 @@ import {
   useApiQuery,
   useApiMutation,
   useApiUpdate,
-} from '../../../hooks/useApi';
+} from '../../../lib/hooks/useApi';
 import { ROUTES } from '../../../helpers/routesHelper';
 import {
   ConvenioEmpresaDto,

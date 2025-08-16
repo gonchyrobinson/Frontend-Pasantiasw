@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../lib/FormularioGenerico';
+import { FormularioGenerico } from '../../../FormularioGenerico';
 import {
   useCreatePasantia,
   useEstudiantes,

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, CircularProgress } from '@mui/material';
 import { PageTitle } from '../../../lib/components/StyledText';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../FormularioGenerico';
 import { useConvenio, useUpdateConvenio } from '../hooks/useConvenios';

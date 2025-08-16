@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stats, StatsProps } from '../../../lib/ElementCardGenerica';
+import { Stats, StatsProps } from '../../../../src/ElementCardGenerica';
 import { getEmpresasStats } from '../helpers/empresaHelpers';
 import { EmpresaDto } from '../types';
 import {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { SearchDialog } from '../../../lib/ElementCardGenerica';
+import { SearchDialog } from '../../../../src/ElementCardGenerica';
 import {
   getEmpresaSearchMetadata,
   formatEmpresaSearchFilters,
 } from '../helpers/empresaSearchHelpers';
 import { EmpresaDto } from '../types';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 
 interface EmpresasFiltersProps {

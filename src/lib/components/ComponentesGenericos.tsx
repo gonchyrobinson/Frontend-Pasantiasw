@@ -12,13 +12,8 @@ import {
   Chip,
 } from '@mui/material';
 import { Add, Clear } from '@mui/icons-material';
-import {
-  BodyText,
-  PageTitle,
-  CaptionText,
-  CardTitle,
-} from '../lib/components/StyledText';
-import { CenteredContainer } from '../lib/components/StyledContainers';
+import { BodyText, PageTitle, CaptionText, CardTitle } from './StyledText';
+import { CenteredContainer } from './StyledContainers';
 
 // ===== DIALOG COMPONENTS =====
 
@@ -393,6 +388,16 @@ export const ChipLimpiarFiltros = ({ onDelete }: { onDelete: () => void }) => (
     onDelete={onDelete}
     onClick={onDelete}
   />
+);
+
+export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (
+  <PageTitle
+    variant='h5'
+    component='h2'
+    sx={{ mt: 4, mb: 2, fontWeight: 'bold' }}
+  >
+    {children}
+  </PageTitle>
 );
 
 // ===== KEYFRAMES FOR ANIMATIONS =====

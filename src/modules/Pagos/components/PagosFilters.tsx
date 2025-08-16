@@ -5,7 +5,7 @@ import {
   formatPagosSearchFilters,
 } from '../helpers/pagosSearchHelpers';
 import { PagosDto } from '../types';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { usePasantias } from '../../Pasantias/hooks/usePasantias';
 

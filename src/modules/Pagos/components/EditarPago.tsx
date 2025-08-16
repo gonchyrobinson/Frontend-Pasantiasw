@@ -4,14 +4,14 @@ import { Alert, Breadcrumbs, Link } from '@mui/material';
 import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../FormularioGenerico';
 import { useUpdatePago, usePago } from '../hooks/usePagos';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
-import { PagosFormData } from '../types';
 import { usePasantias } from '../../Pasantias/hooks/usePasantias';
 import { LoadingSpinner } from '../../../lib/components';
+import { PagosDto } from '../types';
 
 const EditarPago: React.FC = () => {
   const navigate = useNavigate();
@@ -37,16 +37,17 @@ const EditarPago: React.FC = () => {
       setInitialValues({
         idPasantia: pago.idPasantia || '',
         fechaPago: pago.fechaPago ? pago.fechaPago.split('T')[0] : '', // Formatear fecha para input date
-        fechaVencimiento: pago.fechaVencimiento
-          ? pago.fechaVencimiento.split('T')[0]
-          : '', // Formatear fecha para input date
+        fechaVencimiento:
+          pago.fechaVencimiento && typeof pago.fechaVencimiento === 'string'
+            ? pago.fechaVencimiento.split('T')[0]
+            : '', // Formatear fecha para input date
         monto: pago.monto || '',
         observaciones: pago.observaciones || '',
       });
     }
   }, [pagoResponse]);
 
-  const handleSubmit = (data: PagosFormData) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     if (!id) return;
 
     const updateData = {
@@ -54,15 +55,21 @@ const EditarPago: React.FC = () => {
       idPago: Number(id),
     };
 
-    updateMutation.mutate(updateData, {
-      onSuccess: () => {
-        showSuccess('Pago actualizado exitosamente');
-        navigate(ROUTES.PAGOS);
-      },
-      onError: () => {
-        showError('Error al actualizar el pago');
-      },
-    });
+    updateMutation.mutate(
+      {
+        ...updateData,
+        idPago: Number(id),
+      } as unknown as PagosDto,
+      {
+        onSuccess: () => {
+          showSuccess('Pago actualizado exitosamente');
+          navigate(ROUTES.PAGOS);
+        },
+        onError: () => {
+          showError('Error al actualizar el pago');
+        },
+      }
+    );
   };
 
   const handleCancel = () => {
