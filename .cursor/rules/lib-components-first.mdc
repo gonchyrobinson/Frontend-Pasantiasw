@@ -1,0 +1,346 @@
+---
+alwaysApply: true
+description: Always use @lib/ components before creating new ones
+---
+
+# @lib/ Components First - Mandatory Usage Rules
+
+## **Golden Rule: @lib/ Components Are MANDATORY**
+
+### **NEVER Create New Components Without Checking @lib/ First**
+
+Before writing ANY component, you MUST check these files:
+1. ✅ **`@lib/components/StyledText.tsx`** - For any text-related component
+2. ✅ **`@lib/components/StyledButtons.tsx`** - For any button-related component  
+3. ✅ **`@lib/components/StyledContainers.tsx`** - For any container/layout component
+4. ✅ **`@lib/components/ComponentesGenericos.tsx`** - For complex reusable components
+5. ✅ **`@lib/components/StyledComponents.tsx`** - For styled MUI components
+
+## **Mandatory Import Patterns**
+
+### **Text Components - ALWAYS Use StyledText.tsx**
+```typescript
+// ✅ REQUIRED - Import from @lib/
+import {
+  PageTitle,      // For h1, main titles
+  SectionTitle,   // For h2, section headers
+  CardTitle,      // For h3, card titles  
+  Subtitle,       // For subtitles
+  BodyText,       // For paragraphs, body text
+  CaptionText,    // For small text, captions
+  StatValue,      // For statistics, numbers
+  WarningText,    // For warnings, errors
+} from '@lib/components/StyledText';
+
+// ❌ FORBIDDEN - Direct MUI usage
+import { Typography } from '@mui/material';
+<Typography variant="h4">Title</Typography>
+```
+
+### **Button Components - ALWAYS Use StyledButtons.tsx**
+```typescript
+// ✅ REQUIRED - Import from @lib/
+import {
+  PrimaryButton,        // Primary actions
+  SecondaryButton,      // Secondary actions
+  EditButton,           // Edit actions
+  DeleteButton,         // Delete actions
+  CreateButton,         // Create/Add actions
+  SubmitButton,         // Form submissions
+  CancelButton,         // Cancel actions
+  RefreshButton,        // Refresh actions
+  FloatingActionButton, // FAB buttons
+  ActionButtonGroup,    // Multiple action buttons
+  FormButtonGroup,      // Form button sets
+} from '@lib/components/StyledButtons';
+
+// ❌ FORBIDDEN - Direct MUI usage
+import { Button, IconButton, Fab } from '@mui/material';
+```
+
+### **Container Components - ALWAYS Use StyledContainers.tsx**
+```typescript
+// ✅ REQUIRED - Import from @lib/
+import {
+  MainContainer,     // Main page wrapper
+  SectionContainer,  // Section wrapper
+  CardContainer,     // Card-like container
+  FlexContainer,     // Flex layout
+  GridContainer,     // Grid layout
+  CenteredContainer, // Centered content
+  FormContainer,     // Form wrapper
+  ActionContainer,   // Action buttons wrapper
+} from '@lib/components/StyledContainers';
+
+// ❌ FORBIDDEN - Direct MUI usage
+import { Box, Container, Paper } from '@mui/material';
+<Box sx={{ padding: 2 }}>Content</Box>
+```
+
+## **Component Usage Matrix**
+
+### **When to Use Each @lib/ Component**
+
+| Need | Use This Component | NOT This |
+|------|-------------------|----------|
+| Page title | `PageTitle` | `Typography variant="h1"` |
+| Section header | `SectionTitle` | `Typography variant="h2"` |
+| Card title | `CardTitle` | `Typography variant="h3"` |
+| Body text | `BodyText` | `Typography variant="body1"` |
+| Small text | `CaptionText` | `Typography variant="caption"` |
+| Primary action | `PrimaryButton` | `Button variant="contained"` |
+| Secondary action | `SecondaryButton` | `Button variant="outlined"` |
+| Edit action | `EditButton` | `Button + Edit icon` |
+| Delete action | `DeleteButton` | `Button + Delete icon` |
+| Page container | `MainContainer` | `Container maxWidth="lg"` |
+| Section wrapper | `SectionContainer` | `Box sx={{ padding: 3 }}` |
+| Card wrapper | `CardContainer` | `Paper elevation={2}` |
+| Flex layout | `FlexContainer` | `Box sx={{ display: 'flex' }}` |
+
+## **Replacement Examples**
+
+### **Text Component Replacements**
+```typescript
+// ❌ OLD - Direct MUI
+<Typography variant="h1" gutterBottom>
+  My Page Title
+</Typography>
+<Typography variant="body1" color="text.secondary">
+  Description text
+</Typography>
+
+// ✅ NEW - Use @lib/ components
+<PageTitle>My Page Title</PageTitle>
+<BodyText color="text.secondary">Description text</BodyText>
+```
+
+### **Button Component Replacements**
+```typescript
+// ❌ OLD - Direct MUI
+<Button variant="contained" color="primary" onClick={handleSave}>
+  Save
+</Button>
+<Button variant="outlined" onClick={handleCancel}>
+  Cancel
+</Button>
+<IconButton onClick={handleEdit}>
+  <Edit />
+</IconButton>
+
+// ✅ NEW - Use @lib/ components
+<PrimaryButton onClick={handleSave}>Save</PrimaryButton>
+<SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
+<EditIconButton onClick={handleEdit} />
+
+// ✅ EVEN BETTER - Use button group
+<FormButtonGroup
+  onSubmit={handleSave}
+  onCancel={handleCancel}
+/>
+```
+
+### **Container Component Replacements**
+```typescript
+// ❌ OLD - Direct MUI
+<Container maxWidth="lg" sx={{ py: 3 }}>
+  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Paper sx={{ p: 3 }}>
+      Content
+    </Paper>
+  </Box>
+</Container>
+
+// ✅ NEW - Use @lib/ components
+<MainContainer>
+  <FlexContainer sx={{ flexDirection: 'column', gap: 2 }}>
+    <CardContainer>
+      Content
+    </CardContainer>
+  </FlexContainer>
+</MainContainer>
+```
+
+## **Module-Specific Usage Patterns**
+
+### **In Main Module Components**
+```typescript
+// ✅ REQUIRED pattern for module main components
+import {
+  MainContainer,
+  SectionContainer,
+  PageTitle,
+  BodyText,
+  PrimaryButton,
+  FloatingActionButton,
+} from '@lib/components';
+
+const ModuleComponent = () => (
+  <MainContainer>
+    <PageTitle>Module Title</PageTitle>
+    <BodyText>Module description</BodyText>
+    <SectionContainer>
+      {/* Module content */}
+    </SectionContainer>
+    <FloatingActionButton onClick={handleCreate} />
+  </MainContainer>
+);
+```
+
+### **In Form Components**
+```typescript
+// ✅ REQUIRED pattern for forms
+import {
+  FormContainer,
+  SectionTitle,
+  FormButtonGroup,
+} from '@lib/components';
+
+const FormComponent = () => (
+  <FormContainer>
+    <SectionTitle>Form Title</SectionTitle>
+    {/* Form fields */}
+    <FormButtonGroup
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+      loading={isLoading}
+    />
+  </FormContainer>
+);
+```
+
+### **In Card/Grid Components**
+```typescript
+// ✅ REQUIRED pattern for cards
+import {
+  CardContainer,
+  CardTitle,
+  BodyText,
+  ActionButtonGroup,
+} from '@lib/components';
+
+const CardComponent = ({ data }) => (
+  <CardContainer>
+    <CardTitle>{data.title}</CardTitle>
+    <BodyText>{data.description}</BodyText>
+    <ActionButtonGroup
+      onEdit={() => handleEdit(data)}
+      onDelete={() => handleDelete(data)}
+    />
+  </CardContainer>
+);
+```
+
+## **Import Optimization**
+
+### **Preferred Import Style**
+```typescript
+// ✅ BEST - Import from main index
+import {
+  PageTitle,
+  BodyText,
+  PrimaryButton,
+  MainContainer,
+  SectionContainer,
+} from '@lib/components';
+
+// ✅ ACCEPTABLE - Direct imports
+import { PageTitle } from '@lib/components/StyledText';
+import { PrimaryButton } from '@lib/components/StyledButtons';
+
+// ❌ AVOID - Multiple separate imports
+import { PageTitle } from '@lib/components/StyledText';
+import { BodyText } from '@lib/components/StyledText';
+import { PrimaryButton } from '@lib/components/StyledButtons';
+```
+
+## **Extension Guidelines**
+
+### **When @lib/ Component Doesn't Meet Needs**
+
+1. **First**: Try using props to customize existing component
+```typescript
+// ✅ Try customization first
+<PageTitle sx={{ color: 'primary.main', fontSize: '3rem' }}>
+  Custom Title
+</PageTitle>
+```
+
+2. **Second**: Extend the existing component
+```typescript
+// ✅ Extend if customization isn't enough
+const CustomPageTitle = styled(PageTitle)(({ theme }) => ({
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+}));
+```
+
+3. **Third**: Add to @lib/ if it will be reused
+```typescript
+// ✅ Add to StyledText.tsx if reusable
+export const GradientTitle = styled(PageTitle)(({ theme }) => ({
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+}));
+```
+
+4. **Last Resort**: Create module-specific component
+```typescript
+// ❌ Only if absolutely necessary and unique to module
+const VerySpecificModuleTitle = () => {
+  // Complex, module-specific logic that can't be generalized
+};
+```
+
+## **Refactoring Existing Code**
+
+### **Priority Order for Refactoring**
+1. **High Priority**: Direct MUI component usage
+2. **Medium Priority**: Simple wrapper components
+3. **Low Priority**: Complex custom components that work well
+
+### **Refactoring Process**
+1. **Identify** MUI components that can be replaced
+2. **Find** the appropriate @lib/ component
+3. **Replace** import and component usage
+4. **Remove** custom styling that's now handled by @lib/
+5. **Test** that functionality remains the same
+6. **Delete** unnecessary wrapper components
+
+### **Example Refactoring**
+```typescript
+// BEFORE - Custom component
+const CustomTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '2rem',
+  fontWeight: 600,
+  marginBottom: theme.spacing(2),
+}));
+
+<CustomTitle variant="h1">My Title</CustomTitle>
+
+// AFTER - Use @lib/ component
+import { PageTitle } from '@lib/components';
+
+<PageTitle>My Title</PageTitle>
+// Delete CustomTitle component entirely
+```
+
+## **Enforcement and Compliance**
+
+### **Code Review Requirements**
+- ✅ **All new components** must justify why @lib/ components weren't used
+- ✅ **Direct MUI usage** must be flagged and replaced
+- ✅ **Import statements** must prefer @lib/ components
+- ✅ **Custom styling** should be minimized in favor of @lib/ components
+
+### **Automated Checks**
+- **Lint rules** should warn about direct MUI component usage
+- **Import analysis** should flag non-@lib/ component imports
+- **Bundle analysis** should track @lib/ component usage
+
+### **Benefits Tracking**
+- **Consistency** - All components follow the same design system
+- **Maintenance** - Changes to @lib/ components affect entire app
+- **Performance** - Better tree-shaking and code reuse
+- **Developer Experience** - Less decision-making, faster development
