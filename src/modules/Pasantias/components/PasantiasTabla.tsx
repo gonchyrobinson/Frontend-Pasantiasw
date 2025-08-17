@@ -19,10 +19,11 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
   onDelete,
 }) => {
   const metadata: FieldMetadata[] = [
-    { name: 'expediente', label: 'Expediente', type: 'text' },
+    { name: 'tramite', label: 'Trámite', type: 'text' },
     { name: 'obraSocial', label: 'Obra Social', type: 'text' },
     { name: 'art', label: 'ART', type: 'text' },
     { name: 'tipoAcuerdo', label: 'Tipo de Acuerdo', type: 'text' },
+    { name: 'estado', label: 'Estado', type: 'text' },
     { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
     { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
     { name: 'asignacionMensual', label: 'Asignación Mensual', type: 'number' },
@@ -56,7 +57,7 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
       onRowDelete={handleRowDelete}
       pageSize={15}
       pageSizeOptions={[10, 15, 25, 50]}
-      initialSortModel={[{ field: 'expediente', sort: 'asc' }]}
+      initialSortModel={[{ field: 'tramite', sort: 'asc' }]}
     />
   );
 };

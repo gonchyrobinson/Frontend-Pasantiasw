@@ -1,7 +1,11 @@
 import { styled } from '@mui/material/styles';
-import { Box, Paper, Typography } from '@mui/material';
+import { PageTitle } from '../../../lib/components/StyledText';
+import {
+  CenteredContainer,
+  FormContainer,
+} from '../../../lib/components/StyledContainers';
 
-export const ContenedorPrincipalStyled = styled(Box)(() => ({
+export const ContenedorPrincipalStyled = styled(CenteredContainer)(() => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -9,7 +13,7 @@ export const ContenedorPrincipalStyled = styled(Box)(() => ({
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
 }));
 
-export const TarjetaRegistroStyled = styled(Paper)(({ theme }) => ({
+export const TarjetaRegistroStyled = styled(FormContainer)(({ theme }) => ({
   padding: theme.spacing(4),
   width: '100%',
   maxWidth: 450,
@@ -19,7 +23,7 @@ export const TarjetaRegistroStyled = styled(Paper)(({ theme }) => ({
   boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
 }));
 
-export const TituloRegistroStyled = styled(Typography)(({ theme }) => ({
+export const TituloRegistroStyled = styled(PageTitle)(({ theme }) => ({
   fontWeight: 600,
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   backgroundClip: 'text',

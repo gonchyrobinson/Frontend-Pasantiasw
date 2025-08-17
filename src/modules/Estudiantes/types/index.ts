@@ -10,6 +10,7 @@ export interface EstudianteDto {
   email: string;
 }
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface CreacionEstudianteDto {
   apellido: string;
   nombre: string;

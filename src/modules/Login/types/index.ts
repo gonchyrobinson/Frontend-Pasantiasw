@@ -1,4 +1,4 @@
-import { FormMetadata } from '../../../FormularioGenerico';
+import { FormMetadata } from '../../../lib/FormularioGenerico';
 
 export interface LoginCredentials {
   username: string;

@@ -9,3 +9,6 @@ export { EmptyState } from './EmptyState';
 export { TableHeader } from './TableHeader';
 export { TablePageHeader } from './TablePageHeader';
 export * from './StyledComponents';
+export * from './StyledText';
+export * from './StyledContainers';
+export * from './StyledButtons';

@@ -7,22 +7,6 @@ export const getPasantiaFormMetadata = () => ({
   cancelButtonText: 'Cancelar',
   fields: [
     {
-      name: 'expediente',
-      label: 'Expediente',
-      type: 'text' as const,
-      validations: {
-        minLength: {
-          value: 3,
-          message: 'El expediente debe tener al menos 3 caracteres',
-        },
-        maxLength: {
-          value: 100,
-          message: 'El expediente no puede exceder 100 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
       name: 'idEstudiante',
       label: 'Estudiante',
       type: 'dynamicDropdown' as const,
@@ -110,6 +94,22 @@ export const getPasantiaFormMetadata = () => ({
       gridSize: 6,
     },
     {
+      name: 'dniTutorFacultad',
+      label: 'DNI del Tutor de Facultad',
+      type: 'text' as const,
+      validations: {
+        minLength: {
+          value: 7,
+          message: 'El DNI debe tener al menos 7 caracteres',
+        },
+        maxLength: {
+          value: 20,
+          message: 'El DNI no puede exceder 20 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
+    {
       name: 'fechaInicio',
       label: 'Fecha de Inicio',
       type: 'date' as const,
@@ -130,6 +130,57 @@ export const getPasantiaFormMetadata = () => ({
         { value: 'PPS', label: 'PPS' },
         { value: 'otro', label: 'Otro' },
       ],
+      gridSize: 6,
+    },
+    {
+      name: 'frecuenciaPago',
+      label: 'Frecuencia de Pago',
+      type: 'dropdown' as const,
+      options: [
+        { value: 'Mensual', label: 'Mensual' },
+        { value: 'Trimestral', label: 'Trimestral' },
+        { value: 'Semestral', label: 'Semestral' },
+        { value: 'Anual', label: 'Anual' },
+      ],
+      gridSize: 6,
+    },
+    {
+      name: 'montoPago',
+      label: 'Monto de Pago',
+      type: 'number' as const,
+      validations: {
+        min: { value: 0, message: 'El monto debe ser mayor o igual a 0' },
+      },
+      gridSize: 6,
+    },
+    {
+      name: 'areaTrabajo',
+      label: 'Área de Trabajo',
+      type: 'text' as const,
+      validations: {
+        maxLength: {
+          value: 200,
+          message: 'El área de trabajo no puede exceder 200 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
+    {
+      name: 'estado',
+      label: 'Estado',
+      type: 'dropdown' as const,
+      options: [
+        { value: 'Activa', label: 'Activa' },
+        { value: 'Finalizada', label: 'Finalizada' },
+        { value: 'Suspendida', label: 'Suspendida' },
+        { value: 'Cancelada', label: 'Cancelada' },
+      ],
+      gridSize: 6,
+    },
+    {
+      name: 'sudocu',
+      label: 'SUDOCU',
+      type: 'text' as const,
       gridSize: 6,
     },
     {
@@ -190,10 +241,10 @@ export const filterPasantias = (
   filters: PasantiaFilters
 ): PasantiaDto[] => {
   return pasantias.filter(pasantia => {
-    // Filtro por expediente
+    // Filtro por trámite
     if (
       filters.expediente &&
-      !pasantia.expediente
+      !pasantia.tramite
         ?.toLowerCase()
         .includes(filters.expediente.toLowerCase())
     ) {
@@ -315,7 +366,6 @@ export const getPasantiaEstado = (fechaFin?: string): string => {
 
 // Función para obtener valores por defecto del formulario
 export const getDefaultPasantiaValues = () => ({
-  expediente: '',
   idEstudiante: undefined,
   idConvenio: undefined,
   asignacionMensual: 0,
@@ -323,8 +373,14 @@ export const getDefaultPasantiaValues = () => ({
   art: '',
   tutorEmpresa: '',
   tutorFacultad: '',
+  dniTutorFacultad: '',
   fechaInicio: '',
   fechaFin: '',
-  tipoAcuerdo: 'Pasantia' as const,
+  tipoAcuerdo: 'Pasantia',
+  frecuenciaPago: 'Mensual',
+  montoPago: 0,
   observaciones: '',
+  areaTrabajo: '',
+  estado: 'Activa',
+  sudocu: '',
 });

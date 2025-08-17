@@ -36,7 +36,7 @@ const EmpresasTabla: React.FC<EmpresasTablaProps> = ({
     { name: 'encargado', label: 'Encargado', type: 'text' },
     { name: 'celular', label: 'Celular', type: 'text' },
     { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
-    { name: 'sudocu', label: 'SUDOCU', type: 'date' },
+    { name: 'sudocu', label: 'SUDOCU', type: 'text' },
   ];
 
   // Convertir EmpresaDto[] a Record<string, unknown>[] para compatibilidad

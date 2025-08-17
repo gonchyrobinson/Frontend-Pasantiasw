@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import {
   useCreatePasantia,
-  useEstudiantes,
-  useConvenios,
+  useEstudiantesForDropdown,
+  useConveniosForDropdown,
 } from '../hooks/usePasantias';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
@@ -17,10 +17,10 @@ const CrearPasantia: React.FC = () => {
   const { showSuccess, showError } = useSnackbar();
 
   const { mutate: createPasantia, isPending: isCreating } = useCreatePasantia();
-  const { data: estudiantesResponse, isLoading: estudiantesLoading } =
-    useEstudiantes();
-  const { data: conveniosResponse, isLoading: conveniosLoading } =
-    useConvenios();
+  const { data: estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesForDropdown();
+  const { data: conveniosOptions, isLoading: conveniosLoading } =
+    useConveniosForDropdown();
 
   const metadata = getPasantiaFormMetadata();
 
@@ -40,19 +40,10 @@ const CrearPasantia: React.FC = () => {
     navigate(ROUTES.PASANTIAS);
   };
 
-  // Preparar opciones para dropdowns dinámicos
-  const estudiantes = estudiantesResponse || [];
-  const convenios = conveniosResponse || [];
-
+  // Las opciones ya vienen formateadas desde los hooks
   const dynamicDropdownOptions = {
-    idEstudiante: estudiantes.map(estudiante => ({
-      value: estudiante.idEstudiante,
-      label: `${estudiante.nombre} ${estudiante.apellido}`,
-    })),
-    idConvenio: convenios.map(convenio => ({
-      value: convenio.idConvenio,
-      label: convenio.expediente,
-    })),
+    idEstudiante: estudiantesOptions || [],
+    idConvenio: conveniosOptions || [],
   };
 
   if (estudiantesLoading || conveniosLoading) {

@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Typography, Alert, Button, Box } from '@mui/material';
-import { Refresh } from '@mui/icons-material';
-import { useApiQuery } from '../../hooks/useApi';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { Alert } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
+import { RefreshButton } from '../../lib/components/StyledButtons';
+import { useApiQuery } from '../../lib/hooks/useApi';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { EmpresaDto } from './types';
 import EmpresasFilters from './components/EmpresasFilters';
 import EmpresasStats from './components/EmpresasStats';
 import EmpresasTabla from './components/EmpresasTabla';
 import { FabNuevaEmpresa } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEmpresa } from './hooks/useDeleteEmpresa';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
+import { useDeleteEmpresa } from '../../lib/hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
 import { PageHeader } from '../../lib/components';
 
@@ -124,24 +130,23 @@ const Empresas: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={() => refetch()}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={() => refetch()} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar las empresas: {error?.message || 'Error desconocido'}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Empresas'
         subtitle='Administra las empresas del sistema de pasantías'
@@ -161,9 +166,9 @@ const Empresas: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <EmpresasStats empresas={searchResults} />
-          </Box>
+          </SectionContainer>
 
           <EmpresasTabla
             empresas={searchResults}
@@ -179,26 +184,34 @@ const Empresas: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Empresas
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar empresas específicas
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron empresas
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       <FabNuevaEmpresa onClick={handleNuevaEmpresa} />
@@ -213,15 +226,15 @@ const Empresas: React.FC = () => {
         itemDetails={
           empresaToDelete && (
             <>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 ID: {empresaToDelete.idEmpresa}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Encargado: {empresaToDelete.encargado}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Correo: {empresaToDelete.correoElectronico}
-              </Typography>
+              </BodyText>
             </>
           )
         }
@@ -229,7 +242,7 @@ const Empresas: React.FC = () => {
         onConfirm={handleConfirmDelete}
         isDeleting={isDeleting}
       />
-    </Container>
+    </MainContainer>
   );
 };
 

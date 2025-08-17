@@ -2,7 +2,9 @@ import { GridColDef } from '@mui/x-data-grid';
 import { ColumnMetadata } from '../types';
 import { formatValue } from '../../ElementCardGenerica/helpers/elementCardHelper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import { ActionContainer } from '../../../lib/components/StyledContainers';
+import { BodyText } from '../../../lib/components/StyledText';
 
 export const createColumnDefinitions = (
   columns: ColumnMetadata[],
@@ -38,13 +40,9 @@ export const createColumnDefinitions = (
       // Note: checkbox/boolean types are not supported in ColumnMetadata
 
       return (
-        <Typography
-          variant='body2'
-          fontWeight={500}
-          sx={{ wordBreak: 'break-word' }}
-        >
+        <BodyText fontWeight={500} sx={{ wordBreak: 'break-word' }}>
           {formattedValue}
-        </Typography>
+        </BodyText>
       );
     },
   }));
@@ -69,18 +67,7 @@ export const createColumnDefinitions = (
       sortable: false,
       filterable: false,
       renderCell: params => (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            alignItems: 'center',
-            flexWrap: 'nowrap',
-            justifyContent: 'flex-start',
-            width: '100%',
-            minWidth: minWidth - padding,
-            overflow: 'hidden',
-          }}
-        >
+        <ActionContainer>
           {onRowEdit && (
             <Button
               size='small'
@@ -141,7 +128,7 @@ export const createColumnDefinitions = (
               {button.label}
             </Button>
           ))}
-        </Box>
+        </ActionContainer>
       ),
     });
   }

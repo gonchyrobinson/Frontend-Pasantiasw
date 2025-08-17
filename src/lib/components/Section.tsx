@@ -1,7 +1,9 @@
 import React from 'react';
-import { Paper, PaperProps, styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { CardContainer } from './StyledContainers';
+import type { PaperProps } from '@mui/material';
 
-const StyledSection = styled(Paper)(({ theme }) => ({
+const StyledSection = styled(CardContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   marginBottom: theme.spacing(3),
   backgroundColor: theme.palette.background.paper,

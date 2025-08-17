@@ -73,6 +73,7 @@ Response: Array<EmpresaDto>
 ### Modelo EmpresaDto
 
 ```typescript
+// DTO unificado - camelCase (ASP.NET Core hace model binding automático)
 interface EmpresaDto {
   idEmpresa: number;
   nombre: string;
@@ -83,7 +84,20 @@ interface EmpresaDto {
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO: YYYY-MM-DD
+  sudocu: string; // Text field
+}
+
+// Mismo DTO para requests - ASP.NET Core acepta camelCase
+interface CreacionEmpresaDto {
+  nombre: string;
+  vigencia: 'vigente' | 'no_vigente';
+  fechaInicio: string; // ISO: YYYY-MM-DD
+  fechaFin: string; // ISO: YYYY-MM-DD
+  tipoContrato: 'indefinido' | 'temporal' | 'otro';
+  encargado: string;
+  celular: string;
+  correoElectronico: string;
+  sudocu: string; // Text field
 }
 ```
 
@@ -103,7 +117,7 @@ const metadata = [
   { name: 'encargado', label: 'Encargado', type: 'text' },
   { name: 'celular', label: 'Celular', type: 'text' },
   { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
-  { name: 'sudocu', label: 'SUDOCU', type: 'date' },
+  { name: 'sudocu', label: 'SUDOCU', type: 'text' },
 ];
 ```
 

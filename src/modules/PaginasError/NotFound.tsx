@@ -1,37 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Button, Paper } from '@mui/material';
+import { Button } from '@mui/material';
+import {
+  CenteredContainer,
+  CardContainer,
+} from '../../lib/components/StyledContainers';
+import {
+  PageTitle,
+  SectionTitle,
+  BodyText,
+} from '../../lib/components/StyledText';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { ROUTES } from '@/helpers/routesHelper';
 
 const NotFound = () => {
   return (
-    <Box
+    <CenteredContainer
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         minHeight: '100vh',
         bgcolor: 'background.default',
       }}
     >
-      <Paper
-        elevation={3}
+      <CardContainer
         sx={{
           p: 4,
           textAlign: 'center',
           maxWidth: 400,
         }}
       >
-        <Typography variant='h1' component='h1' gutterBottom>
+        <PageTitle component='h1' gutterBottom>
           404
-        </Typography>
-        <Typography variant='h4' component='h2' gutterBottom>
+        </PageTitle>
+        <SectionTitle component='h2' gutterBottom>
           Página no encontrada
-        </Typography>
-        <Typography variant='body1' color='text.secondary' sx={{ mb: 3 }}>
+        </SectionTitle>
+        <BodyText color='text.secondary' sx={{ mb: 3 }}>
           La página que buscas no existe o ha sido movida.
-        </Typography>
+        </BodyText>
         <Button
           component={Link}
           to={ROUTES.DASHBOARD}
@@ -40,8 +45,8 @@ const NotFound = () => {
         >
           Volver al inicio
         </Button>
-      </Paper>
-    </Box>
+      </CardContainer>
+    </CenteredContainer>
   );
 };
 

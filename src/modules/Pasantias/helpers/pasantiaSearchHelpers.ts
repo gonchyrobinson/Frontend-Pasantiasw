@@ -5,11 +5,11 @@ export const getPasantiaSearchMetadata = () => ({
   title: 'Búsqueda Avanzada de Pasantías',
   fields: [
     {
-      name: 'expediente',
-      label: 'Expediente',
+      name: 'tramite',
+      label: 'Tramite',
       type: 'text',
       required: false,
-      placeholder: 'Buscar por expediente...',
+      placeholder: 'Buscar por trámite...',
     },
     {
       name: 'obraSocial',
@@ -75,18 +75,30 @@ export const getPasantiaSearchMetadata = () => ({
       required: false,
     },
     {
-      name: 'asignacionMensualMin',
-      label: 'Asignación Mensual Mínima',
-      type: 'number',
+      name: 'idEstudiante',
+      label: 'Estudiante',
+      type: 'dynamicDropdown',
       required: false,
-      placeholder: '0',
+      placeholder: 'Seleccionar estudiante...',
     },
     {
-      name: 'asignacionMensualMax',
-      label: 'Asignación Mensual Máxima',
-      type: 'number',
+      name: 'idConvenio',
+      label: 'Convenio',
+      type: 'dynamicDropdown',
       required: false,
-      placeholder: '999999',
+      placeholder: 'Seleccionar convenio...',
+    },
+    {
+      name: 'estado',
+      label: 'Estado',
+      type: 'dropdown',
+      required: false,
+      options: [
+        { value: 'Activa', label: 'Activa' },
+        { value: 'Finalizada', label: 'Finalizada' },
+        { value: 'Suspendida', label: 'Suspendida' },
+        { value: 'Cancelada', label: 'Cancelada' },
+      ],
     },
   ] as FieldMetadata[],
   submitButtonText: 'Buscar',
@@ -103,8 +115,8 @@ export const formatPasantiaSearchFilters = (
   const formattedFilters: Record<string, any> = {};
 
   // Filtros de texto
-  if (filters.expediente) {
-    formattedFilters.expediente = filters.expediente;
+  if (filters.tramite) {
+    formattedFilters.tramite = filters.tramite;
   }
   if (filters.obraSocial) {
     formattedFilters.obraSocial = filters.obraSocial;
@@ -136,16 +148,15 @@ export const formatPasantiaSearchFilters = (
     formattedFilters.fechaFinHasta = filters.fechaFinHasta;
   }
 
-  // Filtros numéricos
-  if (filters.asignacionMensualMin) {
-    formattedFilters.asignacionMensualMin = Number(
-      filters.asignacionMensualMin
-    );
+  // Filtros de ID (dropdowns)
+  if (filters.idEstudiante) {
+    formattedFilters.idEstudiante = Number(filters.idEstudiante);
   }
-  if (filters.asignacionMensualMax) {
-    formattedFilters.asignacionMensualMax = Number(
-      filters.asignacionMensualMax
-    );
+  if (filters.idConvenio) {
+    formattedFilters.idConvenio = Number(filters.idConvenio);
+  }
+  if (filters.estado) {
+    formattedFilters.estado = filters.estado;
   }
 
   return formattedFilters;

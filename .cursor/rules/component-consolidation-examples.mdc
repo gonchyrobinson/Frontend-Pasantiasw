@@ -1,0 +1,381 @@
+---
+alwaysApply: true
+description: Practical examples for component consolidation and reuse patterns
+---
+
+# Component Consolidation - Practical Examples
+
+## **Real Project Refactoring Examples**
+
+### **Example 1: Button Consolidation**
+
+#### **BEFORE - Multiple Button Files**
+```typescript
+// ❌ src/modules/Empresas/components/BotonNuevaEmpresa.tsx
+const BotonNuevaEmpresa = ({ onClick }) => (
+  <Button variant="contained" startIcon={<Add />} onClick={onClick}>
+    Nueva Empresa
+  </Button>
+);
+
+// ❌ src/modules/Estudiantes/components/BotonNuevoEstudiante.tsx  
+const BotonNuevoEstudiante = ({ onClick }) => (
+  <Button variant="contained" startIcon={<Add />} onClick={onClick}>
+    Nuevo Estudiante
+  </Button>
+);
+
+// ❌ src/modules/Convenios/components/BotonNuevoConvenio.tsx
+const BotonNuevoConvenio = ({ onClick }) => (
+  <Button variant="contained" startIcon={<Add />} onClick={onClick}>
+    Nuevo Convenio
+  </Button>
+);
+```
+
+#### **AFTER - Single Reusable Component**
+```typescript
+// ✅ Use StyledButtons.tsx component
+import { CreateButton } from '@lib/components/StyledButtons';
+
+// In Empresas module
+<CreateButton onClick={handleCreate}>Nueva Empresa</CreateButton>
+
+// In Estudiantes module  
+<CreateButton onClick={handleCreate}>Nuevo Estudiante</CreateButton>
+
+// In Convenios module
+<CreateButton onClick={handleCreate}>Nuevo Convenio</CreateButton>
+
+// Result: 3 files deleted, 1 reusable component used
+```
+
+### **Example 2: Container Consolidation**
+
+#### **BEFORE - Multiple Container Components**
+```typescript
+// ❌ src/modules/Empresas/components/ContenedorEmpresa.tsx
+const ContenedorEmpresa = ({ children }) => (
+  <Box sx={{ padding: 3, marginBottom: 3 }}>
+    {children}
+  </Box>
+);
+
+// ❌ src/modules/Estudiantes/components/ContenedorEstudiante.tsx
+const ContenedorEstudiante = ({ children }) => (
+  <Box sx={{ padding: 3, marginBottom: 3 }}>
+    {children}
+  </Box>
+);
+```
+
+#### **AFTER - Use Existing Container**
+```typescript
+// ✅ Use StyledContainers.tsx component
+import { SectionContainer } from '@lib/components/StyledContainers';
+
+// In both modules
+<SectionContainer>
+  {children}
+</SectionContainer>
+
+// Result: 2 files deleted, existing component reused
+```
+
+### **Example 3: Text Component Consolidation**
+
+#### **BEFORE - Multiple Text Components**
+```typescript
+// ❌ src/components/TituloModulo.tsx
+const TituloModulo = ({ children }) => (
+  <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+    {children}
+  </Typography>
+);
+
+// ❌ src/components/SubtituloModulo.tsx
+const SubtituloModulo = ({ children }) => (
+  <Typography variant="h6" color="text.secondary">
+    {children}
+  </Typography>
+);
+```
+
+#### **AFTER - Use Existing Text Components**
+```typescript
+// ✅ Use StyledText.tsx components
+import { PageTitle, Subtitle } from '@lib/components/StyledText';
+
+<PageTitle>Module Title</PageTitle>
+<Subtitle>Module Subtitle</Subtitle>
+
+// Result: 2 files deleted, existing components reused
+```
+
+## **Module Refactoring Examples**
+
+### **Example: Empresas Module Cleanup**
+
+#### **BEFORE - Too Many Files**
+```
+src/modules/Empresas/
+├── Empresas.tsx
+├── components/
+│   ├── BotonNuevaEmpresa.tsx          # ❌ Delete - Use CreateButton
+│   ├── ContenedorEmpresa.tsx          # ❌ Delete - Use SectionContainer  
+│   ├── TituloEmpresa.tsx              # ❌ Delete - Use PageTitle
+│   ├── TarjetaEmpresa.tsx             # ❌ Delete - Use CardContainer
+│   ├── BotonEditarEmpresa.tsx         # ❌ Delete - Use EditButton
+│   ├── BotonEliminarEmpresa.tsx       # ❌ Delete - Use DeleteButton
+│   ├── ComponentesPersonalizados.tsx  # ✅ Keep - Has unique logic
+│   └── StyledComponents.tsx           # ✅ Keep - Module-specific styles
+├── types/index.ts                     # ✅ Keep
+└── helpers/empresaHelpers.ts          # ✅ Keep
+```
+
+#### **AFTER - Consolidated Structure**
+```
+src/modules/Empresas/
+├── Empresas.tsx                       # ✅ Updated to use @lib/ components
+├── components/
+│   ├── ComponentesPersonalizados.tsx  # ✅ Updated imports
+│   └── StyledComponents.tsx           # ✅ Only module-specific styles
+├── types/index.ts                     # ✅ Keep
+└── helpers/empresaHelpers.ts          # ✅ Keep
+
+# Result: 6 files deleted, cleaner structure
+```
+
+#### **Updated Empresas.tsx**
+```typescript
+// ✅ AFTER - Clean imports from @lib/
+import {
+  MainContainer,
+  SectionContainer,
+  PageTitle,
+  BodyText,
+  CreateButton,
+  EditButton,
+  DeleteButton,
+  ActionButtonGroup,
+  FloatingActionButton,
+} from '@lib/components';
+
+const Empresas = () => (
+  <MainContainer>
+    <PageTitle>Gestión de Empresas</PageTitle>
+    <BodyText>Administra las empresas del sistema</BodyText>
+    
+    <SectionContainer>
+      {/* Content */}
+    </SectionContainer>
+    
+    <FloatingActionButton onClick={handleCreate} />
+  </MainContainer>
+);
+```
+
+## **Common Refactoring Patterns**
+
+### **Pattern 1: Form Button Groups**
+
+#### **BEFORE - Individual Buttons**
+```typescript
+// ❌ Multiple individual button components
+<Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+  <Button variant="outlined" onClick={onCancel}>
+    Cancelar
+  </Button>
+  <Button variant="contained" onClick={onSubmit} disabled={loading}>
+    {loading ? 'Guardando...' : 'Guardar'}
+  </Button>
+</Box>
+```
+
+#### **AFTER - Button Group Component**
+```typescript
+// ✅ Single component handles all logic
+<FormButtonGroup
+  onSubmit={onSubmit}
+  onCancel={onCancel}
+  loading={loading}
+/>
+```
+
+### **Pattern 2: Action Button Groups**
+
+#### **BEFORE - Individual Action Buttons**
+```typescript
+// ❌ Repeated pattern across components
+<Box sx={{ display: 'flex', gap: 1 }}>
+  <Button size="small" startIcon={<Edit />} onClick={onEdit}>
+    Editar
+  </Button>
+  <Button size="small" startIcon={<Delete />} color="error" onClick={onDelete}>
+    Eliminar
+  </Button>
+</Box>
+```
+
+#### **AFTER - Action Group Component**
+```typescript
+// ✅ Reusable pattern
+<ActionButtonGroup
+  onEdit={onEdit}
+  onDelete={onDelete}
+  extraButtons={[
+    {
+      label: 'Ver Detalles',
+      onClick: onView,
+      icon: <Visibility />,
+      color: 'info',
+    }
+  ]}
+/>
+```
+
+### **Pattern 3: Page Header Consolidation**
+
+#### **BEFORE - Custom Headers**
+```typescript
+// ❌ Custom header in each module
+<Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+  <Box>
+    <Typography variant="h4">Module Title</Typography>
+    <Typography variant="subtitle1">Module description</Typography>
+  </Box>
+  <Box sx={{ display: 'flex', gap: 1 }}>
+    <IconButton onClick={onRefresh}>
+      <Refresh />
+    </IconButton>
+    <Button variant="contained" startIcon={<Add />} onClick={onCreate}>
+      Create New
+    </Button>
+  </Box>
+</Box>
+```
+
+#### **AFTER - Reusable Header**
+```typescript
+// ✅ Use existing PageHeader component
+<PageHeader
+  title="Module Title"
+  subtitle="Module description"
+  onRefresh={onRefresh}
+  isRefreshing={isRefreshing}
+  onAction={onCreate}
+  actionButtonText="Create New"
+/>
+```
+
+## **File Deletion Checklist**
+
+### **Safe to Delete When:**
+- ✅ **File has <50 lines** of actual code
+- ✅ **Single export** that's used in <3 places
+- ✅ **Functionality exists** in @lib/ components
+- ✅ **No complex business logic** specific to the module
+- ✅ **Can be replaced** with existing component + props
+
+### **Keep When:**
+- ❌ **Complex business logic** (>100 lines)
+- ❌ **Multiple exports** used across the module
+- ❌ **Unique functionality** not available in @lib/
+- ❌ **Integration with external APIs** or libraries
+- ❌ **Module-specific state management**
+
+## **Migration Steps**
+
+### **Step 1: Audit Current Files**
+```bash
+# Find small files that might be consolidatable
+find src/modules -name "*.tsx" -exec wc -l {} + | sort -n | head -20
+
+# Find files with single exports
+grep -r "export.*=" src/modules --include="*.tsx" | grep -v "export default"
+```
+
+### **Step 2: Identify @lib/ Replacements**
+```typescript
+// Check these files for existing functionality:
+src/lib/components/
+├── StyledText.tsx          # Text components
+├── StyledButtons.tsx       # Button components
+├── StyledContainers.tsx    # Layout components
+├── ComponentesGenericos.tsx # Complex components
+└── StyledComponents.tsx    # Styled MUI components
+```
+
+### **Step 3: Update Imports**
+```typescript
+// ❌ BEFORE - Module-specific imports
+import { BotonNuevaEmpresa } from './components/BotonNuevaEmpresa';
+import { ContenedorEmpresa } from './components/ContenedorEmpresa';
+
+// ✅ AFTER - @lib/ imports
+import { CreateButton, SectionContainer } from '@lib/components';
+```
+
+### **Step 4: Delete Unnecessary Files**
+```typescript
+// Delete these types of files:
+- Single-purpose button components
+- Simple container wrappers
+- Text styling components
+- Duplicate functionality across modules
+```
+
+### **Step 5: Test Functionality**
+```typescript
+// Ensure after refactoring:
+- ✅ All functionality works the same
+- ✅ Styling is consistent or better
+- ✅ No broken imports
+- ✅ Performance is same or better
+```
+
+## **Measuring Success**
+
+### **Metrics to Track**
+- **File count reduction**: Target 30-50% fewer component files
+- **Import simplification**: Fewer import statements per component
+- **Bundle size**: Should decrease with better tree-shaking
+- **Development speed**: Faster component creation with existing @lib/ components
+
+### **Quality Indicators**
+- **Consistency**: All similar components look and behave the same
+- **Maintainability**: Changes to @lib/ components affect entire app
+- **Discoverability**: Developers know where to find reusable components
+- **Performance**: Better caching and loading with consolidated components
+
+## **Common Mistakes to Avoid**
+
+### **❌ Don't Do This**
+```typescript
+// Don't create wrapper components for simple customization
+const MyCustomButton = ({ children, ...props }) => (
+  <PrimaryButton sx={{ fontSize: '1.2rem' }} {...props}>
+    {children}
+  </PrimaryButton>
+);
+
+// Don't duplicate @lib/ functionality
+const MyContainer = ({ children }) => (
+  <Box sx={{ padding: 3 }}>
+    {children}
+  </Box>
+);
+```
+
+### **✅ Do This Instead**
+```typescript
+// Use props for customization
+<PrimaryButton sx={{ fontSize: '1.2rem' }}>
+  Custom Button
+</PrimaryButton>
+
+// Use existing components
+<SectionContainer>
+  Content
+</SectionContainer>
+```

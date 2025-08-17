@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Alert, CircularProgress } from '@mui/material';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { Alert, CircularProgress } from '@mui/material';
+import { PageTitle } from '../../../lib/components/StyledText';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useConvenio, useUpdateConvenio } from '../hooks/useConvenios';
 import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
 import { getConvenioFormMetadata } from '../helpers/convenioHelpers';
@@ -61,9 +62,9 @@ const EditarConvenio: React.FC = () => {
 
   return (
     <div>
-      <Typography variant='h4' component='h1' gutterBottom>
+      <PageTitle component='h1' gutterBottom>
         Editar Convenio
-      </Typography>
+      </PageTitle>
 
       <FormularioGenerico
         metadata={getConvenioFormMetadata()}

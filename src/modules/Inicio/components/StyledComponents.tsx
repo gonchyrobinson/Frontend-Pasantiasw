@@ -1,15 +1,10 @@
 import { styled } from '@mui/material/styles';
+import { Card, Box, Grid, SpeedDial, CardContent, Chip } from '@mui/material';
 import {
-  Card,
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Alert,
-  SpeedDial,
-  CardContent,
-  Chip,
-} from '@mui/material';
+  SectionTitle,
+  PageTitle,
+  Subtitle,
+} from '../../../lib/components/StyledText';
 
 // Styled components para ActionCard
 export const StyledActionCard = styled(Card)(({ theme }) => ({
@@ -40,6 +35,7 @@ export const StyledProgressSection = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(1),
+  width: '100%',
 }));
 
 // Styled components para StatsCard
@@ -60,25 +56,18 @@ export const StyledWelcomeSection = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
   borderRadius: theme.spacing(2),
   textAlign: 'center',
+  width: '100%',
 }));
 
-// Styled components para Inicio
-export const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-}));
+// Solo mantener componentes específicos de Inicio
 
-// Styled components para ComponentesGenericos.tsx
+// Componentes específicos para el dashboard
 export const ContenedorGridStyled = styled(Grid)(() => ({
-  marginBottom: 32, // mb: 4
+  marginBottom: 32,
 }));
 
-export const TituloSeccionStyled = styled(Typography)(() => ({
-  marginTop: 32, // mt: 4
-}));
-
-export const AlertaErrorStyled = styled(Alert)(() => ({
-  marginTop: 24, // mt: 3
+export const TituloSeccionStyled = styled(SectionTitle)(() => ({
+  marginTop: 32,
 }));
 
 export const SpeedDialStyled = styled(SpeedDial)(() => ({
@@ -87,34 +76,17 @@ export const SpeedDialStyled = styled(SpeedDial)(() => ({
   right: 16,
 }));
 
-export const IconoEstadisticaStyled = styled(StatIcon)(() => ({
-  marginRight: 16, // mr: 2
-}));
-
-export const DescripcionAccionStyled = styled(Typography)(() => ({
-  marginBottom: 16, // mb: 2
-}));
-
-export const BotonAccionStyled = styled(Typography)(() => ({
-  textTransform: 'none',
-}));
-
-export const IconoEstadisticaCardStyled = styled(StatIcon)(() => ({}));
-
-export const ValorEstadisticaStyled = styled(Typography)(() => ({
+// Componentes específicos del Welcome section
+export const TituloBienvenidaStyled = styled(PageTitle)(() => ({
   fontWeight: 600,
 }));
 
-export const TituloBienvenidaStyled = styled(Typography)(() => ({
-  fontWeight: 600,
-}));
-
-export const SubtituloBienvenidaStyled = styled(Typography)(() => ({
+export const SubtituloBienvenidaStyled = styled(Subtitle)(() => ({
   opacity: 0.9,
 }));
 
 export const ChipStyled = styled(Chip)(() => ({
-  marginTop: 16, // mt: 2
+  marginTop: 16,
 }));
 
 // Styled components para ActionCard.tsx
@@ -145,6 +117,7 @@ export const BoxFlexBetweenStatsStyled = styled(Box)(() => ({
 // Styled components para ProgressSection.tsx
 export const BoxFlexBetweenStyled = styled(Box)(() => ({
   display: 'flex',
+  alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: 8, // mb: 1
+  marginBottom: 16, // mb: 1
 }));

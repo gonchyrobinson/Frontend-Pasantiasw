@@ -1,84 +1,33 @@
 import React from 'react';
-import { Typography, Grid, Box, Chip, TextField } from '@mui/material';
-import { Search, Clear, School, Person, Add } from '@mui/icons-material';
+import { TextField } from '@mui/material';
+import { Search, Clear, School, Person } from '@mui/icons-material';
 import {
-  TituloPrincipalStyled,
-  ContenedorPrincipalStyled,
-  ContenedorFiltrosStyled,
-  ContenedorEstadisticasStyled,
-  ContenedorIconoStyled,
-  ContenedorChipsStyled,
-  ContenedorFiltrosInfoStyled,
-  TarjetaEstadisticaStyled,
-  CampoBusquedaStyled,
-  ContenedorHeaderStyled,
-  BotonNuevoEstudianteStyled,
-  FabStyled,
-} from './StyledComponents';
+  GridContainer,
+  FlexContainer,
+  SectionContainer,
+  CenteredContainer,
+  CardContainer,
+} from '../../../lib/components/StyledContainers';
+import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
+import { CreateButton } from '../../../lib/components/StyledButtons';
 
-// Typography Components
-export const TituloPrincipal = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <TituloPrincipalStyled variant='h6' gutterBottom>
-    {children}
-  </TituloPrincipalStyled>
-);
-
-export const TituloSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Typography variant='h6' gutterBottom>
-    {children}
-  </Typography>
-);
-
-export const Subtitulo = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='subtitle2' gutterBottom>
-    {children}
-  </Typography>
-);
-
-export const TextoPrincipal = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='body2'>{children}</Typography>
-);
-
-export const TextoSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Typography variant='body2' color='text.secondary'>
-    {children}
-  </Typography>
-);
-
-export const ValorEstadistica = ({
-  children,
-  color = 'primary',
-}: {
-  children: React.ReactNode;
-  color?: string;
-}) => (
-  <Typography
-    variant='h4'
-    component='div'
-    color={`${color}.main`}
-    fontWeight='bold'
-  >
-    {children}
-  </Typography>
-);
+// Re-export common components from central location
+export {
+  TituloPrincipal,
+  TituloSecundario,
+  Subtitulo,
+  TextoPrincipal,
+  TextoSecundario,
+  ValorEstadistica,
+  ChipEstadistica,
+  ChipLimpiarFiltros,
+} from '../../../lib/components/ComponentesGenericos';
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
-  <Grid container spacing={3}>
+  <GridContainer container spacing={3}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 export const ItemGrid = ({
@@ -88,9 +37,9 @@ export const ItemGrid = ({
   children: React.ReactNode;
   [key: string]: unknown;
 }) => (
-  <Grid item {...props}>
+  <GridContainer item {...props}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 export const ContenedorGridFiltros = ({
@@ -98,9 +47,9 @@ export const ContenedorGridFiltros = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Grid container spacing={2} alignItems='center'>
+  <GridContainer container spacing={2} alignItems='center'>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
 // Box Components
@@ -108,19 +57,30 @@ export const ContenedorPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorPrincipalStyled>{children}</ContenedorPrincipalStyled>;
+}) => <SectionContainer sx={{ marginBottom: 4 }}>{children}</SectionContainer>;
 
 export const ContenedorFiltros = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosStyled>{children}</ContenedorFiltrosStyled>;
+}) => <CardContainer sx={{ mb: 3 }}>{children}</CardContainer>;
 
 export const ContenedorEstadisticas = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorEstadisticasStyled>{children}</ContenedorEstadisticasStyled>;
+}) => (
+  <SectionContainer
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: 2,
+      mb: 3,
+    }}
+  >
+    {children}
+  </SectionContainer>
+);
 
 export const ContenedorIcono = ({
   children,
@@ -129,8 +89,8 @@ export const ContenedorIcono = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <ContenedorIconoStyled>
-    <Box
+  <CenteredContainer sx={{ marginBottom: 1 }}>
+    <FlexContainer
       sx={{
         p: 1,
         borderRadius: '50%',
@@ -139,21 +99,25 @@ export const ContenedorIcono = ({
       }}
     >
       {children}
-    </Box>
-  </ContenedorIconoStyled>
+    </FlexContainer>
+  </CenteredContainer>
 );
 
 export const ContenedorChips = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorChipsStyled>{children}</ContenedorChipsStyled>;
+}) => <FlexContainer sx={{ flexWrap: 'wrap' }}>{children}</FlexContainer>;
 
 export const ContenedorFiltrosInfo = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosInfoStyled>{children}</ContenedorFiltrosInfoStyled>;
+}) => (
+  <FlexContainer sx={{ alignItems: 'center', gap: 2 }}>
+    {children}
+  </FlexContainer>
+);
 
 // Paper Components
 export const TarjetaEstadistica = ({
@@ -163,31 +127,15 @@ export const TarjetaEstadistica = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <TarjetaEstadisticaStyled elevation={2} color={color}>
+  <CardContainer elevation={2} color={color}>
     {children}
-  </TarjetaEstadisticaStyled>
-);
-
-// Chip Components
-export const ChipEstadistica = ({ label }: { label: string }) => (
-  <Chip label={label} variant='outlined' size='small' color='primary' />
-);
-
-export const ChipLimpiarFiltros = ({ onDelete }: { onDelete: () => void }) => (
-  <Chip
-    label='Limpiar filtros'
-    size='small'
-    variant='outlined'
-    deleteIcon={<Clear />}
-    onDelete={onDelete}
-    onClick={onDelete}
-  />
+  </CardContainer>
 );
 
 // Form Components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const CampoBusqueda = ({ register }: { register: any }) => (
-  <CampoBusquedaStyled
+  <TextField
     fullWidth
     placeholder='Buscar estudiantes...'
     {...register}
@@ -231,20 +179,12 @@ export const ContenedorHeader = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorHeaderStyled>{children}</ContenedorHeaderStyled>;
+}) => <SectionContainer>{children}</SectionContainer>;
 
 export const BotonNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
-  <BotonNuevoEstudianteStyled
-    variant='contained'
-    startIcon={<Add />}
-    onClick={onClick}
-  >
-    Nuevo Estudiante
-  </BotonNuevoEstudianteStyled>
+  <CreateButton onClick={onClick}>Nuevo Estudiante</CreateButton>
 );
 
 export const FabNuevoEstudiante = ({ onClick }: { onClick: () => void }) => (
-  <FabStyled color='primary' aria-label='add estudiante' onClick={onClick}>
-    <Add />
-  </FabStyled>
+  <FloatingActionButton onClick={onClick} tooltip='Crear nuevo estudiante' />
 );

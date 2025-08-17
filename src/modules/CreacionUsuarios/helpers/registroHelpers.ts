@@ -1,4 +1,4 @@
-import { FormMetadata } from '../../../FormularioGenerico';
+import { FormMetadata } from '../../../lib/FormularioGenerico';
 import { RegisterData } from '../types';
 
 export const getRegistroMetadata = (): FormMetadata => ({

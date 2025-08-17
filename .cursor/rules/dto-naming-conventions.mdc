@@ -1,0 +1,65 @@
+---
+globs: */types/*.ts,*/types/index.ts,*Dto.ts
+description: DTO naming conventions and type definitions
+---
+
+# DTO Naming Conventions
+
+## 🎯 Unified DTO Approach
+Create **one DTO interface per entity** using camelCase for consistency with JavaScript.
+
+## ✅ Correct DTO Definition
+```typescript
+// ✅ GOOD - Single unified DTO
+export interface EmpresaDto {
+  idEmpresa: number;
+  nombre: string;
+  fechaInicio: string;
+  vigencia: VigenciaType;
+}
+
+// ✅ GOOD - Creation DTO with same naming
+export interface CreacionEmpresaDto {
+  nombre: string;
+  fechaInicio: string;
+  vigencia: VigenciaType;
+  // No idEmpresa - will be auto-generated
+}
+```
+
+## ❌ Avoid These Patterns
+```typescript
+// ❌ BAD - Separate request/response DTOs
+interface EmpresaDtoRequest { Nombre: string; }
+interface EmpresaDtoResponse { nombre: string; }
+
+// ❌ BAD - PascalCase in frontend
+interface CreacionEmpresaDto {
+  Nombre: string;  // Should be: nombre
+  IdEmpresa: number; // Should be: idEmpresa
+}
+```
+
+## 🔍 Search DTO Patterns
+For search/filter DTOs, follow the same camelCase convention:
+
+```typescript
+// ✅ GOOD - Search filters in camelCase
+export interface EmpresaBusquedaAvanzadaDto {
+  nombre?: string;
+  vigencia?: boolean;
+  fechaInicioDesde?: string;
+  fechaInicioHasta?: string;
+}
+```
+
+## 💬 Comments Convention
+Always add comments to clarify the DTO purpose:
+
+```typescript
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
+export interface CreacionEmpresaDto {
+  nombre: string;
+  // ...
+}
+```

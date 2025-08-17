@@ -1,26 +1,29 @@
 import React from 'react';
-import { Typography, Grid, SpeedDialAction } from '@mui/material';
+import { SpeedDialAction } from '@mui/material';
 import {
-  StyledContainer,
+  CardTitle,
+  BodyText,
+  StatValue,
+  CaptionText,
+  PageTitle,
+} from '../../../lib/components/StyledText';
+import { GridContainer } from '../../../lib/components/StyledContainers';
+import {
   StyledActionCard,
   StyledProgressSection,
   StyledStatsCard,
   StyledWelcomeSection,
   ContenedorGridStyled,
-  AlertaErrorStyled,
   SpeedDialStyled,
-  IconoEstadisticaStyled,
-  DescripcionAccionStyled,
-  IconoEstadisticaCardStyled,
   SubtituloBienvenidaStyled,
 } from './StyledComponents';
 
 // Componentes para Inicio.tsx
-export const ContenedorPrincipal = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <StyledContainer maxWidth='lg'>{children}</StyledContainer>;
+export {
+  ContenedorPrincipal,
+  AlertaError,
+  TituloSeccion,
+} from '../../../lib/components/ComponentesGenericos';
 
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
   <ContenedorGridStyled container spacing={3}>
@@ -37,20 +40,15 @@ export const ItemGrid = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }) => (
-  <Grid item xs={12} sm={6} md={4} {...props}>
+  <GridContainer item xs={12} sm={6} md={4} {...props}>
     {children}
-  </Grid>
+  </GridContainer>
 );
 
-export const TituloSeccion = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h5' component='h2' gutterBottom sx={{ mt: 4 }}>
-    {children}
-  </Typography>
-);
+// Section Title
+// Ya no es necesario, se exporta desde lib/
 
-export const AlertaError = ({ mensaje }: { mensaje: string }) => (
-  <AlertaErrorStyled severity='error'>{mensaje}</AlertaErrorStyled>
-);
+// Re-exportar desde componentes centralizados
 
 export const SpeedDialRapido = ({
   actions,
@@ -117,27 +115,27 @@ export const ActionCardContainer = ({
 
 export const IconoEstadistica = ({
   children,
-  color,
-  bgColor,
 }: {
   children: React.ReactNode;
   color: string;
   bgColor: string;
 }) => (
-  <IconoEstadisticaStyled
-    sx={{
-      backgroundColor: `${bgColor}.light`,
-      color: `${color}.main`,
+  <div
+    style={{
+      marginRight: '16px',
+      padding: '8px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }}
   >
     {children}
-  </IconoEstadisticaStyled>
+  </div>
 );
 
 export const TituloAccion = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h6' component='h3'>
-    {children}
-  </Typography>
+  <CardTitle component='h3'>{children}</CardTitle>
 );
 
 export const DescripcionAccion = ({
@@ -145,9 +143,9 @@ export const DescripcionAccion = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <DescripcionAccionStyled variant='body2' color='text.secondary'>
+  <BodyText variant='body2' color='text.secondary' sx={{ marginBottom: 2 }}>
     {children}
-  </DescripcionAccionStyled>
+  </BodyText>
 );
 
 export const BotonAccion = ({
@@ -156,11 +154,7 @@ export const BotonAccion = ({
 }: {
   children: React.ReactNode;
   _icon: React.ReactNode;
-}) => (
-  <Typography variant='body1' sx={{ textTransform: 'none' }}>
-    {children}
-  </Typography>
-);
+}) => <BodyText sx={{ textTransform: 'none' }}>{children}</BodyText>;
 
 // Componentes para ProgressSection.tsx
 export const ContenedorProgreso = ({
@@ -170,9 +164,7 @@ export const ContenedorProgreso = ({
 }) => <StyledProgressSection>{children}</StyledProgressSection>;
 
 export const TituloProgreso = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='h6' gutterBottom>
-    {children}
-  </Typography>
+  <CardTitle gutterBottom>{children}</CardTitle>
 );
 
 export const ItemProgreso = ({
@@ -185,10 +177,8 @@ export const ItemProgreso = ({
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
 }) => (
   <React.Fragment>
-    <Typography variant='body2'>{label}</Typography>
-    <Typography variant='body2' color={color}>
-      {value}%
-    </Typography>
+    <BodyText>{label}</BodyText>
+    <BodyText color={color}>{value}%</BodyText>
   </React.Fragment>
 );
 
@@ -215,20 +205,16 @@ export const IconoEstadisticaCard = ({
   children: React.ReactNode;
   bgColor: string;
   color: string;
-}) => (
-  <IconoEstadisticaCardStyled sx={{ backgroundColor: bgColor, color: color }}>
-    {children}
-  </IconoEstadisticaCardStyled>
-);
+}) => <div style={{ backgroundColor: bgColor, color: color }}>{children}</div>;
 
 export const TituloEstadistica = ({
   children,
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography variant='h6' component='h2' gutterBottom>
+  <CardTitle component='h2' gutterBottom>
     {children}
-  </Typography>
+  </CardTitle>
 );
 
 export const ValorEstadistica = ({
@@ -236,14 +222,9 @@ export const ValorEstadistica = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography
-    variant='h4'
-    component='p'
-    color='primary'
-    sx={{ fontWeight: 600 }}
-  >
+  <StatValue component='p' color='primary' sx={{ fontWeight: 600 }}>
     {children}
-  </Typography>
+  </StatValue>
 );
 
 export const TextoTendencia = ({
@@ -253,18 +234,13 @@ export const TextoTendencia = ({
   children: React.ReactNode;
   direction: 'up' | 'down';
 }) => (
-  <Typography
-    variant='caption'
-    color={direction === 'up' ? 'success.main' : 'error.main'}
-  >
+  <CaptionText color={direction === 'up' ? 'success.main' : 'error.main'}>
     {children}
-  </Typography>
+  </CaptionText>
 );
 
 export const TextoError = ({ children }: { children: React.ReactNode }) => (
-  <Typography color='error' variant='body2'>
-    {children}
-  </Typography>
+  <BodyText color='error'>{children}</BodyText>
 );
 
 // Componentes para WelcomeSection.tsx
@@ -279,9 +255,9 @@ export const TituloBienvenida = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Typography variant='h4' component='h1' gutterBottom sx={{ fontWeight: 600 }}>
+  <PageTitle component='h1' gutterBottom sx={{ fontWeight: 600 }}>
     {children}
-  </Typography>
+  </PageTitle>
 );
 
 export const SubtituloBienvenida = ({

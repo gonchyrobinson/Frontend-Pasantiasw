@@ -1,8 +1,12 @@
-import { Box, Typography, Container } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+} from '../../../lib/components/StyledContainers';
+import { BodyText } from '../../../lib/components/StyledText';
 
 const Footer = () => {
   return (
-    <Box
+    <MainContainer
       component='footer'
       sx={{
         py: 3,
@@ -14,13 +18,13 @@ const Footer = () => {
             : theme.palette.grey[800],
       }}
     >
-      <Container maxWidth='sm'>
-        <Typography variant='body2' color='text.secondary' align='center'>
+      <CenteredContainer sx={{ textAlign: 'center' }}>
+        <BodyText color='text.secondary' align='center'>
           © {new Date().getFullYear()} Sistema de Pasantías. Todos los derechos
           reservados.
-        </Typography>
-      </Container>
-    </Box>
+        </BodyText>
+      </CenteredContainer>
+    </MainContainer>
   );
 };
 

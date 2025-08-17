@@ -1,4 +1,4 @@
-import { EmpresaDto } from '.';
+// Removed circular import
 
 export const Vigencia = {
   Vigente: 'vigente',
@@ -25,9 +25,10 @@ export interface EmpresaDto {
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO format: YYYY-MM-DD
+  sudocu: string; // Text field, not date
 }
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface CreacionEmpresaDto {
   nombre: string;
   vigencia: VigenciaType;
@@ -37,7 +38,7 @@ export interface CreacionEmpresaDto {
   encargado: string;
   celular: string;
   correoElectronico: string;
-  sudocu: string; // ISO format: YYYY-MM-DD
+  sudocu: string; // Text field, not date
 }
 
 export interface EmpresasState {

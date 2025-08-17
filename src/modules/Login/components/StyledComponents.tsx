@@ -1,18 +1,25 @@
 import { styled } from '@mui/material/styles';
-import { Box, Paper, Typography, Alert } from '@mui/material';
+import { Alert } from '@mui/material';
+import {
+  CenteredContainer,
+  FormContainer,
+  SectionContainer,
+} from '../../../lib/components/StyledContainers';
+import {
+  PageTitle,
+  Subtitle,
+  BodyText,
+} from '../../../lib/components/StyledText';
 
 // Styled components para Login.tsx
-export const ContenedorPrincipal = styled(Box)(() => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+export const ContenedorPrincipal = styled(CenteredContainer)(() => ({
   minHeight: '100vh',
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   position: 'relative',
   overflow: 'hidden',
 }));
 
-export const ElementoDecorativo1 = styled(Box)(() => ({
+export const ElementoDecorativo1 = styled(SectionContainer)(() => ({
   position: 'absolute',
   top: '-50%',
   left: '-50%',
@@ -23,7 +30,7 @@ export const ElementoDecorativo1 = styled(Box)(() => ({
   animation: 'float 6s ease-in-out infinite',
 }));
 
-export const ElementoDecorativo2 = styled(Box)(() => ({
+export const ElementoDecorativo2 = styled(SectionContainer)(() => ({
   position: 'absolute',
   bottom: '-30%',
   right: '-30%',
@@ -34,8 +41,7 @@ export const ElementoDecorativo2 = styled(Box)(() => ({
   animation: 'float 8s ease-in-out infinite reverse',
 }));
 
-export const TarjetaLogin = styled(Paper)(() => ({
-  padding: 32, // p: 4
+export const TarjetaLogin = styled(FormContainer)(() => ({
   width: '100%',
   maxWidth: 420,
   borderRadius: 24, // borderRadius: 3
@@ -52,12 +58,12 @@ export const TarjetaLogin = styled(Paper)(() => ({
   },
 }));
 
-export const HeaderFormulario = styled(Box)(() => ({
+export const HeaderFormulario = styled(SectionContainer)(() => ({
   textAlign: 'center',
   marginBottom: 24, // mb: 3
 }));
 
-export const TituloBienvenida = styled(Typography)(() => ({
+export const TituloBienvenida = styled(PageTitle)(() => ({
   fontWeight: 700,
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   backgroundClip: 'text',
@@ -66,7 +72,7 @@ export const TituloBienvenida = styled(Typography)(() => ({
   marginBottom: 8, // mb: 1
 }));
 
-export const SubtituloBienvenida = styled(Typography)(() => ({
+export const SubtituloBienvenida = styled(Subtitle)(() => ({
   opacity: 0.8,
 }));
 
@@ -78,14 +84,14 @@ export const AlertaError = styled(Alert)(() => ({
   },
 }));
 
-export const FooterFormulario = styled(Box)(() => ({
+export const FooterFormulario = styled(SectionContainer)(() => ({
   textAlign: 'center',
   marginTop: 24, // mt: 3
   paddingTop: 16, // pt: 2
   borderTop: '1px solid rgba(0,0,0,0.1)',
 }));
 
-export const EnlaceRegistro = styled(Typography)(() => ({
+export const EnlaceRegistro = styled(BodyText)(() => ({
   color: 'primary.main',
   cursor: 'pointer',
   fontWeight: 600,
