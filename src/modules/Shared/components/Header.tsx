@@ -21,6 +21,8 @@ import NavButtonComponent from './header/NavButton';
 import { styled } from '@mui/material/styles';
 import React, { MouseEvent, useState } from 'react';
 import { useNavigation } from '../../../lib/hooks/useNavigation';
+import { usePagosPorVencer } from '../../Pagos/hooks/usePagosPorVencer';
+import PagosVencerNotifications from './header/PagosVencerNotifications';
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -57,6 +59,10 @@ const Header: React.FC = () => {
     logout,
   } = useNavigation();
 
+  // Hook para obtener pagos por vencer para notificaciones
+  const { data: pagosPorVencer, isLoading: loadingPagos } = usePagosPorVencer();
+  const notificationCount = pagosPorVencer?.length || 0;
+
   const handleMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -83,26 +89,7 @@ const Header: React.FC = () => {
     { label: 'Reportes', icon: <Assessment />, onClick: goToReportes },
   ];
 
-  const notificationItems: MenuItemData[] = [
-    {
-      icon: Business,
-      primary: 'Nuevo convenio aprobado',
-      secondary: 'Convenio con Empresa ABC ha sido aprobado',
-      onClick: goToConvenios,
-    },
-    {
-      icon: School,
-      primary: 'Pasantía iniciada',
-      secondary: 'Juan Pérez ha iniciado su pasantía',
-      onClick: goToPasantias,
-    },
-    {
-      icon: Payment,
-      primary: 'Pago registrado',
-      secondary: 'Pago de pasantía registrado exitosamente',
-      onClick: goToPagos,
-    },
-  ];
+  // Las notificaciones ahora se manejan dinámicamente con pagos por vencer
 
   const userMenuItems: MenuItemData[] = [
     {
@@ -143,7 +130,11 @@ const Header: React.FC = () => {
 
         <UserSection>
           {/* Notifications */}
-          <NotificationButton count={3} onClick={handleNotificationsMenu} />
+          <NotificationButton
+            count={notificationCount}
+            onClick={handleNotificationsMenu}
+            disabled={loadingPagos}
+          />
 
           {/* User Menu */}
           <UserAvatarButton onClick={handleMenu} />
@@ -154,16 +145,17 @@ const Header: React.FC = () => {
             anchorEl={notificationsAnchor}
             onClose={handleNotificationsClose}
             PaperProps={{
-              sx: { minWidth: 300, maxHeight: 400 },
+              sx: { minWidth: 350, maxHeight: 500 },
             }}
           >
-            {notificationItems.map((item, index) => (
-              <MenuElement
-                key={index}
-                {...item}
-                onClose={handleNotificationsClose}
-              />
-            ))}
+            <PagosVencerNotifications
+              onClose={handleNotificationsClose}
+              onNavigateToPago={() => {
+                // Navegar a la página de pagos
+                goToPagos();
+                // En el futuro se puede implementar navegación directa al pago específico
+              }}
+            />
           </CustomMenu>
 
           {/* User Menu */}

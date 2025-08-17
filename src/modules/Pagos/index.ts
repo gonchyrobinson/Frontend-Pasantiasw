@@ -13,3 +13,4 @@ export * from './helpers/pagosSearchHelpers';
 
 // Exportaciones de hooks
 export * from './hooks/usePagos';
+export * from './hooks/usePagosPorVencer';
