@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
+import { useCreatePasantia } from '../hooks/usePasantias';
 import {
-  useCreatePasantia,
-  useEstudiantesForDropdown,
-  useConveniosForDropdown,
-} from '../hooks/usePasantias';
+  useEstudiantesDropdown,
+  useConveniosDropdown,
+} from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
@@ -17,10 +17,10 @@ const CrearPasantia: React.FC = () => {
   const { showSuccess, showError } = useSnackbar();
 
   const { mutate: createPasantia, isPending: isCreating } = useCreatePasantia();
-  const { data: estudiantesOptions, isLoading: estudiantesLoading } =
-    useEstudiantesForDropdown();
-  const { data: conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosForDropdown();
+  const { estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesDropdown();
+  const { conveniosOptions, isLoading: conveniosLoading } =
+    useConveniosDropdown();
 
   const metadata = getPasantiaFormMetadata();
 

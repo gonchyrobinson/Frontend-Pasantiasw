@@ -18,6 +18,7 @@ import {
   getDefaultConvenioValues,
 } from '../helpers/convenioHelpers';
 import { apiClient } from '../../Shared/apis/apiClient';
+import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 
 // Hook para obtener todos los convenios con empresa usando POST
 // Este es un caso especial que requiere POST en lugar de GET
@@ -50,6 +51,7 @@ export const useConvenio = (id: number) => {
 // Hook para crear convenio
 export const useCreateConvenio = () => {
   const queryClient = useQueryClient();
+  const { invalidateConvenios } = useInvalidateDropdowns();
 
   return useApiMutation<
     ConvenioDto,
@@ -59,6 +61,7 @@ export const useCreateConvenio = () => {
       queryClient.invalidateQueries({
         queryKey: ['/convenios/conEmpresa'],
       });
+      invalidateConvenios(); // Invalidar caché de dropdowns
     },
   });
 };
@@ -66,6 +69,7 @@ export const useCreateConvenio = () => {
 // Hook para actualizar convenio
 export const useUpdateConvenio = () => {
   const queryClient = useQueryClient();
+  const { invalidateConvenios } = useInvalidateDropdowns();
 
   return useApiUpdate<ConvenioDto, ConvenioDto & Record<string, unknown>>(
     ROUTES.CONVENIOS,
@@ -74,6 +78,7 @@ export const useUpdateConvenio = () => {
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
+        invalidateConvenios(); // Invalidar caché de dropdowns
       },
     }
   );
@@ -85,6 +90,7 @@ export { useDeleteConvenio } from './useDeleteConvenio';
 // Hook para caducar convenio
 export const useCaducarConvenio = () => {
   const queryClient = useQueryClient();
+  const { invalidateConvenios } = useInvalidateDropdowns();
 
   return useMutation({
     mutationFn: ({
@@ -101,6 +107,7 @@ export const useCaducarConvenio = () => {
       queryClient.invalidateQueries({
         queryKey: ['/convenios/conEmpresa'],
       });
+      invalidateConvenios(); // Invalidar caché de dropdowns
     },
   });
 };
@@ -108,6 +115,7 @@ export const useCaducarConvenio = () => {
 // Hook para asignar empresa a convenio
 export const useAsignarEmpresa = () => {
   const queryClient = useQueryClient();
+  const { invalidateConvenios } = useInvalidateDropdowns();
 
   return useApiMutation<void, AsignarEmpresaDto & Record<string, unknown>>(
     '/convenios/asignar-empresa',
@@ -116,6 +124,7 @@ export const useAsignarEmpresa = () => {
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
+        invalidateConvenios(); // Invalidar caché de dropdowns
       },
     }
   );

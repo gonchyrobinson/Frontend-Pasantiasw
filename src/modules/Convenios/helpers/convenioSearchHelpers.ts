@@ -7,8 +7,8 @@ export const getConvenioSearchMetadata = () => ({
     {
       name: 'nombreEmpresa',
       label: 'Empresa',
-      type: 'text' as const,
-      placeholder: 'Buscar por nombre de empresa...',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar empresa...',
       gridSize: 6,
     },
     {

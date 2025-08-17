@@ -6,7 +6,7 @@ import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useConvenio, useUpdateConvenio } from '../hooks/useConvenios';
-import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
+import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 import { getConvenioFormMetadata } from '../helpers/convenioHelpers';
 import { ConvenioDto } from '../types';
 
@@ -19,7 +19,7 @@ const EditarConvenio: React.FC = () => {
   const { data: convenioResponse, isLoading, error } = useConvenio(convenioId);
   const convenio = convenioResponse?.data;
   const { empresasParaAsignarOptions, isLoading: empresasLoading } =
-    useEmpresasForDropdown();
+    useEmpresasDropdown();
   const updateMutation = useUpdateConvenio();
 
   const handleSubmit = (data: ConvenioDto) => {

@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
-} from '@mui/material';
+import { Autocomplete, TextField, FormControl } from '@mui/material';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { DropdownOption } from '../types';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 type DropdownFieldProps = {
   register: UseFormRegisterReturn;
@@ -17,6 +12,7 @@ type DropdownFieldProps = {
   readonly?: boolean;
   placeholder?: string;
   value?: string | number;
+  loading?: boolean;
 };
 
 const DropdownField: React.FC<DropdownFieldProps> = ({
@@ -27,30 +23,52 @@ const DropdownField: React.FC<DropdownFieldProps> = ({
   readonly = false,
   placeholder,
   value,
+  loading = false,
 }) => {
+  const selectedOption = options.find(opt => opt.value === value) || null;
+
+  // Mostrar LoadingSpinner mientras cargan las opciones
+  if (loading || options.length === 0) {
+    return (
+      <FormControl fullWidth margin='normal'>
+        <LoadingSpinner
+          message={`Cargando ${label.toLowerCase()}...`}
+          size={40}
+        />
+      </FormControl>
+    );
+  }
+
   return (
     <FormControl fullWidth margin='normal' error={!!error}>
-      <InputLabel>{label}</InputLabel>
-      <Select
+      <Autocomplete
         {...register}
-        label={label}
+        options={options}
+        getOptionLabel={option => option.label}
+        value={selectedOption}
+        onChange={(_, newValue) => {
+          const event = {
+            target: { value: newValue?.value || '', name: register.name },
+          } as React.ChangeEvent<HTMLInputElement>;
+          register.onChange(event);
+        }}
         readOnly={readonly}
         disabled={readonly}
-        value={value !== undefined ? value : ''}
-        displayEmpty={false}
-      >
-        {placeholder && (
-          <MenuItem value=''>
-            <em>{placeholder}</em>
-          </MenuItem>
+        renderInput={params => (
+          <TextField
+            {...params}
+            label={label}
+            placeholder={placeholder}
+            error={!!error}
+            helperText={error}
+          />
         )}
-        {options.map(option => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </Select>
-      {error && <FormHelperText>{error}</FormHelperText>}
+        isOptionEqualToValue={(option, val) => option.value === val.value}
+        noOptionsText='No hay opciones disponibles'
+        clearText='Limpiar'
+        closeText='Cerrar'
+        openText='Abrir'
+      />
     </FormControl>
   );
 };

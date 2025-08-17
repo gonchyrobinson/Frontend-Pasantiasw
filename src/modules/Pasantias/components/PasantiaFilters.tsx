@@ -7,9 +7,9 @@ import {
 import { PasantiaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import {
-  useEstudiantesForDropdown,
-  useConveniosForDropdown,
-} from '../hooks/usePasantias';
+  useEstudiantesDropdown,
+  useConveniosDropdown,
+} from '../../../lib/hooks/useDropdownData';
 
 interface PasantiaFiltersProps {
   pasantias: PasantiaDto[];
@@ -26,10 +26,10 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showSuccess } = useSnackbar();
-  const { data: estudiantesOptions, isLoading: estudiantesLoading } =
-    useEstudiantesForDropdown();
-  const { data: conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosForDropdown();
+  const { estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesDropdown();
+  const { conveniosOptions, isLoading: conveniosLoading } =
+    useConveniosDropdown();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {

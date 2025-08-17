@@ -7,7 +7,8 @@ import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
-import { useCreatePago, usePasantiasForDropdown } from '../hooks/usePagos';
+import { useCreatePago } from '../hooks/usePagos';
+import { usePasantiasDropdown } from '../../../lib/hooks/useDropdownData';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
 import { PagosFormData } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
@@ -16,8 +17,8 @@ const CrearPago: React.FC = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useSnackbar();
   const createMutation = useCreatePago();
-  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
-    usePasantiasForDropdown();
+  const { pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasDropdown();
 
   const handleSubmit = (data: Record<string, unknown>) => {
     createMutation.mutate(data as PagosFormData & Record<string, unknown>, {

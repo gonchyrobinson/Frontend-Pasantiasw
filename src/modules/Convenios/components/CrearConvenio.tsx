@@ -7,14 +7,14 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useCreateConvenio } from '../hooks/useConvenios';
 import { getConvenioFormMetadata } from '../helpers/convenioHelpers';
 import { ConvenioCreateDto } from '../types';
-import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
+import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 
 const CrearConvenio: React.FC = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useSnackbar();
   const createMutation = useCreateConvenio();
   const { empresasParaAsignarOptions, isLoading: empresasLoading } =
-    useEmpresasForDropdown();
+    useEmpresasDropdown();
 
   const handleSubmit = (data: ConvenioCreateDto) => {
     createMutation.mutate(data as ConvenioCreateDto & Record<string, unknown>, {

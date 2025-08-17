@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { apiClient } from '../../modules/Shared/apis/apiClient';
+import { useInvalidateDropdowns } from './useDropdownData';
 
 interface UseDeleteOptions {
   endpoint: string;
@@ -8,12 +9,29 @@ interface UseDeleteOptions {
 
 export const useDelete = ({ endpoint, entityName }: UseDeleteOptions) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const {
+    invalidateEmpresas,
+    invalidateEstudiantes,
+    invalidateConvenios,
+    invalidatePasantias,
+  } = useInvalidateDropdowns();
 
   const deleteEntity = async (id: number) => {
     setIsDeleting(true);
 
     try {
       await apiClient.delete<void>(`/${endpoint}/${id}`);
+
+      // Invalidar caché de dropdowns según el endpoint
+      if (endpoint === 'empresas') {
+        invalidateEmpresas();
+      } else if (endpoint === 'students') {
+        invalidateEstudiantes();
+      } else if (endpoint === 'convenios') {
+        invalidateConvenios();
+      } else if (endpoint === 'pasantias') {
+        invalidatePasantias();
+      }
     } catch (error: unknown) {
       const message =
         error instanceof Error && error.message

@@ -11,4 +11,5 @@ export * from './helpers/convenioHelpers';
 
 // Exportaciones de hooks
 export * from './hooks/useConvenios';
-export * from './hooks/useEmpresasForDropdown';
+// DEPRECATED: Use useEmpresasDropdown from lib/hooks/useDropdownData instead
+// export * from './hooks/useEmpresasForDropdown';

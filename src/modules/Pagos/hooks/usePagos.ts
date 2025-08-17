@@ -97,23 +97,24 @@ export const useMarcarPagoPagado = () => {
   });
 };
 
-// Hook para obtener pasantías (para dropdowns)
-export const usePasantiasForDropdown = () => {
-  return useQuery({
-    queryKey: ['pasantias', 'dropdown'],
-    queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = await apiClient.get<any[]>('/pasantias');
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data?.map((pasantia: any) => ({
-          value: pasantia.idPasantia,
-          label: pasantia.tramite || `Pasantía ${pasantia.idPasantia}`,
-        })) || []
-      );
-    },
-  });
-};
+// DEPRECATED: Use usePasantiasDropdown from useDropdownData instead
+// Hook para obtener pasantías (para dropdowns) - DEPRECATED
+// export const usePasantiasForDropdown = () => {
+//   return useQuery({
+//     queryKey: ['pasantias', 'dropdown'],
+//     queryFn: async () => {
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//       const data = await apiClient.get<any[]>('/pasantias');
+//       return (
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         data?.map((pasantia: any) => ({
+//           value: pasantia.idPasantia,
+//           label: pasantia.tramite || `Pasantía ${pasantia.idPasantia}`,
+//         })) || []
+//       );
+//     },
+//   });
+// };
 
 // Hook para obtener estadísticas de pagos
 export const usePagosStats = () => {

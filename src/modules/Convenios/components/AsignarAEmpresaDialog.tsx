@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
-import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
+import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 import { useAsignarEmpresa } from '../hooks/useAsignarEmpresa';
 import { ConvenioEmpresaDto } from '../types';
 
@@ -19,7 +19,7 @@ const AsignarAEmpresaDialog: React.FC<AsignarAEmpresaDialogProps> = ({
 }) => {
   const { showError, showSuccess } = useSnackbar();
   const { empresasParaAsignarOptions, isLoading: empresasLoading } =
-    useEmpresasForDropdown();
+    useEmpresasDropdown();
   const asignarEmpresaMutation = useAsignarEmpresa();
 
   const handleSubmit = async (data: Record<string, unknown>) => {

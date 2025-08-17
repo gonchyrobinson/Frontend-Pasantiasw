@@ -7,7 +7,7 @@ import {
 import { PagosDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { usePasantiasForDropdown } from '../hooks/usePagos';
+import { usePasantiasDropdown } from '../../../lib/hooks/useDropdownData';
 
 interface PagosFiltersProps {
   onSearchResults: (pagos: PagosDto[]) => void;
@@ -22,8 +22,8 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
-    usePasantiasForDropdown();
+  const { pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasDropdown();
 
   const dynamicDropdownOptions = {
     idPasantia: pasantiasOptions || [],
