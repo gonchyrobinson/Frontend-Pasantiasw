@@ -13,7 +13,7 @@ import { ROUTES } from '../../helpers/routesHelper';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import PagosStats from './components/PagosStats';
 import PagosTabla from './components/PagosTabla';
-import { usePagosStats, usePagos, useDeletePago } from './hooks/usePagos';
+import { usePagosStats, usePagos, useMarcarPagoPagado } from './hooks/usePagos';
 import { PagosDto } from './types';
 import { PageHeader } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
@@ -25,13 +25,14 @@ const Pagos: React.FC = () => {
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedPago, setSelectedPago] = useState<PagosDto | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showMarcarPagadoDialog, setShowMarcarPagadoDialog] = useState(false);
   const [searchResults, setSearchResults] = useState<PagosDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
   const { stats, isLoading: statsLoading, error } = usePagosStats();
   const { data: pagosResponse, refetch: refetchPagos } = usePagos();
-  const { mutate: deletePago, isPending: isDeleting } = useDeletePago();
+  const { mutate: marcarPagoPagado, isPending: isMarcandoPagado } =
+    useMarcarPagoPagado();
 
   // Mostrar todos los pagos al cargar la página por primera vez
   useEffect(() => {
@@ -85,32 +86,50 @@ const Pagos: React.FC = () => {
     navigate(ROUTES.PAGOS_CREAR);
   };
 
-  const confirmDelete = (pago: PagosDto) => {
+  const confirmMarcarPagado = (pago: PagosDto) => {
     setSelectedPago(pago);
-    setShowDeleteDialog(true);
+    setShowMarcarPagadoDialog(true);
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleMarcarPagadoConfirm = async () => {
     if (selectedPago) {
       try {
-        deletePago(undefined, {
-          onSuccess: () => {
-            showSuccess('Pago eliminado exitosamente');
-            setShowDeleteDialog(false);
-            setSelectedPago(null);
+        marcarPagoPagado(
+          {
+            idPago: selectedPago.idPago,
+            fechaPago: new Date().toISOString().split('T')[0], // Fecha actual
           },
-          onError: () => {
-            showError('Error al eliminar el pago');
-          },
-        });
+          {
+            onSuccess: () => {
+              showSuccess('Pago marcado como pagado exitosamente');
+              // Actualizar el pago en searchResults
+              setSearchResults(prev =>
+                prev.map(p =>
+                  p.idPago === selectedPago.idPago
+                    ? {
+                        ...p,
+                        pagado: true,
+                        fechaPago: new Date().toISOString().split('T')[0],
+                      }
+                    : p
+                )
+              );
+              setShowMarcarPagadoDialog(false);
+              setSelectedPago(null);
+            },
+            onError: () => {
+              showError('Error al marcar el pago como pagado');
+            },
+          }
+        );
       } catch (error) {
-        showError('Error al eliminar el pago');
+        showError('Error al marcar el pago como pagado');
       }
     }
   };
 
-  const handleCloseDeleteDialog = () => {
-    setShowDeleteDialog(false);
+  const handleCloseMarcarPagadoDialog = () => {
+    setShowMarcarPagadoDialog(false);
     setSelectedPago(null);
   };
 
@@ -160,7 +179,7 @@ const Pagos: React.FC = () => {
             pagos={searchResults}
             loading={statsLoading}
             onEdit={handleEdit}
-            onDelete={confirmDelete}
+            onDelete={confirmMarcarPagado}
           />
         </>
       )}
@@ -193,9 +212,9 @@ const Pagos: React.FC = () => {
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
 
       <DeleteConfirmationDialog
-        open={showDeleteDialog}
-        title='Eliminar Pago'
-        message='¿Está seguro de que desea eliminar este pago?'
+        open={showMarcarPagadoDialog}
+        title='Marcar como Pagado'
+        message='¿Está seguro de que desea marcar este pago como pagado?'
         itemName={`Pago #${selectedPago?.idPago || 'N/A'}`}
         itemDetails={
           selectedPago && (
@@ -210,18 +229,16 @@ const Pagos: React.FC = () => {
                   : 'N/A'}
               </BodyText>
               <BodyText color='text.secondary'>
-                <strong>Fecha de Pago:</strong>{' '}
-                {selectedPago.fechaPago
-                  ? new Date(selectedPago.fechaPago).toLocaleDateString()
-                  : 'N/A'}
+                <strong>Estado actual:</strong>{' '}
+                {selectedPago.pagado ? 'Pagado' : 'Pendiente'}
               </BodyText>
             </div>
           )
         }
-        onClose={handleCloseDeleteDialog}
-        onConfirm={handleDeleteConfirm}
-        isDeleting={isDeleting}
-        confirmButtonText='Eliminar'
+        onClose={handleCloseMarcarPagadoDialog}
+        onConfirm={handleMarcarPagadoConfirm}
+        isDeleting={isMarcandoPagado}
+        confirmButtonText='Marcar como Pagado'
         cancelButtonText='Cancelar'
       />
     </MainContainer>

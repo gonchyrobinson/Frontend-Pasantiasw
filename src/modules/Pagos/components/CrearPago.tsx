@@ -7,18 +7,17 @@ import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
-import { useCreatePago } from '../hooks/usePagos';
+import { useCreatePago, usePasantiasForDropdown } from '../hooks/usePagos';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
 import { PagosFormData } from '../types';
-import { usePasantias } from '../../Pasantias/hooks/usePasantias';
 import { LoadingSpinner } from '../../../lib/components';
 
 const CrearPago: React.FC = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useSnackbar();
   const createMutation = useCreatePago();
-  const { data: pasantiasResponse, isLoading: pasantiasLoading } =
-    usePasantias();
+  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasForDropdown();
 
   const handleSubmit = (data: Record<string, unknown>) => {
     createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
@@ -36,13 +35,9 @@ const CrearPago: React.FC = () => {
     navigate(ROUTES.PAGOS);
   };
 
-  // Preparar opciones para el dropdown de pasantías
-  const pasantias = pasantiasResponse || [];
+  // Las opciones ya vienen formateadas desde el hook
   const dynamicDropdownOptions = {
-    idPasantia: pasantias.map(pasantia => ({
-      value: pasantia.idPasantia,
-      label: `${pasantia.expediente}`,
-    })),
+    idPasantia: pasantiasOptions || [],
   };
 
   if (pasantiasLoading) {
