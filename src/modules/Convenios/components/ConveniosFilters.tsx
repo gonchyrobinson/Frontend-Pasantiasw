@@ -7,7 +7,7 @@ import {
 import { ConvenioEmpresaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
+import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 import AsignarAEmpresaDialog from './AsignarAEmpresaDialog';
 
 interface ConveniosFiltersProps {
@@ -23,8 +23,7 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const { empresasOptions, isLoading: empresasLoading } =
-    useEmpresasForDropdown();
+  const { empresasOptions, isLoading: empresasLoading } = useEmpresasDropdown();
   const [asignarEmpresaOpen, setAsignarEmpresaOpen] = React.useState(false);
   const [selectedConvenio, setSelectedConvenio] =
     React.useState<ConvenioEmpresaDto | null>(null);

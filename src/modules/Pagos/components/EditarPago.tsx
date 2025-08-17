@@ -7,11 +7,8 @@ import { NavigateNext, ArrowBack } from '@mui/icons-material';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
-import {
-  useUpdatePago,
-  usePago,
-  usePasantiasForDropdown,
-} from '../hooks/usePagos';
+import { useUpdatePago, usePago } from '../hooks/usePagos';
+import { usePasantiasDropdown } from '../../../lib/hooks/useDropdownData';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
 import { LoadingSpinner } from '../../../lib/components';
 import { PagosDto } from '../types';
@@ -21,8 +18,8 @@ const EditarPago: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { showSuccess, showError } = useSnackbar();
   const updateMutation = useUpdatePago();
-  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
-    usePasantiasForDropdown();
+  const { pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasDropdown();
   const {
     data: pagoResponse,
     isLoading: pagoLoading,

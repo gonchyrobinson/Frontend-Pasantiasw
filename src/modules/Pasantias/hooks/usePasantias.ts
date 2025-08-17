@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { PasantiaDto, PasantiaCreateDto, PasantiaDetalleDto } from '../types';
+import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 import React from 'react';
 
 const API_BASE = '/pasantias';
@@ -72,6 +73,7 @@ export const usePasantia = (id: number | null) => {
 // Hook para crear una pasantía
 export const useCreatePasantia = () => {
   const queryClient = useQueryClient();
+  const { invalidatePasantias } = useInvalidateDropdowns();
 
   return useMutation({
     mutationFn: async (data: PasantiaCreateDto) => {
@@ -81,6 +83,7 @@ export const useCreatePasantia = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
+      invalidatePasantias(); // Invalidar caché de dropdowns
     },
   });
 };
@@ -88,6 +91,7 @@ export const useCreatePasantia = () => {
 // Hook para actualizar una pasantía
 export const useUpdatePasantia = () => {
   const queryClient = useQueryClient();
+  const { invalidatePasantias } = useInvalidateDropdowns();
 
   return useMutation({
     mutationFn: async ({ data }: { data: PasantiaCreateDto }) => {
@@ -97,6 +101,7 @@ export const useUpdatePasantia = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
+      invalidatePasantias(); // Invalidar caché de dropdowns
     },
   });
 };
@@ -104,6 +109,7 @@ export const useUpdatePasantia = () => {
 // Hook para eliminar una pasantía
 export const useDeletePasantia = () => {
   const queryClient = useQueryClient();
+  const { invalidatePasantias } = useInvalidateDropdowns();
 
   return useMutation({
     mutationFn: async (id: number) => {
@@ -113,6 +119,7 @@ export const useDeletePasantia = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
+      invalidatePasantias(); // Invalidar caché de dropdowns
     },
   });
 };
@@ -171,38 +178,39 @@ export const usePasantiaStats = () => {
   };
 };
 
-// Hook para obtener todos los estudiantes (para dropdowns)
-export const useEstudiantesForDropdown = () => {
-  return useQuery({
-    queryKey: ['estudiantes', 'dropdown'],
-    queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = await apiClient.get<any[]>('/students');
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data?.map((estudiante: any) => ({
-          value: estudiante.idEstudiante,
-          label: `${estudiante.apellido}, ${estudiante.nombre} - ${estudiante.carrera}`,
-        })) || []
-      );
-    },
-  });
-};
+// DEPRECATED: Use useEstudiantesDropdown and useConveniosDropdown from useDropdownData instead
+// Hook para obtener todos los estudiantes (para dropdowns) - DEPRECATED
+// export const useEstudiantesForDropdown = () => {
+//   return useQuery({
+//     queryKey: ['estudiantes', 'dropdown'],
+//     queryFn: async () => {
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//       const data = await apiClient.get<any[]>('/students');
+//       return (
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         data?.map((estudiante: any) => ({
+//           value: estudiante.idEstudiante,
+//           label: `${estudiante.apellido}, ${estudiante.nombre} - ${estudiante.carrera}`,
+//         })) || []
+//       );
+//     },
+//   });
+// };
 
-// Hook para obtener todos los convenios (para dropdowns)
-export const useConveniosForDropdown = () => {
-  return useQuery({
-    queryKey: ['convenios', 'dropdown'],
-    queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = await apiClient.get<any[]>('/convenios');
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data?.map((convenio: any) => ({
-          value: convenio.idConvenio,
-          label: convenio.expediente || `Convenio ${convenio.idConvenio}`,
-        })) || []
-      );
-    },
-  });
-};
+// Hook para obtener todos los convenios (para dropdowns) - DEPRECATED
+// export const useConveniosForDropdown = () => {
+//   return useQuery({
+//     queryKey: ['convenios', 'dropdown'],
+//     queryFn: async () => {
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//       const data = await apiClient.get<any[]>('/convenios');
+//       return (
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         data?.map((convenio: any) => ({
+//           value: convenio.idConvenio,
+//           label: convenio.expediente || `Convenio ${convenio.idConvenio}`,
+//         })) || []
+//       );
+//     },
+//   });
+// };
