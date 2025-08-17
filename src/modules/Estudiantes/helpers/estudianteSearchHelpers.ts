@@ -1,11 +1,13 @@
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
+import { CARRERAS_VALIDAS } from './estudianteHelpers';
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface StudentBusquedaAvanzadaDto {
-  Apellido?: string;
-  Nombre?: string;
-  Documento?: string;
-  Carrera?: string;
-  AreaTrabajo?: string;
+  apellido?: string;
+  nombre?: string;
+  documento?: string;
+  carrera?: string;
+  areaTrabajo?: string;
 }
 
 export const getEstudianteSearchMetadata = (): {
@@ -17,31 +19,37 @@ export const getEstudianteSearchMetadata = (): {
   title: 'Búsqueda Avanzada de Estudiantes',
   fields: [
     {
-      name: 'Apellido',
+      name: 'apellido',
       label: 'Apellido',
       type: 'text',
       placeholder: 'Buscar por apellido...',
     },
     {
-      name: 'Nombre',
+      name: 'nombre',
       label: 'Nombre',
       type: 'text',
       placeholder: 'Buscar por nombre...',
     },
     {
-      name: 'Documento',
+      name: 'documento',
       label: 'Documento',
       type: 'text',
       placeholder: 'Buscar por documento...',
     },
     {
-      name: 'Carrera',
+      name: 'carrera',
       label: 'Carrera',
-      type: 'text',
-      placeholder: 'Filtrar por carrera...',
+      type: 'dropdown',
+      options: [
+        { value: '', label: 'Todas las carreras' },
+        ...CARRERAS_VALIDAS.map(carrera => ({
+          value: carrera,
+          label: carrera,
+        })),
+      ],
     },
     {
-      name: 'AreaTrabajo',
+      name: 'areaTrabajo',
       label: 'Área de Trabajo',
       type: 'text',
       placeholder: 'Filtrar por área de trabajo...',
@@ -56,20 +64,20 @@ export const formatEstudianteSearchFilters = (
 ): StudentBusquedaAvanzadaDto => {
   const formattedFilters: StudentBusquedaAvanzadaDto = {};
 
-  if (filters.Apellido) {
-    formattedFilters.Apellido = filters.Apellido;
+  if (filters.apellido) {
+    formattedFilters.apellido = filters.apellido;
   }
-  if (filters.Nombre) {
-    formattedFilters.Nombre = filters.Nombre;
+  if (filters.nombre) {
+    formattedFilters.nombre = filters.nombre;
   }
-  if (filters.Documento) {
-    formattedFilters.Documento = filters.Documento;
+  if (filters.documento) {
+    formattedFilters.documento = filters.documento;
   }
-  if (filters.Carrera) {
-    formattedFilters.Carrera = filters.Carrera;
+  if (filters.carrera) {
+    formattedFilters.carrera = filters.carrera;
   }
-  if (filters.AreaTrabajo) {
-    formattedFilters.AreaTrabajo = filters.AreaTrabajo;
+  if (filters.areaTrabajo) {
+    formattedFilters.areaTrabajo = filters.areaTrabajo;
   }
 
   return formattedFilters;

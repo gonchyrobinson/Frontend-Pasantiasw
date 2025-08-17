@@ -1,11 +1,11 @@
 import React from 'react';
-import { SearchDialog } from '../../../ElementCardGenerica';
+import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getConvenioSearchMetadata,
   formatConvenioSearchFilters,
 } from '../helpers/convenioSearchHelpers';
 import { ConvenioEmpresaDto } from '../types';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { useEmpresasForDropdown } from '../hooks/useEmpresasForDropdown';
 import AsignarAEmpresaDialog from './AsignarAEmpresaDialog';
@@ -34,7 +34,7 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
     try {
       const searchFilters = formatConvenioSearchFilters(filters);
       const convenios = await apiClient.post<ConvenioEmpresaDto[]>(
-        '/Convenios/conEmpresa',
+        '/convenios/conEmpresa',
         searchFilters as Record<string, unknown>
       );
       onSearchResults(convenios);

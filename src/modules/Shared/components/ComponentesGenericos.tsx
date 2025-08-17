@@ -3,14 +3,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
+  IconButton,
 } from '@mui/material';
+import { CardTitle } from '../../../lib/components/StyledText';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import {
-  MobileToggleButtonStyled,
-  CollapseButtonStyled,
-  HeaderContainerStyled,
-} from './StyledComponents';
 
 // Generic components with custom logic
 
@@ -24,9 +21,22 @@ export const MobileToggleButton: React.FC<MobileToggleButtonProps> = ({
   children,
 }) => {
   return (
-    <MobileToggleButtonStyled onClick={onClick}>
+    <IconButton
+      onClick={onClick}
+      sx={{
+        position: 'fixed',
+        top: 16,
+        left: 16,
+        zIndex: theme => theme.zIndex.drawer + 1,
+        backgroundColor: 'background.paper',
+        boxShadow: 2,
+        '&:hover': {
+          backgroundColor: 'background.paper',
+        },
+      }}
+    >
       {children}
-    </MobileToggleButtonStyled>
+    </IconButton>
   );
 };
 
@@ -40,9 +50,9 @@ export const CollapseButton: React.FC<CollapseButtonProps> = ({
   onClick,
 }) => {
   return (
-    <CollapseButtonStyled onClick={onClick} size='small'>
+    <IconButton onClick={onClick} size='small'>
       {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-    </CollapseButtonStyled>
+    </IconButton>
   );
 };
 
@@ -58,16 +68,22 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   onToggleCollapse,
 }) => {
   return (
-    <HeaderContainerStyled>
+    <SectionContainer
+      sx={{
+        padding: 2,
+        marginBottom: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
       {!isCollapsed && (
-        <Typography variant='h6' component='div'>
-          Sistema de Pasantías
-        </Typography>
+        <CardTitle component='div'>Sistema de Pasantías</CardTitle>
       )}
       {!isMobile && (
         <CollapseButton isCollapsed={isCollapsed} onClick={onToggleCollapse} />
       )}
-    </HeaderContainerStyled>
+    </SectionContainer>
   );
 };
 

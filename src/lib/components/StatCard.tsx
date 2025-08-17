@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  Paper,
-  Typography,
-  CircularProgress,
-  Box,
-  styled,
-} from '@mui/material';
+import { CircularProgress, styled } from '@mui/material';
+import { CenteredContainer, CardContainer } from './StyledContainers';
+import { StatValue, CaptionText } from './StyledText';
 
 interface StatCardProps {
   title: string;
@@ -14,22 +10,10 @@ interface StatCardProps {
   color?: string;
 }
 
-const StyledStatCard = styled(Paper)(({ theme }) => ({
+const StyledStatCard = styled(CardContainer)(({ theme }) => ({
   padding: theme.spacing(2),
   textAlign: 'center',
   height: '100%',
-}));
-
-const StatValue = styled(Typography)(({ theme }) => ({
-  fontSize: '2rem',
-  fontWeight: 600,
-  color: theme.palette.primary.main,
-}));
-
-const StatTitle = styled(Typography)(({ theme }) => ({
-  fontSize: '0.875rem',
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
 }));
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -41,24 +25,21 @@ export const StatCard: React.FC<StatCardProps> = ({
   if (loading) {
     return (
       <StyledStatCard variant='outlined'>
-        <Box
+        <CenteredContainer
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             height: '100%',
           }}
         >
           <CircularProgress size={40} />
-        </Box>
+        </CenteredContainer>
       </StyledStatCard>
     );
   }
 
   return (
     <StyledStatCard variant='outlined'>
-      <StatTitle>{title}</StatTitle>
-      <StatValue sx={{ color }}>{value}</StatValue>
+      <CaptionText sx={{ mb: 1 }}>{title}</CaptionText>
+      <StatValue sx={{ color: color || 'primary.main' }}>{value}</StatValue>
     </StyledStatCard>
   );
 };

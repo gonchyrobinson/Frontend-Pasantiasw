@@ -98,7 +98,7 @@ export const getCreacionEmpresaMetadata = () => ({
     {
       name: 'sudocu',
       label: 'SUDOCU',
-      type: 'date' as const,
+      type: 'text' as const,
       gridSize: 6,
     },
   ],

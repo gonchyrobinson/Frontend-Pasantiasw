@@ -7,8 +7,8 @@ export const getConvenioSearchMetadata = () => ({
     {
       name: 'nombreEmpresa',
       label: 'Empresa',
-      type: 'dynamicDropdown' as const,
-      placeholder: 'Seleccionar empresa',
+      type: 'text' as const,
+      placeholder: 'Buscar por nombre de empresa...',
       gridSize: 6,
     },
     {
@@ -17,6 +17,13 @@ export const getConvenioSearchMetadata = () => ({
       type: 'text' as const,
       placeholder: 'Buscar por documento del representante de facultad',
       gridSize: 6,
+    },
+    {
+      name: 'carrera',
+      label: 'Carrera',
+      type: 'text' as const,
+      placeholder: 'Filtrar por carrera...',
+      gridSize: 12,
     },
     {
       name: 'fechaFirmaDesde',
@@ -45,18 +52,34 @@ export const getConvenioSearchMetadata = () => ({
   ],
 });
 
-// Formatear filtros para la búsqueda avanzada
+// Formatear filtros para la búsqueda avanzada - compatible con ConvenioEmpresaFiltroDto del backend
 export const formatConvenioSearchFilters = (
   filters: Record<string, unknown>
 ) => {
   const searchFilters: Record<string, unknown> = {};
 
-  // Solo incluir filtros que tengan valor
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value && value !== '') {
-      searchFilters[key] = value;
-    }
-  });
+  // Mapear campos del formulario al DTO esperado por el backend
+  if (filters.nombreEmpresa) {
+    searchFilters.nombreEmpresa = filters.nombreEmpresa;
+  }
+  if (filters.docRepresentanteFacultad) {
+    searchFilters.docRepresentanteFacultad = filters.docRepresentanteFacultad;
+  }
+  if (filters.carrera) {
+    searchFilters.carrera = filters.carrera;
+  }
+  if (filters.fechaFirmaDesde) {
+    searchFilters.fechaFirmaDesde = filters.fechaFirmaDesde;
+  }
+  if (filters.fechaFirmaHasta) {
+    searchFilters.fechaFirmaHasta = filters.fechaFirmaHasta;
+  }
+  if (filters.fechaCaducidadDesde) {
+    searchFilters.fechaCaducidadDesde = filters.fechaCaducidadDesde;
+  }
+  if (filters.fechaCaducidadHasta) {
+    searchFilters.fechaCaducidadHasta = filters.fechaCaducidadHasta;
+  }
 
   return searchFilters;
 };

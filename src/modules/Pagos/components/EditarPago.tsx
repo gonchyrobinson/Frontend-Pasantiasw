@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Alert, Breadcrumbs, Link, Box } from '@mui/material';
+import { Alert, Breadcrumbs, Link } from '@mui/material';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
+import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
-import { useUpdatePago, usePago } from '../hooks/usePagos';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
+import {
+  useUpdatePago,
+  usePago,
+  usePasantiasForDropdown,
+} from '../hooks/usePagos';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
-import { PagosFormData } from '../types';
-import { usePasantias } from '../../Pasantias/hooks/usePasantias';
 import { LoadingSpinner } from '../../../lib/components';
+import { PagosDto } from '../types';
 
 const EditarPago: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { showSuccess, showError } = useSnackbar();
   const updateMutation = useUpdatePago();
-  const { data: pasantiasResponse, isLoading: pasantiasLoading } =
-    usePasantias();
+  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasForDropdown();
   const {
     data: pagoResponse,
     isLoading: pagoLoading,
@@ -35,16 +40,17 @@ const EditarPago: React.FC = () => {
       setInitialValues({
         idPasantia: pago.idPasantia || '',
         fechaPago: pago.fechaPago ? pago.fechaPago.split('T')[0] : '', // Formatear fecha para input date
-        fechaVencimiento: pago.fechaVencimiento
-          ? pago.fechaVencimiento.split('T')[0]
-          : '', // Formatear fecha para input date
+        fechaVencimiento:
+          pago.fechaVencimiento && typeof pago.fechaVencimiento === 'string'
+            ? pago.fechaVencimiento.split('T')[0]
+            : '', // Formatear fecha para input date
         monto: pago.monto || '',
         observaciones: pago.observaciones || '',
       });
     }
   }, [pagoResponse]);
 
-  const handleSubmit = (data: PagosFormData) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     if (!id) return;
 
     const updateData = {
@@ -53,7 +59,10 @@ const EditarPago: React.FC = () => {
     };
 
     updateMutation.mutate(
-      updateData as PagosFormData & Record<string, unknown>,
+      {
+        ...updateData,
+        idPago: Number(id),
+      } as unknown as PagosDto,
       {
         onSuccess: () => {
           showSuccess('Pago actualizado exitosamente');
@@ -70,13 +79,9 @@ const EditarPago: React.FC = () => {
     navigate(ROUTES.PAGOS);
   };
 
-  // Preparar opciones para el dropdown de pasantías
-  const pasantias = pasantiasResponse || [];
+  // Las opciones ya vienen formateadas desde el hook
   const dynamicDropdownOptions = {
-    idPasantia: pasantias.map(pasantia => ({
-      value: pasantia.idPasantia,
-      label: `${pasantia.expediente}`,
-    })),
+    idPasantia: pasantiasOptions || [],
   };
 
   if (pagoLoading || pasantiasLoading) {
@@ -102,7 +107,7 @@ const EditarPago: React.FC = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <Box sx={{ mb: 3 }}>
+      <SectionContainer sx={{ mb: 3 }}>
         <Breadcrumbs
           separator={<NavigateNext fontSize='small' />}
           aria-label='breadcrumb'
@@ -119,13 +124,13 @@ const EditarPago: React.FC = () => {
             <ArrowBack sx={{ mr: 0.5 }} fontSize='small' />
             Pagos
           </Link>
-          <Typography color='text.primary'>Editar Pago #{id}</Typography>
+          <BodyText color='text.primary'>Editar Pago #{id}</BodyText>
         </Breadcrumbs>
-      </Box>
+      </SectionContainer>
 
-      <Typography variant='h4' component='h1' gutterBottom>
+      <PageTitle component='h1' gutterBottom>
         Editar Pago #{id}
-      </Typography>
+      </PageTitle>
 
       <FormularioGenerico
         metadata={getPagosFormMetadata()}

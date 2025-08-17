@@ -1,11 +1,17 @@
 import React from 'react';
-import { WelcomeSectionProps } from '../types';
+import { Chip } from '@mui/material';
 import {
   ContenedorBienvenida,
-  TituloBienvenida,
   SubtituloBienvenida,
+  TituloBienvenida,
 } from './ComponentesGenericos';
-import { ChipStyled } from './StyledComponents';
+
+interface WelcomeSectionProps {
+  title: string;
+  subtitle: string;
+  statusLabel?: string;
+  statusColor?: 'success' | 'error' | 'warning' | 'info';
+}
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   title,
@@ -17,7 +23,12 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({
     <ContenedorBienvenida>
       <TituloBienvenida>{title}</TituloBienvenida>
       <SubtituloBienvenida>{subtitle}</SubtituloBienvenida>
-      <ChipStyled label={statusLabel} color={statusColor} size='small' />
+      <Chip
+        label={statusLabel}
+        color={statusColor}
+        size='small'
+        sx={{ marginTop: 2 }}
+      />
     </ContenedorBienvenida>
   );
 };

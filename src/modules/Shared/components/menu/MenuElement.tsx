@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
-import { useNavigation } from '../../../../hooks/useNavigation';
+import { useNavigation } from '../../../../lib/hooks/useNavigation';
 
 export interface MenuItemData {
   icon?: SvgIconComponent;

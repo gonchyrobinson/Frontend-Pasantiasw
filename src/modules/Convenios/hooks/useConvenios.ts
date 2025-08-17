@@ -4,7 +4,7 @@ import {
   useApiQuery,
   useApiMutation,
   useApiUpdate,
-} from '../../../hooks/useApi';
+} from '../../../lib/hooks/useApi';
 import { ROUTES } from '../../../helpers/routesHelper';
 import {
   ConvenioEmpresaDto,
@@ -18,20 +18,22 @@ import {
   getDefaultConvenioValues,
 } from '../helpers/convenioHelpers';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { ApiResponse } from '../../../types';
 
 // Hook para obtener todos los convenios con empresa usando POST
+// Este es un caso especial que requiere POST en lugar de GET
 export const useConvenios = () => {
   return useQuery({
-    queryKey: ['/Convenios/conEmpresa'],
+    queryKey: ['/convenios/conEmpresa'],
     queryFn: async () => {
-      const data = await apiClient.post<ConvenioEmpresaDto[]>(
-        '/Convenios/conEmpresa',
+      const response = await apiClient.post<ConvenioEmpresaDto[]>(
+        '/convenios/conEmpresa',
         getDefaultConvenioValues()
       );
-      return { data } as ApiResponse<ConvenioEmpresaDto[]>;
+      return response as unknown as ConvenioEmpresaDto[];
     },
     staleTime: 5 * 60 * 1000, // 5 minutos
+    gcTime: 10 * 60 * 1000, // 10 minutos
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -55,7 +57,7 @@ export const useCreateConvenio = () => {
   >(ROUTES.CONVENIOS, {
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['/Convenios/conEmpresa'],
+        queryKey: ['/convenios/conEmpresa'],
       });
     },
   });
@@ -70,7 +72,7 @@ export const useUpdateConvenio = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['/Convenios/conEmpresa'],
+          queryKey: ['/convenios/conEmpresa'],
         });
       },
     }
@@ -85,23 +87,19 @@ export const useCaducarConvenio = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
+    mutationFn: ({
       id,
       fechaCaducidad,
     }: {
       id: number;
       fechaCaducidad: string;
-    }) => {
-      // Enviar solo la fecha como string, como en el curl: -d '"2025-08-07"'
-      const result = await apiClient.post<void>(
-        `/Convenios/caducar/${id}`,
-        fechaCaducidad as unknown as Record<string, unknown>
-      );
-      return result;
-    },
+    }) =>
+      apiClient.post<void>(`/convenios/caducar/${id}`, {
+        fechaCaducidad,
+      } as unknown as Record<string, unknown>),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['/Convenios/conEmpresa'],
+        queryKey: ['/convenios/conEmpresa'],
       });
     },
   });
@@ -112,11 +110,11 @@ export const useAsignarEmpresa = () => {
   const queryClient = useQueryClient();
 
   return useApiMutation<void, AsignarEmpresaDto & Record<string, unknown>>(
-    `${ROUTES.CONVENIOS}/asignar-empresa`,
+    '/convenios/asignar-empresa',
     {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['/Convenios/conEmpresa'],
+          queryKey: ['/convenios/conEmpresa'],
         });
       },
     }
@@ -128,7 +126,7 @@ export const useConvenioStats = () => {
   const { data: conveniosResponse, isLoading, error } = useConvenios();
 
   const stats = React.useMemo(() => {
-    const convenios = conveniosResponse?.data;
+    const convenios = conveniosResponse;
     if (!convenios || !Array.isArray(convenios)) {
       return {
         totalConvenios: 0,
@@ -161,10 +159,10 @@ export const useConvenioFilters = () => {
   });
 
   const filteredConvenios = React.useMemo(() => {
-    const convenios = conveniosResponse?.data;
+    const convenios = conveniosResponse;
     if (!convenios || !Array.isArray(convenios)) return [];
 
-    return convenios.filter(convenio => {
+    return convenios.filter((convenio: ConvenioEmpresaDto) => {
       // Filtro por expediente
       if (
         filters.expediente &&

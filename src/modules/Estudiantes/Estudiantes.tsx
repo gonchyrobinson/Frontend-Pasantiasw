@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Typography, Alert, Button, Box } from '@mui/material';
-import { Refresh } from '@mui/icons-material';
-import { useApiQuery } from '../../hooks/useApi';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { Alert } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
+import { RefreshButton } from '../../lib/components/StyledButtons';
+import { useApiQuery } from '../../lib/hooks/useApi';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { EstudianteDto } from './types';
 import EstudiantesFilters from './components/EstudiantesFilters';
 import EstudiantesStats from './components/EstudiantesStats';
 import EstudiantesTabla from './components/EstudiantesTabla';
 import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
-import { useDeleteEstudiante } from './hooks/useDeleteEstudiante';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
+import { useDeleteEstudiante } from '../../lib/hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
 import { PageHeader } from '../../lib/components';
 
@@ -122,25 +128,24 @@ const Estudiantes: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={() => refetch()}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={() => refetch()} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar los estudiantes:{' '}
           {error?.message || 'Error desconocido'}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Estudiantes'
         subtitle='Administra los estudiantes del sistema de pasantías'
@@ -160,9 +165,9 @@ const Estudiantes: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <EstudiantesStats estudiantes={searchResults} />
-          </Box>
+          </SectionContainer>
 
           <EstudiantesTabla
             estudiantes={searchResults}
@@ -178,26 +183,26 @@ const Estudiantes: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Estudiantes
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar estudiantes específicos
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron estudiantes
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       <FabNuevoEstudiante onClick={handleNuevoEstudiante} />
@@ -216,15 +221,15 @@ const Estudiantes: React.FC = () => {
         itemDetails={
           estudianteToDelete && (
             <>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 Documento: {estudianteToDelete.documento}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Carrera: {estudianteToDelete.carrera}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 Email: {estudianteToDelete.email}
-              </Typography>
+              </BodyText>
             </>
           )
         }
@@ -232,7 +237,7 @@ const Estudiantes: React.FC = () => {
         onConfirm={handleConfirmDelete}
         isDeleting={isDeleting}
       />
-    </Container>
+    </MainContainer>
   );
 };
 

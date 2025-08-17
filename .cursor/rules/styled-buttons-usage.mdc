@@ -1,0 +1,210 @@
+---
+globs: *.tsx,*.ts
+description: Enforce usage of StyledButtons components instead of direct MUI Button usage
+---
+
+# StyledButtons Usage Rules
+
+## **Mandatory Button Component Usage**
+
+### **NEVER Use Direct MUI Buttons**
+```typescript
+// ❌ FORBIDDEN - Direct MUI usage
+import { Button, IconButton, Fab } from '@mui/material';
+
+<Button variant="contained">Save</Button>
+<Button variant="outlined">Cancel</Button>
+<IconButton><Edit /></IconButton>
+<Fab><Add /></Fab>
+```
+
+### **ALWAYS Use StyledButtons Components**
+```typescript
+// ✅ REQUIRED - Use StyledButtons
+import {
+  PrimaryButton,
+  SecondaryButton,
+  EditButton,
+  DeleteButton,
+  CreateButton,
+  SubmitButton,
+  CancelButton,
+  RefreshButton,
+  FloatingActionButton,
+  ActionButtonGroup,
+  FormButtonGroup,
+} from '@lib/components/StyledButtons';
+
+// Or from the main index
+import {
+  PrimaryButton,
+  SecondaryButton,
+  EditButton,
+} from '@lib/components';
+```
+
+## **Button Replacement Guide**
+
+### **Form Buttons**
+```typescript
+// ❌ Old way
+<Button type="submit" variant="contained">Save</Button>
+<Button type="button" variant="outlined">Cancel</Button>
+
+// ✅ New way
+<SubmitButton>Save</SubmitButton>
+<CancelButton>Cancel</CancelButton>
+
+// ✅ Even better - Use button group
+<FormButtonGroup
+  onSubmit={handleSubmit}
+  onCancel={handleCancel}
+  loading={isLoading}
+/>
+```
+
+### **Action Buttons**
+```typescript
+// ❌ Old way
+<Button size="small" startIcon={<Edit />} onClick={handleEdit}>
+  Editar
+</Button>
+<Button size="small" startIcon={<Delete />} color="error">
+  Eliminar
+</Button>
+
+// ✅ New way
+<EditButton onClick={handleEdit} />
+<DeleteButton onClick={handleDelete} />
+
+// ✅ Even better - Use action group
+<ActionButtonGroup
+  onEdit={handleEdit}
+  onDelete={handleDelete}
+  loading={isLoading}
+/>
+```
+
+### **Primary Actions**
+```typescript
+// ❌ Old way
+<Button variant="contained" color="primary">
+  Primary Action
+</Button>
+<Button variant="outlined" color="primary">
+  Secondary Action
+</Button>
+
+// ✅ New way
+<PrimaryButton>Primary Action</PrimaryButton>
+<SecondaryButton>Secondary Action</SecondaryButton>
+```
+
+### **Icon Buttons**
+```typescript
+// ❌ Old way
+<IconButton onClick={handleRefresh}>
+  <Refresh />
+</IconButton>
+
+// ✅ New way
+<RefreshButton onClick={handleRefresh} loading={isRefreshing} />
+```
+
+### **Floating Action Buttons**
+```typescript
+// ❌ Old way
+<Fab color="primary" sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+  <Add />
+</Fab>
+
+// ✅ New way
+<FloatingActionButton onClick={handleCreate} />
+<CreateFab onClick={handleCreate} />
+```
+
+## **Component-Specific Patterns**
+
+### **In FormularioGenerico**
+```typescript
+// ✅ Use FormButtonGroup
+<FormButtonGroup
+  onSubmit={handleSubmit}
+  onCancel={onCancel}
+  onClear={onClear}
+  loading={loading}
+  showClear={!!onClear}
+/>
+```
+
+### **In ElementCard and TablaGenerica**
+```typescript
+// ✅ Use ActionButtonGroup
+<ActionButtonGroup
+  onEdit={onEdit}
+  onDelete={onDelete}
+  extraButtons={extraButtons}
+  loading={loading}
+/>
+```
+
+### **In Page Headers**
+```typescript
+// ✅ Use specific button types
+<RefreshButton onClick={onRefresh} loading={isRefreshing} />
+<CreateButton onClick={onAction}>{actionButtonText}</CreateButton>
+```
+
+## **Loading States**
+All StyledButtons components support loading states:
+
+```typescript
+// ✅ Automatic loading handling
+<PrimaryButton loading={isSubmitting}>
+  Save
+</PrimaryButton>
+
+<EditButton loading={isUpdating} />
+<RefreshButton loading={isRefreshing} />
+```
+
+## **Tooltips**
+All StyledButtons components support tooltips:
+
+```typescript
+// ✅ Built-in tooltip support
+<EditButton tooltip="Edit this item" />
+<DeleteButton tooltip="Delete permanently" />
+<RefreshButton tooltip="Refresh data from server" />
+```
+
+## **Migration Checklist**
+
+When updating existing code:
+
+1. ✅ **Find all Button imports** from '@mui/material'
+2. ✅ **Replace with appropriate StyledButtons** imports
+3. ✅ **Update JSX** to use new component names
+4. ✅ **Remove custom styling** (sx, style props) - use StyledButtons defaults
+5. ✅ **Add loading/tooltip props** where appropriate
+6. ✅ **Use button groups** for multiple related buttons
+7. ✅ **Test functionality** remains the same
+
+## **Exceptions**
+
+The ONLY places where direct MUI Button usage is allowed:
+
+1. **Inside StyledButtons.tsx** - For component definitions
+2. **Third-party library integrations** - Where MUI Button is required by external API
+3. **Complex custom buttons** - That cannot be achieved with StyledButtons (rare)
+
+In all other cases, use StyledButtons components.
+
+## **Benefits of Using StyledButtons**
+
+- **Consistent styling** across the application
+- **Built-in loading states** and tooltips
+- **Reduced bundle size** through component reuse
+- **Better accessibility** with proper ARIA labels
+- **Easier maintenance** - styling changes in one place
+- **Type safety** with proper TypeScript interfaces

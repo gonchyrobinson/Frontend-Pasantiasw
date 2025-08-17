@@ -3,8 +3,8 @@ export { default as Stats } from './components/Stats';
 export { default as Grids } from './components/Grids';
 export { default as AdvancedSearchForm } from './components/AdvancedSearchForm';
 export { default as SearchDialog } from './components/SearchDialog';
-export { default as SearchableContent } from './components/SearchableContent';
 export { default as ModuleHeader } from './components/ModuleHeader';
+export { default as SearchableContent } from './components/SearchableContent';
 export type {
   ElementCardProps,
   FieldMetadata,
@@ -16,8 +16,8 @@ export type {
   GridsProps,
   AdvancedSearchFormProps,
   SearchDialogProps,
-  SearchableContentProps,
   ModuleHeaderProps,
+  SearchableContentProps,
 } from './types';
 export {
   formatValue,

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Typography,
-  Grid,
-  Box,
-  Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import {
   Search,
   Clear,
@@ -16,81 +7,32 @@ import {
   CheckCircle,
   Cancel,
   Category,
-  Add,
 } from '@mui/icons-material';
 import {
-  TituloPrincipalStyled,
-  ContenedorPrincipalStyled,
-  ContenedorFiltrosStyled,
-  ContenedorEstadisticasStyled,
-  ContenedorIconoStyled,
-  ContenedorChipsStyled,
-  ContenedorFiltrosInfoStyled,
   TarjetaEstadisticaStyled,
   CampoBusquedaStyled,
   ContenedorHeaderStyled,
-  BotonNuevaEmpresaStyled,
-  FabStyled,
 } from './StyledComponents';
-import { Vigencia, TipoContrato } from '../types';
+import {
+  SectionContainer,
+  FlexContainer,
+  CenteredContainer,
+  CardContainer,
+} from '../../../lib/components/StyledContainers';
+import { FloatingActionButton } from '../../../lib/components/ComponentesGenericos';
+import { CreateButton } from '../../../lib/components/StyledButtons';
 
-// Typography Components
-export const TituloPrincipal = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <TituloPrincipalStyled variant='h6' gutterBottom>
-    {children}
-  </TituloPrincipalStyled>
-);
-
-export const TituloSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Typography variant='h6' gutterBottom>
-    {children}
-  </Typography>
-);
-
-export const Subtitulo = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='subtitle2' gutterBottom>
-    {children}
-  </Typography>
-);
-
-export const TextoPrincipal = ({ children }: { children: React.ReactNode }) => (
-  <Typography variant='body2'>{children}</Typography>
-);
-
-export const TextoSecundario = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <Typography variant='body2' color='text.secondary'>
-    {children}
-  </Typography>
-);
-
-export const ValorEstadistica = ({
-  children,
-  color = 'primary',
-}: {
-  children: React.ReactNode;
-  color?: string;
-}) => (
-  <Typography
-    variant='h4'
-    component='div'
-    color={`${color}.main`}
-    fontWeight='bold'
-  >
-    {children}
-  </Typography>
-);
+// Re-export common components from central location
+export {
+  TituloPrincipal,
+  TituloSecundario,
+  Subtitulo,
+  TextoPrincipal,
+  TextoSecundario,
+  ValorEstadistica,
+  ChipEstadistica,
+  ChipLimpiarFiltros,
+} from '../../../lib/components/ComponentesGenericos';
 
 // Grid Components
 export const ContenedorGrid = ({ children }: { children: React.ReactNode }) => (
@@ -126,19 +68,30 @@ export const ContenedorPrincipal = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorPrincipalStyled>{children}</ContenedorPrincipalStyled>;
+}) => <SectionContainer sx={{ marginBottom: 4 }}>{children}</SectionContainer>;
 
 export const ContenedorFiltros = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosStyled>{children}</ContenedorFiltrosStyled>;
+}) => <CardContainer sx={{ mb: 3 }}>{children}</CardContainer>;
 
 export const ContenedorEstadisticas = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorEstadisticasStyled>{children}</ContenedorEstadisticasStyled>;
+}) => (
+  <SectionContainer
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: 2,
+      mb: 3,
+    }}
+  >
+    {children}
+  </SectionContainer>
+);
 
 export const ContenedorIcono = ({
   children,
@@ -147,7 +100,7 @@ export const ContenedorIcono = ({
   children: React.ReactNode;
   color?: string;
 }) => (
-  <ContenedorIconoStyled>
+  <CenteredContainer sx={{ marginBottom: 1 }}>
     <Box
       sx={{
         p: 1,
@@ -158,20 +111,24 @@ export const ContenedorIcono = ({
     >
       {children}
     </Box>
-  </ContenedorIconoStyled>
+  </CenteredContainer>
 );
 
 export const ContenedorChips = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorChipsStyled>{children}</ContenedorChipsStyled>;
+}) => <FlexContainer sx={{ flexWrap: 'wrap' }}>{children}</FlexContainer>;
 
 export const ContenedorFiltrosInfo = ({
   children,
 }: {
   children: React.ReactNode;
-}) => <ContenedorFiltrosInfoStyled>{children}</ContenedorFiltrosInfoStyled>;
+}) => (
+  <FlexContainer sx={{ alignItems: 'center', gap: 2 }}>
+    {children}
+  </FlexContainer>
+);
 
 // Paper Components
 export const TarjetaEstadistica = ({
@@ -186,22 +143,6 @@ export const TarjetaEstadistica = ({
   </TarjetaEstadisticaStyled>
 );
 
-// Chip Components
-export const ChipEstadistica = ({ label }: { label: string }) => (
-  <Chip label={label} variant='outlined' size='small' color='primary' />
-);
-
-export const ChipLimpiarFiltros = ({ onDelete }: { onDelete: () => void }) => (
-  <Chip
-    label='Limpiar filtros'
-    size='small'
-    variant='outlined'
-    deleteIcon={<Clear />}
-    onDelete={onDelete}
-    onClick={onDelete}
-  />
-);
-
 // Form Components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const CampoBusqueda = ({ register }: { register: any }) => (
@@ -214,31 +155,6 @@ export const CampoBusqueda = ({ register }: { register: any }) => (
     }}
     size='small'
   />
-);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const SelectorVigencia = ({ field }: { field: any }) => (
-  <FormControl fullWidth size='small'>
-    <InputLabel>Vigencia</InputLabel>
-    <Select {...field} label='Vigencia'>
-      <MenuItem value=''>Todas</MenuItem>
-      <MenuItem value={Vigencia.Vigente}>Vigente</MenuItem>
-      <MenuItem value={Vigencia.NoVigente}>No Vigente</MenuItem>
-    </Select>
-  </FormControl>
-);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const SelectorTipoContrato = ({ field }: { field: any }) => (
-  <FormControl fullWidth size='small'>
-    <InputLabel>Tipo de Contrato</InputLabel>
-    <Select {...field} label='Tipo de Contrato'>
-      <MenuItem value=''>Todos</MenuItem>
-      <MenuItem value={TipoContrato.Indefinido}>Indefinido</MenuItem>
-      <MenuItem value={TipoContrato.Temporal}>Temporal</MenuItem>
-      <MenuItem value={TipoContrato.Otro}>Otro</MenuItem>
-    </Select>
-  </FormControl>
 );
 
 // Icon Components
@@ -257,17 +173,9 @@ export const ContenedorHeader = ({
 }) => <ContenedorHeaderStyled>{children}</ContenedorHeaderStyled>;
 
 export const BotonNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
-  <BotonNuevaEmpresaStyled
-    variant='contained'
-    startIcon={<Add />}
-    onClick={onClick}
-  >
-    Nueva Empresa
-  </BotonNuevaEmpresaStyled>
+  <CreateButton onClick={onClick}>Nueva Empresa</CreateButton>
 );
 
 export const FabNuevaEmpresa = ({ onClick }: { onClick: () => void }) => (
-  <FabStyled color='primary' aria-label='add empresa' onClick={onClick}>
-    <Add />
-  </FabStyled>
+  <FloatingActionButton onClick={onClick} tooltip='Crear nueva empresa' />
 );

@@ -1,24 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Breadcrumbs, Link, Box } from '@mui/material';
+import { Breadcrumbs, Link } from '@mui/material';
+import { SectionContainer } from '../../../lib/components/StyledContainers';
+import { PageTitle, BodyText } from '../../../lib/components/StyledText';
 import { NavigateNext, ArrowBack } from '@mui/icons-material';
-import { useSnackbar } from '../../../hooks/useSnackbar';
+import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { FormularioGenerico } from '../../../FormularioGenerico';
-import { useCreatePago } from '../hooks/usePagos';
+import { FormularioGenerico } from '../../../lib/FormularioGenerico';
+import { useCreatePago, usePasantiasForDropdown } from '../hooks/usePagos';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
 import { PagosFormData } from '../types';
-import { usePasantias } from '../../Pasantias/hooks/usePasantias';
 import { LoadingSpinner } from '../../../lib/components';
 
 const CrearPago: React.FC = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useSnackbar();
   const createMutation = useCreatePago();
-  const { data: pasantiasResponse, isLoading: pasantiasLoading } =
-    usePasantias();
+  const { data: pasantiasOptions, isLoading: pasantiasLoading } =
+    usePasantiasForDropdown();
 
-  const handleSubmit = (data: PagosFormData) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
       onSuccess: () => {
         showSuccess('Pago creado exitosamente');
@@ -34,13 +35,9 @@ const CrearPago: React.FC = () => {
     navigate(ROUTES.PAGOS);
   };
 
-  // Preparar opciones para el dropdown de pasantías
-  const pasantias = pasantiasResponse || [];
+  // Las opciones ya vienen formateadas desde el hook
   const dynamicDropdownOptions = {
-    idPasantia: pasantias.map(pasantia => ({
-      value: pasantia.idPasantia,
-      label: `${pasantia.expediente}`,
-    })),
+    idPasantia: pasantiasOptions || [],
   };
 
   if (pasantiasLoading) {
@@ -50,7 +47,7 @@ const CrearPago: React.FC = () => {
   return (
     <div>
       {/* Breadcrumb */}
-      <Box sx={{ mb: 3 }}>
+      <SectionContainer sx={{ mb: 3 }}>
         <Breadcrumbs
           separator={<NavigateNext fontSize='small' />}
           aria-label='breadcrumb'
@@ -67,13 +64,13 @@ const CrearPago: React.FC = () => {
             <ArrowBack sx={{ mr: 0.5 }} fontSize='small' />
             Pagos
           </Link>
-          <Typography color='text.primary'>Crear Nuevo Pago</Typography>
+          <BodyText color='text.primary'>Crear Nuevo Pago</BodyText>
         </Breadcrumbs>
-      </Box>
+      </SectionContainer>
 
-      <Typography variant='h4' component='h1' gutterBottom>
+      <PageTitle component='h1' gutterBottom>
         Crear Nuevo Pago
-      </Typography>
+      </PageTitle>
 
       <FormularioGenerico
         metadata={getPagosFormMetadata()}

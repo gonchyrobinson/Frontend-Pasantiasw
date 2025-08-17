@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { CenteredContainer } from './StyledContainers';
 import { Section } from './Section';
+import { CardTitle, Subtitle } from './StyledText';
 
 interface EmptyStateProps {
   title: string;
@@ -17,22 +18,20 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <Section>
-      <Box sx={{ textAlign: 'center', py: 4 }}>
+      <CenteredContainer sx={{ textAlign: 'center', py: 4 }}>
         {icon && (
-          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+          <CenteredContainer sx={{ mb: 2, justifyContent: 'center' }}>
             {icon}
-          </Box>
+          </CenteredContainer>
         )}
-        <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CardTitle color='text.secondary' gutterBottom>
           {title}
-        </Typography>
-        {subtitle && (
-          <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
-            {subtitle}
-          </Typography>
+        </CardTitle>
+        {subtitle && <Subtitle sx={{ mb: 2 }}>{subtitle}</Subtitle>}
+        {action && (
+          <CenteredContainer sx={{ mt: 2 }}>{action}</CenteredContainer>
         )}
-        {action && <Box sx={{ mt: 2 }}>{action}</Box>}
-      </Box>
+      </CenteredContainer>
     </Section>
   );
 };

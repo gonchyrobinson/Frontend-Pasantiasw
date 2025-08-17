@@ -1,13 +1,15 @@
-// DTOs del backend
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface PagosDto {
   idPago: number;
   idPasantia?: number;
-  fechaPago?: string;
+  pagado?: boolean;
+  fechaPago?: string; // DateOnly se maneja como string en frontend
   fechaVencimiento?: string;
   monto?: number;
   observaciones?: string;
 }
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface CreatePagosDto {
   idPasantia?: number;
   fechaPago?: string;
@@ -19,7 +21,25 @@ export interface CreatePagosDto {
 // Tipos para formularios
 export type PagosFormData = CreatePagosDto;
 
-// Tipos para filtros y búsqueda
+// DTO para marcar pago como pagado - camelCase
+export interface MarcarPagoDto {
+  idPago: number;
+  fechaPago?: string;
+}
+
+// DTO para filtros de búsqueda - camelCase
+export interface PagosBusquedaAvanzadaDto {
+  idPasantia?: number;
+  fechaPagoDesde?: string;
+  fechaPagoHasta?: string;
+  fechaVencimientoDesde?: string;
+  fechaVencimientoHasta?: string;
+  pagado?: boolean;
+  montoMin?: number;
+  montoMax?: number;
+}
+
+// Tipos para filtros locales (para compatibilidad)
 export interface PagosFilters {
   idPasantia?: string;
   fechaPagoDesde?: string;

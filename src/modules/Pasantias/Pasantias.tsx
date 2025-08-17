@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
-import { Refresh } from '@mui/icons-material';
-import { useSnackbar } from '../../hooks/useSnackbar';
-import { ROUTES } from '../../helpers/routesHelper';
+import { Alert } from '@mui/material';
 import {
-  PasantiaStats,
-  FloatingActionButton,
-  PasantiaFilters,
-  PasantiasTabla,
-} from './components';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
+import { RefreshButton } from '../../lib/components/StyledButtons';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { ROUTES } from '../../helpers/routesHelper';
+
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import { usePasantiaStats, usePasantias } from './hooks/usePasantias';
 import { useDeletePasantia } from './hooks/usePasantias';
 import { PasantiaDto } from './types';
 import { PageHeader } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
+import PasantiaFilters from './components/PasantiaFilters';
+import PasantiaStats from './components/PasantiaStats';
+import PasantiasTabla from './components/PasantiasTabla';
+import { FloatingActionButton } from '../../lib/components/ComponentesGenericos';
 
 const Pasantias: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +35,7 @@ const Pasantias: React.FC = () => {
   );
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const { stats, isLoading: statsLoading, error } = usePasantiaStats();
+  const { isLoading: statsLoading, error } = usePasantiaStats();
   const {
     data: pasantias,
     isLoading: pasantiasLoading,
@@ -123,24 +128,23 @@ const Pasantias: React.FC = () => {
 
   if (error || pasantiasError) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={handleRefresh}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={handleRefresh} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar las pasantías: {(error || pasantiasError)?.message}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Pasantías'
         subtitle='Administra las pasantías del sistema de pasantías'
@@ -160,9 +164,9 @@ const Pasantias: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
-            <PasantiaStats stats={stats} loading={statsLoading} />
-          </Box>
+          <SectionContainer sx={{ mb: 3 }}>
+            <PasantiaStats pasantias={searchResults} />
+          </SectionContainer>
 
           <PasantiasTabla
             pasantias={searchResults}
@@ -175,26 +179,34 @@ const Pasantias: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Pasantías
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza los filtros para encontrar pasantías específicas
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron pasantías
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       <FloatingActionButton onClick={handleCreate} />
@@ -205,24 +217,24 @@ const Pasantias: React.FC = () => {
         open={showDeleteDialog}
         title='Eliminar Pasantía'
         message='¿Está seguro de que desea eliminar esta pasantía?'
-        itemName={selectedPasantia?.expediente || 'Pasantía'}
+        itemName={selectedPasantia?.tramite || 'Pasantía'}
         itemDetails={
           selectedPasantia && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>Obra Social:</strong>{' '}
                 {selectedPasantia.obraSocial || 'No especificada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>ART:</strong>{' '}
                 {selectedPasantia.art || 'No especificado'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Inicio:</strong>{' '}
                 {selectedPasantia.fechaInicio
                   ? new Date(selectedPasantia.fechaInicio).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
+              </BodyText>
             </div>
           )
         }
@@ -232,7 +244,7 @@ const Pasantias: React.FC = () => {
         confirmButtonText='Eliminar'
         cancelButtonText='Cancelar'
       />
-    </Container>
+    </MainContainer>
   );
 };
 

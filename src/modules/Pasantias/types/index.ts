@@ -1,46 +1,95 @@
-// DTOs del backend
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface PasantiaDto {
   idPasantia: number;
-  idEstudiante: number;
-  idConvenio: number;
-  asignacionMensual: number;
-  obraSocial: string;
-  art: string;
-  tutorEmpresa: string;
-  tutorFacultad: string;
-  expediente: string;
-  fechaInicio: string; // DateOnly se maneja como string en frontend
-  fechaFin: string;
-  tipoAcuerdo: 'Pasantia' | 'PPS' | 'otro';
-  observaciones: string;
+  idEstudiante?: number;
+  idConvenio?: number;
+  asignacionMensual?: number;
+  obraSocial?: string;
+  art?: string;
+  tutorEmpresa?: string;
+  tutorFacultad?: string;
+  dniTutorFacultad?: string;
+  tramite?: string; // Calculado en backend como "EXP-FACET-{IdPasantia:D3}"
+  fechaInicio?: string; // DateOnly se maneja como string en frontend
+  fechaFin?: string;
+  tipoAcuerdo?: string;
+  frecuenciaPago?: string;
+  montoPago?: number;
+  observaciones?: string;
+  sudocu?: string;
+  areaTrabajo?: string;
+  estado?: string;
 }
 
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface PasantiaCreateDto {
+  idEstudiante?: number;
+  idConvenio?: number;
+  asignacionMensual?: number;
+  obraSocial?: string;
+  art?: string;
+  tutorEmpresa?: string;
+  tutorFacultad?: string;
+  dniTutorFacultad?: string;
+  fechaInicio?: string;
+  fechaFin?: string;
+  tipoAcuerdo?: string;
+  frecuenciaPago?: string;
+  montoPago?: number;
+  observaciones?: string;
+  sudocu?: string;
+  areaTrabajo?: string;
+  estado?: string;
+}
+
+// DTO para pasantía con detalles (incluye estudiante y convenio)
+export interface PasantiaDetalleDto {
+  pasantia: PasantiaDto;
+  estudiante?: EstudianteDto;
+  convenio?: ConvenioDto;
+}
+
+// DTOs básicos para referencias
+export interface EstudianteDto {
   idEstudiante: number;
+  nombre: string;
+  apellido: string;
+  email: string;
+  carrera: string;
+}
+
+export interface ConvenioDto {
   idConvenio: number;
-  asignacionMensual: number;
-  obraSocial: string;
-  art: string;
-  tutorEmpresa: string;
-  tutorFacultad: string;
-  expediente: string;
-  fechaInicio: string;
-  fechaFin: string;
-  tipoAcuerdo: 'Pasantia' | 'PPS' | 'otro';
-  observaciones: string;
+  idEmpresa?: number;
 }
 
 // Tipos para formularios
 export type PasantiaFormData = PasantiaCreateDto;
 
-// Tipos para filtros y búsqueda
+// DTO para filtros de búsqueda avanzada - camelCase
+export interface PasantiaBusquedaAvanzadaDto {
+  idEstudiante?: number;
+  idConvenio?: number;
+  obraSocial?: string;
+  art?: string;
+  tutorEmpresa?: string;
+  tutorFacultad?: string;
+  tipoAcuerdo?: string;
+  fechaInicioDesde?: string;
+  fechaInicioHasta?: string;
+  fechaFinDesde?: string;
+  fechaFinHasta?: string;
+  estado?: string;
+}
+
+// Tipos para filtros locales (para compatibilidad)
 export interface PasantiaFilters {
   expediente?: string;
   obraSocial?: string;
   art?: string;
   tutorEmpresa?: string;
   tutorFacultad?: string;
-  tipoAcuerdo?: 'Pasantia' | 'PPS' | 'otro';
+  tipoAcuerdo?: string;
   fechaInicioDesde?: string;
   fechaInicioHasta?: string;
   fechaFinDesde?: string;

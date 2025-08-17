@@ -1,0 +1,212 @@
+---
+alwaysApply: true
+description: Rules for component reuse and avoiding unnecessary files
+---
+
+# Component Reuse and File Organization Rules
+
+## **Core Principles**
+
+### **1. Always Use @lib/ Components First**
+- **NEVER** create new components without first checking if a similar component exists in `src/lib/components/`
+- **ALWAYS** prefer reusing existing components from `@lib/` over creating module-specific ones
+- **MANDATORY**: Check `StyledText.tsx`, `StyledContainers.tsx`, `ComponentesGenericos.tsx`, and `StyledButtons.tsx` before creating new components
+
+### **2. Avoid Unnecessary Files**
+- **DO NOT** create new files if the functionality can be achieved by:
+  - Using existing components from `@lib/`
+  - Adding a small wrapper function
+  - Using props to customize existing components
+- **ELIMINATE** duplicate components across modules
+- **CONSOLIDATE** similar functionality into shared components
+
+### **3. Component Creation Hierarchy**
+When you need a new component, follow this order:
+1. **First**: Check if `@lib/components/` has what you need
+2. **Second**: Check if you can extend an existing component with props
+3. **Third**: Create in `@lib/components/` if it will be reused across modules
+4. **Last**: Create module-specific only if truly unique to that module
+
+## **Mandatory Component Libraries**
+
+### **Text Components** - Use `@lib/components/StyledText.tsx`
+```typescript
+// ALWAYS use these instead of creating new text components:
+import {
+  PageTitle,      // For main page titles
+  SectionTitle,   // For section headers  
+  CardTitle,      // For card titles
+  Subtitle,       // For subtitles
+  BodyText,       // For body text
+  CaptionText,    // For small text
+  StatValue,      // For statistics
+  WarningText,    // For warnings
+} from '@lib/components/StyledText';
+```
+
+### **Button Components** - Use `@lib/components/StyledButtons.tsx`
+```typescript
+// ALWAYS use these instead of creating new button components:
+import {
+  PrimaryButton,        // Primary actions
+  SecondaryButton,      // Secondary actions  
+  ActionButton,         // Generic actions
+  DeleteButton,         // Delete actions
+  EditButton,           // Edit actions
+  RefreshButton,        // Refresh actions
+  CreateButton,         // Create/Add actions
+  CancelButton,         // Cancel actions
+  SubmitButton,         // Form submissions
+  FloatingActionButton, // FAB buttons
+} from '@lib/components/StyledButtons';
+```
+
+### **Container Components** - Use `@lib/components/StyledContainers.tsx`
+```typescript
+// ALWAYS use these instead of Box or creating new containers:
+import {
+  MainContainer,     // Main page container
+  SectionContainer,  // Section wrapper
+  CardContainer,     // Card-like container
+  FlexContainer,     // Flex layout
+  GridContainer,     // Grid layout
+  CenteredContainer, // Centered content
+  FormContainer,     // Form wrapper
+  ActionContainer,   // Action buttons container
+} from '@lib/components/StyledContainers';
+```
+
+## **Specific Rules by Component Type**
+
+### **Button Rules**
+- **NEVER** use `<Button>` directly from MUI
+- **ALWAYS** use components from `StyledButtons.tsx`
+- **PATTERN**: `<PrimaryButton onClick={handleClick}>Text</PrimaryButton>`
+- **EXCEPTION**: Only use MUI Button directly inside `StyledButtons.tsx` definitions
+
+### **Text Rules**  
+- **NEVER** use `<Typography>` directly from MUI
+- **ALWAYS** use components from `StyledText.tsx`
+- **PATTERN**: `<PageTitle>My Title</PageTitle>`
+- **EXCEPTION**: Only use MUI Typography directly inside `StyledText.tsx` definitions
+
+### **Container Rules**
+- **NEVER** use `<Box>` directly from MUI
+- **ALWAYS** use components from `StyledContainers.tsx`
+- **PATTERN**: `<SectionContainer>content</SectionContainer>`
+- **EXCEPTION**: Only use MUI Box directly inside `StyledContainers.tsx` definitions
+
+### **Icon Button Rules**
+- **ALWAYS** use `RefreshButton` for refresh actions
+- **ALWAYS** use `EditButton` for edit actions  
+- **ALWAYS** use `DeleteButton` for delete actions
+- **PATTERN**: `<RefreshButton onClick={handleRefresh} isLoading={isRefreshing} />`
+
+## **File Organization Rules**
+
+### **What Goes Where**
+```
+src/lib/components/
+├── StyledText.tsx          # ALL text components
+├── StyledButtons.tsx       # ALL button components  
+├── StyledContainers.tsx    # ALL container components
+├── ComponentesGenericos.tsx # Complex reusable components
+├── DeleteConfirmationDialog.tsx # Specific dialogs
+└── LoadingSpinner.tsx      # Specific utilities
+```
+
+### **Module Structure**
+```
+src/modules/[Module]/
+├── [Module].tsx                    # Main component
+├── components/
+│   ├── StyledComponents.tsx        # ONLY module-specific styled components
+│   ├── ComponentesPersonalizados.tsx # ONLY truly unique components
+│   └── [Feature]Component.tsx      # ONLY if complex and unique
+├── types/index.ts                  # Module types
+└── helpers/[feature]Helpers.ts     # Business logic
+```
+
+## **Before Creating Any New Component**
+
+### **Mandatory Checklist**
+1. ✅ **Check `@lib/components/StyledText.tsx`** - Is there a text component I can use?
+2. ✅ **Check `@lib/components/StyledButtons.tsx`** - Is there a button component I can use?
+3. ✅ **Check `@lib/components/StyledContainers.tsx`** - Is there a container I can use?
+4. ✅ **Check `@lib/components/ComponentesGenericos.tsx`** - Is there a generic component I can use?
+5. ✅ **Can I extend an existing component with props?**
+6. ✅ **Will this component be used in multiple modules?** → Create in `@lib/`
+7. ✅ **Is this truly unique to this module?** → Only then create module-specific
+
+### **Red Flags - DO NOT CREATE**
+- ❌ Another text component when `StyledText.tsx` exists
+- ❌ Another button when `StyledButtons.tsx` has similar functionality
+- ❌ Another container when `StyledContainers.tsx` has what you need
+- ❌ Duplicate components across modules
+- ❌ Components that differ only in styling (use props instead)
+
+## **Refactoring Existing Code**
+
+### **When You See These Patterns - REFACTOR**
+```typescript
+// ❌ BAD - Direct MUI usage
+<Typography variant="h4">Title</Typography>
+<Button variant="contained">Action</Button>
+<Box sx={{ padding: 2 }}>Content</Box>
+
+// ✅ GOOD - Use lib components  
+<PageTitle>Title</PageTitle>
+<PrimaryButton>Action</PrimaryButton>
+<SectionContainer>Content</SectionContainer>
+```
+
+### **Migration Strategy**
+1. **Identify** duplicate or similar components across modules
+2. **Extract** to appropriate `@lib/components/` file
+3. **Update** all imports to use the centralized component
+4. **Delete** the old module-specific components
+5. **Test** that functionality remains the same
+
+## **Examples of Correct Usage**
+
+### **Good Component Reuse**
+```typescript
+// ✅ Using existing components
+import { 
+  PrimaryButton, 
+  SecondaryButton,
+  DeleteButton 
+} from '@lib/components/StyledButtons';
+import { PageTitle, BodyText } from '@lib/components/StyledText';
+import { SectionContainer } from '@lib/components/StyledContainers';
+
+const MyComponent = () => (
+  <SectionContainer>
+    <PageTitle>My Page</PageTitle>
+    <BodyText>Description</BodyText>
+    <PrimaryButton onClick={handleSave}>Save</PrimaryButton>
+    <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
+    <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+  </SectionContainer>
+);
+```
+
+### **Bad Component Creation**
+```typescript
+// ❌ DON'T DO THIS - Creating unnecessary components
+const MyTitle = styled(Typography)({ fontSize: '2rem' }); // Use PageTitle instead
+const MyButton = styled(Button)({ color: 'primary' });    // Use PrimaryButton instead  
+const MyBox = styled(Box)({ padding: 16 });              // Use SectionContainer instead
+```
+
+## **Performance Benefits**
+- **Smaller bundle size** - Fewer duplicate components
+- **Consistent styling** - All components follow the same design system
+- **Easier maintenance** - Changes in one place affect all usages
+- **Better DX** - Developers know exactly where to find components
+
+## **Enforcement**
+- **Code reviews** must check for component reuse
+- **New components** must be justified if similar ones exist in `@lib/`
+- **Refactoring** existing code to use `@lib/` components is encouraged
+- **Documentation** must be updated when adding new reusable components

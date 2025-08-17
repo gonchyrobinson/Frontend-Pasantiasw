@@ -1,0 +1,75 @@
+---
+globs: */helpers/*Helper*.ts,*/helpers/*Search*.ts,*Api*.ts,*Service*.ts
+description: API calls and data transformation guidelines
+---
+
+# API Calls Simplification Guidelines
+
+## 🎯 Core Principle
+Leverage ASP.NET Core's automatic model binding instead of manual conversions.
+
+## ✅ Direct API Calls
+```typescript
+// ✅ GOOD - Direct usage without conversion
+const handleSubmit = async (data: Record<string, unknown>) => {
+  const empresaData = data as unknown as CreacionEmpresaDto;
+  await apiClient.post('/empresas', empresaData);
+};
+
+// ✅ GOOD - Direct search filters
+const formatSearchFilters = (filters: Record<string, any>) => {
+  const formattedFilters: EmpresaBusquedaAvanzadaDto = {};
+  
+  if (filters.nombre) {
+    formattedFilters.nombre = filters.nombre; // Direct assignment
+  }
+  
+  return formattedFilters;
+};
+```
+
+## ❌ Avoid Manual Conversions
+```typescript
+// ❌ BAD - Unnecessary conversion functions
+export const convertToPascalCaseForBackend = (data: Record<string, unknown>) => {
+  return {
+    Nombre: data.nombre,      // Unnecessary
+    IdEmpresa: data.idEmpresa // Unnecessary
+  };
+};
+
+// ❌ BAD - Using conversion in API calls
+const empresaData = convertToPascalCaseForBackend(data);
+await apiClient.post('/empresas', empresaData);
+```
+
+## 🔄 Edit Operations
+For edit operations, add ID in the same camelCase convention:
+
+```typescript
+// ✅ GOOD - Consistent camelCase
+const handleEdit = async (data: Record<string, unknown>) => {
+  const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
+  await apiClient.put('/empresas', empresaData);
+};
+```
+
+## 📋 Form Field Names
+Keep form field names in camelCase to match DTO properties:
+
+```typescript
+// ✅ GOOD - Form fields match DTO
+const metadata = {
+  fields: [
+    { name: 'nombre', label: 'Nombre', type: 'text' },
+    { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
+    { name: 'vigencia', label: 'Vigencia', type: 'dropdown' }
+  ]
+};
+```
+
+## 🧠 Remember
+ASP.NET Core automatically handles:
+- Case conversion during model binding
+- Property mapping between camelCase and PascalCase
+- Validation using the backend DTO structure

@@ -21,12 +21,10 @@ export const getPagosFormMetadata = () => ({
       name: 'fechaPago',
       label: 'Fecha de Pago',
       type: 'date' as const,
-      required: true,
       gridSize: 6,
       validations: {
-        required: 'La fecha de pago es requerida',
         validate: (value: string) => {
-          if (!value) return 'La fecha de pago es requerida';
+          if (!value) return true; // Campo opcional
           const fechaActual = new Date();
           const fechaPago = new Date(value);
           if (fechaPago > fechaActual) {
@@ -40,11 +38,10 @@ export const getPagosFormMetadata = () => ({
       name: 'fechaVencimiento',
       label: 'Fecha de Vencimiento',
       type: 'date' as const,
-      required: true,
       gridSize: 6,
       validations: {
         validate: (value: string, formValues: Record<string, unknown>) => {
-          if (!value) return 'La fecha de vencimiento es requerida';
+          if (!value) return true; // Campo opcional
           const fechaPago = formValues.fechaPago as string;
           if (fechaPago && value <= fechaPago) {
             return 'La fecha de vencimiento debe ser posterior a la fecha de pago';
@@ -56,9 +53,8 @@ export const getPagosFormMetadata = () => ({
     {
       name: 'monto',
       label: 'Monto',
-      type: 'currency' as const,
+      type: 'number' as const,
       placeholder: '0.00',
-      required: true,
       validations: {
         min: { value: 0, message: 'El monto debe ser mayor o igual a 0' },
       },
@@ -173,3 +169,29 @@ export const getDefaultPagosValues = () => ({
   monto: undefined,
   observaciones: '',
 });
+
+// Función para verificar si un pago está vencido
+export const isPagoVencido = (fechaVencimiento?: string): boolean => {
+  if (!fechaVencimiento) return false;
+  const fechaActual = new Date();
+  const fechaVencimientoDate = new Date(fechaVencimiento);
+  return fechaVencimientoDate <= fechaActual;
+};
+
+// Función para obtener el estado de un pago
+export const getPagoEstado = (pago: PagosDto): string => {
+  if (pago.pagado) return 'Pagado';
+  if (isPagoVencido(pago.fechaVencimiento)) return 'Vencido';
+  return 'Pendiente';
+};
+
+// Función para formatear fechas
+export const formatDate = (dateString?: string): string => {
+  if (!dateString) return 'No especificada';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};

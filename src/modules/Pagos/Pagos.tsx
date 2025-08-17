@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
-import { Refresh } from '@mui/icons-material';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { Alert } from '@mui/material';
+import {
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
+import { RefreshButton } from '../../lib/components/StyledButtons';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import PagosStats from './components/PagosStats';
 import PagosTabla from './components/PagosTabla';
-import { usePagosStats, usePagos, useDeletePago } from './hooks/usePagos';
+import { usePagosStats, usePagos, useMarcarPagoPagado } from './hooks/usePagos';
 import { PagosDto } from './types';
 import { PageHeader } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
@@ -19,13 +25,14 @@ const Pagos: React.FC = () => {
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedPago, setSelectedPago] = useState<PagosDto | null>(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showMarcarPagadoDialog, setShowMarcarPagadoDialog] = useState(false);
   const [searchResults, setSearchResults] = useState<PagosDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
   const { stats, isLoading: statsLoading, error } = usePagosStats();
   const { data: pagosResponse, refetch: refetchPagos } = usePagos();
-  const { mutate: deletePago, isPending: isDeleting } = useDeletePago();
+  const { mutate: marcarPagoPagado, isPending: isMarcandoPagado } =
+    useMarcarPagoPagado();
 
   // Mostrar todos los pagos al cargar la página por primera vez
   useEffect(() => {
@@ -79,55 +86,72 @@ const Pagos: React.FC = () => {
     navigate(ROUTES.PAGOS_CREAR);
   };
 
-  const confirmDelete = (pago: PagosDto) => {
+  const confirmMarcarPagado = (pago: PagosDto) => {
     setSelectedPago(pago);
-    setShowDeleteDialog(true);
+    setShowMarcarPagadoDialog(true);
   };
 
-  const handleDeleteConfirm = async () => {
+  const handleMarcarPagadoConfirm = async () => {
     if (selectedPago) {
       try {
-        deletePago(selectedPago.idPago, {
-          onSuccess: () => {
-            showSuccess('Pago eliminado exitosamente');
-            setShowDeleteDialog(false);
-            setSelectedPago(null);
+        marcarPagoPagado(
+          {
+            idPago: selectedPago.idPago,
+            fechaPago: new Date().toISOString().split('T')[0], // Fecha actual
           },
-          onError: () => {
-            showError('Error al eliminar el pago');
-          },
-        });
+          {
+            onSuccess: () => {
+              showSuccess('Pago marcado como pagado exitosamente');
+              // Actualizar el pago en searchResults
+              setSearchResults(prev =>
+                prev.map(p =>
+                  p.idPago === selectedPago.idPago
+                    ? {
+                        ...p,
+                        pagado: true,
+                        fechaPago: new Date().toISOString().split('T')[0],
+                      }
+                    : p
+                )
+              );
+              setShowMarcarPagadoDialog(false);
+              setSelectedPago(null);
+            },
+            onError: () => {
+              showError('Error al marcar el pago como pagado');
+            },
+          }
+        );
       } catch (error) {
-        showError('Error al eliminar el pago');
+        showError('Error al marcar el pago como pagado');
       }
     }
   };
 
-  const handleCloseDeleteDialog = () => {
-    setShowDeleteDialog(false);
+  const handleCloseMarcarPagadoDialog = () => {
+    setShowMarcarPagadoDialog(false);
     setSelectedPago(null);
   };
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={handleRefresh}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={handleRefresh} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar los pagos: {error.message}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Pagos'
         subtitle='Administra los pagos del sistema de pasantías. Use la búsqueda para encontrar pagos por ID de pasantía.'
@@ -147,79 +171,77 @@ const Pagos: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <PagosStats stats={stats} loading={statsLoading} />
-          </Box>
+          </SectionContainer>
 
           <PagosTabla
             pagos={searchResults}
             loading={statsLoading}
             onEdit={handleEdit}
-            onDelete={confirmDelete}
+            onDelete={confirmMarcarPagado}
           />
         </>
       )}
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Pagos por Pasantía
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda para encontrar pagos seleccionando una pasantía
             específica del dropdown
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron pagos
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />
 
       <DeleteConfirmationDialog
-        open={showDeleteDialog}
-        title='Eliminar Pago'
-        message='¿Está seguro de que desea eliminar este pago?'
+        open={showMarcarPagadoDialog}
+        title='Marcar como Pagado'
+        message='¿Está seguro de que desea marcar este pago como pagado?'
         itemName={`Pago #${selectedPago?.idPago || 'N/A'}`}
         itemDetails={
           selectedPago && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>ID Pasantía:</strong> {selectedPago.idPasantia || 'N/A'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Monto:</strong>{' '}
                 {selectedPago.monto
                   ? `$${selectedPago.monto.toLocaleString()}`
                   : 'N/A'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                <strong>Fecha de Pago:</strong>{' '}
-                {selectedPago.fechaPago
-                  ? new Date(selectedPago.fechaPago).toLocaleDateString()
-                  : 'N/A'}
-              </Typography>
+              </BodyText>
+              <BodyText color='text.secondary'>
+                <strong>Estado actual:</strong>{' '}
+                {selectedPago.pagado ? 'Pagado' : 'Pendiente'}
+              </BodyText>
             </div>
           )
         }
-        onClose={handleCloseDeleteDialog}
-        onConfirm={handleDeleteConfirm}
-        isDeleting={isDeleting}
-        confirmButtonText='Eliminar'
+        onClose={handleCloseMarcarPagadoDialog}
+        onConfirm={handleMarcarPagadoConfirm}
+        isDeleting={isMarcandoPagado}
+        confirmButtonText='Marcar como Pagado'
         cancelButtonText='Cancelar'
       />
-    </Container>
+    </MainContainer>
   );
 };
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
-import { FormularioGenerico } from '../../FormularioGenerico';
+import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { CreacionEmpresaDto } from './types';
 import { getCreacionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
 
 const CreacionEmpresas: React.FC = () => {
   const navigate = useNavigate();

@@ -1,12 +1,15 @@
-import { Box, LinearProgress, Stack } from '@mui/material';
+import { LinearProgress, Stack } from '@mui/material';
 import React from 'react';
 import { ProgressSectionProps } from '../types';
 import {
   ContenedorProgreso,
-  TituloProgreso,
   ItemProgreso,
+  TituloProgreso,
 } from './ComponentesGenericos';
-import { BoxFlexBetweenStyled } from './StyledComponents';
+import {
+  SectionContainer,
+  FlexContainer,
+} from '../../../lib/components/StyledContainers';
 
 const ProgressSection: React.FC<ProgressSectionProps> = ({ title, items }) => {
   return (
@@ -14,20 +17,26 @@ const ProgressSection: React.FC<ProgressSectionProps> = ({ title, items }) => {
       <TituloProgreso>{title}</TituloProgreso>
       <Stack spacing={2}>
         {items.map((item, index) => (
-          <Box key={index}>
-            <BoxFlexBetweenStyled>
+          <SectionContainer key={index}>
+            <FlexContainer
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 2,
+              }}
+            >
               <ItemProgreso
                 label={item.label}
                 value={item.value}
                 color={item.color}
               />
-            </BoxFlexBetweenStyled>
+            </FlexContainer>
             <LinearProgress
               variant='determinate'
               value={item.value}
               color={item.color || 'primary'}
             />
-          </Box>
+          </SectionContainer>
         ))}
       </Stack>
     </ContenedorProgreso>

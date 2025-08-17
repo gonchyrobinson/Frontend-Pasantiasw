@@ -3,12 +3,11 @@ import React from 'react';
 import { ActionCardProps } from '../types';
 import {
   ActionCardContainer,
-  IconoEstadistica,
-  TituloAccion,
   DescripcionAccion,
-  BotonAccion,
+  TituloAccion,
 } from './ComponentesGenericos';
-import { CardContentStyled, BoxFlexStyled } from './StyledComponents';
+import { CardContent } from '@mui/material';
+import { FlexContainer } from '../../../lib/components/StyledContainers';
 
 const ActionCard: React.FC<ActionCardProps> = ({
   title,
@@ -58,16 +57,25 @@ const ActionCard: React.FC<ActionCardProps> = ({
           : {},
       }}
     >
-      <CardContentStyled>
-        <BoxFlexStyled>
-          <IconoEstadistica color={color} bgColor={color}>
-            {icon}
-          </IconoEstadistica>
+      <CardContent sx={{ flexGrow: 1 }}>
+        <FlexContainer
+          sx={{ width: '100%', alignItems: 'center', marginBottom: 2 }}
+        >
+          {icon}
           <TituloAccion>{title}</TituloAccion>
-        </BoxFlexStyled>
+        </FlexContainer>
         <DescripcionAccion>{description}</DescripcionAccion>
-        <BotonAccion _icon={<Add />}>
-          {title}
+        <FlexContainer
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mt: 2,
+          }}
+        >
+          <FlexContainer sx={{ alignItems: 'center' }}>
+            <Add fontSize='small' sx={{ mr: 0.5 }} />
+            {title}
+          </FlexContainer>
           {onClick && (
             <ArrowForward
               className='action-arrow'
@@ -78,7 +86,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
               }}
             />
           )}
-        </BotonAccion>
+        </FlexContainer>
 
         {onClick && (
           <div
@@ -95,7 +103,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
             <TouchApp fontSize='small' color='action' sx={{ opacity: 0.7 }} />
           </div>
         )}
-      </CardContentStyled>
+      </CardContent>
     </ActionCardContainer>
   );
 };

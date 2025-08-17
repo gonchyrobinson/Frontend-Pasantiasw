@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Typography, Alert, Container, Button, Box } from '@mui/material';
-import { Refresh } from '@mui/icons-material';
-import { useSnackbar } from '../../hooks/useSnackbar';
-import { ROUTES } from '../../helpers/routesHelper';
+import { Alert } from '@mui/material';
 import {
-  ConvenioStats,
+  MainContainer,
+  CenteredContainer,
+  SectionContainer,
+} from '../../lib/components/StyledContainers';
+import { CardTitle, BodyText } from '../../lib/components/StyledText';
+import { RefreshButton } from '../../lib/components/StyledButtons';
+import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { ROUTES } from '../../helpers/routesHelper';
+import ConvenioStats from './components/ConvenioStats';
+import {
   ConfirmDialog,
   FloatingActionButton,
-} from './components/ComponentesGenericos';
-import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+} from '../../lib/components/ComponentesGenericos';
+import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import ConveniosFilters from './components/ConveniosFilters';
 import ConveniosTabla from './components/ConveniosTabla';
 import {
@@ -39,34 +45,30 @@ const Convenios: React.FC = () => {
     useState(false);
 
   const { stats, isLoading: statsLoading, error } = useConvenioStats();
-  const { data: conveniosResponse, refetch: refetchConvenios } = useConvenios();
+  const { data: convenios, refetch: refetchConvenios } = useConvenios();
   const { deleteConvenio, isDeleting } = useDeleteConvenio();
   const { mutate: caducarConvenio } = useCaducarConvenio();
 
   // Mostrar todos los convenios al cargar la página por primera vez
   useEffect(() => {
-    if (
-      !hasSearched &&
-      conveniosResponse?.data &&
-      conveniosResponse.data.length > 0
-    ) {
+    if (!hasSearched && convenios && convenios.length > 0) {
       setHasSearched(true);
-      setSearchResults(conveniosResponse.data);
+      setSearchResults(convenios);
     }
-  }, [conveniosResponse, hasSearched]);
+  }, [convenios, hasSearched]);
 
   // Al regresar a la página, hacer GET a la API y mostrar todos los convenios
   useEffect(() => {
     if (
       location.pathname === ROUTES.CONVENIOS &&
-      conveniosResponse?.data &&
-      conveniosResponse.data.length > 0
+      convenios &&
+      convenios.length > 0
     ) {
       // Refrescar datos y mostrar todos los convenios
       setHasSearched(true);
-      setSearchResults(conveniosResponse.data);
+      setSearchResults(convenios);
     }
-  }, [location.pathname, conveniosResponse]);
+  }, [location.pathname, convenios]);
 
   const handleClearSearch = () => {
     setSearchResults([]);
@@ -173,24 +175,23 @@ const Convenios: React.FC = () => {
 
   if (error) {
     return (
-      <Container maxWidth='lg' sx={{ py: 3 }}>
+      <MainContainer>
         <Alert
           severity='error'
           action={
-            <Button color='inherit' size='small' onClick={handleRefresh}>
-              <Refresh sx={{ mr: 1 }} />
+            <RefreshButton onClick={handleRefresh} size='small'>
               Reintentar
-            </Button>
+            </RefreshButton>
           }
         >
           Error al cargar los convenios: {error.message}
         </Alert>
-      </Container>
+      </MainContainer>
     );
   }
 
   return (
-    <Container maxWidth='lg' sx={{ py: 3 }}>
+    <MainContainer>
       <PageHeader
         title='Gestión de Convenios'
         subtitle='Administra los convenios del sistema de pasantías'
@@ -210,9 +211,9 @@ const Convenios: React.FC = () => {
       {/* Vista principal con TablaGenerica */}
       {hasSearched && searchResults.length > 0 && (
         <>
-          <Box sx={{ mb: 3 }}>
+          <SectionContainer sx={{ mb: 3 }}>
             <ConvenioStats stats={stats} loading={statsLoading} />
-          </Box>
+          </SectionContainer>
 
           <ConveniosTabla
             convenios={searchResults}
@@ -227,26 +228,34 @@ const Convenios: React.FC = () => {
 
       {/* Estado vacío cuando no hay búsqueda */}
       {!hasSearched && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer
+          sx={{
+            textAlign: 'center',
+            py: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <CardTitle color='text.secondary' gutterBottom>
             Búsqueda de Convenios
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar convenios específicos
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       {/* Estado vacío cuando no hay resultados */}
       {hasSearched && searchResults.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant='h6' color='text.secondary' gutterBottom>
+        <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
+          <CardTitle color='text.secondary' gutterBottom>
             No se encontraron convenios
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
+          </CardTitle>
+          <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda
-          </Typography>
-        </Box>
+          </BodyText>
+        </CenteredContainer>
       )}
 
       <FloatingActionButton onClick={handleCreate} />
@@ -261,24 +270,24 @@ const Convenios: React.FC = () => {
         itemDetails={
           selectedConvenio && (
             <div>
-              <Typography variant='body2' color='text.secondary'>
+              <BodyText color='text.secondary'>
                 <strong>Empresa:</strong>{' '}
                 {selectedConvenio.nombreEmpresa || 'Sin empresa asignada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Firma:</strong>{' '}
                 {selectedConvenio.fechaFirma
                   ? new Date(selectedConvenio.fechaFirma).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
+              </BodyText>
+              <BodyText color='text.secondary'>
                 <strong>Fecha de Caducidad:</strong>{' '}
                 {selectedConvenio.fechaCaducidad
                   ? new Date(
                       selectedConvenio.fechaCaducidad
                     ).toLocaleDateString()
                   : 'No especificada'}
-              </Typography>
+              </BodyText>
             </div>
           )
         }
@@ -305,7 +314,7 @@ const Convenios: React.FC = () => {
         onClose={handleCloseAsignarEmpresa}
         convenio={selectedConvenio}
       />
-    </Container>
+    </MainContainer>
   );
 };
 

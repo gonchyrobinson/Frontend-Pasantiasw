@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Typography, Grid, Paper } from '@mui/material';
+import { Button } from '@mui/material';
+import { SectionTitle } from '../../components/StyledText';
 import { GenericFormProps, FieldMetadata } from '../types';
+import {
+  FormContainer,
+  ActionContainer,
+  GridContainer,
+} from '../../components/StyledContainers';
 import TextField from './TextField';
 import EmailField from './EmailField';
 import CurrencyField from './CurrencyField';
@@ -129,15 +135,14 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
   };
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <FormContainer>
       {metadata.title && (
-        <Typography variant='h5' component='h2' gutterBottom>
+        <SectionTitle component='h2' gutterBottom>
           {metadata.title}
-        </Typography>
+        </SectionTitle>
       )}
 
-      <Box
-        component='form'
+      <form
         onSubmit={handleSubmit((data: Record<string, unknown>) => {
           // Transform empty strings to null
           const transformedData = Object.fromEntries(
@@ -150,15 +155,20 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
         })}
         noValidate
       >
-        <Grid container spacing={2}>
+        <GridContainer container spacing={2}>
           {metadata.fields.map(field => (
-            <Grid item xs={12} md={field.gridSize || 6} key={field.name}>
+            <GridContainer
+              item
+              xs={12}
+              md={field.gridSize || 6}
+              key={field.name}
+            >
               {renderField(field)}
-            </Grid>
+            </GridContainer>
           ))}
-        </Grid>
+        </GridContainer>
 
-        <Box
+        <ActionContainer
           sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'flex-end' }}
         >
           {(onCancel || onClear) && (
@@ -174,9 +184,9 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
           <Button type='submit' variant='contained' disabled={loading}>
             {loading ? 'Procesando...' : metadata.submitButtonText || 'Guardar'}
           </Button>
-        </Box>
-      </Box>
-    </Paper>
+        </ActionContainer>
+      </form>
+    </FormContainer>
   );
 };
 

@@ -1,0 +1,240 @@
+---
+alwaysApply: true
+description: Rules to avoid creating unnecessary files and promote code consolidation
+---
+
+# Avoid Unnecessary Files - Code Consolidation Rules
+
+## **Core Principle: Minimize File Count**
+
+### **Before Creating ANY New File, Ask:**
+1. ✅ **Can this be added to an existing file?**
+2. ✅ **Does a similar component/function already exist in `@lib/`?**
+3. ✅ **Can this be achieved with props/configuration instead of a new file?**
+4. ✅ **Will this be used in multiple places?** (If no, consider inline)
+5. ✅ **Is this truly complex enough to warrant its own file?**
+
+## **File Creation Hierarchy**
+
+### **1. Check Existing Libraries FIRST**
+```typescript
+// ALWAYS check these locations before creating new files:
+src/lib/components/
+├── StyledText.tsx          # Text components
+├── StyledButtons.tsx       # Button components
+├── StyledContainers.tsx    # Container components
+├── ComponentesGenericos.tsx # Generic components
+├── StyledComponents.tsx    # Styled MUI components
+└── [Other existing files]
+```
+
+### **2. Add to Existing Files When Possible**
+```typescript
+// ✅ GOOD - Add to existing file
+// In StyledButtons.tsx
+export const NewSpecificButton = () => { ... };
+
+// ❌ BAD - Create new file
+// src/components/NewSpecificButton.tsx
+```
+
+### **3. Create New Files Only When Necessary**
+New files are justified ONLY when:
+- **Complex component** (>100 lines)
+- **Multiple related components** that form a cohesive unit
+- **Truly unique functionality** not available in `@lib/`
+- **Will be reused** across multiple modules
+
+## **Specific Anti-Patterns to Avoid**
+
+### **❌ DON'T Create These Files**
+
+#### **Single-Purpose Component Files**
+```typescript
+// ❌ DON'T CREATE
+src/components/SaveButton.tsx      // Use StyledButtons.tsx
+src/components/PageHeader.tsx      // Use existing PageHeader
+src/components/ErrorText.tsx       // Use StyledText.tsx
+src/components/FlexBox.tsx         // Use StyledContainers.tsx
+```
+
+#### **Wrapper Components**
+```typescript
+// ❌ DON'T CREATE - Simple wrapper
+const MyButton = ({ children, ...props }) => (
+  <Button variant="contained" {...props}>
+    {children}
+  </Button>
+);
+
+// ✅ DO THIS - Use existing component
+import { PrimaryButton } from '@lib/components/StyledButtons';
+```
+
+#### **Style-Only Components**
+```typescript
+// ❌ DON'T CREATE - Just styling
+const StyledCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
+
+// ✅ DO THIS - Use existing or add to StyledComponents.tsx
+import { CardContainer } from '@lib/components/StyledContainers';
+```
+
+#### **Duplicate Functionality**
+```typescript
+// ❌ DON'T CREATE - Duplicates existing
+src/modules/Empresas/components/EmpresaButton.tsx
+src/modules/Estudiantes/components/EstudianteButton.tsx
+// Both do the same thing with different text
+
+// ✅ DO THIS - Use generic component with props
+import { CreateButton } from '@lib/components/StyledButtons';
+<CreateButton>Nueva Empresa</CreateButton>
+<CreateButton>Nuevo Estudiante</CreateButton>
+```
+
+## **File Consolidation Strategies**
+
+### **1. Component Consolidation**
+```typescript
+// ✅ GOOD - Multiple related components in one file
+// StyledButtons.tsx
+export const PrimaryButton = () => { ... };
+export const SecondaryButton = () => { ... };
+export const ActionButton = () => { ... };
+export const EditButton = () => { ... };
+export const DeleteButton = () => { ... };
+
+// ❌ BAD - Separate files for each
+// PrimaryButton.tsx, SecondaryButton.tsx, etc.
+```
+
+### **2. Helper Function Consolidation**
+```typescript
+// ✅ GOOD - Related helpers in one file
+// src/modules/Empresas/helpers/empresaHelpers.ts
+export const validateEmpresa = () => { ... };
+export const formatEmpresaData = () => { ... };
+export const getEmpresaMetadata = () => { ... };
+
+// ❌ BAD - Separate files
+// validateEmpresa.ts, formatEmpresaData.ts, etc.
+```
+
+### **3. Type Consolidation**
+```typescript
+// ✅ GOOD - All module types in one file
+// src/modules/Empresas/types/index.ts
+export interface EmpresaDto { ... }
+export interface CreateEmpresaDto { ... }
+export interface EmpresaFilters { ... }
+export type EmpresaStatus = 'active' | 'inactive';
+
+// ❌ BAD - Separate type files
+// EmpresaDto.ts, CreateEmpresaDto.ts, etc.
+```
+
+## **Module Structure Guidelines**
+
+### **Maximum Files Per Module**
+```
+src/modules/[ModuleName]/
+├── [ModuleName].tsx                    # Main component (REQUIRED)
+├── types/index.ts                      # All types (REQUIRED)
+├── helpers/[moduleName]Helpers.ts      # All helpers (IF NEEDED)
+├── components/
+│   ├── StyledComponents.tsx            # Module-specific styled (IF NEEDED)
+│   ├── ComponentesPersonalizados.tsx   # Unique components (IF NEEDED)
+│   └── [Complex]Component.tsx          # Only if >100 lines (RARE)
+└── hooks/use[ModuleName].ts            # Module hooks (IF NEEDED)
+```
+
+**Target: Maximum 6-8 files per module**
+
+### **When NOT to Create Module-Specific Files**
+- **Simple components** (<50 lines) → Add to existing file or use `@lib/`
+- **Single function helpers** → Add to existing helpers file
+- **Style-only components** → Use `@lib/` components with props
+- **Duplicate functionality** → Create generic component in `@lib/`
+
+## **Refactoring Existing Unnecessary Files**
+
+### **Identification Criteria**
+Files that should be consolidated:
+- **<30 lines** of actual code
+- **Single export** that's used in only one place
+- **Similar functionality** to existing components
+- **Style-only** components
+- **Simple wrapper** components
+
+### **Consolidation Process**
+1. **Identify** the target file for consolidation
+2. **Move** the code to the appropriate existing file
+3. **Update** all imports
+4. **Delete** the unnecessary file
+5. **Test** that functionality remains intact
+
+### **Example Consolidation**
+```typescript
+// BEFORE - Unnecessary file
+// src/components/CustomButton.tsx (15 lines)
+const CustomButton = ({ children, ...props }) => (
+  <Button variant="contained" color="primary" {...props}>
+    {children}
+  </Button>
+);
+
+// AFTER - Consolidated
+// Use existing PrimaryButton from StyledButtons.tsx
+import { PrimaryButton } from '@lib/components/StyledButtons';
+// Delete CustomButton.tsx file
+```
+
+## **Benefits of File Consolidation**
+
+### **Developer Experience**
+- **Fewer files** to navigate and maintain
+- **Easier discovery** of existing functionality
+- **Consistent patterns** across the codebase
+- **Reduced decision fatigue** about where to put code
+
+### **Performance**
+- **Smaller bundle size** through better tree-shaking
+- **Fewer HTTP requests** in development
+- **Better caching** with consolidated modules
+- **Faster build times** with fewer files to process
+
+### **Maintenance**
+- **Single source of truth** for related functionality
+- **Easier refactoring** when logic is consolidated
+- **Reduced duplication** and inconsistencies
+- **Simpler testing** with consolidated test files
+
+## **Enforcement Guidelines**
+
+### **Code Review Checklist**
+- ✅ **New file justified?** Must have clear reason for existence
+- ✅ **Could be added to existing file?** Check for consolidation opportunities
+- ✅ **Uses @lib/ components?** Avoid reinventing existing functionality
+- ✅ **File size appropriate?** Small files should be consolidated
+- ✅ **Naming follows conventions?** Clear, descriptive names
+
+### **Refactoring Opportunities**
+- **Regular audits** of file count and size
+- **Consolidate** files with <50 lines of code
+- **Move** generic functionality to `@lib/`
+- **Delete** unused or redundant files
+- **Update** documentation when consolidating
+
+## **Exceptions**
+
+Files that are acceptable to keep separate:
+- **Main module components** (e.g., `Empresas.tsx`)
+- **Complex components** (>100 lines with multiple responsibilities)
+- **Third-party integrations** that require specific file structure
+- **Generated files** from tools or APIs
+- **Configuration files** required by frameworks
+
+In all other cases, prefer consolidation over file proliferation.

@@ -1,8 +1,12 @@
 import React from 'react';
-import { Grid, Button, TextField, Box, styled } from '@mui/material';
+import { Button, TextField, styled } from '@mui/material';
+import {
+  FlexContainer,
+  GridContainer,
+} from '../../../lib/components/StyledContainers';
 import { Clear } from '@mui/icons-material';
 import { Section } from '../../../lib/components/Section';
-import { ConvenioFilters as ConvenioFiltersType } from '../../types';
+import { ConvenioFilters as ConvenioFiltersType } from '../types';
 
 interface ConvenioFiltersProps {
   filters: ConvenioFiltersType;
@@ -10,10 +14,7 @@ interface ConvenioFiltersProps {
   onClearFilters: () => void;
 }
 
-const FilterContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(2),
-  alignItems: 'center',
+const FilterContainer = styled(FlexContainer)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
@@ -56,8 +57,8 @@ const ConvenioFilters: React.FC<ConvenioFiltersProps> = ({
         </Button>
       </FilterContainer>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
+      <GridContainer container spacing={2}>
+        <GridContainer item xs={12} sm={6} md={3}>
           <TextField
             label='Fecha de firma desde'
             type='date'
@@ -67,8 +68,8 @@ const ConvenioFilters: React.FC<ConvenioFiltersProps> = ({
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </GridContainer>
+        <GridContainer item xs={12} sm={6} md={3}>
           <TextField
             label='Fecha de firma hasta'
             type='date'
@@ -78,8 +79,8 @@ const ConvenioFilters: React.FC<ConvenioFiltersProps> = ({
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </GridContainer>
+        <GridContainer item xs={12} sm={6} md={3}>
           <TextField
             label='Fecha de caducidad desde'
             type='date'
@@ -89,8 +90,8 @@ const ConvenioFilters: React.FC<ConvenioFiltersProps> = ({
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </GridContainer>
+        <GridContainer item xs={12} sm={6} md={3}>
           <TextField
             label='Fecha de caducidad hasta'
             type='date'
@@ -100,8 +101,8 @@ const ConvenioFilters: React.FC<ConvenioFiltersProps> = ({
             fullWidth
             InputLabelProps={{ shrink: true }}
           />
-        </Grid>
-      </Grid>
+        </GridContainer>
+      </GridContainer>
     </Section>
   );
 };
