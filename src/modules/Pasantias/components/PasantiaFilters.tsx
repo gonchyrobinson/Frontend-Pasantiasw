@@ -6,6 +6,10 @@ import {
 } from '../helpers/pasantiaSearchHelpers';
 import { PasantiaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
+import {
+  useEstudiantesForDropdown,
+  useConveniosForDropdown,
+} from '../hooks/usePasantias';
 
 interface PasantiaFiltersProps {
   pasantias: PasantiaDto[];
@@ -22,6 +26,10 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showSuccess } = useSnackbar();
+  const { data: estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesForDropdown();
+  const { data: conveniosOptions, isLoading: conveniosLoading } =
+    useConveniosForDropdown();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -48,12 +56,10 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
     filters: Record<string, any>
   ): PasantiaDto[] => {
     return pasantias.filter(pasantia => {
-      // Filtro por expediente
+      // Filtro por trámite
       if (
-        filters.expediente &&
-        !pasantia.expediente
-          ?.toLowerCase()
-          .includes(filters.expediente.toLowerCase())
+        filters.tramite &&
+        !pasantia.tramite?.toLowerCase().includes(filters.tramite.toLowerCase())
       ) {
         return false;
       }
@@ -102,7 +108,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       }
 
       // Filtros de fecha de inicio
-      if (filters.fechaInicioDesde) {
+      if (filters.fechaInicioDesde && pasantia.fechaInicio) {
         const fechaInicio = new Date(pasantia.fechaInicio);
         const fechaDesde = new Date(filters.fechaInicioDesde);
         if (fechaInicio < fechaDesde) {
@@ -110,7 +116,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
         }
       }
 
-      if (filters.fechaInicioHasta) {
+      if (filters.fechaInicioHasta && pasantia.fechaInicio) {
         const fechaInicio = new Date(pasantia.fechaInicio);
         const fechaHasta = new Date(filters.fechaInicioHasta);
         if (fechaInicio > fechaHasta) {
@@ -119,7 +125,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       }
 
       // Filtros de fecha de fin
-      if (filters.fechaFinDesde) {
+      if (filters.fechaFinDesde && pasantia.fechaFin) {
         const fechaFin = new Date(pasantia.fechaFin);
         const fechaDesde = new Date(filters.fechaFinDesde);
         if (fechaFin < fechaDesde) {
@@ -127,7 +133,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
         }
       }
 
-      if (filters.fechaFinHasta) {
+      if (filters.fechaFinHasta && pasantia.fechaFin) {
         const fechaFin = new Date(pasantia.fechaFin);
         const fechaHasta = new Date(filters.fechaFinHasta);
         if (fechaFin > fechaHasta) {
@@ -135,18 +141,23 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
         }
       }
 
-      // Filtros de asignación mensual
+      // Filtros por ID
       if (
-        filters.asignacionMensualMin &&
-        pasantia.asignacionMensual < Number(filters.asignacionMensualMin)
+        filters.idEstudiante &&
+        pasantia.idEstudiante !== Number(filters.idEstudiante)
       ) {
         return false;
       }
 
       if (
-        filters.asignacionMensualMax &&
-        pasantia.asignacionMensual > Number(filters.asignacionMensualMax)
+        filters.idConvenio &&
+        pasantia.idConvenio !== Number(filters.idConvenio)
       ) {
+        return false;
+      }
+
+      // Filtro por estado
+      if (filters.estado && pasantia.estado !== filters.estado) {
         return false;
       }
 
@@ -162,6 +173,11 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       onSubmit={handleSearchSubmit}
       onClearResults={onClearResults}
       hasResults={hasResults}
+      dynamicDropdownOptions={{
+        idEstudiante: estudiantesOptions || [],
+        idConvenio: conveniosOptions || [],
+      }}
+      loading={estudiantesLoading || conveniosLoading}
     />
   );
 };

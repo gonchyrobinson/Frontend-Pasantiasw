@@ -6,24 +6,12 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import {
   usePasantia,
   useUpdatePasantia,
-  useEstudiantes,
-  useConvenios,
+  useEstudiantesForDropdown,
+  useConveniosForDropdown,
 } from '../hooks/usePasantias';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
-
-// Tipos para estudiantes y convenios
-interface Estudiante {
-  idEstudiante: number;
-  nombre: string;
-  apellido: string;
-}
-
-interface Convenio {
-  idConvenio: number;
-  expediente: string;
-}
 
 const EditarPasantia: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,10 +21,10 @@ const EditarPasantia: React.FC = () => {
 
   const { data: pasantiaData, isLoading, error } = usePasantia(pasantiaId);
   const { mutate: updatePasantia, isPending: isUpdating } = useUpdatePasantia();
-  const { data: estudiantesResponse, isLoading: estudiantesLoading } =
-    useEstudiantes();
-  const { data: conveniosResponse, isLoading: conveniosLoading } =
-    useConvenios();
+  const { data: estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesForDropdown();
+  const { data: conveniosOptions, isLoading: conveniosLoading } =
+    useConveniosForDropdown();
 
   const metadata = getPasantiaFormMetadata();
 
@@ -74,19 +62,10 @@ const EditarPasantia: React.FC = () => {
     return <div>No se encontró la pasantía.</div>;
   }
 
-  // Preparar opciones para dropdowns dinámicos
-  const estudiantes = (estudiantesResponse || []) as Estudiante[];
-  const convenios = (conveniosResponse || []) as Convenio[];
-
+  // Las opciones ya vienen formateadas desde los hooks
   const dynamicDropdownOptions = {
-    idEstudiante: estudiantes.map((estudiante: Estudiante) => ({
-      value: estudiante.idEstudiante,
-      label: `${estudiante.nombre} ${estudiante.apellido}`,
-    })),
-    idConvenio: convenios.map((convenio: Convenio) => ({
-      value: convenio.idConvenio,
-      label: convenio.expediente,
-    })),
+    idEstudiante: estudiantesOptions || [],
+    idConvenio: conveniosOptions || [],
   };
 
   return (

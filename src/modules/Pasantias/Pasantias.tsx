@@ -217,7 +217,7 @@ const Pasantias: React.FC = () => {
         open={showDeleteDialog}
         title='Eliminar Pasantía'
         message='¿Está seguro de que desea eliminar esta pasantía?'
-        itemName={selectedPasantia?.expediente || 'Pasantía'}
+        itemName={selectedPasantia?.tramite || 'Pasantía'}
         itemDetails={
           selectedPasantia && (
             <div>
