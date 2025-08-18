@@ -7,6 +7,7 @@ import { Warning, Business } from '@mui/icons-material';
 interface ConveniosTablaProps {
   convenios: ConvenioEmpresaDto[];
   loading: boolean;
+  onRowClick?: (convenio: ConvenioEmpresaDto) => void;
   onEdit: (convenio: ConvenioEmpresaDto) => void;
   onDelete: (convenio: ConvenioEmpresaDto) => void;
   onCaducar: (convenio: ConvenioEmpresaDto) => void;
@@ -16,6 +17,7 @@ interface ConveniosTablaProps {
 const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
   convenios,
   loading,
+  onRowClick,
   onEdit,
   onDelete,
   onCaducar,
@@ -42,6 +44,11 @@ const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
     ...convenio,
     id: convenio.idConvenio,
   }));
+
+  const handleRowClick = (row: Record<string, unknown>) => {
+    const convenio = convenios.find(c => c.idConvenio === row.id);
+    if (convenio && onRowClick) onRowClick(convenio);
+  };
 
   const handleRowEdit = (row: Record<string, unknown>) => {
     const convenio = convenios.find(c => c.idConvenio === row.id);
@@ -83,6 +90,7 @@ const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
       title='Convenios'
       subtitle='Lista de convenios registrados en el sistema'
       loading={loading}
+      onRowClick={handleRowClick}
       onRowEdit={handleRowEdit}
       onRowDelete={handleRowDelete}
       extraButtons={extraButtons}

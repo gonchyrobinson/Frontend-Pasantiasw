@@ -20,6 +20,7 @@ export const ROUTES = {
   CONVENIOS: '/convenios',
   CONVENIOS_CREAR: '/convenios/crear',
   CONVENIOS_EDITAR: '/convenios/editar',
+  CONVENIOS_DETALLE: '/convenios/detalle',
   PASANTIAS: '/pasantias',
   PASANTIAS_CREAR: '/pasantias/crear',
   PASANTIAS_EDITAR: '/pasantias/editar',
