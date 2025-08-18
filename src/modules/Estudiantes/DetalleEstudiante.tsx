@@ -34,26 +34,26 @@ const DetalleEstudiante: React.FC = () => {
             name: 'nombre',
             label: 'Nombre',
             type: 'text',
-            gridSize: 5,
+            gridSize: 6,
           },
           {
             name: 'apellido',
             label: 'Apellido',
             type: 'text',
-            gridSize: 5,
+            gridSize: 6,
           },
           {
             name: 'documento',
             label: 'Documento',
             type: 'text',
-            gridSize: 5,
+            gridSize: 6,
             prefix: 'DNI: ',
           },
           {
             name: 'libreta',
             label: 'Libreta Universitaria',
             type: 'text',
-            gridSize: 5,
+            gridSize: 6,
             prefix: 'LU: ',
           },
           {
@@ -74,7 +74,7 @@ const DetalleEstudiante: React.FC = () => {
             name: 'carrera',
             label: 'Carrera',
             type: 'badge',
-            gridSize: 5,
+            gridSize: 6,
             badgeConfig: {
               color: 'primary',
             },
@@ -83,7 +83,7 @@ const DetalleEstudiante: React.FC = () => {
             name: 'areaTrabajo',
             label: 'Área de Trabajo',
             type: 'badge',
-            gridSize: 5,
+            gridSize: 6,
             badgeConfig: {
               color: 'secondary',
             },

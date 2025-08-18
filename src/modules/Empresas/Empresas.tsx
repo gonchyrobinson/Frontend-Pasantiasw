@@ -72,6 +72,10 @@ const Empresas: React.FC = () => {
     navigate(`${ROUTES.EMPRESAS_EDITAR}/${empresa.idEmpresa}`);
   };
 
+  const handleVerDetalle = (empresa: EmpresaDto) => {
+    navigate(`${ROUTES.EMPRESAS_DETALLE}/${empresa.idEmpresa}`);
+  };
+
   const { deleteEmpresa, isDeleting } = useDeleteEmpresa();
 
   // Mostrar todas las empresas al cargar la página por primera vez
@@ -173,9 +177,7 @@ const Empresas: React.FC = () => {
           <EmpresasTabla
             empresas={searchResults}
             loading={isLoading || isRefreshing}
-            onRowClick={() => {
-              // TODO: Implementar vista detalle de empresa
-            }}
+            onRowClick={handleVerDetalle}
             onRowEdit={handleEditarEmpresa}
             onRowDelete={handleDeleteEmpresa}
           />

@@ -13,6 +13,7 @@ import Login from '../modules/Login/Login';
 import Empresas from '../modules/Empresas/Empresas';
 import CreacionEmpresas from '../modules/Empresas/CreacionEmpresas';
 import EditarEmpresa from '../modules/Empresas/EditarEmpresa';
+import DetalleEmpresa from '../modules/Empresas/DetalleEmpresa';
 import Estudiantes from '../modules/Estudiantes/Estudiantes';
 import CreacionEstudiantes from '../modules/Estudiantes/CreacionEstudiantes';
 import EditarEstudiante from '../modules/Estudiantes/EditarEstudiante';
@@ -79,6 +80,16 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <EditarEmpresa />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.EMPRESAS_DETALLE}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DetalleEmpresa />
               </Layout>
             </ProtectedRoute>
           }

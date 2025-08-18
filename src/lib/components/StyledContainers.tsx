@@ -49,6 +49,29 @@ export const GridContainer = styled(Grid)<GridProps>(({ theme }) => ({
   gap: theme.spacing(3),
 }));
 
+// 5.1. Grid Layout Container - Grid container with proper spacing
+export const GridLayoutContainer = styled(Grid)<GridProps>(() => ({
+  // No additional styles needed, MUI Grid handles it
+}));
+
+// 5.2. Field Container - Container for individual display fields
+export const FieldContainer = styled(Box)<BoxProps>(({ theme }) => ({
+  padding: theme.spacing(2),
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  height: '100%',
+  backgroundColor: theme.palette.background.paper,
+}));
+
+// 5.3. Display Section Card - Complete card for display sections
+export const DisplaySectionCard = styled(Card)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  '& .MuiCardActions-root': {
+    backgroundColor: theme.palette.grey[50],
+    justifyContent: 'space-between',
+  },
+}));
+
 // 6. Centered Container - Box centered both horizontally and vertically
 export const CenteredContainer = styled(Box)<BoxProps>(() => ({
   display: 'flex',
