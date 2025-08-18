@@ -82,6 +82,10 @@ const Pagos: React.FC = () => {
     navigate(`${ROUTES.PAGOS_EDITAR}/${pago.idPago}`);
   };
 
+  const handleVerDetalle = (pago: PagosDto) => {
+    navigate(`${ROUTES.PAGOS_DETALLE}/${pago.idPago}`);
+  };
+
   const handleCreate = () => {
     navigate(ROUTES.PAGOS_CREAR);
   };
@@ -178,6 +182,7 @@ const Pagos: React.FC = () => {
           <PagosTabla
             pagos={searchResults}
             loading={statsLoading}
+            onRowClick={handleVerDetalle}
             onEdit={handleEdit}
             onDelete={confirmMarcarPagado}
           />

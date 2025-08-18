@@ -28,6 +28,7 @@ export const ROUTES = {
   PAGOS: '/pagos',
   PAGOS_CREAR: '/pagos/crear',
   PAGOS_EDITAR: '/pagos/editar',
+  PAGOS_DETALLE: '/pagos/detalle',
   REPORTES: '/reportes',
 
   // Usuario y configuración

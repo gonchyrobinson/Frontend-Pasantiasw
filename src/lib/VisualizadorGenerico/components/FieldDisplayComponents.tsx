@@ -14,12 +14,13 @@ interface FieldDisplayProps {
 }
 
 // Utilidades simples
-const formatCurrency = (value: number | string): string => {
+const formatCurrency = (value: number | string | null | undefined): string => {
+  if (value === null || value === undefined) return 'N/A';
   const numValue = typeof value === 'string' ? parseFloat(value) : value;
   return isNaN(numValue) ? 'N/A' : `$${numValue.toLocaleString()}`;
 };
 
-const formatDate = (value: string | Date): string => {
+const formatDate = (value: string | Date | null | undefined): string => {
   if (!value) return 'N/A';
   try {
     const date = new Date(value);
@@ -29,7 +30,8 @@ const formatDate = (value: string | Date): string => {
   }
 };
 
-const formatNumber = (value: number | string): string => {
+const formatNumber = (value: number | string | null | undefined): string => {
+  if (value === null || value === undefined) return 'N/A';
   const numValue = typeof value === 'string' ? parseFloat(value) : value;
   return isNaN(numValue) ? 'N/A' : numValue.toLocaleString();
 };

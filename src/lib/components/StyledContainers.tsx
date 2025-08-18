@@ -72,6 +72,22 @@ export const DisplaySectionCard = styled(Card)(({ theme }) => ({
   },
 }));
 
+// 5.4. Status Badge Container - Container for status badges with conditional styling
+export const StatusBadgeContainer = styled(Box)<
+  BoxProps & { success?: boolean }
+>(({ theme, success }) => ({
+  padding: theme.spacing(1, 2),
+  borderRadius: theme.shape.borderRadius,
+  textAlign: 'center',
+  fontWeight: 600,
+  backgroundColor: success
+    ? theme.palette.success.light
+    : theme.palette.warning.light,
+  color: success ? theme.palette.success.dark : theme.palette.warning.dark,
+  border: `1px solid ${success ? theme.palette.success.main : theme.palette.warning.main}`,
+  display: 'inline-block',
+}));
+
 // 6. Centered Container - Box centered both horizontally and vertically
 export const CenteredContainer = styled(Box)<BoxProps>(() => ({
   display: 'flex',
