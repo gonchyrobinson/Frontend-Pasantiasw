@@ -12,3 +12,6 @@ export * from './StyledComponents';
 export * from './StyledText';
 export * from './StyledContainers';
 export * from './StyledButtons';
+
+// VisualizadorGenerico
+export * from '../VisualizadorGenerico';

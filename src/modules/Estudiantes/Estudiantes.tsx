@@ -71,6 +71,10 @@ const Estudiantes: React.FC = () => {
     navigate(`${ROUTES.ESTUDIANTES_EDITAR}/${estudiante.idEstudiante}`);
   };
 
+  const handleVerDetalle = (estudiante: EstudianteDto) => {
+    navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${estudiante.idEstudiante}`);
+  };
+
   const handleDeleteEstudiante = (estudiante: EstudianteDto) => {
     setEstudianteToDelete(estudiante);
     setShowDeleteDialog(true);
@@ -172,9 +176,7 @@ const Estudiantes: React.FC = () => {
           <EstudiantesTabla
             estudiantes={searchResults}
             loading={isLoading || isRefreshing}
-            onRowClick={() => {
-              // TODO: Implementar vista detalle de estudiante
-            }}
+            onRowClick={handleVerDetalle}
             onRowEdit={handleEditarEstudiante}
             onRowDelete={handleDeleteEstudiante}
           />
