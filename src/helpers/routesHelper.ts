@@ -24,6 +24,7 @@ export const ROUTES = {
   PASANTIAS: '/pasantias',
   PASANTIAS_CREAR: '/pasantias/crear',
   PASANTIAS_EDITAR: '/pasantias/editar',
+  PASANTIAS_DETALLE: '/pasantias/detalle',
   PAGOS: '/pagos',
   PAGOS_CREAR: '/pagos/crear',
   PAGOS_EDITAR: '/pagos/editar',

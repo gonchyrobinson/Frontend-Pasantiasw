@@ -6,6 +6,7 @@ import { FieldMetadata } from '../../../lib/ElementCardGenerica/types';
 interface PasantiasTablaProps {
   pasantias: PasantiaDto[];
   loading: boolean;
+  onRowClick?: (pasantia: PasantiaDto) => void;
   onEdit: (pasantia: PasantiaDto) => void;
   onDelete: (pasantia: PasantiaDto) => void;
   onFinalizar?: (pasantia: PasantiaDto) => void;
@@ -15,6 +16,7 @@ interface PasantiasTablaProps {
 const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
   pasantias,
   loading,
+  onRowClick,
   onEdit,
   onDelete,
 }) => {
@@ -36,6 +38,11 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
     id: pasantia.idPasantia,
   }));
 
+  const handleRowClick = (row: Record<string, unknown>) => {
+    const pasantia = pasantias.find(p => p.idPasantia === row.id);
+    if (pasantia && onRowClick) onRowClick(pasantia);
+  };
+
   const handleRowEdit = (row: Record<string, unknown>) => {
     const pasantia = pasantias.find(p => p.idPasantia === row.id);
     if (pasantia) onEdit(pasantia);
@@ -53,6 +60,7 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
       title='Pasantías'
       subtitle='Lista de pasantías registradas en el sistema'
       loading={loading}
+      onRowClick={handleRowClick}
       onRowEdit={handleRowEdit}
       onRowDelete={handleRowDelete}
       pageSize={15}

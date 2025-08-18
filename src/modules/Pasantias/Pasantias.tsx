@@ -92,6 +92,10 @@ const Pasantias: React.FC = () => {
     navigate(`${ROUTES.PASANTIAS_EDITAR}/${pasantia.idPasantia}`);
   };
 
+  const handleVerDetalle = (pasantia: PasantiaDto) => {
+    navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantia.idPasantia}`);
+  };
+
   const handleCreate = () => {
     navigate(ROUTES.PASANTIAS_CREAR);
   };
@@ -171,6 +175,7 @@ const Pasantias: React.FC = () => {
           <PasantiasTabla
             pasantias={searchResults}
             loading={statsLoading}
+            onRowClick={handleVerDetalle}
             onEdit={handleEdit}
             onDelete={confirmDelete}
           />
