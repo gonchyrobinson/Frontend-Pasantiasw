@@ -97,6 +97,10 @@ const Convenios: React.FC = () => {
     navigate(`${ROUTES.CONVENIOS_EDITAR}/${convenio.idConvenio}`);
   };
 
+  const handleVerDetalle = (convenio: ConvenioEmpresaDto) => {
+    navigate(`${ROUTES.CONVENIOS_DETALLE}/${convenio.idConvenio}`);
+  };
+
   const handleCreate = () => {
     navigate(ROUTES.CONVENIOS_CREAR);
   };
@@ -218,6 +222,7 @@ const Convenios: React.FC = () => {
           <ConveniosTabla
             convenios={searchResults}
             loading={statsLoading}
+            onRowClick={handleVerDetalle}
             onEdit={handleEdit}
             onDelete={confirmDelete}
             onCaducar={confirmCaducar}
