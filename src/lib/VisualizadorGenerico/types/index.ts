@@ -62,6 +62,13 @@ export interface SectionMetadata {
   gridContainer?: boolean;
 }
 
+export interface NavigationButton {
+  label: string;
+  icon?: React.ReactNode;
+  onClick: () => void;
+  condition?: boolean;
+}
+
 export interface DisplayMetadata {
   title?: string;
   subtitle?: string;
@@ -71,6 +78,7 @@ export interface DisplayMetadata {
   showEditButton?: boolean;
   editButtonText?: string;
   onEdit?: () => void;
+  navigationButtons?: NavigationButton[];
 }
 
 export interface VisualizadorGenericoProps {

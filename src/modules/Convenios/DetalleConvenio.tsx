@@ -2,8 +2,6 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Business } from '@mui/icons-material';
 import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
-import { SecondaryButton } from '../../lib/components/StyledButtons';
-import { FlexContainer } from '../../lib/components/StyledContainers';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { ConvenioEmpresaDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -19,12 +17,6 @@ const DetalleConvenio: React.FC = () => {
     refetch,
   } = useApiQuery<ConvenioEmpresaDto>(`${ROUTES.CONVENIOS}/${id}`);
 
-  const handleVerEmpresa = () => {
-    if (convenio?.data?.idEmpresa) {
-      navigate(`${ROUTES.EMPRESAS_DETALLE}/${convenio.data.idEmpresa}`);
-    }
-  };
-
   const metadata: DisplayMetadata = {
     title: 'Detalle del Convenio',
     subtitle: 'Información completa del convenio y empresa asociada',
@@ -32,6 +24,15 @@ const DetalleConvenio: React.FC = () => {
     showCopyButton: true,
     editButtonText: 'Editar',
     onEdit: () => navigate(`${ROUTES.CONVENIOS_EDITAR}/${id}`),
+    navigationButtons: [
+      {
+        label: 'Ver Empresa',
+        icon: <Business />,
+        onClick: () =>
+          navigate(`${ROUTES.EMPRESAS_DETALLE}/${convenio?.data?.idEmpresa}`),
+        condition: !!convenio?.data?.idEmpresa,
+      },
+    ],
     sections: [
       {
         title: 'Información General',
@@ -137,28 +138,13 @@ const DetalleConvenio: React.FC = () => {
   };
 
   return (
-    <>
-      <VisualizadorGenerico
-        metadata={metadata}
-        data={convenio?.data || {}}
-        loading={isLoading}
-        error={error?.message}
-        onRetry={refetch}
-      />
-
-      {/* Botón adicional Ver Empresa */}
-      {convenio?.data?.idEmpresa && (
-        <FlexContainer sx={{ mt: 2, justifyContent: 'center' }}>
-          <SecondaryButton
-            startIcon={<Business />}
-            onClick={handleVerEmpresa}
-            size='large'
-          >
-            Ver Empresa
-          </SecondaryButton>
-        </FlexContainer>
-      )}
-    </>
+    <VisualizadorGenerico
+      metadata={metadata}
+      data={convenio?.data || {}}
+      loading={isLoading}
+      error={error?.message}
+      onRetry={refetch}
+    />
   );
 };
 

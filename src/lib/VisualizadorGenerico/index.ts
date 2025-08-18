@@ -25,6 +25,7 @@ export type {
   SectionMetadata,
   DisplayMetadata,
   VisualizadorGenericoProps,
+  NavigationButton,
   BadgeConfig,
   LinkConfig,
   CurrencyFormat,

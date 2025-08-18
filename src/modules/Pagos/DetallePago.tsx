@@ -2,11 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Work } from '@mui/icons-material';
 import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
-import { SecondaryButton } from '../../lib/components/StyledButtons';
-import {
-  FlexContainer,
-  StatusBadgeContainer,
-} from '../../lib/components/StyledContainers';
+import { StatusBadgeContainer } from '../../lib/components/StyledContainers';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { PagosDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -22,12 +18,6 @@ const DetallePago: React.FC = () => {
     refetch,
   } = useApiQuery<PagosDto>(`${ROUTES.PAGOS}/${id}`);
 
-  const handleVerPasantia = () => {
-    if (pago?.data?.idPasantia) {
-      navigate(`${ROUTES.PASANTIAS_DETALLE}/${pago.data.idPasantia}`);
-    }
-  };
-
   const metadata: DisplayMetadata = {
     title: 'Detalle del Pago',
     subtitle: 'Información completa del pago',
@@ -35,6 +25,15 @@ const DetallePago: React.FC = () => {
     showCopyButton: true,
     editButtonText: 'Editar',
     onEdit: () => navigate(`${ROUTES.PAGOS_EDITAR}/${id}`),
+    navigationButtons: [
+      {
+        label: 'Ver Pasantía',
+        icon: <Work />,
+        onClick: () =>
+          navigate(`${ROUTES.PASANTIAS_DETALLE}/${pago?.data?.idPasantia}`),
+        condition: !!pago?.data?.idPasantia,
+      },
+    ],
     sections: [
       {
         title: 'Información General',
@@ -106,28 +105,13 @@ const DetallePago: React.FC = () => {
   };
 
   return (
-    <>
-      <VisualizadorGenerico
-        metadata={metadata}
-        data={pago?.data || {}}
-        loading={isLoading}
-        error={error?.message}
-        onRetry={refetch}
-      />
-
-      {/* Botón Ver Pasantía */}
-      {pago?.data?.idPasantia && (
-        <FlexContainer sx={{ mt: 2, justifyContent: 'center' }}>
-          <SecondaryButton
-            startIcon={<Work />}
-            onClick={handleVerPasantia}
-            size='large'
-          >
-            Ver Pasantía
-          </SecondaryButton>
-        </FlexContainer>
-      )}
-    </>
+    <VisualizadorGenerico
+      metadata={metadata}
+      data={pago?.data || {}}
+      loading={isLoading}
+      error={error?.message}
+      onRetry={refetch}
+    />
   );
 };
 

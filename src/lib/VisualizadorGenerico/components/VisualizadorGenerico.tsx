@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CardContent,
   CardActions,
@@ -13,6 +14,7 @@ import {
   ContentCopy,
   ExpandMore,
   ExpandLess,
+  ArrowBack,
 } from '@mui/icons-material';
 
 import { VisualizadorGenericoProps, FieldDisplayMetadata } from '../types';
@@ -59,6 +61,7 @@ const VisualizadorGenerico: React.FC<VisualizadorGenericoProps> = ({
   error = null,
   onRetry,
 }) => {
+  const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = useState<
     Record<number, boolean>
   >({});
@@ -233,6 +236,36 @@ const VisualizadorGenerico: React.FC<VisualizadorGenericoProps> = ({
           </Collapse>
         </DisplaySectionCard>
       ))}
+
+      {/* Botones de navegación */}
+      {(metadata.navigationButtons?.length || window.history.length > 1) && (
+        <FlexContainer sx={{ mt: 3, justifyContent: 'center', gap: 2 }}>
+          {/* Botón volver automático */}
+          {window.history.length > 1 && (
+            <SecondaryButton
+              startIcon={<ArrowBack />}
+              onClick={() => navigate(-1)}
+              size='large'
+            >
+              Volver
+            </SecondaryButton>
+          )}
+
+          {/* Botones personalizados */}
+          {metadata.navigationButtons
+            ?.filter(button => button.condition !== false)
+            .map((button, index) => (
+              <SecondaryButton
+                key={index}
+                startIcon={button.icon}
+                onClick={button.onClick}
+                size='large'
+              >
+                {button.label}
+              </SecondaryButton>
+            ))}
+        </FlexContainer>
+      )}
     </MainContainer>
   );
 };
