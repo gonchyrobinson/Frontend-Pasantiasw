@@ -2,8 +2,6 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Person, Assignment } from '@mui/icons-material';
 import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
-import { SecondaryButton } from '../../lib/components/StyledButtons';
-import { FlexContainer } from '../../lib/components/StyledContainers';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { PasantiaDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
@@ -19,18 +17,6 @@ const DetallePasantia: React.FC = () => {
     refetch,
   } = useApiQuery<PasantiaDto>(`${ROUTES.PASANTIAS}/${id}`);
 
-  const handleVerEstudiante = () => {
-    if (pasantia?.data?.idEstudiante) {
-      navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${pasantia.data.idEstudiante}`);
-    }
-  };
-
-  const handleVerConvenio = () => {
-    if (pasantia?.data?.idConvenio) {
-      navigate(`${ROUTES.CONVENIOS_DETALLE}/${pasantia.data.idConvenio}`);
-    }
-  };
-
   const metadata: DisplayMetadata = {
     title: 'Detalle de la Pasantía',
     subtitle: 'Información completa de la pasantía',
@@ -38,6 +24,24 @@ const DetallePasantia: React.FC = () => {
     showCopyButton: true,
     editButtonText: 'Editar',
     onEdit: () => navigate(`${ROUTES.PASANTIAS_EDITAR}/${id}`),
+    navigationButtons: [
+      {
+        label: 'Ver Estudiante',
+        icon: <Person />,
+        onClick: () =>
+          navigate(
+            `${ROUTES.ESTUDIANTES_DETALLE}/${pasantia?.data?.idEstudiante}`
+          ),
+        condition: !!pasantia?.data?.idEstudiante,
+      },
+      {
+        label: 'Ver Convenio',
+        icon: <Assignment />,
+        onClick: () =>
+          navigate(`${ROUTES.CONVENIOS_DETALLE}/${pasantia?.data?.idConvenio}`),
+        condition: !!pasantia?.data?.idConvenio,
+      },
+    ],
     sections: [
       {
         title: 'Información General',
@@ -191,37 +195,13 @@ const DetallePasantia: React.FC = () => {
   };
 
   return (
-    <>
-      <VisualizadorGenerico
-        metadata={metadata}
-        data={pasantia?.data || {}}
-        loading={isLoading}
-        error={error?.message}
-        onRetry={refetch}
-      />
-
-      {/* Botones adicionales */}
-      <FlexContainer sx={{ mt: 2, justifyContent: 'center', gap: 2 }}>
-        {pasantia?.data?.idEstudiante && (
-          <SecondaryButton
-            startIcon={<Person />}
-            onClick={handleVerEstudiante}
-            size='large'
-          >
-            Ver Estudiante
-          </SecondaryButton>
-        )}
-        {pasantia?.data?.idConvenio && (
-          <SecondaryButton
-            startIcon={<Assignment />}
-            onClick={handleVerConvenio}
-            size='large'
-          >
-            Ver Convenio
-          </SecondaryButton>
-        )}
-      </FlexContainer>
-    </>
+    <VisualizadorGenerico
+      metadata={metadata}
+      data={pasantia?.data || {}}
+      loading={isLoading}
+      error={error?.message}
+      onRetry={refetch}
+    />
   );
 };
 
