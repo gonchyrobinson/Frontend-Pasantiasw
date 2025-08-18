@@ -12,6 +12,7 @@ export const ROUTES = {
   EMPRESAS: '/empresas',
   EMPRESAS_CREAR: '/empresas/crear',
   EMPRESAS_EDITAR: '/empresas/editar',
+  EMPRESAS_DETALLE: '/empresas/detalle',
   ESTUDIANTES: '/students',
   ESTUDIANTES_CREAR: '/students/crear',
   ESTUDIANTES_EDITAR: '/students/editar',

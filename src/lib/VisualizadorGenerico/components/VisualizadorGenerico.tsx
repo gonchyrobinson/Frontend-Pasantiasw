@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Card,
   CardContent,
   CardActions,
   Collapse,
@@ -30,8 +29,10 @@ import {
 } from '../../components/StyledButtons';
 import {
   MainContainer,
-  GridContainer,
   FlexContainer,
+  GridLayoutContainer,
+  FieldContainer,
+  DisplaySectionCard,
 } from '../../components/StyledContainers';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -95,28 +96,20 @@ const VisualizadorGenerico: React.FC<VisualizadorGenericoProps> = ({
     const FieldComponent = components[field.type] || TextDisplayField;
 
     return (
-      <GridContainer
+      <GridLayoutContainer
         item
         xs={12}
         sm={6}
         md={field.gridSize || 6}
         key={field.name}
       >
-        <Box
-          sx={{
-            p: 2,
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: 1,
-            height: '100%',
-          }}
-        >
+        <FieldContainer>
           <CaptionText sx={{ fontWeight: 600, mb: 1, color: 'primary.main' }}>
             {field.label}
           </CaptionText>
           <FieldComponent {...fieldProps} />
-        </Box>
-      </GridContainer>
+        </FieldContainer>
+      </GridLayoutContainer>
     );
   };
 
@@ -196,15 +189,10 @@ const VisualizadorGenerico: React.FC<VisualizadorGenericoProps> = ({
 
       {/* Secciones */}
       {metadata.sections.map((section, sectionIndex) => (
-        <Card key={sectionIndex} sx={{ mb: 2 }}>
+        <DisplaySectionCard key={sectionIndex}>
           {/* Header de sección */}
           {section.title && (
-            <CardActions
-              sx={{
-                justifyContent: 'space-between',
-                backgroundColor: 'grey.50',
-              }}
-            >
+            <CardActions>
               <Box>
                 <SectionTitle variant='h6'>{section.title}</SectionTitle>
                 {section.subtitle && (
@@ -233,26 +221,17 @@ const VisualizadorGenerico: React.FC<VisualizadorGenericoProps> = ({
           >
             <CardContent>
               {section.gridContainer ? (
-                <GridContainer
-                  container
-                  spacing={2}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 2,
-                    flexWrap: 'wrap',
-                  }}
-                >
+                <GridLayoutContainer container spacing={2}>
                   {section.fields.map(renderField)}
-                </GridContainer>
+                </GridLayoutContainer>
               ) : (
-                <FlexContainer sx={{ flexDirection: 'row', gap: 2 }}>
+                <FlexContainer sx={{ flexDirection: 'column', gap: 2 }}>
                   {section.fields.map(renderField)}
                 </FlexContainer>
               )}
             </CardContent>
           </Collapse>
-        </Card>
+        </DisplaySectionCard>
       ))}
     </MainContainer>
   );
