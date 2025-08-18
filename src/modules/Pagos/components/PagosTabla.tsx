@@ -8,6 +8,7 @@ import { CheckCircle } from '@mui/icons-material';
 interface PagosTablaProps {
   pagos: PagosDto[];
   loading: boolean;
+  onRowClick?: (pago: PagosDto) => void;
   onEdit: (pago: PagosDto) => void;
   onDelete: (pago: PagosDto) => void; // Ahora representa "marcar como pagado"
 }
@@ -15,6 +16,7 @@ interface PagosTablaProps {
 const PagosTabla: React.FC<PagosTablaProps> = ({
   pagos,
   loading,
+  onRowClick,
   onEdit,
   onDelete,
 }) => {
@@ -37,6 +39,11 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
     fechaVencimiento: pago.fechaVencimiento || '-',
     observaciones: pago.observaciones || '-',
   }));
+
+  const handleRowClick = (row: Record<string, unknown>) => {
+    const pago = pagos.find(p => p.idPago === row.id);
+    if (pago && onRowClick) onRowClick(pago);
+  };
 
   const handleRowEdit = (row: Record<string, unknown>) => {
     const pago = pagos.find(p => p.idPago === row.id);
@@ -69,6 +76,7 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
       title='Pagos'
       subtitle='Lista de pagos registrados en el sistema'
       loading={loading}
+      onRowClick={handleRowClick}
       onRowEdit={handleRowEdit}
       extraButtons={extraButtons}
       pageSize={15}

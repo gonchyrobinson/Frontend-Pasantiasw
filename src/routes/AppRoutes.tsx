@@ -29,6 +29,7 @@ import DetallePasantia from '../modules/Pasantias/DetallePasantia';
 import Pagos from '../modules/Pagos/Pagos';
 import CrearPago from '../modules/Pagos/components/CrearPago';
 import EditarPago from '../modules/Pagos/components/EditarPago';
+import DetallePago from '../modules/Pagos/DetallePago';
 import Reportes from '../modules/Reportes/Reportes';
 import RegistroUsuarios from '../modules/CreacionUsuarios/RegistroUsuarios';
 import ProtectedRoute from './helpers/ProtectedRoute';
@@ -242,6 +243,16 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <EditarPago />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.PAGOS_DETALLE}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DetallePago />
               </Layout>
             </ProtectedRoute>
           }
