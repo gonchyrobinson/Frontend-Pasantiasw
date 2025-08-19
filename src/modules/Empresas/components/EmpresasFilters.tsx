@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getEmpresaSearchMetadata,
   formatEmpresaSearchFilters,
+  getSugerenciasNombresEmpresas,
 } from '../helpers/empresaSearchHelpers';
 import { EmpresaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
@@ -21,6 +22,26 @@ const EmpresasFilters: React.FC<EmpresasFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
+  const [dynamicOptions, setDynamicOptions] = useState<
+    Record<string, Array<{ value: string | number; label: string }>>
+  >({});
+
+  // Cargar sugerencias al montar el componente
+  useEffect(() => {
+    const cargarSugerencias = async () => {
+      try {
+        const nombres = await getSugerenciasNombresEmpresas();
+
+        setDynamicOptions({
+          nombre: nombres,
+        });
+      } catch (error) {
+        console.error('Error al cargar sugerencias:', error);
+      }
+    };
+
+    cargarSugerencias();
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -46,6 +67,7 @@ const EmpresasFilters: React.FC<EmpresasFiltersProps> = ({
       onSubmit={handleSearchSubmit}
       onClearResults={onClearResults}
       hasResults={hasResults}
+      dynamicDropdownOptions={dynamicOptions}
     />
   );
 };

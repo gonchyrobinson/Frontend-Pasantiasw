@@ -17,17 +17,7 @@ interface EmpresaDto {
   nombre: string;
 }
 
-interface EstudianteDto {
-  idEstudiante: number;
-  nombre: string;
-  apellido: string;
-  carrera: string;
-}
-
-interface ConvenioDto {
-  idConvenio: number;
-  expediente?: string;
-}
+// Interfaces removidas - ya no se usan debido a la optimización
 
 interface PasantiaDto {
   idPasantia: number;
@@ -44,8 +34,9 @@ export const DROPDOWN_QUERY_KEYS = {
 
 // Hook para empresas en dropdowns
 export const useEmpresasDropdown = () => {
-  const query = useQuery({
-    queryKey: DROPDOWN_QUERY_KEYS.empresas,
+  // Query para datos completos (para asignación)
+  const queryCompletas = useQuery({
+    queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'completas'],
     queryFn: async () => {
       const data = await apiClient.get<EmpresaDto[]>('/empresas');
       return data;
@@ -53,44 +44,72 @@ export const useEmpresasDropdown = () => {
     ...DROPDOWN_CACHE_CONFIG,
   });
 
-  // Opciones para búsqueda por nombre
+  // Query para sugerencias de nombres (filtradas, sin eliminadas)
+  const querySugerencias = useQuery({
+    queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'sugerencias'],
+    queryFn: async () => {
+      const data = await apiClient.get<string[]>(
+        '/empresas/sugerencias-nombres'
+      );
+      return data;
+    },
+    ...DROPDOWN_CACHE_CONFIG,
+  });
+
+  // Opciones para búsqueda por nombre (usando sugerencias filtradas)
   const empresasOptions: DropdownOption[] = React.useMemo(() => {
-    if (!query.data || !Array.isArray(query.data)) {
+    if (!querySugerencias.data || !Array.isArray(querySugerencias.data)) {
       return [];
     }
 
-    return query.data.map(empresa => ({
-      value: empresa.nombre,
-      label: empresa.nombre,
+    return querySugerencias.data.map(nombre => ({
+      value: nombre,
+      label: nombre,
     }));
-  }, [query.data]);
+  }, [querySugerencias.data]);
 
-  // Opciones para asignación (usando ID)
+  // Opciones para asignación (usando ID de datos completos, filtradas)
   const empresasParaAsignarOptions: DropdownOption[] = React.useMemo(() => {
-    if (!query.data || !Array.isArray(query.data)) {
+    if (!queryCompletas.data || !Array.isArray(queryCompletas.data)) {
       return [];
     }
 
-    return query.data.map(empresa => ({
+    // Filtrar empresas eliminadas explícitamente como medida de seguridad
+    const empresasActivas = queryCompletas.data.filter(
+      empresa => empresa.nombre && empresa.nombre.trim() !== '' // Solo empresas con nombre válido
+    );
+
+    return empresasActivas.map(empresa => ({
       value: empresa.idEmpresa,
       label: empresa.nombre,
     }));
-  }, [query.data]);
+  }, [queryCompletas.data]);
+
+  // Combinar el estado de ambas queries
+  const isLoading = queryCompletas.isLoading || querySugerencias.isLoading;
+  const error = queryCompletas.error || querySugerencias.error;
 
   return {
-    ...query,
+    isLoading,
+    error,
+    data: queryCompletas.data, // Para compatibilidad con código existente
     empresasOptions,
     empresasParaAsignarOptions,
+    refetch: () => {
+      queryCompletas.refetch();
+      querySugerencias.refetch();
+    },
   };
 };
 
-// Hook para estudiantes en dropdowns
+// Hook para estudiantes en dropdowns - MISMO ENDPOINT QUE ESTUDIANTES.TSX
 export const useEstudiantesDropdown = () => {
   const query = useQuery({
-    queryKey: DROPDOWN_QUERY_KEYS.estudiantes,
+    queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
     queryFn: async () => {
-      const data = await apiClient.get<EstudianteDto[]>('/students');
-      return data;
+      // El endpoint GET /students devuelve directamente el array de estudiantes
+      const response = await apiClient.get<any[]>('/students');
+      return response || [];
     },
     ...DROPDOWN_CACHE_CONFIG,
   });
@@ -100,10 +119,14 @@ export const useEstudiantesDropdown = () => {
       return [];
     }
 
-    return query.data.map(estudiante => ({
-      value: estudiante.idEstudiante,
-      label: `${estudiante.apellido}, ${estudiante.nombre} - ${estudiante.carrera}`,
-    }));
+    // Mostrar solo los primeros 15 estudiantes ordenados por apellido para máxima velocidad
+    return query.data
+      .sort((a, b) => (a.apellido || '').localeCompare(b.apellido || ''))
+      .slice(0, 15) // Solo los primeros 15 para performance
+      .map(estudiante => ({
+        value: estudiante.idEstudiante,
+        label: `${estudiante.apellido || 'Sin apellido'}, ${estudiante.nombre || 'Sin nombre'}`,
+      }));
   }, [query.data]);
 
   return {
@@ -112,12 +135,14 @@ export const useEstudiantesDropdown = () => {
   };
 };
 
-// Hook para convenios en dropdowns
+// Hook para convenios en dropdowns - OPTIMIZADO
 export const useConveniosDropdown = () => {
   const query = useQuery({
-    queryKey: DROPDOWN_QUERY_KEYS.convenios,
+    queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
     queryFn: async () => {
-      const data = await apiClient.get<ConvenioDto[]>('/convenios');
+      const data = await apiClient.get<DropdownOption[]>(
+        '/convenios/sugerencias-dropdown'
+      );
       return data;
     },
     ...DROPDOWN_CACHE_CONFIG,
@@ -128,10 +153,7 @@ export const useConveniosDropdown = () => {
       return [];
     }
 
-    return query.data.map(convenio => ({
-      value: convenio.idConvenio,
-      label: convenio.expediente || `Convenio ${convenio.idConvenio}`,
-    }));
+    return query.data; // Ya viene en el formato correcto
   }, [query.data]);
 
   return {
@@ -142,8 +164,9 @@ export const useConveniosDropdown = () => {
 
 // Hook para pasantías en dropdowns
 export const usePasantiasDropdown = () => {
-  const query = useQuery({
-    queryKey: DROPDOWN_QUERY_KEYS.pasantias,
+  // Query para datos completos (para asignación)
+  const queryCompletas = useQuery({
+    queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'completas'],
     queryFn: async () => {
       const data = await apiClient.get<PasantiaDto[]>('/pasantias');
       return data;
@@ -151,20 +174,60 @@ export const usePasantiasDropdown = () => {
     ...DROPDOWN_CACHE_CONFIG,
   });
 
+  // Query para sugerencias de trámites (filtradas)
+  const querySugerenciasTramites = useQuery({
+    queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'sugerencias-tramites'],
+    queryFn: async () => {
+      const data = await apiClient.get<string[]>(
+        '/pasantias/sugerencias-tramites'
+      );
+      return data;
+    },
+    ...DROPDOWN_CACHE_CONFIG,
+  });
+
+  // Opciones para selección de pasantías (usando ID)
   const pasantiasOptions: DropdownOption[] = React.useMemo(() => {
-    if (!query.data || !Array.isArray(query.data)) {
+    if (!queryCompletas.data || !Array.isArray(queryCompletas.data)) {
       return [];
     }
 
-    return query.data.map(pasantia => ({
+    return queryCompletas.data.map(pasantia => ({
       value: pasantia.idPasantia,
       label: pasantia.tramite || `Pasantía ${pasantia.idPasantia}`,
     }));
-  }, [query.data]);
+  }, [queryCompletas.data]);
+
+  // Opciones para búsqueda de trámites (usando string)
+  const tramitesOptions: DropdownOption[] = React.useMemo(() => {
+    if (
+      !querySugerenciasTramites.data ||
+      !Array.isArray(querySugerenciasTramites.data)
+    ) {
+      return [];
+    }
+
+    return querySugerenciasTramites.data.map(tramite => ({
+      value: tramite,
+      label: tramite,
+    }));
+  }, [querySugerenciasTramites.data]);
+
+  // Combinar el estado de ambas queries
+  const isLoading =
+    queryCompletas.isLoading || querySugerenciasTramites.isLoading;
+  const error = queryCompletas.error || querySugerenciasTramites.error;
 
   return {
-    ...query,
+    isLoading,
+    error,
+    data: queryCompletas.data, // Para compatibilidad con código existente
     pasantiasOptions,
+    tramitesOptions,
+    refetch: () => {
+      queryCompletas.refetch();
+      querySugerenciasTramites.refetch();
+    },
   };
 };
 
@@ -215,20 +278,30 @@ export const useInvalidateDropdowns = () => {
   const queryClient = useQueryClient();
 
   return {
-    invalidateEmpresas: () =>
-      queryClient.invalidateQueries({ queryKey: DROPDOWN_QUERY_KEYS.empresas }),
+    invalidateEmpresas: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'completas'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'sugerencias'],
+      });
+    },
     invalidateEstudiantes: () =>
       queryClient.invalidateQueries({
-        queryKey: DROPDOWN_QUERY_KEYS.estudiantes,
+        queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
       }),
     invalidateConvenios: () =>
       queryClient.invalidateQueries({
-        queryKey: DROPDOWN_QUERY_KEYS.convenios,
+        queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
       }),
-    invalidatePasantias: () =>
+    invalidatePasantias: () => {
       queryClient.invalidateQueries({
-        queryKey: DROPDOWN_QUERY_KEYS.pasantias,
-      }),
+        queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'completas'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'sugerencias-tramites'],
+      });
+    },
     invalidateAll: () => {
       queryClient.invalidateQueries({ queryKey: ['dropdown'] });
     },
@@ -241,32 +314,48 @@ export const usePrefetchDropdowns = () => {
 
   const prefetchEmpresas = () => {
     queryClient.prefetchQuery({
-      queryKey: DROPDOWN_QUERY_KEYS.empresas,
+      queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'completas'],
       queryFn: async () => apiClient.get<EmpresaDto[]>('/empresas'),
+      ...DROPDOWN_CACHE_CONFIG,
+    });
+    queryClient.prefetchQuery({
+      queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'sugerencias'],
+      queryFn: async () =>
+        apiClient.get<string[]>('/empresas/sugerencias-nombres'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };
 
   const prefetchEstudiantes = () => {
     queryClient.prefetchQuery({
-      queryKey: DROPDOWN_QUERY_KEYS.estudiantes,
-      queryFn: async () => apiClient.get<EstudianteDto[]>('/students'),
+      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
+      queryFn: async () => {
+        const response = await apiClient.get<{ data: any[] }>('/students');
+        return response.data || [];
+      },
       ...DROPDOWN_CACHE_CONFIG,
     });
   };
 
   const prefetchConvenios = () => {
     queryClient.prefetchQuery({
-      queryKey: DROPDOWN_QUERY_KEYS.convenios,
-      queryFn: async () => apiClient.get<ConvenioDto[]>('/convenios'),
+      queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
+      queryFn: async () =>
+        apiClient.get<DropdownOption[]>('/convenios/sugerencias-dropdown'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };
 
   const prefetchPasantias = () => {
     queryClient.prefetchQuery({
-      queryKey: DROPDOWN_QUERY_KEYS.pasantias,
+      queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'completas'],
       queryFn: async () => apiClient.get<PasantiaDto[]>('/pasantias'),
+      ...DROPDOWN_CACHE_CONFIG,
+    });
+    queryClient.prefetchQuery({
+      queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'sugerencias-tramites'],
+      queryFn: async () =>
+        apiClient.get<string[]>('/pasantias/sugerencias-tramites'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };

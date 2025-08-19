@@ -1,4 +1,5 @@
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
+import { apiClient } from '../../Shared/apis/apiClient';
 
 // DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface EmpresaBusquedaAvanzadaDto {
@@ -22,7 +23,7 @@ export const getEmpresaSearchMetadata = (): {
     {
       name: 'nombre',
       label: 'Nombre de la Empresa',
-      type: 'text',
+      type: 'dynamicDropdown',
       placeholder: 'Buscar por nombre...',
     },
     {
@@ -105,4 +106,21 @@ export const formatEmpresaSearchFilters = (
   }
 
   return formattedFilters;
+};
+
+export const getSugerenciasNombresEmpresas = async (): Promise<
+  { value: string; label: string }[]
+> => {
+  try {
+    const nombres = await apiClient.get<string[]>(
+      '/empresas/sugerencias-nombres'
+    );
+    return nombres.map(nombre => ({ value: nombre, label: nombre }));
+  } catch (error) {
+    console.error(
+      'Error al obtener sugerencias de nombres de empresas:',
+      error
+    );
+    return [];
+  }
 };

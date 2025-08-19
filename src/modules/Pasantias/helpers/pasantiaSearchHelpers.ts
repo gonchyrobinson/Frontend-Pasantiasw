@@ -6,10 +6,10 @@ export const getPasantiaSearchMetadata = () => ({
   fields: [
     {
       name: 'tramite',
-      label: 'Tramite',
-      type: 'text',
+      label: 'Número de Trámite',
+      type: 'dynamicDropdown',
       required: false,
-      placeholder: 'Buscar por trámite...',
+      placeholder: 'Seleccionar número de trámite...',
     },
     {
       name: 'obraSocial',

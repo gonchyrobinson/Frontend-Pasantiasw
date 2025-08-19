@@ -159,7 +159,6 @@ const Pasantias: React.FC = () => {
       />
 
       <PasantiaFilters
-        pasantias={pasantias || []}
         onSearchResults={handleSearchResults}
         onClearResults={handleClearSearch}
         loading={pasantiasLoading}

@@ -1,5 +1,6 @@
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 import { CARRERAS_VALIDAS } from './estudianteHelpers';
+import { apiClient } from '../../Shared/apis/apiClient';
 
 // DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface StudentBusquedaAvanzadaDto {
@@ -21,13 +22,13 @@ export const getEstudianteSearchMetadata = (): {
     {
       name: 'apellido',
       label: 'Apellido',
-      type: 'text',
+      type: 'dynamicDropdown',
       placeholder: 'Buscar por apellido...',
     },
     {
       name: 'nombre',
       label: 'Nombre',
-      type: 'text',
+      type: 'dynamicDropdown',
       placeholder: 'Buscar por nombre...',
     },
     {
@@ -81,4 +82,32 @@ export const formatEstudianteSearchFilters = (
   }
 
   return formattedFilters;
+};
+
+export const getSugerenciasNombres = async (): Promise<
+  { value: string; label: string }[]
+> => {
+  try {
+    const nombres = await apiClient.get<string[]>(
+      '/students/sugerencias-nombres'
+    );
+    return nombres.map(nombre => ({ value: nombre, label: nombre }));
+  } catch (error) {
+    console.error('Error al obtener sugerencias de nombres:', error);
+    return [];
+  }
+};
+
+export const getSugerenciasApellidos = async (): Promise<
+  { value: string; label: string }[]
+> => {
+  try {
+    const apellidos = await apiClient.get<string[]>(
+      '/students/sugerencias-apellidos'
+    );
+    return apellidos.map(apellido => ({ value: apellido, label: apellido }));
+  } catch (error) {
+    console.error('Error al obtener sugerencias de apellidos:', error);
+    return [];
+  }
 };
