@@ -1,3 +1,5 @@
+import { CARRERAS_VALIDAS } from '../../Estudiantes/helpers/estudianteHelpers';
+
 // Metadata para búsqueda avanzada de convenios
 export const getConvenioSearchMetadata = () => ({
   title: 'Búsqueda Avanzada de Convenios',
@@ -21,8 +23,14 @@ export const getConvenioSearchMetadata = () => ({
     {
       name: 'carrera',
       label: 'Carrera',
-      type: 'text' as const,
-      placeholder: 'Filtrar por carrera...',
+      type: 'dropdown' as const,
+      options: [
+        { value: '', label: 'Todas las carreras' },
+        ...CARRERAS_VALIDAS.map(carrera => ({
+          value: carrera,
+          label: carrera,
+        })),
+      ],
       gridSize: 12,
     },
     {

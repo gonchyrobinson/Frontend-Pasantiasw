@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
-import { useAsignarEmpresa } from '../hooks/useAsignarEmpresa';
+import { useAsignarEmpresa } from '../hooks/useConvenios';
 import { ConvenioEmpresaDto } from '../types';
 
 interface AsignarAEmpresaDialogProps {
@@ -18,8 +18,11 @@ const AsignarAEmpresaDialog: React.FC<AsignarAEmpresaDialogProps> = ({
   convenio,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const { empresasParaAsignarOptions, isLoading: empresasLoading } =
-    useEmpresasDropdown();
+  const {
+    empresasParaAsignarOptions,
+    isLoading: empresasLoading,
+    error: empresasError,
+  } = useEmpresasDropdown();
   const asignarEmpresaMutation = useAsignarEmpresa();
 
   const handleSubmit = async (data: Record<string, unknown>) => {
@@ -33,39 +36,65 @@ const AsignarAEmpresaDialog: React.FC<AsignarAEmpresaDialogProps> = ({
       showSuccess('Empresa asignada exitosamente');
       onClose();
     } catch (error) {
-      showError('Error al asignar la empresa');
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error al asignar la empresa';
+      showError(errorMessage);
     }
   };
 
+  // Debug: Log opciones del dropdown
+  React.useEffect(() => {
+    if (empresasParaAsignarOptions) {
+      console.log(
+        'Opciones de empresas para asignar:',
+        empresasParaAsignarOptions
+      );
+    }
+    if (empresasError) {
+      console.error('Error al cargar empresas:', empresasError);
+    }
+  }, [empresasParaAsignarOptions, empresasError]);
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
       <DialogTitle>Asignar Empresa a Convenio</DialogTitle>
       <DialogContent>
-        <FormularioGenerico
-          metadata={{
-            title: '',
-            submitButtonText: 'Asignar',
-            cancelButtonText: 'Cancelar',
-            fields: [
-              {
-                name: 'empresaId',
-                label: 'Empresa',
-                type: 'dynamicDropdown' as const,
-                validations: {
-                  required: 'Este campo es requerido',
+        {empresasError ? (
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <p>Error al cargar las empresas disponibles</p>
+            <button onClick={() => window.location.reload()}>Reintentar</button>
+          </div>
+        ) : (
+          <FormularioGenerico
+            metadata={{
+              title: '',
+              submitButtonText: 'Asignar',
+              cancelButtonText: 'Cancelar',
+              fields: [
+                {
+                  name: 'empresaId',
+                  label: 'Empresa',
+                  type: 'dynamicDropdown' as const,
+                  validations: {
+                    required: 'Este campo es requerido',
+                  },
+                  placeholder: empresasLoading
+                    ? 'Cargando empresas...'
+                    : empresasParaAsignarOptions.length > 0
+                      ? 'Seleccione una empresa'
+                      : 'No hay empresas disponibles',
+                  gridSize: 12,
                 },
-                placeholder: 'Seleccione una empresa',
-                gridSize: 12,
-              },
-            ],
-          }}
-          onSubmit={handleSubmit}
-          onCancel={onClose}
-          loading={asignarEmpresaMutation.isPending || empresasLoading}
-          dynamicDropdownOptions={{
-            empresaId: empresasParaAsignarOptions,
-          }}
-        />
+              ],
+            }}
+            onSubmit={handleSubmit}
+            onCancel={onClose}
+            loading={asignarEmpresaMutation.isPending || empresasLoading}
+            dynamicDropdownOptions={{
+              empresaId: empresasParaAsignarOptions || [],
+            }}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
