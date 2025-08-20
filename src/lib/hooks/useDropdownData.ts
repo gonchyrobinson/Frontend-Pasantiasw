@@ -102,13 +102,14 @@ export const useEmpresasDropdown = () => {
   };
 };
 
-// Hook para estudiantes en dropdowns - MISMO ENDPOINT QUE ESTUDIANTES.TSX
+// Hook para estudiantes en dropdowns - OPTIMIZADO PARA DOCUMENTOS
 export const useEstudiantesDropdown = () => {
   const query = useQuery({
-    queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
+    queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
     queryFn: async () => {
-      // El endpoint GET /students devuelve directamente el array de estudiantes
-      const response = await apiClient.get<any[]>('/students');
+      const response = await apiClient.get<DropdownOption[]>(
+        '/students/documentos-dropdown'
+      );
       return response || [];
     },
     ...DROPDOWN_CACHE_CONFIG,
@@ -119,14 +120,7 @@ export const useEstudiantesDropdown = () => {
       return [];
     }
 
-    // Mostrar solo los primeros 15 estudiantes ordenados por apellido para máxima velocidad
-    return query.data
-      .sort((a, b) => (a.apellido || '').localeCompare(b.apellido || ''))
-      .slice(0, 15) // Solo los primeros 15 para performance
-      .map(estudiante => ({
-        value: estudiante.idEstudiante,
-        label: `${estudiante.apellido || 'Sin apellido'}, ${estudiante.nombre || 'Sin nombre'}`,
-      }));
+    return query.data; // Ya viene en el formato correcto desde el backend
   }, [query.data]);
 
   return {
@@ -318,7 +312,7 @@ export const useInvalidateDropdowns = () => {
     },
     invalidateEstudiantes: () =>
       queryClient.invalidateQueries({
-        queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
+        queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
       }),
     invalidateConvenios: () => {
       queryClient.invalidateQueries({
@@ -365,11 +359,9 @@ export const usePrefetchDropdowns = () => {
 
   const prefetchEstudiantes = () => {
     queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
-      queryFn: async () => {
-        const response = await apiClient.get<{ data: any[] }>('/students');
-        return response.data || [];
-      },
+      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
+      queryFn: async () =>
+        apiClient.get<DropdownOption[]>('/students/documentos-dropdown'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };
