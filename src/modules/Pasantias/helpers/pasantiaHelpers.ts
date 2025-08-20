@@ -153,30 +153,7 @@ export const getPasantiaFormMetadata = () => ({
       },
       gridSize: 6,
     },
-    {
-      name: 'areaTrabajo',
-      label: 'Área de Trabajo',
-      type: 'text' as const,
-      validations: {
-        maxLength: {
-          value: 200,
-          message: 'El área de trabajo no puede exceder 200 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
-      name: 'estado',
-      label: 'Estado',
-      type: 'dropdown' as const,
-      options: [
-        { value: 'Activa', label: 'Activa' },
-        { value: 'Finalizada', label: 'Finalizada' },
-        { value: 'Suspendida', label: 'Suspendida' },
-        { value: 'Cancelada', label: 'Cancelada' },
-      ],
-      gridSize: 6,
-    },
+    // areaTrabajo y estado se calculan automáticamente - no deben estar en el formulario
     {
       name: 'sudocu',
       label: 'SUDOCU',
