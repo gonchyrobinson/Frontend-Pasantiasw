@@ -47,7 +47,7 @@ export const getPasantiaFormMetadata = () => ({
     },
     {
       name: 'art',
-      label: 'ART (Artículo de Pasantía)',
+      label: 'ART',
       type: 'text' as const,
       validations: {
         minLength: {
