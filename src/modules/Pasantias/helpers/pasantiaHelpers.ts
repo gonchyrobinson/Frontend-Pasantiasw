@@ -15,9 +15,9 @@ export const getPasantiaFormMetadata = () => ({
     },
     {
       name: 'idConvenio',
-      label: 'Convenio',
+      label: 'Empresa',
       type: 'dynamicDropdown' as const,
-      placeholder: 'Seleccione un convenio',
+      placeholder: 'Seleccione una empresa',
       gridSize: 6,
     },
     {

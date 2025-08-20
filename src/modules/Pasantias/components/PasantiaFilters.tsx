@@ -9,7 +9,7 @@ import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 import {
   useEstudiantesDropdown,
-  useConveniosDropdown,
+  useEmpresasConvenioDropdown,
   usePasantiasDropdown,
 } from '../../../lib/hooks/useDropdownData';
 
@@ -28,8 +28,8 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   const { showSuccess, showError } = useSnackbar();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
     useEstudiantesDropdown();
-  const { conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosDropdown();
+  const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
+    useEmpresasConvenioDropdown();
   const { tramitesOptions, isLoading: tramitesLoading } =
     usePasantiasDropdown();
 
@@ -59,10 +59,10 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       hasResults={hasResults}
       dynamicDropdownOptions={{
         idEstudiante: estudiantesOptions || [],
-        idConvenio: conveniosOptions || [],
+        idConvenio: empresasConvenioOptions || [],
         tramite: tramitesOptions || [],
       }}
-      loading={estudiantesLoading || conveniosLoading || tramitesLoading}
+      loading={estudiantesLoading || empresasConvenioLoading || tramitesLoading}
     />
   );
 };

@@ -6,7 +6,7 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { usePasantia, useUpdatePasantia } from '../hooks/usePasantias';
 import {
   useEstudiantesDropdown,
-  useConveniosDropdown,
+  useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
@@ -22,8 +22,8 @@ const EditarPasantia: React.FC = () => {
   const { mutate: updatePasantia, isPending: isUpdating } = useUpdatePasantia();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
     useEstudiantesDropdown();
-  const { conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosDropdown();
+  const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
+    useEmpresasConvenioDropdown();
 
   const metadata = getPasantiaFormMetadata();
 
@@ -49,7 +49,7 @@ const EditarPasantia: React.FC = () => {
     navigate(ROUTES.PASANTIAS);
   };
 
-  if (isLoading || estudiantesLoading || conveniosLoading) {
+  if (isLoading || estudiantesLoading || empresasConvenioLoading) {
     return <LoadingSpinner message='Cargando datos...' />;
   }
 
@@ -64,7 +64,7 @@ const EditarPasantia: React.FC = () => {
   // Las opciones ya vienen formateadas desde los hooks
   const dynamicDropdownOptions = {
     idEstudiante: estudiantesOptions || [],
-    idConvenio: conveniosOptions || [],
+    idConvenio: empresasConvenioOptions || [],
   };
 
   return (
