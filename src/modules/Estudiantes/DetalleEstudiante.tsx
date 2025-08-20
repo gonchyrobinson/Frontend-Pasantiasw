@@ -50,13 +50,6 @@ const DetalleEstudiante: React.FC = () => {
             prefix: 'DNI: ',
           },
           {
-            name: 'libreta',
-            label: 'Libreta Universitaria',
-            type: 'text',
-            gridSize: 6,
-            prefix: 'LU: ',
-          },
-          {
             name: 'domicilio',
             label: 'Domicilio',
             type: 'text',

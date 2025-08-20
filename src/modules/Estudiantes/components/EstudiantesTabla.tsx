@@ -35,7 +35,6 @@ const EstudiantesTabla: React.FC<EstudiantesTablaProps> = ({
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'telefono', label: 'Teléfono', type: 'text' },
     { name: 'domicilio', label: 'Domicilio', type: 'text' },
-    { name: 'libreta', label: 'Libreta', type: 'text' },
   ];
 
   const estudiantesData = estudiantes.map(estudiante => ({
