@@ -18,9 +18,15 @@ const CrearConvenio: React.FC = () => {
 
   const handleSubmit = (data: ConvenioCreateDto) => {
     createMutation.mutate(data as ConvenioCreateDto & Record<string, unknown>, {
-      onSuccess: () => {
+      onSuccess: response => {
         showSuccess('Convenio creado exitosamente');
-        navigate(ROUTES.CONVENIOS);
+        // Redirigir al detalle del convenio creado
+        if (response?.data && response.data.idConvenio) {
+          navigate(`${ROUTES.CONVENIOS_DETALLE}/${response.data.idConvenio}`);
+        } else {
+          // Fallback: redirigir a la lista si no se puede obtener el ID
+          navigate(ROUTES.CONVENIOS);
+        }
       },
       onError: () => {
         showError('Error al crear el convenio');

@@ -26,7 +26,8 @@ const EditarConvenio: React.FC = () => {
     updateMutation.mutate(data as ConvenioDto & Record<string, unknown>, {
       onSuccess: () => {
         showSuccess('Convenio actualizado exitosamente');
-        navigate(ROUTES.CONVENIOS);
+        // Redirigir al detalle del convenio modificado
+        navigate(`${ROUTES.CONVENIOS_DETALLE}/${convenioId}`);
       },
       onError: () => {
         showError('Error al actualizar el convenio');

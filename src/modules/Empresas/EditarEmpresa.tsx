@@ -24,8 +24,9 @@ const EditarEmpresa: React.FC = () => {
         {
           onSuccess: () => {
             showSuccess('Empresa actualizada exitosamente');
+            // Redirigir al detalle de la empresa modificada
             setTimeout(() => {
-              navigate(ROUTES.EMPRESAS);
+              navigate(`${ROUTES.EMPRESAS_DETALLE}/${empresaId}`);
             }, 2000);
           },
           onError: err => {

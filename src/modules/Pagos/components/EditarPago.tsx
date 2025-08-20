@@ -63,7 +63,8 @@ const EditarPago: React.FC = () => {
       {
         onSuccess: () => {
           showSuccess('Pago actualizado exitosamente');
-          navigate(ROUTES.PAGOS);
+          // Redirigir al detalle del pago modificado
+          navigate(`${ROUTES.PAGOS_DETALLE}/${id}`);
         },
         onError: () => {
           showError('Error al actualizar el pago');

@@ -16,11 +16,19 @@ const CreacionEstudiantes: React.FC = () => {
 
   const handleSubmit = (formData: Record<string, unknown>) => {
     createEstudiante(formData as unknown as CreacionEstudianteDto, {
-      onSuccess: () => {
+      onSuccess: response => {
         showSuccess('Estudiante creado exitosamente');
-        setTimeout(() => {
-          navigate(ROUTES.ESTUDIANTES);
-        }, 2000);
+        // Redirigir al detalle del estudiante creado
+        if (response && response.idEstudiante) {
+          setTimeout(() => {
+            navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${response.idEstudiante}`);
+          }, 2000);
+        } else {
+          // Fallback: redirigir a la lista si no se puede obtener el ID
+          setTimeout(() => {
+            navigate(ROUTES.ESTUDIANTES);
+          }, 2000);
+        }
       },
       onError: err => {
         showError(`Error al crear el estudiante: ${err.message}`);

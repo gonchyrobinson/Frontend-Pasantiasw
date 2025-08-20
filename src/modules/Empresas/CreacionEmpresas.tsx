@@ -15,11 +15,19 @@ const CreacionEmpresas: React.FC = () => {
 
   const handleSubmit = (formData: Record<string, unknown>) => {
     createEmpresa(formData as unknown as CreacionEmpresaDto, {
-      onSuccess: () => {
+      onSuccess: response => {
         showSuccess('Empresa creada exitosamente');
-        setTimeout(() => {
-          navigate(ROUTES.EMPRESAS);
-        }, 2000);
+        // Redirigir al detalle de la empresa creada
+        if (response && response.idEmpresa) {
+          setTimeout(() => {
+            navigate(`${ROUTES.EMPRESAS_DETALLE}/${response.idEmpresa}`);
+          }, 2000);
+        } else {
+          // Fallback: redirigir a la lista si no se puede obtener el ID
+          setTimeout(() => {
+            navigate(ROUTES.EMPRESAS);
+          }, 2000);
+        }
       },
       onError: err => {
         showError(`Error al crear la empresa: ${err.message}`);

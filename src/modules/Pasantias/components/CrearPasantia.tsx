@@ -26,9 +26,15 @@ const CrearPasantia: React.FC = () => {
 
   const handleSubmit = (formData: Record<string, unknown>) => {
     createPasantia(formData as unknown as PasantiaFormData, {
-      onSuccess: () => {
+      onSuccess: response => {
         showSuccess('Pasantía creada exitosamente');
-        navigate(ROUTES.PASANTIAS);
+        // Redirigir al detalle de la pasantía creada
+        if (response && response.idPasantia) {
+          navigate(`${ROUTES.PASANTIAS_DETALLE}/${response.idPasantia}`);
+        } else {
+          // Fallback: redirigir a la lista si no se puede obtener el ID
+          navigate(ROUTES.PASANTIAS);
+        }
       },
       onError: err => {
         showError(`Error al crear pasantía: ${err.message}`);

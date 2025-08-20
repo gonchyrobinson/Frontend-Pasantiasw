@@ -34,8 +34,8 @@ const EditarPasantia: React.FC = () => {
         {
           onSuccess: () => {
             showSuccess('Pasantía actualizada exitosamente');
-            // Retornar a la página principal preservando el estado
-            navigate(ROUTES.PASANTIAS);
+            // Redirigir al detalle de la pasantía modificada
+            navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantiaId}`);
           },
           onError: err => {
             showError(`Error al actualizar pasantía: ${err.message}`);

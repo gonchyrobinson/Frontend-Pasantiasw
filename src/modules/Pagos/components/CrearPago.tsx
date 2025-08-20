@@ -22,9 +22,15 @@ const CrearPago: React.FC = () => {
 
   const handleSubmit = (data: Record<string, unknown>) => {
     createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
-      onSuccess: () => {
+      onSuccess: response => {
         showSuccess('Pago creado exitosamente');
-        navigate(ROUTES.PAGOS);
+        // Redirigir al detalle del pago creado
+        if (response && response.idPago) {
+          navigate(`${ROUTES.PAGOS_DETALLE}/${response.idPago}`);
+        } else {
+          // Fallback: redirigir a la lista si no se puede obtener el ID
+          navigate(ROUTES.PAGOS);
+        }
       },
       onError: () => {
         showError('Error al crear el pago');

@@ -29,8 +29,9 @@ const EditarEstudiante: React.FC = () => {
         {
           onSuccess: () => {
             showSuccess('Estudiante actualizado exitosamente');
+            // Redirigir al detalle del estudiante modificado
             setTimeout(() => {
-              navigate(ROUTES.ESTUDIANTES);
+              navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${estudianteId}`);
             }, 2000);
           },
           onError: err => {
