@@ -13,7 +13,7 @@ import { ConvenioDto } from '../types';
 const EditarConvenio: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
 
   const convenioId = id ? parseInt(id, 10) : 0;
   const { data: convenioResponse, isLoading, error } = useConvenio(convenioId);
@@ -22,17 +22,12 @@ const EditarConvenio: React.FC = () => {
     useEmpresasDropdown();
   const updateMutation = useUpdateConvenio();
 
-  const handleSubmit = (data: ConvenioDto) => {
-    updateMutation.mutate(data as ConvenioDto & Record<string, unknown>, {
-      onSuccess: () => {
-        showSuccess('Convenio actualizado exitosamente');
-        // Redirigir al detalle del convenio modificado
-        navigate(`${ROUTES.CONVENIOS_DETALLE}/${convenioId}`);
-      },
-      onError: () => {
-        showError('Error al actualizar el convenio');
-      },
-    });
+  const handleSubmit = async (data: ConvenioDto) => {
+    await updateMutation.mutateAsync(
+      data as ConvenioDto & Record<string, unknown>
+    );
+    showSuccess('Convenio actualizado exitosamente');
+    navigate(`${ROUTES.CONVENIOS_DETALLE}/${convenioId}`);
   };
 
   const handleCancel = () => {

@@ -11,10 +11,11 @@ import {
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
+import { PasantiaDto } from '../types';
 
 const CrearPasantia: React.FC = () => {
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
 
   const { mutate: createPasantia, isPending: isCreating } = useCreatePasantia();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
@@ -24,22 +25,19 @@ const CrearPasantia: React.FC = () => {
 
   const metadata = getPasantiaFormMetadata();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
-    createPasantia(formData as unknown as PasantiaFormData, {
-      onSuccess: response => {
-        showSuccess('Pasantía creada exitosamente');
-        // Redirigir al detalle de la pasantía creada
-        if (response && response.idPasantia) {
-          navigate(`${ROUTES.PASANTIAS_DETALLE}/${response.idPasantia}`);
-        } else {
-          // Fallback: redirigir a la lista si no se puede obtener el ID
-          navigate(ROUTES.PASANTIAS);
-        }
-      },
-      onError: err => {
-        showError(`Error al crear pasantía: ${err.message}`);
-      },
+  const handleSubmit = async (formData: Record<string, unknown>) => {
+    const response = await new Promise<PasantiaDto>((resolve, reject) => {
+      createPasantia(formData as PasantiaFormData, {
+        onSuccess: resolve,
+        onError: reject,
+      });
     });
+    showSuccess('Pasantía creada exitosamente');
+    if (response && response.idPasantia) {
+      navigate(`${ROUTES.PASANTIAS_DETALLE}/${response.idPasantia}`);
+    } else {
+      navigate(ROUTES.PASANTIAS);
+    }
   };
 
   const handleCancel = () => {

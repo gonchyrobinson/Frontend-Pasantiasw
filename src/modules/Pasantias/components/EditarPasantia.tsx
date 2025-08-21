@@ -9,14 +9,14 @@ import {
   useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
-import { PasantiaFormData } from '../types';
+import { PasantiaFormData, PasantiaDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 
 const EditarPasantia: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const pasantiaId = id ? parseInt(id, 10) : null;
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
 
   const { data: pasantiaData, isLoading, error } = usePasantia(pasantiaId);
   const { mutate: updatePasantia, isPending: isUpdating } = useUpdatePasantia();
@@ -27,21 +27,19 @@ const EditarPasantia: React.FC = () => {
 
   const metadata = getPasantiaFormMetadata();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
+  const handleSubmit = async (formData: Record<string, unknown>) => {
     if (pasantiaId) {
-      updatePasantia(
-        { data: formData as unknown as PasantiaFormData },
-        {
-          onSuccess: () => {
-            showSuccess('Pasantía actualizada exitosamente');
-            // Redirigir al detalle de la pasantía modificada
-            navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantiaId}`);
-          },
-          onError: err => {
-            showError(`Error al actualizar pasantía: ${err.message}`);
-          },
-        }
-      );
+      await new Promise<PasantiaDto>((resolve, reject) => {
+        updatePasantia(
+          { data: formData as unknown as PasantiaFormData },
+          {
+            onSuccess: resolve,
+            onError: reject,
+          }
+        );
+      });
+      showSuccess('Pasantía actualizada exitosamente');
+      navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantiaId}`);
     }
   };
 

@@ -11,27 +11,21 @@ import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 
 const CrearConvenio: React.FC = () => {
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
   const createMutation = useCreateConvenio();
   const { empresasParaAsignarOptions, isLoading: empresasLoading } =
     useEmpresasDropdown();
 
-  const handleSubmit = (data: ConvenioCreateDto) => {
-    createMutation.mutate(data as ConvenioCreateDto & Record<string, unknown>, {
-      onSuccess: response => {
-        showSuccess('Convenio creado exitosamente');
-        // Redirigir al detalle del convenio creado
-        if (response?.data && response.data.idConvenio) {
-          navigate(`${ROUTES.CONVENIOS_DETALLE}/${response.data.idConvenio}`);
-        } else {
-          // Fallback: redirigir a la lista si no se puede obtener el ID
-          navigate(ROUTES.CONVENIOS);
-        }
-      },
-      onError: () => {
-        showError('Error al crear el convenio');
-      },
-    });
+  const handleSubmit = async (data: ConvenioCreateDto) => {
+    const response = await createMutation.mutateAsync(
+      data as ConvenioCreateDto & Record<string, unknown>
+    );
+    showSuccess('Convenio creado exitosamente');
+    if (response?.data && response.data.idConvenio) {
+      navigate(`${ROUTES.CONVENIOS_DETALLE}/${response.data.idConvenio}`);
+    } else {
+      navigate(ROUTES.CONVENIOS);
+    }
   };
 
   const handleCancel = () => {

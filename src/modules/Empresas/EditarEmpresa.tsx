@@ -12,28 +12,26 @@ const EditarEmpresa: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const empresaId = id ? parseInt(id, 10) : null;
-  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
+  const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
 
   const { data: empresaData, isLoading, error } = useEmpresa(empresaId);
   const { mutate: updateEmpresa, isPending: isUpdating } = useUpdateEmpresa();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
+  const handleSubmit = async (formData: Record<string, unknown>) => {
     if (empresaId) {
-      updateEmpresa(
-        { ...formData, idEmpresa: empresaId } as unknown as EmpresaDto,
-        {
-          onSuccess: () => {
-            showSuccess('Empresa actualizada exitosamente');
-            // Redirigir al detalle de la empresa modificada
-            setTimeout(() => {
-              navigate(`${ROUTES.EMPRESAS_DETALLE}/${empresaId}`);
-            }, 2000);
-          },
-          onError: err => {
-            showError(`Error al actualizar la empresa: ${err.message}`);
-          },
-        }
-      );
+      await new Promise<EmpresaDto>((resolve, reject) => {
+        updateEmpresa(
+          { ...formData, idEmpresa: empresaId } as unknown as EmpresaDto,
+          {
+            onSuccess: resolve,
+            onError: reject,
+          }
+        );
+      });
+      showSuccess('Empresa actualizada exitosamente');
+      setTimeout(() => {
+        navigate(`${ROUTES.EMPRESAS_DETALLE}/${empresaId}`);
+      }, 2000);
     }
   };
 

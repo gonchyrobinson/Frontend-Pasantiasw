@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { SectionTitle } from '../../components/StyledText';
@@ -16,6 +16,7 @@ import CheckboxField from './CheckboxField';
 import DropdownField from './DropdownField';
 import DynamicDropdownField from './DynamicDropdownField';
 import NumberField from './NumberField';
+import FormErrorAlert from '../../components/FormErrorAlert';
 
 const FormularioGenerico: React.FC<GenericFormProps> = ({
   metadata,
@@ -51,6 +52,8 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
       reset(initialValues);
     }
   }, [initialValues, reset]);
+
+  const [formError, setFormError] = useState<string | null>(null);
 
   const renderField = (field: FieldMetadata) => {
     const error = errors[field.name]?.message as string;
@@ -143,18 +146,24 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
       )}
 
       <form
-        onSubmit={handleSubmit((data: Record<string, unknown>) => {
-          // Transform empty strings to null
+        onSubmit={handleSubmit(async (data: Record<string, unknown>) => {
+          setFormError(null);
           const transformedData = Object.fromEntries(
             Object.entries(data).map(([key, value]) => [
               key,
               value === '' || value === undefined ? null : value,
             ])
           );
-          onSubmit(transformedData);
+          try {
+            await onSubmit(transformedData);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (error: any) {
+            setFormError(error.message || 'Error en el formulario');
+          }
         })}
         noValidate
       >
+        {formError && <FormErrorAlert message={formError} />}
         <GridContainer container spacing={2}>
           {metadata.fields.map(field => (
             <GridContainer

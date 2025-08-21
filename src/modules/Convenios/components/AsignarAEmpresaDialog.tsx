@@ -42,19 +42,6 @@ const AsignarAEmpresaDialog: React.FC<AsignarAEmpresaDialogProps> = ({
     }
   };
 
-  // Debug: Log opciones del dropdown
-  React.useEffect(() => {
-    if (empresasParaAsignarOptions) {
-      console.log(
-        'Opciones de empresas para asignar:',
-        empresasParaAsignarOptions
-      );
-    }
-    if (empresasError) {
-      console.error('Error al cargar empresas:', empresasError);
-    }
-  }, [empresasParaAsignarOptions, empresasError]);
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
       <DialogTitle>Asignar Empresa a Convenio</DialogTitle>

@@ -15,27 +15,21 @@ import { LoadingSpinner } from '../../../lib/components';
 
 const CrearPago: React.FC = () => {
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
   const createMutation = useCreatePago();
   const { pasantiasOptions, isLoading: pasantiasLoading } =
     usePasantiasDropdown();
 
-  const handleSubmit = (data: Record<string, unknown>) => {
-    createMutation.mutate(data as PagosFormData & Record<string, unknown>, {
-      onSuccess: response => {
-        showSuccess('Pago creado exitosamente');
-        // Redirigir al detalle del pago creado
-        if (response && response.idPago) {
-          navigate(`${ROUTES.PAGOS_DETALLE}/${response.idPago}`);
-        } else {
-          // Fallback: redirigir a la lista si no se puede obtener el ID
-          navigate(ROUTES.PAGOS);
-        }
-      },
-      onError: () => {
-        showError('Error al crear el pago');
-      },
-    });
+  const handleSubmit = async (data: Record<string, unknown>) => {
+    const response = await createMutation.mutateAsync(
+      data as PagosFormData & Record<string, unknown>
+    );
+    showSuccess('Pago creado exitosamente');
+    if (response && response.idPago) {
+      navigate(`${ROUTES.PAGOS_DETALLE}/${response.idPago}`);
+    } else {
+      navigate(ROUTES.PAGOS);
+    }
   };
 
   const handleCancel = () => {

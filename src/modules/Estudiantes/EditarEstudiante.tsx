@@ -12,7 +12,7 @@ const EditarEstudiante: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const estudianteId = id ? parseInt(id, 10) : null;
-  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
+  const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
 
   const {
     data: estudianteData,
@@ -22,23 +22,24 @@ const EditarEstudiante: React.FC = () => {
   const { mutate: updateEstudiante, isPending: isUpdating } =
     useUpdateEstudiante();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
+  const handleSubmit = async (formData: Record<string, unknown>) => {
     if (estudianteId) {
-      updateEstudiante(
-        { ...formData, idEstudiante: estudianteId } as unknown as EstudianteDto,
-        {
-          onSuccess: () => {
-            showSuccess('Estudiante actualizado exitosamente');
-            // Redirigir al detalle del estudiante modificado
-            setTimeout(() => {
-              navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${estudianteId}`);
-            }, 2000);
-          },
-          onError: err => {
-            showError(`Error al actualizar el estudiante: ${err.message}`);
-          },
-        }
-      );
+      await new Promise<EstudianteDto>((resolve, reject) => {
+        updateEstudiante(
+          {
+            ...formData,
+            idEstudiante: estudianteId,
+          } as unknown as EstudianteDto,
+          {
+            onSuccess: resolve,
+            onError: reject,
+          }
+        );
+      });
+      showSuccess('Estudiante actualizado exitosamente');
+      setTimeout(() => {
+        navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${estudianteId}`);
+      }, 2000);
     }
   };
 
