@@ -6,34 +6,38 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useCreatePasantia } from '../hooks/usePasantias';
 import {
   useEstudiantesDropdown,
-  useConveniosDropdown,
+  useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
 import { PasantiaFormData } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
+import { PasantiaDto } from '../types';
 
 const CrearPasantia: React.FC = () => {
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
 
   const { mutate: createPasantia, isPending: isCreating } = useCreatePasantia();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
     useEstudiantesDropdown();
-  const { conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosDropdown();
+  const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
+    useEmpresasConvenioDropdown();
 
   const metadata = getPasantiaFormMetadata();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
-    createPasantia(formData as unknown as PasantiaFormData, {
-      onSuccess: () => {
-        showSuccess('Pasantía creada exitosamente');
-        navigate(ROUTES.PASANTIAS);
-      },
-      onError: err => {
-        showError(`Error al crear pasantía: ${err.message}`);
-      },
+  const handleSubmit = async (formData: Record<string, unknown>) => {
+    const response = await new Promise<PasantiaDto>((resolve, reject) => {
+      createPasantia(formData as PasantiaFormData, {
+        onSuccess: resolve,
+        onError: reject,
+      });
     });
+    showSuccess('Pasantía creada exitosamente');
+    if (response && response.idPasantia) {
+      navigate(`${ROUTES.PASANTIAS_DETALLE}/${response.idPasantia}`);
+    } else {
+      navigate(ROUTES.PASANTIAS);
+    }
   };
 
   const handleCancel = () => {
@@ -43,10 +47,10 @@ const CrearPasantia: React.FC = () => {
   // Las opciones ya vienen formateadas desde los hooks
   const dynamicDropdownOptions = {
     idEstudiante: estudiantesOptions || [],
-    idConvenio: conveniosOptions || [],
+    idConvenio: empresasConvenioOptions || [],
   };
 
-  if (estudiantesLoading || conveniosLoading) {
+  if (estudiantesLoading || empresasConvenioLoading) {
     return <LoadingSpinner message='Cargando opciones...' />;
   }
 

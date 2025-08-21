@@ -59,7 +59,12 @@ export const useCreatePago = () => {
       return result;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pagos
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
+      queryClient.invalidateQueries({ queryKey: ['pago'] });
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
     },
   });
 };
@@ -74,7 +79,12 @@ export const useUpdatePago = () => {
       return result;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pagos
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
+      queryClient.invalidateQueries({ queryKey: ['pago'] });
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
     },
   });
 };
@@ -92,29 +102,15 @@ export const useMarcarPagoPagado = () => {
       return response;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pagos
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
+      queryClient.invalidateQueries({ queryKey: ['pago'] });
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
     },
   });
 };
-
-// DEPRECATED: Use usePasantiasDropdown from useDropdownData instead
-// Hook para obtener pasantías (para dropdowns) - DEPRECATED
-// export const usePasantiasForDropdown = () => {
-//   return useQuery({
-//     queryKey: ['pasantias', 'dropdown'],
-//     queryFn: async () => {
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//       const data = await apiClient.get<any[]>('/pasantias');
-//       return (
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         data?.map((pasantia: any) => ({
-//           value: pasantia.idPasantia,
-//           label: pasantia.tramite || `Pasantía ${pasantia.idPasantia}`,
-//         })) || []
-//       );
-//     },
-//   });
-// };
 
 // Hook para obtener estadísticas de pagos
 export const usePagosStats = () => {

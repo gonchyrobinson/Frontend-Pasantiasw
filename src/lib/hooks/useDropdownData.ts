@@ -102,13 +102,14 @@ export const useEmpresasDropdown = () => {
   };
 };
 
-// Hook para estudiantes en dropdowns - MISMO ENDPOINT QUE ESTUDIANTES.TSX
+// Hook para estudiantes en dropdowns - OPTIMIZADO PARA DOCUMENTOS
 export const useEstudiantesDropdown = () => {
   const query = useQuery({
-    queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
+    queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
     queryFn: async () => {
-      // El endpoint GET /students devuelve directamente el array de estudiantes
-      const response = await apiClient.get<any[]>('/students');
+      const response = await apiClient.get<DropdownOption[]>(
+        '/students/documentos-dropdown'
+      );
       return response || [];
     },
     ...DROPDOWN_CACHE_CONFIG,
@@ -119,14 +120,7 @@ export const useEstudiantesDropdown = () => {
       return [];
     }
 
-    // Mostrar solo los primeros 15 estudiantes ordenados por apellido para máxima velocidad
-    return query.data
-      .sort((a, b) => (a.apellido || '').localeCompare(b.apellido || ''))
-      .slice(0, 15) // Solo los primeros 15 para performance
-      .map(estudiante => ({
-        value: estudiante.idEstudiante,
-        label: `${estudiante.apellido || 'Sin apellido'}, ${estudiante.nombre || 'Sin nombre'}`,
-      }));
+    return query.data; // Ya viene en el formato correcto desde el backend
   }, [query.data]);
 
   return {
@@ -231,6 +225,36 @@ export const usePasantiasDropdown = () => {
   };
 };
 
+// Hook para empresas con último convenio vigente (para dropdown de pasantías)
+export const useEmpresasConvenioDropdown = () => {
+  const query = useQuery({
+    queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'empresas-convenio-vigente'],
+    queryFn: async () => {
+      const data = await apiClient.get<DropdownOption[]>(
+        '/convenios/empresas-convenio-vigente'
+      );
+      return data;
+    },
+    ...DROPDOWN_CACHE_CONFIG,
+  });
+
+  const empresasConvenioOptions: DropdownOption[] = React.useMemo(() => {
+    if (!query.data || !Array.isArray(query.data)) {
+      return [];
+    }
+
+    return query.data.map(item => ({
+      value: item.value, // IdConvenio del último convenio vigente
+      label: item.label, // Nombre de la empresa
+    }));
+  }, [query.data]);
+
+  return {
+    ...query,
+    empresasConvenioOptions,
+  };
+};
+
 // Hook combinado para obtener todas las opciones de dropdown
 export const useAllDropdownData = () => {
   const empresas = useEmpresasDropdown();
@@ -288,12 +312,19 @@ export const useInvalidateDropdowns = () => {
     },
     invalidateEstudiantes: () =>
       queryClient.invalidateQueries({
-        queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
+        queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
       }),
-    invalidateConvenios: () =>
+    invalidateConvenios: () => {
       queryClient.invalidateQueries({
         queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
-      }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...DROPDOWN_QUERY_KEYS.convenios,
+          'empresas-convenio-vigente',
+        ],
+      });
+    },
     invalidatePasantias: () => {
       queryClient.invalidateQueries({
         queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'completas'],
@@ -328,11 +359,9 @@ export const usePrefetchDropdowns = () => {
 
   const prefetchEstudiantes = () => {
     queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'estandar'],
-      queryFn: async () => {
-        const response = await apiClient.get<{ data: any[] }>('/students');
-        return response.data || [];
-      },
+      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
+      queryFn: async () =>
+        apiClient.get<DropdownOption[]>('/students/documentos-dropdown'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };
@@ -342,6 +371,12 @@ export const usePrefetchDropdowns = () => {
       queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
       queryFn: async () =>
         apiClient.get<DropdownOption[]>('/convenios/sugerencias-dropdown'),
+      ...DROPDOWN_CACHE_CONFIG,
+    });
+    queryClient.prefetchQuery({
+      queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'empresas-convenio-vigente'],
+      queryFn: async () =>
+        apiClient.get<DropdownOption[]>('/convenios/empresas-convenio-vigente'),
       ...DROPDOWN_CACHE_CONFIG,
     });
   };

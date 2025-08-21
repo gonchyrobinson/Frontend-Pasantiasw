@@ -1,52 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { EmpresaDto } from './types';
 import { getEdicionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { useEmpresa, useUpdateEmpresa } from './hooks/useEmpresas';
 
 const EditarEmpresa: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [loading, setLoading] = useState(false);
-  const [initialData, setInitialData] = useState<EmpresaDto | null>(null);
-  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
+  const empresaId = id ? parseInt(id, 10) : null;
+  const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    const fetchEmpresa = async () => {
-      try {
-        const data = await apiClient.get<EmpresaDto>(`/empresas/${id}`);
-        setInitialData(data);
-      } catch (error) {
-        showError('Error al cargar la empresa');
-        setTimeout(() => navigate(ROUTES.EMPRESAS), 2000);
-      }
-    };
+  const { data: empresaData, isLoading, error } = useEmpresa(empresaId);
+  const { mutate: updateEmpresa, isPending: isUpdating } = useUpdateEmpresa();
 
-    if (id) {
-      fetchEmpresa();
-    }
-  }, [id, navigate, showError]);
-
-  const handleSubmit = async (data: Record<string, unknown>) => {
-    setLoading(true);
-
-    try {
-      const empresaData = { ...data, idEmpresa: parseInt(id || '0') };
-      await apiClient.put(`/empresas`, empresaData);
-
+  const handleSubmit = async (formData: Record<string, unknown>) => {
+    if (empresaId) {
+      await new Promise<EmpresaDto>((resolve, reject) => {
+        updateEmpresa(
+          { ...formData, idEmpresa: empresaId } as unknown as EmpresaDto,
+          {
+            onSuccess: resolve,
+            onError: reject,
+          }
+        );
+      });
       showSuccess('Empresa actualizada exitosamente');
-
       setTimeout(() => {
-        navigate(ROUTES.EMPRESAS);
+        navigate(`${ROUTES.EMPRESAS_DETALLE}/${empresaId}`);
       }, 2000);
-    } catch (error) {
-      showError('Error al actualizar la empresa');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -54,12 +39,20 @@ const EditarEmpresa: React.FC = () => {
     navigate(ROUTES.EMPRESAS);
   };
 
-  if (!initialData) {
+  if (isLoading) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         Cargando datos de la empresa...
       </div>
     );
+  }
+
+  if (error) {
+    return <div>Error al cargar la empresa: {error.message}</div>;
+  }
+
+  if (!empresaData) {
+    return <div>No se encontró la empresa.</div>;
   }
 
   return (
@@ -68,8 +61,8 @@ const EditarEmpresa: React.FC = () => {
         metadata={getEdicionEmpresaMetadata()}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
-        loading={loading}
-        initialValues={initialData as unknown as Record<string, unknown>}
+        loading={isUpdating}
+        initialValues={empresaData as unknown as Record<string, unknown>}
       />
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />

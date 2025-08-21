@@ -1,34 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiClient } from '../Shared/apis/apiClient';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
-import { CreacionEstudianteDto } from './types';
+import { CreacionEstudianteDto, EstudianteDto } from './types';
 import { getCreacionEstudianteMetadata } from './helpers/estudianteHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { useCreateEstudiante } from './hooks/useEstudiantes';
 
 const CreacionEstudiantes: React.FC = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
+  const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
+  const { mutate: createEstudiante, isPending: isCreating } =
+    useCreateEstudiante();
 
-  const handleSubmit = async (data: Record<string, unknown>) => {
-    setLoading(true);
-
-    try {
-      const estudianteData = data as unknown as CreacionEstudianteDto;
-      await apiClient.post('/students', estudianteData);
-
-      showSuccess('Estudiante creado exitosamente');
-
+  const handleSubmit = async (formData: Record<string, unknown>) => {
+    const response = await new Promise<EstudianteDto>((resolve, reject) => {
+      createEstudiante(formData as unknown as CreacionEstudianteDto, {
+        onSuccess: resolve,
+        onError: reject,
+      });
+    });
+    showSuccess('Estudiante creado exitosamente');
+    if (response && response.idEstudiante) {
+      setTimeout(() => {
+        navigate(`${ROUTES.ESTUDIANTES_DETALLE}/${response.idEstudiante}`);
+      }, 2000);
+    } else {
       setTimeout(() => {
         navigate(ROUTES.ESTUDIANTES);
       }, 2000);
-    } catch (error) {
-      showError('Error al crear el estudiante');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -42,7 +43,7 @@ const CreacionEstudiantes: React.FC = () => {
         metadata={getCreacionEstudianteMetadata()}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
-        loading={loading}
+        loading={isCreating}
       />
 
       <PersonalizedSnackbar snackbar={snackbar} onClose={hideSnackbar} />

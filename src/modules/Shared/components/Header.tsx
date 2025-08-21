@@ -9,7 +9,7 @@ import {
   Person,
   Domain,
 } from '@mui/icons-material';
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar, Toolbar, Divider } from '@mui/material';
 import { FlexContainer } from '../../../lib/components/StyledContainers';
 import { CardTitle } from '../../../lib/components/StyledText';
 import CustomMenu from './menu/CustomMenu';
@@ -23,6 +23,12 @@ import React, { MouseEvent, useState } from 'react';
 import { useNavigation } from '../../../lib/hooks/useNavigation';
 import { usePagosPorVencer } from '../../Pagos/hooks/usePagosPorVencer';
 import PagosVencerNotifications from './header/PagosVencerNotifications';
+import ConveniosVencerNotifications from './header/ConveniosVencerNotifications';
+import PasantiasVencerNotifications from './header/PasantiasVencerNotifications';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../helpers/routesHelper';
+import { useConveniosPorVencer } from '../../Convenios/hooks/useConveniosPorVencer';
+import { usePasantiasPorVencer } from '../../Pasantias/hooks/usePasantiasPorVencer';
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -43,6 +49,7 @@ const UserSection = styled(FlexContainer)(({ theme }) => ({
 }));
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
@@ -59,9 +66,30 @@ const Header: React.FC = () => {
     logout,
   } = useNavigation();
 
+  const goToDetallePago = (pagoId: number) => {
+    navigate(`${ROUTES.PAGOS_DETALLE}/${pagoId}`);
+  };
+
+  const goToDetalleConvenio = (convenioId: number) => {
+    navigate(`${ROUTES.CONVENIOS_DETALLE}/${convenioId}`);
+  };
+
+  const goToDetallePasantia = (pasantiaId: number) => {
+    navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantiaId}`);
+  };
+
   // Hook para obtener pagos por vencer para notificaciones
   const { data: pagosPorVencer, isLoading: loadingPagos } = usePagosPorVencer();
-  const notificationCount = pagosPorVencer?.length || 0;
+  const { data: conveniosPorVencer, isLoading: loadingConvenios } =
+    useConveniosPorVencer();
+  const { data: pasantiasPorVencer, isLoading: loadingPasantias } =
+    usePasantiasPorVencer();
+
+  // Calcular total de notificaciones
+  const notificationCount =
+    (pagosPorVencer?.length || 0) +
+    (conveniosPorVencer?.length || 0) +
+    (pasantiasPorVencer?.length || 0);
 
   const handleMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -133,7 +161,7 @@ const Header: React.FC = () => {
           <NotificationButton
             count={notificationCount}
             onClick={handleNotificationsMenu}
-            disabled={loadingPagos}
+            disabled={loadingPagos || loadingConvenios || loadingPasantias}
           />
 
           {/* User Menu */}
@@ -145,16 +173,31 @@ const Header: React.FC = () => {
             anchorEl={notificationsAnchor}
             onClose={handleNotificationsClose}
             PaperProps={{
-              sx: { minWidth: 350, maxHeight: 500 },
+              sx: { minWidth: 400, maxHeight: 600 },
             }}
           >
+            {/* Pagos por Vencer */}
             <PagosVencerNotifications
               onClose={handleNotificationsClose}
-              onNavigateToPago={() => {
-                // Navegar a la página de pagos
-                goToPagos();
-                // En el futuro se puede implementar navegación directa al pago específico
-              }}
+              onNavigateToPago={goToDetallePago}
+            />
+
+            {/* Separador */}
+            <Divider sx={{ my: 1 }} />
+
+            {/* Convenios por Vencer */}
+            <ConveniosVencerNotifications
+              onClose={handleNotificationsClose}
+              onNavigateToConvenio={goToDetalleConvenio}
+            />
+
+            {/* Separador */}
+            <Divider sx={{ my: 1 }} />
+
+            {/* Pasantías por Vencer */}
+            <PasantiasVencerNotifications
+              onClose={handleNotificationsClose}
+              onNavigateToPasantia={goToDetallePasantia}
             />
           </CustomMenu>
 

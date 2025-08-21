@@ -4,10 +4,10 @@ import { apiClient } from '../../Shared/apis/apiClient';
 
 // DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface StudentBusquedaAvanzadaDto {
-  apellido?: string;
-  nombre?: string;
   documento?: string;
   carrera?: string;
+  nombre?: string;
+  apellido?: string;
   areaTrabajo?: string;
 }
 
@@ -19,18 +19,6 @@ export const getEstudianteSearchMetadata = (): {
 } => ({
   title: 'Búsqueda Avanzada de Estudiantes',
   fields: [
-    {
-      name: 'apellido',
-      label: 'Apellido',
-      type: 'dynamicDropdown',
-      placeholder: 'Buscar por apellido...',
-    },
-    {
-      name: 'nombre',
-      label: 'Nombre',
-      type: 'dynamicDropdown',
-      placeholder: 'Buscar por nombre...',
-    },
     {
       name: 'documento',
       label: 'Documento',
@@ -50,6 +38,18 @@ export const getEstudianteSearchMetadata = (): {
       ],
     },
     {
+      name: 'nombre',
+      label: 'Nombre',
+      type: 'text',
+      placeholder: 'Buscar por nombre...',
+    },
+    {
+      name: 'apellido',
+      label: 'Apellido',
+      type: 'text',
+      placeholder: 'Buscar por apellido...',
+    },
+    {
       name: 'areaTrabajo',
       label: 'Área de Trabajo',
       type: 'text',
@@ -65,17 +65,17 @@ export const formatEstudianteSearchFilters = (
 ): StudentBusquedaAvanzadaDto => {
   const formattedFilters: StudentBusquedaAvanzadaDto = {};
 
-  if (filters.apellido) {
-    formattedFilters.apellido = filters.apellido;
-  }
-  if (filters.nombre) {
-    formattedFilters.nombre = filters.nombre;
-  }
   if (filters.documento) {
     formattedFilters.documento = filters.documento;
   }
   if (filters.carrera) {
     formattedFilters.carrera = filters.carrera;
+  }
+  if (filters.nombre) {
+    formattedFilters.nombre = filters.nombre;
+  }
+  if (filters.apellido) {
+    formattedFilters.apellido = filters.apellido;
   }
   if (filters.areaTrabajo) {
     formattedFilters.areaTrabajo = filters.areaTrabajo;
@@ -84,30 +84,16 @@ export const formatEstudianteSearchFilters = (
   return formattedFilters;
 };
 
-export const getSugerenciasNombres = async (): Promise<
+export const getSugerenciasDocumentos = async (): Promise<
   { value: string; label: string }[]
 > => {
   try {
-    const nombres = await apiClient.get<string[]>(
-      '/students/sugerencias-nombres'
-    );
-    return nombres.map(nombre => ({ value: nombre, label: nombre }));
+    const documentos = await apiClient.get<
+      Array<{ value: string; label: string }>
+    >('/students/documentos-dropdown');
+    return documentos;
   } catch (error) {
-    console.error('Error al obtener sugerencias de nombres:', error);
-    return [];
-  }
-};
-
-export const getSugerenciasApellidos = async (): Promise<
-  { value: string; label: string }[]
-> => {
-  try {
-    const apellidos = await apiClient.get<string[]>(
-      '/students/sugerencias-apellidos'
-    );
-    return apellidos.map(apellido => ({ value: apellido, label: apellido }));
-  } catch (error) {
-    console.error('Error al obtener sugerencias de apellidos:', error);
+    console.error('Error al obtener sugerencias de documentos:', error);
     return [];
   }
 };

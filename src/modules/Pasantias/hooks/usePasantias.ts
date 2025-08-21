@@ -81,9 +81,16 @@ export const useCreatePasantia = () => {
       return result;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pasantías
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
-      invalidatePasantias(); // Invalidar caché de dropdowns
+
+      // Invalidar dropdowns de pasantías
+      invalidatePasantias();
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
   });
 };
@@ -99,9 +106,16 @@ export const useUpdatePasantia = () => {
       return result;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pasantías
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
-      invalidatePasantias(); // Invalidar caché de dropdowns
+
+      // Invalidar dropdowns de pasantías
+      invalidatePasantias();
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
   });
 };
@@ -117,9 +131,16 @@ export const useDeletePasantia = () => {
       return result;
     },
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con pasantías
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
-      invalidatePasantias(); // Invalidar caché de dropdowns
+
+      // Invalidar dropdowns de pasantías
+      invalidatePasantias();
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
   });
 };

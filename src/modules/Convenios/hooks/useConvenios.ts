@@ -58,10 +58,21 @@ export const useCreateConvenio = () => {
     ConvenioCreateDto & Record<string, unknown>
   >(ROUTES.CONVENIOS, {
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con convenios
       queryClient.invalidateQueries({
         queryKey: ['/convenios/conEmpresa'],
       });
-      invalidateConvenios(); // Invalidar caché de dropdowns
+      queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+      // Invalidar dropdowns de convenios
+      invalidateConvenios();
+
+      // Invalidar dropdowns que dependen de convenios (pasantías)
+      queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
   });
 };
@@ -75,10 +86,21 @@ export const useUpdateConvenio = () => {
     ROUTES.CONVENIOS,
     {
       onSuccess: () => {
+        // Invalidar todas las queries relacionadas con convenios
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
-        invalidateConvenios(); // Invalidar caché de dropdowns
+        queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+        // Invalidar dropdowns de convenios
+        invalidateConvenios();
+
+        // Invalidar dropdowns que dependen de convenios (pasantías)
+        queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
+
+        // Invalidar queries de inicio que muestran estadísticas
+        queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+        queryClient.invalidateQueries({ queryKey: ['pagos'] });
       },
     }
   );
@@ -104,10 +126,21 @@ export const useCaducarConvenio = () => {
         fechaCaducidad,
       } as unknown as Record<string, unknown>),
     onSuccess: () => {
+      // Invalidar todas las queries relacionadas con convenios
       queryClient.invalidateQueries({
         queryKey: ['/convenios/conEmpresa'],
       });
-      invalidateConvenios(); // Invalidar caché de dropdowns
+      queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+      // Invalidar dropdowns de convenios
+      invalidateConvenios();
+
+      // Invalidar dropdowns que dependen de convenios (pasantías)
+      queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
+
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
     },
   });
 };
@@ -121,10 +154,21 @@ export const useAsignarEmpresa = () => {
     '/convenios/asignar-empresa',
     {
       onSuccess: () => {
+        // Invalidar todas las queries relacionadas con convenios
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
-        invalidateConvenios(); // Invalidar caché de dropdowns
+        queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+        // Invalidar dropdowns de convenios
+        invalidateConvenios();
+
+        // Invalidar dropdowns que dependen de convenios (pasantías)
+        queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
+
+        // Invalidar queries de inicio que muestran estadísticas
+        queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+        queryClient.invalidateQueries({ queryKey: ['pagos'] });
       },
     }
   );

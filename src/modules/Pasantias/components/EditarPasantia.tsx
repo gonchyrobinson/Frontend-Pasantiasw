@@ -6,42 +6,40 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { usePasantia, useUpdatePasantia } from '../hooks/usePasantias';
 import {
   useEstudiantesDropdown,
-  useConveniosDropdown,
+  useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
-import { PasantiaFormData } from '../types';
+import { PasantiaFormData, PasantiaDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 
 const EditarPasantia: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const pasantiaId = id ? parseInt(id, 10) : null;
   const navigate = useNavigate();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
 
   const { data: pasantiaData, isLoading, error } = usePasantia(pasantiaId);
   const { mutate: updatePasantia, isPending: isUpdating } = useUpdatePasantia();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
     useEstudiantesDropdown();
-  const { conveniosOptions, isLoading: conveniosLoading } =
-    useConveniosDropdown();
+  const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
+    useEmpresasConvenioDropdown();
 
   const metadata = getPasantiaFormMetadata();
 
-  const handleSubmit = (formData: Record<string, unknown>) => {
+  const handleSubmit = async (formData: Record<string, unknown>) => {
     if (pasantiaId) {
-      updatePasantia(
-        { data: formData as unknown as PasantiaFormData },
-        {
-          onSuccess: () => {
-            showSuccess('Pasantía actualizada exitosamente');
-            // Retornar a la página principal preservando el estado
-            navigate(ROUTES.PASANTIAS);
-          },
-          onError: err => {
-            showError(`Error al actualizar pasantía: ${err.message}`);
-          },
-        }
-      );
+      await new Promise<PasantiaDto>((resolve, reject) => {
+        updatePasantia(
+          { data: formData as unknown as PasantiaFormData },
+          {
+            onSuccess: resolve,
+            onError: reject,
+          }
+        );
+      });
+      showSuccess('Pasantía actualizada exitosamente');
+      navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantiaId}`);
     }
   };
 
@@ -49,7 +47,7 @@ const EditarPasantia: React.FC = () => {
     navigate(ROUTES.PASANTIAS);
   };
 
-  if (isLoading || estudiantesLoading || conveniosLoading) {
+  if (isLoading || estudiantesLoading || empresasConvenioLoading) {
     return <LoadingSpinner message='Cargando datos...' />;
   }
 
@@ -64,7 +62,7 @@ const EditarPasantia: React.FC = () => {
   // Las opciones ya vienen formateadas desde los hooks
   const dynamicDropdownOptions = {
     idEstudiante: estudiantesOptions || [],
-    idConvenio: conveniosOptions || [],
+    idConvenio: empresasConvenioOptions || [],
   };
 
   return (

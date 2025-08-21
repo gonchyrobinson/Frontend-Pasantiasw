@@ -43,16 +43,6 @@ const EstudiantesStats: React.FC<EstudiantesStatsProps> = ({ estudiantes }) => {
         color: 'info',
       },
     ],
-    distributions: [
-      {
-        title: 'Distribución por carrera',
-        data: stats.porCarrera,
-      },
-      {
-        title: 'Distribución por área de trabajo',
-        data: stats.porAreaTrabajo,
-      },
-    ],
   };
 
   return <Stats {...statsData} />;

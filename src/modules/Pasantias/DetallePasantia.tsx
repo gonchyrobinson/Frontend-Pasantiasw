@@ -1,7 +1,10 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Person, Assignment } from '@mui/icons-material';
-import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
+import {
+  DisplayMetadata,
+  VisualizadorGenerico,
+} from '@/lib/VisualizadorGenerico';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { PasantiaDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';

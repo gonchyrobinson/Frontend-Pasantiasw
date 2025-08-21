@@ -83,10 +83,10 @@ export const getPasantiaSearchMetadata = () => ({
     },
     {
       name: 'idConvenio',
-      label: 'Convenio',
-      type: 'dynamicDropdown',
+      label: 'Empresa',
+      type: 'dynamicDropdown' as const,
       required: false,
-      placeholder: 'Seleccionar convenio...',
+      placeholder: 'Seleccionar empresa...',
     },
     {
       name: 'estado',

@@ -68,15 +68,6 @@ export const getCreacionEstudianteMetadata = () => ({
       gridSize: 6,
     },
     {
-      name: 'libreta',
-      label: 'Libreta',
-      type: 'text' as const,
-      validations: {
-        required: 'La libreta es requerida',
-      },
-      gridSize: 6,
-    },
-    {
       name: 'carrera',
       label: 'Carrera',
       type: 'dropdown' as const,

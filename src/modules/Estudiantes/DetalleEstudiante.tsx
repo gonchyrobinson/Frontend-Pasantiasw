@@ -1,9 +1,12 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { EstudianteDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
+import {
+  DisplayMetadata,
+  VisualizadorGenerico,
+} from '@/lib/VisualizadorGenerico';
 
 const DetalleEstudiante: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,13 +51,6 @@ const DetalleEstudiante: React.FC = () => {
             type: 'text',
             gridSize: 6,
             prefix: 'DNI: ',
-          },
-          {
-            name: 'libreta',
-            label: 'Libreta Universitaria',
-            type: 'text',
-            gridSize: 6,
-            prefix: 'LU: ',
           },
           {
             name: 'domicilio',

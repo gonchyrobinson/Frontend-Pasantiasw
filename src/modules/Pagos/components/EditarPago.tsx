@@ -16,7 +16,7 @@ import { PagosDto } from '../types';
 const EditarPago: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { showSuccess, showError } = useSnackbar();
+  const { showSuccess } = useSnackbar();
   const updateMutation = useUpdatePago();
   const { pasantiasOptions, isLoading: pasantiasLoading } =
     usePasantiasDropdown();
@@ -47,29 +47,15 @@ const EditarPago: React.FC = () => {
     }
   }, [pagoResponse]);
 
-  const handleSubmit = (data: Record<string, unknown>) => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
     if (!id) return;
-
     const updateData = {
       ...data,
       idPago: Number(id),
     };
-
-    updateMutation.mutate(
-      {
-        ...updateData,
-        idPago: Number(id),
-      } as unknown as PagosDto,
-      {
-        onSuccess: () => {
-          showSuccess('Pago actualizado exitosamente');
-          navigate(ROUTES.PAGOS);
-        },
-        onError: () => {
-          showError('Error al actualizar el pago');
-        },
-      }
-    );
+    await updateMutation.mutateAsync(updateData as unknown as PagosDto);
+    showSuccess('Pago actualizado exitosamente');
+    navigate(`${ROUTES.PAGOS_DETALLE}/${id}`);
   };
 
   const handleCancel = () => {

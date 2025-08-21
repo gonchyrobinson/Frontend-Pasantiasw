@@ -38,10 +38,11 @@ export const detectType = (value: unknown): string => {
 
 export const formatDate = (dateValue: unknown): string => {
   try {
+    if (!dateValue) return '-';
     const date = new Date(dateValue as string | number | Date);
     return date.toLocaleDateString('es-AR');
   } catch {
-    return String(dateValue);
+    return '-';
   }
 };
 

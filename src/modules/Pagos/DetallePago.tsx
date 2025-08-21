@@ -1,7 +1,10 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Work } from '@mui/icons-material';
-import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
+import {
+  DisplayMetadata,
+  VisualizadorGenerico,
+} from '@/lib/VisualizadorGenerico';
 import { StatusBadgeContainer } from '../../lib/components/StyledContainers';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { PagosDto } from './types';

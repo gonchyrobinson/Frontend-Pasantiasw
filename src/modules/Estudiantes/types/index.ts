@@ -4,7 +4,6 @@ export interface EstudianteDto {
   nombre: string;
   documento: string;
   domicilio: string;
-  libreta: string;
   carrera: string;
   areaTrabajo: string;
   email: string;
@@ -16,7 +15,6 @@ export interface CreacionEstudianteDto {
   nombre: string;
   documento: string;
   domicilio: string;
-  libreta: string;
   carrera: string;
   areaTrabajo: string;
   email: string;

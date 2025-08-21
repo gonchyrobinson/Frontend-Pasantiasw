@@ -15,9 +15,9 @@ export const getPasantiaFormMetadata = () => ({
     },
     {
       name: 'idConvenio',
-      label: 'Convenio',
+      label: 'Empresa',
       type: 'dynamicDropdown' as const,
-      placeholder: 'Seleccione un convenio',
+      placeholder: 'Seleccione una empresa',
       gridSize: 6,
     },
     {
@@ -47,7 +47,7 @@ export const getPasantiaFormMetadata = () => ({
     },
     {
       name: 'art',
-      label: 'ART (Artículo de Pasantía)',
+      label: 'ART',
       type: 'text' as const,
       validations: {
         minLength: {
@@ -153,30 +153,7 @@ export const getPasantiaFormMetadata = () => ({
       },
       gridSize: 6,
     },
-    {
-      name: 'areaTrabajo',
-      label: 'Área de Trabajo',
-      type: 'text' as const,
-      validations: {
-        maxLength: {
-          value: 200,
-          message: 'El área de trabajo no puede exceder 200 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
-      name: 'estado',
-      label: 'Estado',
-      type: 'dropdown' as const,
-      options: [
-        { value: 'Activa', label: 'Activa' },
-        { value: 'Finalizada', label: 'Finalizada' },
-        { value: 'Suspendida', label: 'Suspendida' },
-        { value: 'Cancelada', label: 'Cancelada' },
-      ],
-      gridSize: 6,
-    },
+    // areaTrabajo y estado se calculan automáticamente - no deben estar en el formulario
     {
       name: 'sudocu',
       label: 'SUDOCU',
@@ -200,7 +177,8 @@ export const getPasantiaFormMetadata = () => ({
 
 // Función para calcular estadísticas de pasantías
 export const calculatePasantiaStats = (
-  pasantias: PasantiaDto[]
+  pasantias: PasantiaDto[],
+  pasantiasPorVencer?: number
 ): PasantiaStats => {
   const totalPasantias = pasantias.length;
   const fechaActual = new Date();
@@ -217,21 +195,25 @@ export const calculatePasantiaStats = (
     return fechaFin <= fechaActual;
   }).length;
 
-  // Pasantías que finalizan en los próximos 30 días
-  const treintaDias = new Date();
-  treintaDias.setDate(treintaDias.getDate() + 30);
+  // Si no se proporciona pasantiasPorVencer, calcular por defecto (30 días)
+  const pasantiasPorVencerCalculadas =
+    pasantiasPorVencer ??
+    (() => {
+      const treintaDias = new Date();
+      treintaDias.setDate(treintaDias.getDate() + 30);
 
-  const pasantiasPorVencer = pasantias.filter(pasantia => {
-    if (!pasantia.fechaFin) return false;
-    const fechaFin = new Date(pasantia.fechaFin);
-    return fechaFin > fechaActual && fechaFin <= treintaDias;
-  }).length;
+      return pasantias.filter(pasantia => {
+        if (!pasantia.fechaFin) return false;
+        const fechaFin = new Date(pasantia.fechaFin);
+        return fechaFin > fechaActual && fechaFin <= treintaDias;
+      }).length;
+    })();
 
   return {
     totalPasantias,
     pasantiasActivas,
     pasantiasFinalizadas,
-    pasantiasPorVencer,
+    pasantiasPorVencer: pasantiasPorVencerCalculadas,
   };
 };
 
