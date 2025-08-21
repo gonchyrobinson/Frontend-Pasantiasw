@@ -1,10 +1,13 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Business } from '@mui/icons-material';
-import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { ConvenioEmpresaDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
+import {
+  DisplayMetadata,
+  VisualizadorGenerico,
+} from '@/lib/VisualizadorGenerico';
 
 const DetalleConvenio: React.FC = () => {
   const { id } = useParams<{ id: string }>();

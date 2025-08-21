@@ -1,9 +1,12 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { VisualizadorGenerico, DisplayMetadata } from '../../lib/components';
 import { useApiQuery } from '../../lib/hooks/useApi';
 import { EmpresaDto } from './types';
 import { ROUTES } from '../../helpers/routesHelper';
+import {
+  DisplayMetadata,
+  VisualizadorGenerico,
+} from '@/lib/VisualizadorGenerico';
 
 const DetalleEmpresa: React.FC = () => {
   const { id } = useParams<{ id: string }>();
