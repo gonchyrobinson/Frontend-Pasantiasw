@@ -51,7 +51,6 @@ const PagosVencerNotifications: React.FC<PagosVencerNotificationsProps> = ({
       error={error}
       config={config}
       onClose={onClose}
-      maxItems={5}
     />
   );
 };

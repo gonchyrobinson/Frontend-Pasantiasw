@@ -177,7 +177,8 @@ export const getPasantiaFormMetadata = () => ({
 
 // Función para calcular estadísticas de pasantías
 export const calculatePasantiaStats = (
-  pasantias: PasantiaDto[]
+  pasantias: PasantiaDto[],
+  pasantiasPorVencer?: number
 ): PasantiaStats => {
   const totalPasantias = pasantias.length;
   const fechaActual = new Date();
@@ -194,21 +195,25 @@ export const calculatePasantiaStats = (
     return fechaFin <= fechaActual;
   }).length;
 
-  // Pasantías que finalizan en los próximos 30 días
-  const treintaDias = new Date();
-  treintaDias.setDate(treintaDias.getDate() + 30);
+  // Si no se proporciona pasantiasPorVencer, calcular por defecto (30 días)
+  const pasantiasPorVencerCalculadas =
+    pasantiasPorVencer ??
+    (() => {
+      const treintaDias = new Date();
+      treintaDias.setDate(treintaDias.getDate() + 30);
 
-  const pasantiasPorVencer = pasantias.filter(pasantia => {
-    if (!pasantia.fechaFin) return false;
-    const fechaFin = new Date(pasantia.fechaFin);
-    return fechaFin > fechaActual && fechaFin <= treintaDias;
-  }).length;
+      return pasantias.filter(pasantia => {
+        if (!pasantia.fechaFin) return false;
+        const fechaFin = new Date(pasantia.fechaFin);
+        return fechaFin > fechaActual && fechaFin <= treintaDias;
+      }).length;
+    })();
 
   return {
     totalPasantias,
     pasantiasActivas,
     pasantiasFinalizadas,
-    pasantiasPorVencer,
+    pasantiasPorVencer: pasantiasPorVencerCalculadas,
   };
 };
 

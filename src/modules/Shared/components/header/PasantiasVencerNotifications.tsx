@@ -50,7 +50,6 @@ const PasantiasVencerNotifications: React.FC<
       error={error}
       config={config}
       onClose={onClose}
-      maxItems={5}
     />
   );
 };

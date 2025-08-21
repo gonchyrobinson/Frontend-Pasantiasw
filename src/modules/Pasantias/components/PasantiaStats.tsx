@@ -3,13 +3,18 @@ import { Stats, StatsProps } from '../../../lib/ElementCardGenerica';
 import { calculatePasantiaStats } from '../helpers/pasantiaHelpers';
 import { PasantiaDto } from '../types';
 import { Work, CheckCircle, Cancel, Warning } from '@mui/icons-material';
+import { usePasantiasPorVencer } from '../hooks/usePasantiasPorVencer';
 
 interface PasantiaStatsProps {
   pasantias: PasantiaDto[];
 }
 
 const PasantiaStats: React.FC<PasantiaStatsProps> = ({ pasantias }) => {
-  const stats = calculatePasantiaStats(pasantias);
+  // Obtener pasantías por vencer del hook (ya calculadas)
+  const { data: pasantiasPorVencer } = usePasantiasPorVencer();
+
+  // Calcular estadísticas usando el valor pre-calculado
+  const stats = calculatePasantiaStats(pasantias, pasantiasPorVencer?.length);
 
   const statsData: StatsProps = {
     title: 'Estadísticas de Pasantías',
@@ -38,30 +43,6 @@ const PasantiaStats: React.FC<PasantiaStatsProps> = ({ pasantias }) => {
         title: 'Por Vencer',
         value: stats.pasantiasPorVencer,
         color: 'warning',
-      },
-    ],
-    distributions: [
-      {
-        title: 'Distribución por tipo de acuerdo',
-        data: pasantias.reduce(
-          (acc, pasantia) => {
-            const tipo = pasantia.tipoAcuerdo || 'No especificado';
-            acc[tipo] = (acc[tipo] || 0) + 1;
-            return acc;
-          },
-          {} as Record<string, number>
-        ),
-      },
-      {
-        title: 'Distribución por tutor empresa',
-        data: pasantias.reduce(
-          (acc, pasantia) => {
-            const tutor = pasantia.tutorEmpresa || 'No especificado';
-            acc[tutor] = (acc[tutor] || 0) + 1;
-            return acc;
-          },
-          {} as Record<string, number>
-        ),
       },
     ],
   };

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getEstudianteSearchMetadata,
   formatEstudianteSearchFilters,
-  getSugerenciasNombres,
-  getSugerenciasApellidos,
 } from '../helpers/estudianteSearchHelpers';
 import { EstudianteDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
@@ -23,30 +21,6 @@ const EstudiantesFilters: React.FC<EstudiantesFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const [dynamicOptions, setDynamicOptions] = useState<
-    Record<string, Array<{ value: string | number; label: string }>>
-  >({});
-
-  // Cargar sugerencias al montar el componente
-  useEffect(() => {
-    const cargarSugerencias = async () => {
-      try {
-        const [nombres, apellidos] = await Promise.all([
-          getSugerenciasNombres(),
-          getSugerenciasApellidos(),
-        ]);
-
-        setDynamicOptions({
-          nombre: nombres,
-          apellido: apellidos,
-        });
-      } catch (error) {
-        console.error('Error al cargar sugerencias:', error);
-      }
-    };
-
-    cargarSugerencias();
-  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -72,7 +46,6 @@ const EstudiantesFilters: React.FC<EstudiantesFiltersProps> = ({
       onSubmit={handleSearchSubmit}
       onClearResults={onClearResults}
       hasResults={hasResults}
-      dynamicDropdownOptions={dynamicOptions}
     />
   );
 };

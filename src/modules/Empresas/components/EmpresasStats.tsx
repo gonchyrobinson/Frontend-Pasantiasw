@@ -45,12 +45,6 @@ const EmpresasStats: React.FC<EmpresasStatsProps> = ({ empresas }) => {
         color: 'warning',
       },
     ],
-    distributions: [
-      {
-        title: 'Distribución por tipo de contrato',
-        data: stats.porTipo,
-      },
-    ],
   };
 
   return <Stats {...statsData} />;

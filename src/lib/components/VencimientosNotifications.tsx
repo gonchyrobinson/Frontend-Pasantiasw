@@ -46,7 +46,7 @@ const VencimientosNotifications: React.FC<VencimientosNotificationsProps> = ({
   error,
   config,
   onClose,
-  maxItems = 5,
+  maxItems = 100,
 }) => {
   if (isLoading) {
     return (

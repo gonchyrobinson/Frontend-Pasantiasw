@@ -50,7 +50,6 @@ const ConveniosVencerNotifications: React.FC<
       error={error}
       config={config}
       onClose={onClose}
-      maxItems={5}
     />
   );
 };

@@ -7,10 +7,10 @@ export const usePasantiasPorVencer = (diasAdelante = 30) => {
   return useQuery({
     queryKey: ['pasantias', 'por-vencer', diasAdelante],
     queryFn: async () => {
-      const data = await apiClient.get<PasantiaDto[]>(
+      const response = await apiClient.get<PasantiaDto[]>(
         `/pasantias/por-vencer?dias=${diasAdelante}`
       );
-      return data;
+      return response;
     },
     staleTime: 5 * 60 * 1000, // 5 minutos
     refetchInterval: 10 * 60 * 1000, // Refrescar cada 10 minutos para notificaciones
