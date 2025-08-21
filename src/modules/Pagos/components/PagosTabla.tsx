@@ -35,11 +35,10 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
     id: pago.idPago,
     estado: getPagoEstado(pago),
     monto: pago.monto ? `$${pago.monto.toLocaleString()}` : '-',
-    fechaPago: pago.fechaPago || '-',
-    fechaVencimiento: pago.fechaVencimiento || '-',
+    fechaPago: pago.fechaPago,
+    fechaVencimiento: pago.fechaVencimiento,
     observaciones: pago.observaciones || '-',
   }));
-
   const handleRowClick = (row: Record<string, unknown>) => {
     const pago = pagos.find(p => p.idPago === row.id);
     if (pago && onRowClick) onRowClick(pago);
