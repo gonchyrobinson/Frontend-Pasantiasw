@@ -191,7 +191,7 @@ const Estudiantes: React.FC = () => {
           </CardTitle>
           <BodyText color='text.secondary'>
             Utiliza la búsqueda avanzada para encontrar estudiantes por
-            documento, carrera o área de trabajo
+            documento o carrera
           </BodyText>
         </CenteredContainer>
       )}
@@ -203,8 +203,7 @@ const Estudiantes: React.FC = () => {
             No se encontraron estudiantes
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda (documento, carrera,
-            etc.)
+            Intenta con diferentes criterios de búsqueda (documento, carrera)
           </BodyText>
         </CenteredContainer>
       )}

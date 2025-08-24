@@ -1,162 +1,108 @@
-import { FieldMetadata } from '../../../lib/ElementCardGenerica/types';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
+import { CARRERAS_VALIDAS } from '../../Estudiantes/helpers/estudianteHelpers';
 
-// Metadata para el formulario de búsqueda avanzada
-export const getPasantiaSearchMetadata = () => ({
+// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
+export interface PasantiaBusquedaAvanzadaDto {
+  numeroTramite?: string;
+  tipo?: string;
+  estudiante?: string;
+  empresa?: string;
+  vigente?: boolean;
+  carrera?: string;
+}
+
+export const getPasantiaSearchMetadata = (): {
+  title: string;
+  fields: FieldMetadata[];
+  submitButtonText: string;
+  cancelButtonText: string;
+} => ({
   title: 'Búsqueda Avanzada de Pasantías',
   fields: [
     {
-      name: 'tramite',
+      name: 'numeroTramite',
       label: 'Número de Trámite',
       type: 'dynamicDropdown',
-      required: false,
       placeholder: 'Seleccionar número de trámite...',
     },
     {
-      name: 'obraSocial',
-      label: 'Obra Social',
-      type: 'text',
-      required: false,
-      placeholder: 'Buscar por obra social...',
-    },
-    {
-      name: 'art',
-      label: 'ART',
-      type: 'text',
-      required: false,
-      placeholder: 'Buscar por ART...',
-    },
-    {
-      name: 'tutorEmpresa',
-      label: 'Tutor Empresa',
-      type: 'text',
-      required: false,
-      placeholder: 'Buscar por tutor de empresa...',
-    },
-    {
-      name: 'tutorFacultad',
-      label: 'Tutor Facultad',
-      type: 'text',
-      required: false,
-      placeholder: 'Buscar por tutor de facultad...',
-    },
-    {
-      name: 'tipoAcuerdo',
-      label: 'Tipo de Acuerdo',
+      name: 'tipo',
+      label: 'Tipo',
       type: 'dropdown',
-      required: false,
       options: [
-        { value: 'Pasantia', label: 'Pasantía' },
+        { value: '', label: 'Todos' },
         { value: 'PPS', label: 'PPS' },
+        { value: 'Pasantia', label: 'Pasantía' },
         { value: 'otro', label: 'Otro' },
       ],
     },
     {
-      name: 'fechaInicioDesde',
-      label: 'Fecha de Inicio Desde',
-      type: 'date',
-      required: false,
-    },
-    {
-      name: 'fechaInicioHasta',
-      label: 'Fecha de Inicio Hasta',
-      type: 'date',
-      required: false,
-    },
-    {
-      name: 'fechaFinDesde',
-      label: 'Fecha de Fin Desde',
-      type: 'date',
-      required: false,
-    },
-    {
-      name: 'fechaFinHasta',
-      label: 'Fecha de Fin Hasta',
-      type: 'date',
-      required: false,
-    },
-    {
-      name: 'idEstudiante',
-      label: 'Estudiante',
+      name: 'estudiante',
+      label: 'Documento del Estudiante',
       type: 'dynamicDropdown',
-      required: false,
-      placeholder: 'Seleccionar estudiante...',
+      placeholder: 'Seleccionar documento del estudiante...',
     },
     {
-      name: 'idConvenio',
+      name: 'empresa',
       label: 'Empresa',
-      type: 'dynamicDropdown' as const,
-      required: false,
+      type: 'dynamicDropdown',
       placeholder: 'Seleccionar empresa...',
     },
     {
-      name: 'estado',
-      label: 'Estado',
+      name: 'vigente',
+      label: 'Vigente',
       type: 'dropdown',
-      required: false,
       options: [
-        { value: 'Activa', label: 'Activa' },
-        { value: 'Finalizada', label: 'Finalizada' },
-        { value: 'Suspendida', label: 'Suspendida' },
-        { value: 'Cancelada', label: 'Cancelada' },
+        { value: '', label: 'Todos' },
+        { value: 'vigente', label: 'Vigente' },
+        { value: 'no_vigente', label: 'No Vigente' },
       ],
     },
-  ] as FieldMetadata[],
+    {
+      name: 'carrera',
+      label: 'Carrera',
+      type: 'dropdown',
+      options: [
+        { value: '', label: 'Todas las carreras' },
+        ...CARRERAS_VALIDAS.map(carrera => ({
+          value: carrera,
+          label: carrera,
+        })),
+      ],
+    },
+  ],
   submitButtonText: 'Buscar',
-  cancelButtonText: 'Cancelar',
+  cancelButtonText: 'Limpiar',
 });
 
-// Función para formatear los filtros de búsqueda
 export const formatPasantiaSearchFilters = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filters: Record<string, any>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Record<string, any> => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formattedFilters: Record<string, any> = {};
+  filters: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+): PasantiaBusquedaAvanzadaDto => {
+  const formattedFilters: PasantiaBusquedaAvanzadaDto = {};
 
-  // Filtros de texto
-  if (filters.tramite) {
-    formattedFilters.tramite = filters.tramite;
+  if (filters.numeroTramite) {
+    formattedFilters.numeroTramite = filters.numeroTramite;
   }
-  if (filters.obraSocial) {
-    formattedFilters.obraSocial = filters.obraSocial;
+  if (filters.tipo) {
+    formattedFilters.tipo = filters.tipo;
   }
-  if (filters.art) {
-    formattedFilters.art = filters.art;
+  if (filters.estudiante) {
+    formattedFilters.estudiante = filters.estudiante;
   }
-  if (filters.tutorEmpresa) {
-    formattedFilters.tutorEmpresa = filters.tutorEmpresa;
+  if (filters.empresa) {
+    formattedFilters.empresa = filters.empresa;
   }
-  if (filters.tutorFacultad) {
-    formattedFilters.tutorFacultad = filters.tutorFacultad;
+  if (filters.vigente) {
+    // Convertir string del frontend a boolean esperado por el backend
+    if (filters.vigente === 'vigente') {
+      formattedFilters.vigente = true;
+    } else if (filters.vigente === 'no_vigente') {
+      formattedFilters.vigente = false;
+    }
+    // Si es empty string o 'todos', no se incluye el filtro
   }
-  if (filters.tipoAcuerdo) {
-    formattedFilters.tipoAcuerdo = filters.tipoAcuerdo;
-  }
-
-  // Filtros de fecha
-  if (filters.fechaInicioDesde) {
-    formattedFilters.fechaInicioDesde = filters.fechaInicioDesde;
-  }
-  if (filters.fechaInicioHasta) {
-    formattedFilters.fechaInicioHasta = filters.fechaInicioHasta;
-  }
-  if (filters.fechaFinDesde) {
-    formattedFilters.fechaFinDesde = filters.fechaFinDesde;
-  }
-  if (filters.fechaFinHasta) {
-    formattedFilters.fechaFinHasta = filters.fechaFinHasta;
-  }
-
-  // Filtros de ID (dropdowns)
-  if (filters.idEstudiante) {
-    formattedFilters.idEstudiante = Number(filters.idEstudiante);
-  }
-  if (filters.idConvenio) {
-    formattedFilters.idConvenio = Number(filters.idConvenio);
-  }
-  if (filters.estado) {
-    formattedFilters.estado = filters.estado;
+  if (filters.carrera) {
+    formattedFilters.carrera = filters.carrera;
   }
 
   return formattedFilters;

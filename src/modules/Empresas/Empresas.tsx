@@ -199,7 +199,8 @@ const Empresas: React.FC = () => {
             Búsqueda de Empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza la búsqueda avanzada para encontrar empresas específicas
+            Utiliza la búsqueda avanzada para encontrar empresas por nombre,
+            tipo de contrato o vigencia
           </BodyText>
         </CenteredContainer>
       )}
@@ -211,7 +212,8 @@ const Empresas: React.FC = () => {
             No se encontraron empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda
+            Intenta con diferentes criterios de búsqueda (nombre, tipo de
+            contrato, vigencia)
           </BodyText>
         </CenteredContainer>
       )}

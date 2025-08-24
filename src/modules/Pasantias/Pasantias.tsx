@@ -196,7 +196,8 @@ const Pasantias: React.FC = () => {
             Búsqueda de Pasantías
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza los filtros para encontrar pasantías específicas
+            Utiliza la búsqueda avanzada para encontrar pasantías por número de
+            trámite, tipo, estudiante, empresa, vigente o carrera
           </BodyText>
         </CenteredContainer>
       )}
@@ -208,7 +209,8 @@ const Pasantias: React.FC = () => {
             No se encontraron pasantías
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda
+            Intenta con diferentes criterios de búsqueda (número de trámite,
+            tipo, estudiante, empresa, vigente, carrera)
           </BodyText>
         </CenteredContainer>
       )}

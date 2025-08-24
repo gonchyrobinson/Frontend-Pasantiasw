@@ -6,10 +6,6 @@ export interface EmpresaBusquedaAvanzadaDto {
   nombre?: string;
   vigencia?: boolean; // true = vigente, false = no vigente, undefined = todas
   tipoContrato?: string;
-  fechaInicioDesde?: string;
-  fechaInicioHasta?: string;
-  fechaFinDesde?: string;
-  fechaFinHasta?: string;
 }
 
 export const getEmpresaSearchMetadata = (): {
@@ -24,7 +20,7 @@ export const getEmpresaSearchMetadata = (): {
       name: 'nombre',
       label: 'Nombre de la Empresa',
       type: 'dynamicDropdown',
-      placeholder: 'Buscar por nombre...',
+      placeholder: 'Seleccionar empresa...',
     },
     {
       name: 'vigencia',
@@ -42,30 +38,10 @@ export const getEmpresaSearchMetadata = (): {
       type: 'dropdown',
       options: [
         { value: '', label: 'Todos' },
-        { value: 'temporal', label: 'Temporal' },
-        { value: 'indefinido', label: 'Indefinido' },
+        { value: 'PPS', label: 'PPS' },
+        { value: 'Pasantia', label: 'Pasantía' },
         { value: 'otro', label: 'Otro' },
       ],
-    },
-    {
-      name: 'fechaInicioDesde',
-      label: 'Fecha de Inicio Desde',
-      type: 'date',
-    },
-    {
-      name: 'fechaInicioHasta',
-      label: 'Fecha de Inicio Hasta',
-      type: 'date',
-    },
-    {
-      name: 'fechaFinDesde',
-      label: 'Fecha de Fin Desde',
-      type: 'date',
-    },
-    {
-      name: 'fechaFinHasta',
-      label: 'Fecha de Fin Hasta',
-      type: 'date',
     },
   ],
   submitButtonText: 'Buscar',
@@ -91,18 +67,6 @@ export const formatEmpresaSearchFilters = (
   }
   if (filters.tipoContrato) {
     formattedFilters.tipoContrato = filters.tipoContrato;
-  }
-  if (filters.fechaInicioDesde) {
-    formattedFilters.fechaInicioDesde = filters.fechaInicioDesde;
-  }
-  if (filters.fechaInicioHasta) {
-    formattedFilters.fechaInicioHasta = filters.fechaInicioHasta;
-  }
-  if (filters.fechaFinDesde) {
-    formattedFilters.fechaFinDesde = filters.fechaFinDesde;
-  }
-  if (filters.fechaFinHasta) {
-    formattedFilters.fechaFinHasta = filters.fechaFinHasta;
   }
 
   return formattedFilters;
