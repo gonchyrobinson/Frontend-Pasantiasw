@@ -6,9 +6,6 @@ import { apiClient } from '../../Shared/apis/apiClient';
 export interface StudentBusquedaAvanzadaDto {
   documento?: string;
   carrera?: string;
-  nombre?: string;
-  apellido?: string;
-  areaTrabajo?: string;
 }
 
 export const getEstudianteSearchMetadata = (): {
@@ -22,8 +19,8 @@ export const getEstudianteSearchMetadata = (): {
     {
       name: 'documento',
       label: 'Documento',
-      type: 'text',
-      placeholder: 'Buscar por documento...',
+      type: 'dynamicDropdown',
+      placeholder: 'Seleccionar documento...',
     },
     {
       name: 'carrera',
@@ -36,24 +33,6 @@ export const getEstudianteSearchMetadata = (): {
           label: carrera,
         })),
       ],
-    },
-    {
-      name: 'nombre',
-      label: 'Nombre',
-      type: 'text',
-      placeholder: 'Buscar por nombre...',
-    },
-    {
-      name: 'apellido',
-      label: 'Apellido',
-      type: 'text',
-      placeholder: 'Buscar por apellido...',
-    },
-    {
-      name: 'areaTrabajo',
-      label: 'Área de Trabajo',
-      type: 'text',
-      placeholder: 'Filtrar por área de trabajo...',
     },
   ],
   submitButtonText: 'Buscar',
@@ -70,15 +49,6 @@ export const formatEstudianteSearchFilters = (
   }
   if (filters.carrera) {
     formattedFilters.carrera = filters.carrera;
-  }
-  if (filters.nombre) {
-    formattedFilters.nombre = filters.nombre;
-  }
-  if (filters.apellido) {
-    formattedFilters.apellido = filters.apellido;
-  }
-  if (filters.areaTrabajo) {
-    formattedFilters.areaTrabajo = filters.areaTrabajo;
   }
 
   return formattedFilters;

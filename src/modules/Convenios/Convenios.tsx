@@ -246,7 +246,8 @@ const Convenios: React.FC = () => {
             Búsqueda de Convenios
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza la búsqueda avanzada para encontrar convenios específicos
+            Utiliza la búsqueda avanzada para encontrar convenios por empresa,
+            número de acuerdo marco o vigencia
           </BodyText>
         </CenteredContainer>
       )}
@@ -258,7 +259,8 @@ const Convenios: React.FC = () => {
             No se encontraron convenios
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda
+            Intenta con diferentes criterios de búsqueda (empresa, número de
+            acuerdo marco, vigencia)
           </BodyText>
         </CenteredContainer>
       )}

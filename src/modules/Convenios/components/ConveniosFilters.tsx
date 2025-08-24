@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getConvenioSearchMetadata,
@@ -27,6 +27,37 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
   const [asignarEmpresaOpen, setAsignarEmpresaOpen] = React.useState(false);
   const [selectedConvenio, setSelectedConvenio] =
     React.useState<ConvenioEmpresaDto | null>(null);
+  const [dynamicOptions, setDynamicOptions] = useState<
+    Record<string, Array<{ value: string | number; label: string }>>
+  >({});
+
+  // Cargar sugerencias al montar el componente
+  useEffect(() => {
+    const cargarSugerencias = async () => {
+      try {
+        // Cargar números de acuerdo marco únicos
+        const numerosAcuerdoMarco = await apiClient.get<string[]>(
+          '/convenios/sugerencias-acuerdos-marco'
+        );
+
+        setDynamicOptions({
+          nombreEmpresa: empresasOptions || [],
+          numeroAcuerdoMarco: numerosAcuerdoMarco.map(numero => ({
+            value: numero,
+            label: numero,
+          })),
+        });
+      } catch (error) {
+        console.error('Error al cargar sugerencias:', error);
+        // Si falla la carga de números de acuerdo marco, al menos cargar empresas
+        setDynamicOptions({
+          nombreEmpresa: empresasOptions || [],
+        });
+      }
+    };
+
+    cargarSugerencias();
+  }, [empresasOptions]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -58,9 +89,7 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
         onSubmit={handleSearchSubmit}
         onClearResults={onClearResults}
         hasResults={hasResults}
-        dynamicDropdownOptions={{
-          nombreEmpresa: empresasOptions,
-        }}
+        dynamicDropdownOptions={dynamicOptions}
         loading={empresasLoading}
       />
 

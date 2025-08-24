@@ -1,5 +1,3 @@
-import { CARRERAS_VALIDAS } from '../../Estudiantes/helpers/estudianteHelpers';
-
 // Metadata para búsqueda avanzada de convenios
 export const getConvenioSearchMetadata = () => ({
   title: 'Búsqueda Avanzada de Convenios',
@@ -11,51 +9,22 @@ export const getConvenioSearchMetadata = () => ({
       label: 'Empresa',
       type: 'dynamicDropdown' as const,
       placeholder: 'Seleccionar empresa...',
-      gridSize: 6,
     },
     {
-      name: 'docRepresentanteFacultad',
-      label: 'Documento del Representante de Facultad',
-      type: 'text' as const,
-      placeholder: 'Buscar por documento del representante de facultad',
-      gridSize: 6,
+      name: 'numeroAcuerdoMarco',
+      label: 'Número de Acuerdo Marco',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar número de acuerdo marco...',
     },
     {
-      name: 'carrera',
-      label: 'Carrera',
+      name: 'vigencia',
+      label: 'Vigencia',
       type: 'dropdown' as const,
       options: [
-        { value: '', label: 'Todas las carreras' },
-        ...CARRERAS_VALIDAS.map(carrera => ({
-          value: carrera,
-          label: carrera,
-        })),
+        { value: '', label: 'Todos' },
+        { value: 'vigente', label: 'Vigente' },
+        { value: 'no_vigente', label: 'No Vigente' },
       ],
-      gridSize: 12,
-    },
-    {
-      name: 'fechaFirmaDesde',
-      label: 'Fecha de Firma Desde',
-      type: 'date' as const,
-      gridSize: 6,
-    },
-    {
-      name: 'fechaFirmaHasta',
-      label: 'Fecha de Firma Hasta',
-      type: 'date' as const,
-      gridSize: 6,
-    },
-    {
-      name: 'fechaCaducidadDesde',
-      label: 'Fecha de Caducidad Desde',
-      type: 'date' as const,
-      gridSize: 6,
-    },
-    {
-      name: 'fechaCaducidadHasta',
-      label: 'Fecha de Caducidad Hasta',
-      type: 'date' as const,
-      gridSize: 6,
     },
   ],
 });
@@ -70,23 +39,17 @@ export const formatConvenioSearchFilters = (
   if (filters.nombreEmpresa) {
     searchFilters.nombreEmpresa = filters.nombreEmpresa;
   }
-  if (filters.docRepresentanteFacultad) {
-    searchFilters.docRepresentanteFacultad = filters.docRepresentanteFacultad;
+  if (filters.numeroAcuerdoMarco) {
+    searchFilters.numeroAcuerdoMarco = filters.numeroAcuerdoMarco;
   }
-  if (filters.carrera) {
-    searchFilters.carrera = filters.carrera;
-  }
-  if (filters.fechaFirmaDesde) {
-    searchFilters.fechaFirmaDesde = filters.fechaFirmaDesde;
-  }
-  if (filters.fechaFirmaHasta) {
-    searchFilters.fechaFirmaHasta = filters.fechaFirmaHasta;
-  }
-  if (filters.fechaCaducidadDesde) {
-    searchFilters.fechaCaducidadDesde = filters.fechaCaducidadDesde;
-  }
-  if (filters.fechaCaducidadHasta) {
-    searchFilters.fechaCaducidadHasta = filters.fechaCaducidadHasta;
+  if (filters.vigencia) {
+    // Convertir string del frontend a boolean esperado por el backend
+    if (filters.vigencia === 'vigente') {
+      searchFilters.vigencia = true;
+    } else if (filters.vigencia === 'no_vigente') {
+      searchFilters.vigencia = false;
+    }
+    // Si es empty string o 'todos', no se incluye el filtro
   }
 
   return searchFilters;

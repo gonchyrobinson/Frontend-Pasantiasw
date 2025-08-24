@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getPagosSearchMetadata,
@@ -7,7 +7,6 @@ import {
 import { PagosDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { usePasantiasDropdown } from '../../../lib/hooks/useDropdownData';
 
 interface PagosFiltersProps {
   onSearchResults: (pagos: PagosDto[]) => void;
@@ -22,99 +21,59 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const { pasantiasOptions, isLoading: pasantiasLoading } =
-    usePasantiasDropdown();
+  const [dynamicOptions, setDynamicOptions] = useState<
+    Record<string, Array<{ value: string | number; label: string }>>
+  >({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const dynamicDropdownOptions = {
-    idPasantia: pasantiasOptions || [],
-  };
+  // Cargar sugerencias al montar el componente
+  useEffect(() => {
+    const cargarSugerencias = async () => {
+      try {
+        setIsLoading(true);
+
+        // Cargar empresas únicas
+        const empresas = await apiClient.get<
+          Array<{ value: number; label: string }>
+        >('/pagos/sugerencias-empresas');
+
+        // Cargar documentos de estudiantes únicos
+        const estudiantes = await apiClient.get<
+          Array<{ value: string; label: string }>
+        >('/pagos/sugerencias-estudiantes');
+
+        setDynamicOptions({
+          idEmpresa: empresas,
+          estudiante: estudiantes,
+        });
+      } catch (error) {
+        console.error('Error al cargar sugerencias:', error);
+        showError('Error al cargar las opciones de búsqueda');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    cargarSugerencias();
+  }, [showError]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
     try {
       const searchFilters = formatPagosSearchFilters(filters);
-      const idPasantia = searchFilters.idPasantia as number;
 
-      let pagos: PagosDto[];
-
-      if (idPasantia) {
-        // Búsqueda específica por pasantía - puede devolver un objeto o array
-        const response = await apiClient.get(
-          `/pagos/by-pasantia/${idPasantia}`
-        );
-        // Normalizar respuesta a array
-        pagos = Array.isArray(response) ? response : response ? [response] : [];
-      } else {
-        // Sin pasantía seleccionada: obtener todos los pagos para filtrado local
-        pagos = await apiClient.get<PagosDto[]>('/pagos');
-      }
-
-      // Filtrar localmente con todos los criterios
-      const filteredPagos = filterPagosLocally(pagos, searchFilters);
-
-      onSearchResults(filteredPagos);
-      showSuccess(
-        `Búsqueda completada: ${filteredPagos.length} pagos encontrados`
+      // Usar el nuevo endpoint de búsqueda avanzada
+      const pagos = await apiClient.post<PagosDto[]>(
+        '/pagos/buscar-avanzado',
+        searchFilters as Record<string, unknown>
       );
+
+      onSearchResults(pagos);
+      showSuccess(`Búsqueda completada: ${pagos.length} pagos encontrados`);
     } catch (error) {
       showError('Error al realizar la búsqueda de pagos');
       throw error;
     }
-  };
-
-  // Función para filtrar pagos localmente
-  const filterPagosLocally = (
-    pagos: PagosDto[],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    filters: Record<string, any>
-  ): PagosDto[] => {
-    return pagos.filter(pago => {
-      // Filtro por estado de pago - manejar null correctamente
-      if (filters.pagado !== undefined) {
-        const pagoPagado = pago.pagado === true;
-        const filtroPagado = filters.pagado === true;
-        if (pagoPagado !== filtroPagado) {
-          return false;
-        }
-      }
-
-      // Filtros de fecha de pago
-      if (filters.fechaPagoDesde && pago.fechaPago) {
-        const fechaPago = new Date(pago.fechaPago);
-        const fechaDesde = new Date(filters.fechaPagoDesde);
-        if (fechaPago < fechaDesde) return false;
-      }
-
-      if (filters.fechaPagoHasta && pago.fechaPago) {
-        const fechaPago = new Date(pago.fechaPago);
-        const fechaHasta = new Date(filters.fechaPagoHasta);
-        if (fechaPago > fechaHasta) return false;
-      }
-
-      // Filtros de fecha de vencimiento
-      if (filters.fechaVencimientoDesde && pago.fechaVencimiento) {
-        const fechaVencimiento = new Date(pago.fechaVencimiento);
-        const fechaDesde = new Date(filters.fechaVencimientoDesde);
-        if (fechaVencimiento < fechaDesde) return false;
-      }
-
-      if (filters.fechaVencimientoHasta && pago.fechaVencimiento) {
-        const fechaVencimiento = new Date(pago.fechaVencimiento);
-        const fechaHasta = new Date(filters.fechaVencimientoHasta);
-        if (fechaVencimiento > fechaHasta) return false;
-      }
-
-      // Filtros de monto
-      if (filters.montoMin && pago.monto && pago.monto < filters.montoMin) {
-        return false;
-      }
-
-      if (filters.montoMax && pago.monto && pago.monto > filters.montoMax) {
-        return false;
-      }
-
-      return true;
-    });
   };
 
   return (
@@ -125,8 +84,8 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
       onSubmit={handleSearchSubmit}
       onClearResults={onClearResults}
       hasResults={hasResults}
-      dynamicDropdownOptions={dynamicDropdownOptions}
-      loading={pasantiasLoading}
+      dynamicDropdownOptions={dynamicOptions}
+      loading={isLoading}
     />
   );
 };
