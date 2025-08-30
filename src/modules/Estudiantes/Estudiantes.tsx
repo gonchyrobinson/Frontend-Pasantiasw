@@ -19,7 +19,7 @@ import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import { useDeleteEstudiante } from '../../lib/hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 
 const Estudiantes: React.FC = () => {
   const navigate = useNavigate();
@@ -129,6 +129,14 @@ const Estudiantes: React.FC = () => {
     setShowDeleteDialog(false);
     setEstudianteToDelete(null);
   };
+
+  if (isLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando estudiantes...' />
+      </MainContainer>
+    );
+  }
 
   if (error) {
     return (

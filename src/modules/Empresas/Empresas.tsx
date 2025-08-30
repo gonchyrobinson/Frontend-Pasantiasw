@@ -19,7 +19,7 @@ import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import { useDeleteEmpresa } from '../../lib/hooks/useDelete';
 import { ROUTES } from '../../helpers/routesHelper';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 
 const Empresas: React.FC = () => {
   const navigate = useNavigate();
@@ -131,6 +131,14 @@ const Empresas: React.FC = () => {
     setShowDeleteDialog(false);
     setEmpresaToDelete(null);
   };
+
+  if (isLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando empresas...' />
+      </MainContainer>
+    );
+  }
 
   if (error) {
     return (

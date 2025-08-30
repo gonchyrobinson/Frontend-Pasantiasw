@@ -25,7 +25,7 @@ import {
 } from './hooks/useConvenios';
 import { useDeleteConvenio } from './hooks/useDeleteConvenio';
 import { ConvenioEmpresaDto } from './types';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import AsignarAEmpresaDialog from './components/AsignarAEmpresaDialog';
 
@@ -176,6 +176,14 @@ const Convenios: React.FC = () => {
     setShowCaducarDialog(false);
     setSelectedConvenio(null);
   };
+
+  if (statsLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando convenios...' />
+      </MainContainer>
+    );
+  }
 
   if (error) {
     return (
