@@ -26,17 +26,10 @@ const EmpresasTabla: React.FC<EmpresasTablaProps> = ({
   onRowDelete,
   extraButtons = [],
 }) => {
-  // Metadata compatible con ElementCardGenerica - exactamente los mismos campos
   const metadata: FieldMetadata[] = [
     { name: 'nombre', label: 'Nombre', type: 'text' },
     { name: 'vigencia', label: 'Vigencia', type: 'text' },
-    { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
-    { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
     { name: 'tipoContrato', label: 'Tipo de Contrato', type: 'text' },
-    { name: 'encargado', label: 'Encargado', type: 'text' },
-    { name: 'celular', label: 'Celular', type: 'text' },
-    { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
-    { name: 'sudocu', label: 'SUDOCU', type: 'text' },
   ];
 
   // Convertir EmpresaDto[] a Record<string, unknown>[] para compatibilidad

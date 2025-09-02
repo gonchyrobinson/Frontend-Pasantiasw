@@ -1,13 +1,11 @@
 import axios from 'axios';
 import { API_BASE } from '../lib/api';
+import { authHelper } from './authHelper';
 
-// Base única: API_BASE (dev: '/api', prod: VITE_API_URL)
+// Configuración global de axios
 axios.defaults.baseURL = API_BASE;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-// eslint-disable-next-line no-console
-console.log('[axios] baseURL:', axios.defaults.baseURL, 'API_BASE=', API_BASE);
-
-import { authHelper } from './authHelper';
+axios.defaults.timeout = 30000; // 30 segundos
 
 // Función para redirección sin refresh
 const goToLogin = () => {
@@ -29,7 +27,7 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
-// Manejar errores 401
+// Manejar errores de autenticación
 axios.interceptors.response.use(
   response => response,
   error => {

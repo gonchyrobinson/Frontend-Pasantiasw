@@ -1,70 +1,12 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { authHelper } from '../../../helpers/authHelper';
+import axios from 'axios';
+import '../../../helpers/interceptors'; // Asegurar que los interceptores estén configurados
 
-// Base única: VITE_API_URL (prod) o '/api' (dev)
-const envApiUrl =
-  (import.meta.env.VITE_API_URL as string | undefined) ?? '/api';
-const API_BASE_URL = envApiUrl.replace(/\/$/, '');
-
-// Relaxed to accept any JSON-serializable payload
 type RequestData = unknown;
 
 class ApiClient {
-  private client: AxiosInstance;
-
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_BASE_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000,
-    });
-
-    // Request interceptor - agrega autenticación
-    this.client.interceptors.request.use(
-      config => {
-        // Autenticación
-        const token = authHelper.getToken();
-        if (token) {
-          config.headers = config.headers ?? {};
-          (config.headers as Record<string, string>).Authorization =
-            `Bearer ${token}`;
-        }
-        return config;
-      },
-      error => {
-        return Promise.reject(error);
-      }
-    );
-
-    // Response interceptor
-    this.client.interceptors.response.use(
-      (response: AxiosResponse) => {
-        return response;
-      },
-      (error: AxiosError) => {
-        // Auto-logout on JWT expiration (401 Unauthorized)
-        if (error.response?.status === 401) {
-          authHelper.removeToken();
-          window.location.href = '/login';
-          return Promise.reject(error);
-        }
-
-        // Manejo básico de errores - se expandirá más adelante
-        console.error(
-          'API Error:',
-          error.response?.status,
-          error.response?.data
-        );
-        return Promise.reject(error);
-      }
-    );
-  }
-
   async get<T>(endpoint: string): Promise<T> {
     try {
-      const response = await this.client.get<T>(endpoint);
+      const response = await axios.get<T>(endpoint);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -73,7 +15,7 @@ class ApiClient {
 
   async post<T>(endpoint: string, data: RequestData): Promise<T> {
     try {
-      const response = await this.client.post<T>(endpoint, data);
+      const response = await axios.post<T>(endpoint, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -82,7 +24,7 @@ class ApiClient {
 
   async put<T>(endpoint: string, data: RequestData): Promise<T> {
     try {
-      const response = await this.client.put<T>(endpoint, data);
+      const response = await axios.put<T>(endpoint, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -91,7 +33,7 @@ class ApiClient {
 
   async delete<T>(endpoint: string): Promise<T> {
     try {
-      const response = await this.client.delete<T>(endpoint);
+      const response = await axios.delete<T>(endpoint);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -102,15 +44,22 @@ class ApiClient {
     if (axios.isAxiosError(error)) {
       const data = error.response?.data;
 
-      // Extract error message from various possible formats
+      // Extraer errores de validación de ASP.NET Core
+      if (data?.errors) {
+        const firstError = Object.values(data.errors)[0];
+        if (Array.isArray(firstError) && firstError[0]) {
+          return new Error(firstError[0]);
+        }
+      }
+
+      // Otros formatos de error
       const message =
         (typeof data === 'string' && data) ||
-        (data as { message?: string })?.message ||
-        (data as { detail?: string })?.detail ||
-        (data as { title?: string })?.title ||
+        data?.message ||
+        data?.detail ||
+        data?.title ||
         error.message ||
         'An unexpected error occurred';
-
       return new Error(message);
     }
     return new Error('An unexpected error occurred');
