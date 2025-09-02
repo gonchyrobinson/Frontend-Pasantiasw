@@ -15,7 +15,7 @@ import PagosStats from './components/PagosStats';
 import PagosTabla from './components/PagosTabla';
 import { usePagosStats, usePagos, useMarcarPagoPagado } from './hooks/usePagos';
 import { PagosDto } from './types';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import PagosFilters from './components/PagosFilters';
 
@@ -136,6 +136,14 @@ const Pagos: React.FC = () => {
     setShowMarcarPagadoDialog(false);
     setSelectedPago(null);
   };
+
+  if (statsLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando pagos...' />
+      </MainContainer>
+    );
+  }
 
   if (error) {
     return (

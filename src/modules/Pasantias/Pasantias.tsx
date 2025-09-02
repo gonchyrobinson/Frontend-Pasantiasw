@@ -15,7 +15,7 @@ import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDia
 import { usePasantiaStats, usePasantias } from './hooks/usePasantias';
 import { useDeletePasantia } from './hooks/usePasantias';
 import { PasantiaDto } from './types';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import PasantiaFilters from './components/PasantiaFilters';
 import PasantiaStats from './components/PasantiaStats';
@@ -129,6 +129,14 @@ const Pasantias: React.FC = () => {
     setShowDeleteDialog(false);
     setSelectedPasantia(null);
   };
+
+  if (statsLoading || pasantiasLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando pasantías...' />
+      </MainContainer>
+    );
+  }
 
   if (error || pasantiasError) {
     return (

@@ -1,16 +1,16 @@
 import React from 'react';
 import { TablaGenericaWrapper } from '../../../lib/TablaGenerica';
-import { PasantiaDto } from '../types';
+import { PasantiaShowTableDto } from '../types';
 import { FieldMetadata } from '../../../lib/ElementCardGenerica/types';
 
 interface PasantiasTablaProps {
-  pasantias: PasantiaDto[];
+  pasantias: PasantiaShowTableDto[];
   loading: boolean;
-  onRowClick?: (pasantia: PasantiaDto) => void;
-  onEdit: (pasantia: PasantiaDto) => void;
-  onDelete: (pasantia: PasantiaDto) => void;
-  onFinalizar?: (pasantia: PasantiaDto) => void;
-  onActivar?: (pasantia: PasantiaDto) => void;
+  onRowClick?: (pasantia: PasantiaShowTableDto) => void;
+  onEdit: (pasantia: PasantiaShowTableDto) => void;
+  onDelete: (pasantia: PasantiaShowTableDto) => void;
+  onFinalizar?: (pasantia: PasantiaShowTableDto) => void;
+  onActivar?: (pasantia: PasantiaShowTableDto) => void;
 }
 
 const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
@@ -22,34 +22,31 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
 }) => {
   const metadata: FieldMetadata[] = [
     { name: 'tramite', label: 'Trámite', type: 'text' },
-    { name: 'obraSocial', label: 'Obra Social', type: 'text' },
-    { name: 'art', label: 'ART', type: 'text' },
+    { name: 'estudiante', label: 'Estudiante', type: 'text' },
+    { name: 'empresa', label: 'Empresa', type: 'text' },
     { name: 'tipoAcuerdo', label: 'Tipo de Acuerdo', type: 'text' },
     { name: 'estado', label: 'Estado', type: 'text' },
     { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
     { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
-    { name: 'asignacionMensual', label: 'Asignación Mensual', type: 'number' },
-    { name: 'tutorEmpresa', label: 'Tutor Empresa', type: 'text' },
-    { name: 'tutorFacultad', label: 'Tutor Facultad', type: 'text' },
   ];
 
   const pasantiasData = pasantias.map(pasantia => ({
     ...pasantia,
-    id: pasantia.idPasantia,
+    id: pasantia.id,
   }));
 
   const handleRowClick = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.idPasantia === row.id);
+    const pasantia = pasantias.find(p => p.id === row.id);
     if (pasantia && onRowClick) onRowClick(pasantia);
   };
 
   const handleRowEdit = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.idPasantia === row.id);
+    const pasantia = pasantias.find(p => p.id === row.id);
     if (pasantia) onEdit(pasantia);
   };
 
   const handleRowDelete = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.idPasantia === row.id);
+    const pasantia = pasantias.find(p => p.id === row.id);
     if (pasantia) onDelete(pasantia);
   };
 
