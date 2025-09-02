@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { PasantiaDto, PasantiaCreateDto, PasantiaDetalleDto } from '../types';
+import {
+  PasantiaDto,
+  PasantiaCreateDto,
+  PasantiaDetalleDto,
+  PasantiaShowTableDto,
+} from '../types';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 import React from 'react';
 
@@ -11,7 +16,9 @@ export const usePasantias = () => {
   return useQuery({
     queryKey: ['pasantias'],
     queryFn: async () => {
-      const data = await apiClient.get<PasantiaDto[]>(API_BASE);
+      const data = await apiClient.get<PasantiaShowTableDto[]>(
+        `${API_BASE}/show-table`
+      );
       return data;
     },
   });

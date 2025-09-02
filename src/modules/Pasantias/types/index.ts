@@ -49,6 +49,18 @@ export interface PasantiaDetalleDto {
   convenio?: ConvenioDto;
 }
 
+// DTO para tabla de pasantías (endpoint show-table)
+export interface PasantiaShowTableDto {
+  id: number;
+  tramite: string;
+  estudiante: string;
+  empresa: string;
+  tipoAcuerdo: string;
+  estado: string;
+  fechaInicio?: string;
+  fechaFin?: string;
+}
+
 // DTOs básicos para referencias
 export interface EstudianteDto {
   idEstudiante: number;
