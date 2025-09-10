@@ -14,18 +14,6 @@ export const useNavigation = () => {
     navigate(ROUTES.DASHBOARD, { replace: true });
   };
 
-  const goToRegister = () => {
-    navigate(ROUTES.REGISTRAR_USUARIO);
-  };
-
-  const goBack = () => {
-    navigate(-1);
-  };
-
-  const goForward = () => {
-    navigate(1);
-  };
-
   const redirectAfterLogin = () => {
     const from = location.state?.from?.pathname || ROUTES.DASHBOARD;
     navigate(from, { replace: true });
@@ -74,9 +62,6 @@ export const useNavigation = () => {
     location,
     goToLogin,
     goToDashboard,
-    goToRegister,
-    goBack,
-    goForward,
     redirectAfterLogin,
     logout,
     goToEmpresas,

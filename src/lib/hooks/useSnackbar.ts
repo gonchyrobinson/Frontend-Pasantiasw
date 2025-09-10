@@ -43,27 +43,11 @@ export const useSnackbar = () => {
     [showSnackbar]
   );
 
-  const showWarning = useCallback(
-    (message: string) => {
-      showSnackbar(message, 'warning');
-    },
-    [showSnackbar]
-  );
-
-  const showInfo = useCallback(
-    (message: string) => {
-      showSnackbar(message, 'info');
-    },
-    [showSnackbar]
-  );
-
   return {
     snackbar,
     showSnackbar,
     hideSnackbar,
     showSuccess,
     showError,
-    showWarning,
-    showInfo,
   };
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import {
   useApiQuery,
@@ -11,7 +12,6 @@ import {
   ConvenioDto,
   ConvenioCreateDto,
   AsignarEmpresaDto,
-  ConvenioFilters,
 } from '../types';
 import {
   calculateConvenioStats,
@@ -106,9 +106,6 @@ export const useUpdateConvenio = () => {
   );
 };
 
-// Hook para eliminar convenio
-export { useDeleteConvenio } from './useDeleteConvenio';
-
 // Hook para caducar convenio
 export const useCaducarConvenio = () => {
   const queryClient = useQueryClient();
@@ -199,90 +196,62 @@ export const useConvenioStats = () => {
   };
 };
 
-// Hook para manejar filtros de convenios
-export const useConvenioFilters = () => {
-  const { data: conveniosResponse, isLoading, error } = useConvenios();
-  const [filters, setFilters] = React.useState<ConvenioFilters>({
-    expediente: '',
-    empresa: '',
-    fechaFirmaDesde: '',
-    fechaFirmaHasta: '',
-    fechaCaducidadDesde: '',
-    fechaCaducidadHasta: '',
-  });
+// Hook para eliminar convenio
+export const useDeleteConvenio = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const queryClient = useQueryClient();
+  const { invalidateConvenios } = useInvalidateDropdowns();
 
-  const filteredConvenios = React.useMemo(() => {
-    const convenios = conveniosResponse;
-    if (!convenios || !Array.isArray(convenios)) return [];
+  const deleteConvenio = async (idConvenio: number) => {
+    setIsDeleting(true);
 
-    return convenios.filter((convenio: ConvenioEmpresaDto) => {
-      // Filtro por expediente
-      if (
-        filters.expediente &&
-        !convenio.expediente
-          ?.toLowerCase()
-          .includes(filters.expediente.toLowerCase())
-      ) {
-        return false;
-      }
+    try {
+      await apiClient.delete<void>(`/convenios/${idConvenio}`);
 
-      // Filtro por empresa
-      if (
-        filters.empresa &&
-        !convenio.nombreEmpresa
-          ?.toLowerCase()
-          .includes(filters.empresa.toLowerCase())
-      ) {
-        return false;
-      }
+      // Invalidar todas las queries relacionadas con convenios
+      queryClient.invalidateQueries({
+        queryKey: ['/convenios/conEmpresa'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['convenio'] });
 
-      // Filtro por fecha de firma
-      if (filters.fechaFirmaDesde && convenio.fechaFirma) {
-        const fechaFirma = new Date(convenio.fechaFirma);
-        const fechaDesde = new Date(filters.fechaFirmaDesde);
-        if (fechaFirma < fechaDesde) return false;
-      }
+      // Invalidar dropdowns de convenios
+      invalidateConvenios();
 
-      if (filters.fechaFirmaHasta && convenio.fechaFirma) {
-        const fechaFirma = new Date(convenio.fechaFirma);
-        const fechaHasta = new Date(filters.fechaFirmaHasta);
-        if (fechaFirma > fechaHasta) return false;
-      }
+      // Invalidar dropdowns que dependen de convenios (pasantías)
+      queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
-      // Filtro por fecha de caducidad
-      if (filters.fechaCaducidadDesde && convenio.fechaCaducidad) {
-        const fechaCaducidad = new Date(convenio.fechaCaducidad);
-        const fechaDesde = new Date(filters.fechaCaducidadDesde);
-        if (fechaCaducidad < fechaDesde) return false;
-      }
-
-      if (filters.fechaCaducidadHasta && convenio.fechaCaducidad) {
-        const fechaCaducidad = new Date(convenio.fechaCaducidad);
-        const fechaHasta = new Date(filters.fechaCaducidadHasta);
-        if (fechaCaducidad > fechaHasta) return false;
-      }
-
-      return true;
-    });
-  }, [conveniosResponse, filters]);
-
-  const clearFilters = () => {
-    setFilters({
-      expediente: '',
-      empresa: '',
-      fechaFirmaDesde: '',
-      fechaFirmaHasta: '',
-      fechaCaducidadDesde: '',
-      fechaCaducidadHasta: '',
-    });
+      // Invalidar queries de inicio que muestran estadísticas
+      queryClient.invalidateQueries({ queryKey: ['pasantias'] });
+      queryClient.invalidateQueries({ queryKey: ['pagos'] });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Error al eliminar el convenio. Inténtalo de nuevo.';
+      throw new Error(message);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return {
-    convenios: filteredConvenios,
-    isLoading,
-    error,
-    filters,
-    setFilters,
-    clearFilters,
+    deleteConvenio,
+    isDeleting,
   };
+};
+
+// Hook para obtener convenios por vencer
+export const useConveniosPorVencer = (diasAdelante = 30) => {
+  return useQuery({
+    queryKey: ['convenios', 'por-vencer', diasAdelante],
+    queryFn: async () => {
+      const data = await apiClient.get<ConvenioEmpresaDto[]>(
+        `/convenios/por-vencer?dias=${diasAdelante}`
+      );
+      return data;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    refetchInterval: 10 * 60 * 1000, // Refrescar cada 10 minutos para notificaciones
+    refetchOnWindowFocus: true, // Refrescar cuando el usuario vuelve a la pestaña
+  });
 };

@@ -21,14 +21,14 @@ import NavButtonComponent from './header/NavButton';
 import { styled } from '@mui/material/styles';
 import React, { MouseEvent, useState } from 'react';
 import { useNavigation } from '../../../lib/hooks/useNavigation';
-import { usePagosPorVencer } from '../../Pagos/hooks/usePagosPorVencer';
+import { usePagosPorVencer } from '../../Pagos/hooks/usePagos';
 import PagosVencerNotifications from './header/PagosVencerNotifications';
 import ConveniosVencerNotifications from './header/ConveniosVencerNotifications';
 import PasantiasVencerNotifications from './header/PasantiasVencerNotifications';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../helpers/routesHelper';
-import { useConveniosPorVencer } from '../../Convenios/hooks/useConveniosPorVencer';
-import { usePasantiasPorVencer } from '../../Pasantias/hooks/usePasantiasPorVencer';
+import { useConveniosPorVencer } from '../../Convenios/hooks/useConvenios';
+import { usePasantiasPorVencer } from '../../Pasantias/hooks/usePasantias';
 
 // Styled components
 const StyledAppBar = styled(AppBar)(({ theme }) => ({

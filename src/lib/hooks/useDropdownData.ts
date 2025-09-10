@@ -17,8 +17,6 @@ interface EmpresaDto {
   nombre: string;
 }
 
-// Interfaces removidas - ya no se usan debido a la optimización
-
 interface PasantiaDto {
   idPasantia: number;
   tramite?: string;
@@ -255,48 +253,6 @@ export const useEmpresasConvenioDropdown = () => {
   };
 };
 
-// Hook combinado para obtener todas las opciones de dropdown
-export const useAllDropdownData = () => {
-  const empresas = useEmpresasDropdown();
-  const estudiantes = useEstudiantesDropdown();
-  const convenios = useConveniosDropdown();
-  const pasantias = usePasantiasDropdown();
-
-  const isLoading =
-    empresas.isLoading ||
-    estudiantes.isLoading ||
-    convenios.isLoading ||
-    pasantias.isLoading;
-  const hasError =
-    empresas.error || estudiantes.error || convenios.error || pasantias.error;
-
-  return {
-    empresas: {
-      options: empresas.empresasOptions,
-      optionsParaAsignar: empresas.empresasParaAsignarOptions,
-      isLoading: empresas.isLoading,
-      error: empresas.error,
-    },
-    estudiantes: {
-      options: estudiantes.estudiantesOptions,
-      isLoading: estudiantes.isLoading,
-      error: estudiantes.error,
-    },
-    convenios: {
-      options: convenios.conveniosOptions,
-      isLoading: convenios.isLoading,
-      error: convenios.error,
-    },
-    pasantias: {
-      options: pasantias.pasantiasOptions,
-      isLoading: pasantias.isLoading,
-      error: pasantias.error,
-    },
-    isLoading,
-    hasError,
-  };
-};
-
 // Hook para invalidar selectivamente el caché de dropdowns
 export const useInvalidateDropdowns = () => {
   const queryClient = useQueryClient();
@@ -336,77 +292,5 @@ export const useInvalidateDropdowns = () => {
     invalidateAll: () => {
       queryClient.invalidateQueries({ queryKey: ['dropdown'] });
     },
-  };
-};
-
-// Hook para prefetch de datos de dropdown (útil para optimización preemptiva)
-export const usePrefetchDropdowns = () => {
-  const queryClient = useQueryClient();
-
-  const prefetchEmpresas = () => {
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'completas'],
-      queryFn: async () => apiClient.get<EmpresaDto[]>('/empresas'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.empresas, 'sugerencias'],
-      queryFn: async () =>
-        apiClient.get<string[]>('/empresas/sugerencias-nombres'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-  };
-
-  const prefetchEstudiantes = () => {
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.estudiantes, 'documentos-dropdown'],
-      queryFn: async () =>
-        apiClient.get<DropdownOption[]>('/students/documentos-dropdown'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-  };
-
-  const prefetchConvenios = () => {
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'optimizado'],
-      queryFn: async () =>
-        apiClient.get<DropdownOption[]>('/convenios/sugerencias-dropdown'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'empresas-convenio-vigente'],
-      queryFn: async () =>
-        apiClient.get<DropdownOption[]>('/convenios/empresas-convenio-vigente'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-  };
-
-  const prefetchPasantias = () => {
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'completas'],
-      queryFn: async () => apiClient.get<PasantiaDto[]>('/pasantias'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-    queryClient.prefetchQuery({
-      queryKey: [...DROPDOWN_QUERY_KEYS.pasantias, 'sugerencias-tramites'],
-      queryFn: async () =>
-        apiClient.get<string[]>('/pasantias/sugerencias-tramites'),
-      ...DROPDOWN_CACHE_CONFIG,
-    });
-  };
-
-  const prefetchAll = () => {
-    prefetchEmpresas();
-    prefetchEstudiantes();
-    prefetchConvenios();
-    prefetchPasantias();
-  };
-
-  return {
-    prefetchEmpresas,
-    prefetchEstudiantes,
-    prefetchConvenios,
-    prefetchPasantias,
-    prefetchAll,
   };
 };

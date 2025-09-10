@@ -22,8 +22,8 @@ import {
   useConvenioStats,
   useCaducarConvenio,
   useConvenios,
+  useDeleteConvenio,
 } from './hooks/useConvenios';
-import { useDeleteConvenio } from './hooks/useDeleteConvenio';
 import { ConvenioEmpresaDto } from './types';
 import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';

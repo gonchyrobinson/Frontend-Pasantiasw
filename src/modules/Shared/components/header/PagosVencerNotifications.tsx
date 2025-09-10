@@ -1,6 +1,6 @@
 import React from 'react';
 import { Payment } from '@mui/icons-material';
-import { usePagosPorVencer } from '../../../Pagos/hooks/usePagosPorVencer';
+import { usePagosPorVencer } from '../../../Pagos/hooks/usePagos';
 import { PagosDto } from '../../../Pagos/types';
 import VencimientosNotifications, {
   VencimientoItem,
