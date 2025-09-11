@@ -10,7 +10,7 @@ import {
   useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
-import { PasantiaFormData, PasantiaDto } from '../types';
+import { PasantiaCreateDto, PasantiaDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 
 const EditarPasantia: React.FC = () => {
@@ -32,7 +32,7 @@ const EditarPasantia: React.FC = () => {
     if (pasantiaId) {
       await new Promise<PasantiaDto>((resolve, reject) => {
         updatePasantia(
-          { data: formData as unknown as PasantiaFormData },
+          { data: formData as unknown as PasantiaCreateDto },
           {
             onSuccess: resolve,
             onError: reject,

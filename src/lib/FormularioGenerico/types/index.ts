@@ -26,7 +26,7 @@ export type ValidationRule = {
   max?: { value: number; message: string };
 };
 
-export type FieldMetadata = {
+export type FormFieldMetadata = {
   name: string;
   type: FieldType;
   label: string;
@@ -39,7 +39,7 @@ export type FieldMetadata = {
 };
 
 export type FormMetadata = {
-  fields: FieldMetadata[];
+  fields: FormFieldMetadata[];
   title?: string;
   submitButtonText?: string;
   cancelButtonText?: string;

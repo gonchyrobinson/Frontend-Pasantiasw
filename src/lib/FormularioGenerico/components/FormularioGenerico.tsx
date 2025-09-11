@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import { SectionTitle } from '../../components/StyledText';
-import { GenericFormProps, FieldMetadata } from '../types';
+import { GenericFormProps, FormFieldMetadata } from '../types';
 import {
   FormContainer,
   ActionContainer,
@@ -55,7 +55,7 @@ const FormularioGenerico: React.FC<GenericFormProps> = ({
 
   const [formError, setFormError] = useState<string | null>(null);
 
-  const renderField = (field: FieldMetadata) => {
+  const renderField = (field: FormFieldMetadata) => {
     const error = errors[field.name]?.message as string;
     const commonProps = {
       register: register(field.name, field.validations),

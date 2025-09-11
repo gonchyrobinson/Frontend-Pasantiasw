@@ -10,7 +10,7 @@ import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useCreatePago } from '../hooks/usePagos';
 import { usePasantiasDropdown } from '../../../lib/hooks/useDropdownData';
 import { getPagosFormMetadata } from '../helpers/pagosHelpers';
-import { PagosFormData } from '../types';
+import { CreatePagosDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 
 const CrearPago: React.FC = () => {
@@ -22,7 +22,7 @@ const CrearPago: React.FC = () => {
 
   const handleSubmit = async (data: Record<string, unknown>) => {
     const response = await createMutation.mutateAsync(
-      data as PagosFormData & Record<string, unknown>
+      data as CreatePagosDto & Record<string, unknown>
     );
     showSuccess('Pago creado exitosamente');
     if (response && response.idPago) {

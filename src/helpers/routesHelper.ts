@@ -80,14 +80,6 @@ export const ROUTES = {
   NOT_FOUND: '*',
 } as const;
 
-// ==================== TIPOS TYPESCRIPT ====================
-
-/** Tipo que representa las claves de las rutas */
-export type RouteKey = keyof typeof ROUTES;
-
-/** Tipo que representa los valores de las rutas */
-export type RouteValue = (typeof ROUTES)[RouteKey];
-
 // ==================== UTILIDADES DE RUTAS ====================
 
 /**

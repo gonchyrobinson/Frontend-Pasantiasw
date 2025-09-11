@@ -9,17 +9,8 @@ export interface PagosDto {
   observaciones?: string;
 }
 
-// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
-export interface CreatePagosDto {
-  idPasantia?: number;
-  fechaPago?: string;
-  fechaVencimiento?: string;
-  monto?: number;
-  observaciones?: string;
-}
-
-// Tipos para formularios
-export type PagosFormData = CreatePagosDto;
+// DTO para creación - omite el ID y pagado que son manejados por el backend
+export type CreatePagosDto = Omit<PagosDto, 'idPago' | 'pagado'>;
 
 // DTO para marcar pago como pagado - camelCase
 export interface MarcarPagoDto {
@@ -56,26 +47,6 @@ export interface PagosStats {
   pagosVigentes: number;
   pagosVencidos: number;
   montoTotal: number;
-}
-
-// Tipos para acciones
-export interface PagosActions {
-  onEdit: (pago: PagosDto) => void;
-  onDelete: (pago: PagosDto) => void;
-}
-
-// Tipos para componentes
-export interface PagosCardProps {
-  pago: PagosDto;
-  onEdit: () => void;
-  onDelete: () => void;
-}
-
-export interface PagosGridProps {
-  pagos: PagosDto[];
-  loading: boolean;
-  onEdit: (pago: PagosDto) => void;
-  onDelete: (pago: PagosDto) => void;
 }
 
 export interface PagosStatsProps {

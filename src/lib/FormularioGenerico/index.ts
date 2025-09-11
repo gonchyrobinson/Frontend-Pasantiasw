@@ -16,7 +16,7 @@ export type {
   FieldType,
   DropdownOption,
   ValidationRule,
-  FieldMetadata,
+  FormFieldMetadata,
   FormMetadata,
   DynamicDropdownOptions,
   GenericFormProps,

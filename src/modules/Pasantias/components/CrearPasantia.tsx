@@ -9,7 +9,7 @@ import {
   useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
-import { PasantiaFormData } from '../types';
+import { PasantiaCreateDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 import { PasantiaDto } from '../types';
 
@@ -27,7 +27,7 @@ const CrearPasantia: React.FC = () => {
 
   const handleSubmit = async (formData: Record<string, unknown>) => {
     const response = await new Promise<PasantiaDto>((resolve, reject) => {
-      createPasantia(formData as PasantiaFormData, {
+      createPasantia(formData as PasantiaCreateDto, {
         onSuccess: resolve,
         onError: reject,
       });

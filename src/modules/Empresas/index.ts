@@ -1,7 +1,7 @@
 export { default as Empresas } from './Empresas';
 export { default as CreacionEmpresas } from './CreacionEmpresas';
 export { default as EditarEmpresa } from './EditarEmpresa';
-export type { EmpresaDto, CreacionEmpresaDto, EmpresasState } from './types';
+export type { EmpresaDto, CreacionEmpresaDto } from './types';
 export {
   getEmpresasStats,
   getCreacionEmpresaMetadata,
