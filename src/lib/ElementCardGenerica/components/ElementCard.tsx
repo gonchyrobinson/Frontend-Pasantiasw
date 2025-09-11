@@ -20,7 +20,8 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import { ElementCardProps } from '../types';
-import { formatValue, detectType } from '../helpers/elementCardHelper';
+import { formatValue } from '../../../helpers/formatHelper';
+import { detectType } from '../../../helpers/formatHelper';
 import { ElementCardStyled, CardActionsStyled } from './StyledComponents';
 
 const ElementCard: React.FC<ElementCardProps> = ({

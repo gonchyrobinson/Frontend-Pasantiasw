@@ -19,9 +19,12 @@ export type {
   ModuleHeaderProps,
   SearchableContentProps,
 } from './types';
+// Funciones específicas de ElementCard
+export { formatValue } from '../../helpers/formatHelper';
+
+// Re-exportar funciones del helper centralizado para compatibilidad
 export {
-  formatValue,
   detectType,
   formatDate,
   formatCurrency,
-} from './helpers/elementCardHelper';
+} from '../../helpers/formatHelper';

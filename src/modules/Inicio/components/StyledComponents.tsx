@@ -29,15 +29,6 @@ export const StatIcon = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-// Styled components para ProgressSection
-export const StyledProgressSection = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(3),
-  padding: theme.spacing(2),
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: theme.spacing(1),
-  width: '100%',
-}));
-
 // Styled components para StatsCard
 export const StyledStatsCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -112,12 +103,4 @@ export const BoxFlexBetweenStatsStyled = styled(Box)(() => ({
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: 16, // mb: 2
-}));
-
-// Styled components para ProgressSection.tsx
-export const BoxFlexBetweenStyled = styled(Box)(() => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: 16, // mb: 1
 }));

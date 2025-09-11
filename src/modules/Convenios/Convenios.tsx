@@ -10,6 +10,7 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
+import { formatDate } from '../../helpers/formatHelper';
 import ConvenioStats from './components/ConvenioStats';
 import {
   ConfirmDialog,
@@ -292,15 +293,13 @@ const Convenios: React.FC = () => {
               <BodyText color='text.secondary'>
                 <strong>Fecha de Firma:</strong>{' '}
                 {selectedConvenio.fechaFirma
-                  ? new Date(selectedConvenio.fechaFirma).toLocaleDateString()
+                  ? formatDate(selectedConvenio.fechaFirma)
                   : 'No especificada'}
               </BodyText>
               <BodyText color='text.secondary'>
                 <strong>Fecha de Caducidad:</strong>{' '}
                 {selectedConvenio.fechaCaducidad
-                  ? new Date(
-                      selectedConvenio.fechaCaducidad
-                    ).toLocaleDateString()
+                  ? formatDate(selectedConvenio.fechaCaducidad)
                   : 'No especificada'}
               </BodyText>
             </div>

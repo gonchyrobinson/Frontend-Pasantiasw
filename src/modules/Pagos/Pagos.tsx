@@ -10,6 +10,7 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
+import { formatCurrency } from '../../helpers/formatHelper';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import PagosStats from './components/PagosStats';
 import PagosTabla from './components/PagosTabla';
@@ -238,7 +239,7 @@ const Pagos: React.FC = () => {
               <BodyText color='text.secondary'>
                 <strong>Monto:</strong>{' '}
                 {selectedPago.monto
-                  ? `$${selectedPago.monto.toLocaleString()}`
+                  ? formatCurrency(selectedPago.monto)
                   : 'N/A'}
               </BodyText>
               <BodyText color='text.secondary'>

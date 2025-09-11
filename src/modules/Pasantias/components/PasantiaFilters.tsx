@@ -3,7 +3,7 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getPasantiaSearchMetadata,
   formatPasantiaSearchFilters,
-} from '../helpers/pasantiaSearchHelpers';
+} from '../helpers/pasantiaHelpers';
 import { PasantiaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';

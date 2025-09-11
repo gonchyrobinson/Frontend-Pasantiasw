@@ -14,7 +14,6 @@ import {
 import {
   getRegistroMetadata,
   validatePasswords,
-  handleRegistrationError,
 } from './helpers/registroHelpers';
 import { RegisterData } from './types';
 
@@ -53,7 +52,10 @@ const RegistroUsuarios = () => {
         redirectAfterLogin();
       }, 2000);
     } catch (error: unknown) {
-      const errorMessage = handleRegistrationError(error);
+      const errorMessage = authHelper.handleAuthError(
+        error,
+        'Error de registro'
+      );
       showError(errorMessage);
     } finally {
       setLoading(false);

@@ -4,7 +4,7 @@ import {
   getEstudianteSearchMetadata,
   formatEstudianteSearchFilters,
   getSugerenciasDocumentos,
-} from '../helpers/estudianteSearchHelpers';
+} from '../helpers/estudianteHelpers';
 import { EstudianteDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';

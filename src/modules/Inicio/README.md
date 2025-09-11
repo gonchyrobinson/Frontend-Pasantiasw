@@ -37,10 +37,6 @@ Tarjetas de acción rápida para:
 - Nueva Pasantía
 - Registrar Pago
 
-### ProgressSection
-
-Sección que muestra el progreso del sistema con barras de progreso.
-
 ### SpeedDialRapido
 
 Botón flotante con acciones rápidas accesibles desde cualquier parte del dashboard.

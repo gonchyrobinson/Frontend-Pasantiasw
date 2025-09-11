@@ -3,7 +3,7 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getPagosSearchMetadata,
   formatPagosSearchFilters,
-} from '../helpers/pagosSearchHelpers';
+} from '../helpers/pagosHelpers';
 import { PagosDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';

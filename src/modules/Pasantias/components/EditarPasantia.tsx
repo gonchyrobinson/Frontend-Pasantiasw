@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
+import { safeParseInt } from '../../../helpers/formatHelper';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { usePasantia, useUpdatePasantia } from '../hooks/usePasantias';
@@ -14,7 +15,7 @@ import { LoadingSpinner } from '../../../lib/components';
 
 const EditarPasantia: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const pasantiaId = id ? parseInt(id, 10) : null;
+  const pasantiaId = safeParseInt(id);
   const navigate = useNavigate();
   const { showSuccess } = useSnackbar();
 

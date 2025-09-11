@@ -4,7 +4,7 @@ import {
   getEmpresaSearchMetadata,
   formatEmpresaSearchFilters,
   getSugerenciasNombresEmpresas,
-} from '../helpers/empresaSearchHelpers';
+} from '../helpers/empresaHelpers';
 import { EmpresaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';

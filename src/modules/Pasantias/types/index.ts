@@ -78,20 +78,14 @@ export interface ConvenioDto {
 // Tipos para formularios
 export type PasantiaFormData = PasantiaCreateDto;
 
-// DTO para filtros de búsqueda avanzada - camelCase
+// DTO para filtros de búsqueda avanzada - camelCase (compatible con formulario de búsqueda)
 export interface PasantiaBusquedaAvanzadaDto {
-  idEstudiante?: number;
-  idConvenio?: number;
-  obraSocial?: string;
-  art?: string;
-  tutorEmpresa?: string;
-  tutorFacultad?: string;
-  tipoAcuerdo?: string;
-  fechaInicioDesde?: string;
-  fechaInicioHasta?: string;
-  fechaFinDesde?: string;
-  fechaFinHasta?: string;
-  estado?: string;
+  numeroTramite?: string;
+  tipo?: string;
+  estudiante?: string;
+  empresa?: string;
+  vigente?: boolean;
+  carrera?: string;
 }
 
 // Tipos para filtros locales (para compatibilidad)
