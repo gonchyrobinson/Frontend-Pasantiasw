@@ -28,40 +28,12 @@ export interface EmpresaDto {
   sudocu: string; // Text field, not date
 }
 
-// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
-export interface CreacionEmpresaDto {
-  nombre: string;
-  vigencia: VigenciaType;
-  fechaInicio: string; // ISO format: YYYY-MM-DD
-  fechaFin: string; // ISO format: YYYY-MM-DD
-  tipoContrato: TipoContratoType;
-  encargado: string;
-  celular: string;
-  correoElectronico: string;
-  sudocu: string; // Text field, not date
-}
-
-export interface EmpresasState {
-  loading: boolean;
-  error: string | null;
-  empresas: EmpresaDto[];
-}
-
-export interface EmpresasFiltersState {
-  searchText: string;
-  vigenciaFilter: string;
-  tipoContratoFilter: string;
-}
+// DTO para creación - omite el ID que es generado por el backend
+export type CreacionEmpresaDto = Omit<EmpresaDto, 'idEmpresa'>;
 
 export interface EmpresasStats {
   total: number;
   activas: number;
   inactivas: number;
   porTipo: Record<string, number>;
-}
-export interface EmpresasGridProps {
-  empresas: EmpresaDto[];
-  onEmpresaClick?: (empresa: EmpresaDto) => void;
-  onEmpresaEdit?: (empresa: EmpresaDto) => void;
-  onEmpresaDelete?: (empresa: EmpresaDto) => void;
 }

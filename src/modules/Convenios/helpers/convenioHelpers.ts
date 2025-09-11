@@ -1,6 +1,37 @@
-import { ConvenioStats, ConvenioEmpresaDto, ConvenioFilters } from '../types';
+import { ConvenioStats, ConvenioEmpresaDto } from '../types';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 
-// Metadata para formularios de convenios
+/**
+ * Helper consolidado para convenios
+ *
+ * Contiene funciones utilitarias para:
+ * - Generación de metadata de formularios (crear/editar)
+ * - Generación de metadata de formularios de búsqueda
+ * - Formateo de filtros de búsqueda para el backend
+ * - Cálculo de estadísticas de convenios
+ * - Valores por defecto de formularios
+ */
+
+// ==================== TIPOS ====================
+
+/**
+ * DTO para filtros de búsqueda avanzada de convenios
+ * Compatible con ConvenioEmpresaFiltroDto del backend
+ */
+export interface ConvenioBusquedaAvanzadaDto {
+  nombreEmpresa?: string;
+  numeroAcuerdoMarco?: string;
+  vigencia?: boolean; // true = vigente, false = no vigente, undefined = todos
+}
+
+// ==================== METADATA DE FORMULARIOS ====================
+
+/**
+ * Genera la metadata para el formulario de convenios (crear/editar)
+ * Utilizado en CrearConvenio y EditarConvenio
+ *
+ * @returns Configuración completa del formulario con campos, validaciones y opciones
+ */
 export const getConvenioFormMetadata = () => ({
   title: 'Información del Convenio',
   submitButtonText: 'Guardar',
@@ -99,7 +130,6 @@ export const getConvenioFormMetadata = () => ({
       type: 'text' as const,
       gridSize: 6,
     },
-
     {
       name: 'docRepresentanteFacultad',
       label: 'Documento del Representante Facultad',
@@ -134,7 +164,92 @@ export const getConvenioFormMetadata = () => ({
   ],
 });
 
-// Función para calcular estadísticas de convenios
+// ==================== METADATA DE BÚSQUEDA ====================
+
+/**
+ * Genera la metadata para el formulario de búsqueda avanzada de convenios
+ * Utilizado en ConveniosFilters
+ *
+ * @returns Configuración completa del formulario de búsqueda con campos y opciones
+ */
+export const getConvenioSearchMetadata = (): {
+  title: string;
+  fields: FieldMetadata[];
+  submitButtonText: string;
+  cancelButtonText: string;
+} => ({
+  title: 'Búsqueda Avanzada de Convenios',
+  submitButtonText: 'Buscar',
+  cancelButtonText: 'Cancelar',
+  fields: [
+    {
+      name: 'nombreEmpresa',
+      label: 'Empresa',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar empresa...',
+    },
+    {
+      name: 'numeroAcuerdoMarco',
+      label: 'Número de Acuerdo Marco',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar número de acuerdo marco...',
+    },
+    {
+      name: 'vigencia',
+      label: 'Vigencia',
+      type: 'dropdown' as const,
+      options: [
+        { value: '', label: 'Todos' },
+        { value: 'vigente', label: 'Vigente' },
+        { value: 'no_vigente', label: 'No Vigente' },
+      ],
+    },
+  ],
+});
+
+// ==================== FORMATEO DE FILTROS ====================
+
+/**
+ * Formatea los filtros del formulario de búsqueda para enviarlos al backend
+ * Compatible con ConvenioEmpresaFiltroDto del backend
+ *
+ * @param filters - Filtros del formulario de búsqueda
+ * @returns Objeto DTO formateado para el backend
+ */
+export const formatConvenioSearchFilters = (
+  filters: Record<string, unknown>
+): ConvenioBusquedaAvanzadaDto => {
+  const searchFilters: ConvenioBusquedaAvanzadaDto = {};
+
+  // Mapear campos del formulario al DTO esperado por el backend
+  if (filters.nombreEmpresa) {
+    searchFilters.nombreEmpresa = filters.nombreEmpresa as string;
+  }
+  if (filters.numeroAcuerdoMarco) {
+    searchFilters.numeroAcuerdoMarco = filters.numeroAcuerdoMarco as string;
+  }
+  if (filters.vigencia) {
+    // Convertir string del frontend a boolean esperado por el backend
+    if (filters.vigencia === 'vigente') {
+      searchFilters.vigencia = true;
+    } else if (filters.vigencia === 'no_vigente') {
+      searchFilters.vigencia = false;
+    }
+    // Si es empty string o 'todos', no se incluye el filtro
+  }
+
+  return searchFilters;
+};
+
+// ==================== CÁLCULO DE ESTADÍSTICAS ====================
+
+/**
+ * Calcula las estadísticas de convenios basadas en un array de convenios
+ * Utilizado en useConvenios hook
+ *
+ * @param convenios - Array de convenios para calcular estadísticas
+ * @returns Objeto con estadísticas calculadas (total, vigentes, caducados, por vencer)
+ */
 export const calculateConvenioStats = (
   convenios: ConvenioEmpresaDto[]
 ): ConvenioStats => {
@@ -171,104 +286,14 @@ export const calculateConvenioStats = (
   };
 };
 
-// Función para filtrar convenios
-export const filterConvenios = (
-  convenios: ConvenioEmpresaDto[],
-  filters: ConvenioFilters
-): ConvenioEmpresaDto[] => {
-  return convenios.filter(convenio => {
-    // Filtro por expediente
-    if (
-      filters.expediente &&
-      !convenio.expediente
-        ?.toLowerCase()
-        .includes(filters.expediente.toLowerCase())
-    ) {
-      return false;
-    }
+// ==================== VALORES POR DEFECTO ====================
 
-    // Filtro por empresa
-    if (
-      filters.empresa &&
-      !convenio.nombreEmpresa
-        ?.toLowerCase()
-        .includes(filters.empresa.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // Filtro por fecha de firma
-    if (filters.fechaFirmaDesde && convenio.fechaFirma) {
-      const fechaFirma = new Date(convenio.fechaFirma);
-      const fechaDesde = new Date(filters.fechaFirmaDesde);
-      if (fechaFirma < fechaDesde) return false;
-    }
-
-    if (filters.fechaFirmaHasta && convenio.fechaFirma) {
-      const fechaFirma = new Date(convenio.fechaFirma);
-      const fechaHasta = new Date(filters.fechaFirmaHasta);
-      if (fechaFirma > fechaHasta) return false;
-    }
-
-    // Filtro por fecha de caducidad
-    if (filters.fechaCaducidadDesde && convenio.fechaCaducidad) {
-      const fechaCaducidad = new Date(convenio.fechaCaducidad);
-      const fechaDesde = new Date(filters.fechaCaducidadDesde);
-      if (fechaCaducidad < fechaDesde) return false;
-    }
-
-    if (filters.fechaCaducidadHasta && convenio.fechaCaducidad) {
-      const fechaCaducidad = new Date(convenio.fechaCaducidad);
-      const fechaHasta = new Date(filters.fechaCaducidadHasta);
-      if (fechaCaducidad > fechaHasta) return false;
-    }
-
-    return true;
-  });
-};
-
-// Función para formatear fechas
-export const formatDate = (dateString?: string): string => {
-  if (!dateString) return 'No especificada';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
-// Función para verificar si un convenio está vigente
-export const isConvenioVigente = (fechaCaducidad?: string): boolean => {
-  if (!fechaCaducidad) return false;
-  const fechaActual = new Date();
-  const fechaCaducidadDate = new Date(fechaCaducidad);
-  return fechaCaducidadDate > fechaActual;
-};
-
-// Función para obtener el estado de un convenio
-export const getConvenioEstado = (fechaCaducidad?: string): string => {
-  if (!fechaCaducidad) return 'Sin fecha de caducidad';
-
-  const fechaActual = new Date();
-  const fechaCaducidadDate = new Date(fechaCaducidad);
-
-  if (fechaCaducidadDate > fechaActual) {
-    const diasRestantes = Math.ceil(
-      (fechaCaducidadDate.getTime() - fechaActual.getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-
-    if (diasRestantes <= 30) {
-      return `Por vencer (${diasRestantes} días)`;
-    }
-    return 'Vigente';
-  }
-
-  return 'Caducado';
-};
-
-// Función para obtener valores por defecto del formulario
+/**
+ * Obtiene los valores por defecto para el formulario de convenios
+ * Utilizado en useConvenios hook
+ *
+ * @returns Objeto con valores por defecto para todos los campos del formulario
+ */
 export const getDefaultConvenioValues = () => ({
   idEmpresa: undefined,
   representanteEmpresa: '',

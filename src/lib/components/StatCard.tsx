@@ -3,7 +3,7 @@ import { CircularProgress, styled } from '@mui/material';
 import { CenteredContainer, CardContainer } from './StyledContainers';
 import { StatValue, CaptionText } from './StyledText';
 
-interface StatCardProps {
+interface SimpleStatCardProps {
   title: string;
   value: string | number;
   loading?: boolean;
@@ -16,7 +16,7 @@ const StyledStatCard = styled(CardContainer)(({ theme }) => ({
   height: '100%',
 }));
 
-export const StatCard: React.FC<StatCardProps> = ({
+export const StatCard: React.FC<SimpleStatCardProps> = ({
   title,
   value,
   loading = false,

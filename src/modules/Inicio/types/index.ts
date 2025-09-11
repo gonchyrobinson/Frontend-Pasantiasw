@@ -8,8 +8,8 @@ export interface StatItem {
   bgColor: string;
   loading: boolean;
   error: boolean;
-  trend: string;
-  trendDirection: 'up' | 'down';
+  trend?: string;
+  trendDirection?: 'up' | 'down';
   onClick?: () => void;
 }
 
@@ -28,23 +28,12 @@ export interface SpeedDialAction {
   action: () => void;
 }
 
-export interface ProgressItem {
-  label: string;
-  value: number;
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
-}
-
 export interface ActionCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
   color: string;
   onClick?: () => void;
-}
-
-export interface ProgressSectionProps {
-  title: string;
-  items: ProgressItem[];
 }
 
 export interface StatsCardProps {
@@ -55,8 +44,8 @@ export interface StatsCardProps {
   bgColor: string;
   loading?: boolean;
   error?: boolean;
-  trend: string;
-  trendDirection: 'up' | 'down';
+  trend?: string;
+  trendDirection?: 'up' | 'down';
   onClick?: () => void;
 }
 

@@ -1,31 +1,38 @@
 import { EstudianteDto } from '../types';
+import { getCarrerasOptions } from '../../../helpers/constants';
+import { FieldMetadata } from '../../../lib/ElementCardGenerica';
+import { apiClient } from '../../Shared/apis/apiClient';
 
-// Carreras válidas según el backend
-export const CARRERAS_VALIDAS = [
-  'AGRIMENSURA',
-  'INGENIERÍA AZUCARERA',
-  'INGENIERÍA BIOMÉDICA',
-  'INGENIERÍA CIVIL',
-  'INGENIERÍA EN COMPUTACIÓN',
-  'INGENIERÍA EN INFORMÁTICA',
-  'INGENIERÍA ELÉCTRICA',
-  'INGENIERÍA ELECTRÓNICA',
-  'INGENIERÍA GEODÉSICA Y GEOFÍSICA',
-  'INGENIERÍA INDUSTRIAL',
-  'INGENIERÍA MECÁNICA',
-  'INGENIERÍA QUÍMICA',
-  'LICENCIATURA EN FÍSICA',
-  'LICENCIATURA EN MATEMÁTICA',
-  'LICENCIATURA EN INFORMÁTICA',
-  'DISEÑO DE ILUMINACIÓN',
-  'PROGRAMADOR UNIVERSITARIO',
-  'TECNICATURA UNIVERSITARIA EN TECNOLOGÍA',
-  'AZUCARERA E INDUSTRIAS DERIVADAS',
-  'TECNICATURA UNIVERSITARIA EN FÍSICA',
-  'TECNICATURA UNIVERSITARIA EN FÍSICA AMBIENTAL',
-  'OTRA',
-] as const;
+/**
+ * Helper consolidado para estudiantes
+ *
+ * Contiene funciones utilitarias para:
+ * - Generación de metadata de formularios (crear/editar)
+ * - Generación de metadata de formularios de búsqueda
+ * - Formateo de filtros de búsqueda para el backend
+ * - Obtención de sugerencias de documentos
+ * - Cálculo de estadísticas de estudiantes
+ */
 
+// ==================== TIPOS ====================
+
+/**
+ * DTO para filtros de búsqueda avanzada de estudiantes
+ * Compatible con model binding de ASP.NET Core (camelCase)
+ */
+export interface StudentBusquedaAvanzadaDto {
+  documento?: string;
+  carrera?: string;
+}
+
+// ==================== METADATA DE FORMULARIOS ====================
+
+/**
+ * Genera la metadata para el formulario de creación de estudiantes
+ * Utilizado en CreacionEstudiantes
+ *
+ * @returns Configuración completa del formulario con campos, validaciones y opciones
+ */
 export const getCreacionEstudianteMetadata = () => ({
   title: 'Crear Nuevo Estudiante',
   submitButtonText: 'Crear Estudiante',
@@ -71,10 +78,7 @@ export const getCreacionEstudianteMetadata = () => ({
       name: 'carrera',
       label: 'Carrera',
       type: 'dropdown' as const,
-      options: CARRERAS_VALIDAS.map(carrera => ({
-        value: carrera,
-        label: carrera,
-      })),
+      options: getCarrerasOptions(),
       validations: {
         required: 'La carrera es requerida',
       },
@@ -105,12 +109,28 @@ export const getCreacionEstudianteMetadata = () => ({
   ],
 });
 
+/**
+ * Genera la metadata para el formulario de edición de estudiantes
+ * Reutiliza la metadata de creación pero cambia título y botón
+ * Utilizado en EditarEstudiante
+ *
+ * @returns Configuración completa del formulario para edición
+ */
 export const getEdicionEstudianteMetadata = () => ({
   ...getCreacionEstudianteMetadata(),
   title: 'Editar Estudiante',
   submitButtonText: 'Actualizar Estudiante',
 });
 
+// ==================== CÁLCULO DE ESTADÍSTICAS ====================
+
+/**
+ * Calcula las estadísticas de estudiantes basadas en un array de estudiantes
+ * Utilizado en EstudiantesStats
+ *
+ * @param estudiantes - Array de estudiantes para calcular estadísticas
+ * @returns Objeto con estadísticas calculadas (total, por carrera, por área de trabajo)
+ */
 export const getEstudiantesStats = (estudiantes: EstudianteDto[]) => {
   const total = estudiantes.length;
   const porCarrera = estudiantes.reduce(
@@ -129,4 +149,86 @@ export const getEstudiantesStats = (estudiantes: EstudianteDto[]) => {
   );
 
   return { total, porCarrera, porAreaTrabajo };
+};
+
+// ==================== METADATA DE BÚSQUEDA ====================
+
+/**
+ * Genera la metadata para el formulario de búsqueda avanzada de estudiantes
+ * Utilizado en EstudiantesFilters
+ *
+ * @returns Configuración completa del formulario de búsqueda con campos y opciones
+ */
+export const getEstudianteSearchMetadata = (): {
+  title: string;
+  fields: FieldMetadata[];
+  submitButtonText: string;
+  cancelButtonText: string;
+} => ({
+  title: 'Búsqueda Avanzada de Estudiantes',
+  fields: [
+    {
+      name: 'documento',
+      label: 'Documento',
+      type: 'dynamicDropdown',
+      placeholder: 'Seleccionar documento...',
+    },
+    {
+      name: 'carrera',
+      label: 'Carrera',
+      type: 'dropdown',
+      options: [
+        { value: '', label: 'Todas las carreras' },
+        ...getCarrerasOptions(),
+      ],
+    },
+  ],
+  submitButtonText: 'Buscar',
+  cancelButtonText: 'Limpiar',
+});
+
+// ==================== FORMATEO DE FILTROS ====================
+
+/**
+ * Formatea los filtros del formulario de búsqueda para enviarlos al backend
+ * Convierte los valores del frontend al formato esperado por la API
+ *
+ * @param filters - Filtros del formulario de búsqueda
+ * @returns Objeto DTO formateado para el backend
+ */
+export const formatEstudianteSearchFilters = (
+  filters: Record<string, unknown>
+): StudentBusquedaAvanzadaDto => {
+  const formattedFilters: StudentBusquedaAvanzadaDto = {};
+
+  if (filters.documento) {
+    formattedFilters.documento = filters.documento as string;
+  }
+  if (filters.carrera) {
+    formattedFilters.carrera = filters.carrera as string;
+  }
+
+  return formattedFilters;
+};
+
+// ==================== SERVICIOS DE DATOS ====================
+
+/**
+ * Obtiene sugerencias de documentos de estudiantes desde el backend
+ * Utilizado en EstudiantesFilters para el dropdown dinámico
+ *
+ * @returns Promise con array de opciones de documentos
+ */
+export const getSugerenciasDocumentos = async (): Promise<
+  { value: string; label: string }[]
+> => {
+  try {
+    const documentos = await apiClient.get<
+      Array<{ value: string; label: string }>
+    >('/students/documentos-dropdown');
+    return documentos;
+  } catch (error) {
+    console.error('Error al obtener sugerencias de documentos:', error);
+    return [];
+  }
 };

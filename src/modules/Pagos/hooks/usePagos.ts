@@ -36,16 +36,18 @@ export const usePagosByPasantia = (idPasantia: number | null) => {
 };
 
 // Hook para obtener pagos por vencer
-export const usePagosPorVencer = (fecha: string) => {
+export const usePagosPorVencer = (diasAdelante = 30) => {
   return useQuery({
-    queryKey: ['pagos', 'por-vencer', fecha],
+    queryKey: ['pagos', 'por-vencer', diasAdelante],
     queryFn: async () => {
       const data = await apiClient.get<PagosDto[]>(
-        `/pagos/por-vencer?fecha=${fecha}`
+        `/pagos/por-vencer?dias=${diasAdelante}`
       );
       return data;
     },
-    enabled: !!fecha,
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    refetchInterval: 10 * 60 * 1000, // Refrescar cada 10 minutos para notificaciones
+    refetchOnWindowFocus: true, // Refrescar cuando el usuario vuelve a la pestaña
   });
 };
 

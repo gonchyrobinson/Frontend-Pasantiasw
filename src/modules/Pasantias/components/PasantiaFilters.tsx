@@ -3,11 +3,14 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getPasantiaSearchMetadata,
   formatPasantiaSearchFilters,
-} from '../helpers/pasantiaSearchHelpers';
+} from '../helpers/pasantiaHelpers';
 import { PasantiaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
+import {
+  useEmpresasDropdown,
+  useEstudiantesDropdown,
+} from '../../../lib/hooks/useDropdownData';
 
 interface PasantiaFiltersProps {
   onSearchResults: (pasantias: PasantiaDto[]) => void;
@@ -23,6 +26,8 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
 }) => {
   const { showError, showSuccess } = useSnackbar();
   const { empresasOptions, isLoading: empresasLoading } = useEmpresasDropdown();
+  const { estudiantesOptions, isLoading: estudiantesLoading } =
+    useEstudiantesDropdown();
   const [dynamicOptions, setDynamicOptions] = useState<
     Record<string, Array<{ value: string | number; label: string }>>
   >({});
@@ -36,30 +41,26 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
           '/pasantias/sugerencias-numeros-tramite'
         );
 
-        // Cargar documentos de estudiantes únicos
-        const estudiantes = await apiClient.get<
-          Array<{ value: string; label: string }>
-        >('/students/documentos-dropdown');
-
         setDynamicOptions({
           numeroTramite: numerosTramite.map(numero => ({
             value: numero,
             label: numero,
           })),
-          estudiante: estudiantes, // Ya tiene el formato correcto { value, label }
+          estudiante: estudiantesOptions || [], // Usar el hook en lugar de llamada directa
           empresa: empresasOptions || [],
         });
       } catch (error) {
         console.error('Error al cargar sugerencias:', error);
-        // Si falla la carga, al menos cargar empresas
+        // Si falla la carga, al menos cargar opciones de dropdowns
         setDynamicOptions({
+          estudiante: estudiantesOptions || [],
           empresa: empresasOptions || [],
         });
       }
     };
 
     cargarSugerencias();
-  }, [empresasOptions]);
+  }, [empresasOptions, estudiantesOptions]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -86,7 +87,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       onClearResults={onClearResults}
       hasResults={hasResults}
       dynamicDropdownOptions={dynamicOptions}
-      loading={empresasLoading}
+      loading={empresasLoading || estudiantesLoading}
     />
   );
 };

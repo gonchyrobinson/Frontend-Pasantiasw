@@ -13,28 +13,12 @@ interface FieldDisplayProps {
   data: Record<string, any>;
 }
 
-// Utilidades simples
-const formatCurrency = (value: number | string | null | undefined): string => {
-  if (value === null || value === undefined) return 'N/A';
-  const numValue = typeof value === 'string' ? parseFloat(value) : value;
-  return isNaN(numValue) ? 'N/A' : `$${numValue.toLocaleString()}`;
-};
-
-const formatDate = (value: string | Date | null | undefined): string => {
-  if (!value) return 'N/A';
-  try {
-    const date = new Date(value);
-    return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString();
-  } catch {
-    return 'N/A';
-  }
-};
-
-const formatNumber = (value: number | string | null | undefined): string => {
-  if (value === null || value === undefined) return 'N/A';
-  const numValue = typeof value === 'string' ? parseFloat(value) : value;
-  return isNaN(numValue) ? 'N/A' : numValue.toLocaleString();
-};
+// Importar utilidades centralizadas
+import {
+  formatCurrency,
+  formatDate,
+  formatNumber,
+} from '../../../helpers/formatHelper';
 
 // Componentes simplificados
 export const TextDisplayField: React.FC<FieldDisplayProps> = ({

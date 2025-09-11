@@ -1,6 +1,7 @@
 import React from 'react';
 import { Payment } from '@mui/icons-material';
-import { usePagosPorVencer } from '../../../Pagos/hooks/usePagosPorVencer';
+import { formatCurrency } from '../../../../helpers/formatHelper';
+import { usePagosPorVencer } from '../../../Pagos/hooks/usePagos';
 import { PagosDto } from '../../../Pagos/types';
 import VencimientosNotifications, {
   VencimientoItem,
@@ -30,7 +31,7 @@ const PagosVencerNotifications: React.FC<PagosVencerNotificationsProps> = ({
     },
     getItemSubtitle: (item: VencimientoItem) => {
       const pago = item as unknown as PagosDto;
-      return `Monto: $${pago.monto?.toLocaleString() || 'N/A'}`;
+      return `Monto: ${formatCurrency(pago.monto) || 'N/A'}`;
     },
     onItemClick: (item: VencimientoItem) => {
       onNavigateToPago?.(item.id);

@@ -16,27 +16,11 @@ export type {
   FieldType,
   DropdownOption,
   ValidationRule,
-  FieldMetadata,
+  FormFieldMetadata,
   FormMetadata,
   DynamicDropdownOptions,
   GenericFormProps,
 } from './types';
 
-// Helpers
-export {
-  createEmailValidation,
-  createRequiredValidation,
-  createMinLengthValidation,
-  createMaxLengthValidation,
-  createNumberRangeValidation,
-} from './helpers/validationHelpers';
-
-export {
-  createDropdownOptions,
-  createTextField,
-  createEmailField,
-  createDateField,
-  createCurrencyField,
-  createDropdownField,
-  createDynamicDropdownField,
-} from './helpers/formMetadataHelpers';
+// Nota: Las validaciones se definen directamente inline en cada helper de módulo
+// No se necesitan funciones helper adicionales para validaciones

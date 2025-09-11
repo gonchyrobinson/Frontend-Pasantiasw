@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
+import { safeParseInt } from '../../../helpers/formatHelper';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { usePasantia, useUpdatePasantia } from '../hooks/usePasantias';
@@ -9,12 +10,12 @@ import {
   useEmpresasConvenioDropdown,
 } from '../../../lib/hooks/useDropdownData';
 import { getPasantiaFormMetadata } from '../helpers/pasantiaHelpers';
-import { PasantiaFormData, PasantiaDto } from '../types';
+import { PasantiaCreateDto, PasantiaDto } from '../types';
 import { LoadingSpinner } from '../../../lib/components';
 
 const EditarPasantia: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const pasantiaId = id ? parseInt(id, 10) : null;
+  const pasantiaId = safeParseInt(id);
   const navigate = useNavigate();
   const { showSuccess } = useSnackbar();
 
@@ -31,7 +32,7 @@ const EditarPasantia: React.FC = () => {
     if (pasantiaId) {
       await new Promise<PasantiaDto>((resolve, reject) => {
         updatePasantia(
-          { data: formData as unknown as PasantiaFormData },
+          { data: formData as unknown as PasantiaCreateDto },
           {
             onSuccess: resolve,
             onError: reject,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { TablaGenericaWrapper } from '../../../lib/TablaGenerica';
+import { formatCurrency } from '../../../helpers/formatHelper';
 import { PagosDto } from '../types';
 import { FieldMetadata } from '../../../lib/ElementCardGenerica/types';
 import { getPagoEstado } from '../helpers/pagosHelpers';
@@ -34,7 +35,7 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
     ...pago,
     id: pago.idPago,
     estado: getPagoEstado(pago),
-    monto: pago.monto ? `$${pago.monto.toLocaleString()}` : '-',
+    monto: pago.monto ? formatCurrency(pago.monto) : '-',
     fechaPago: pago.fechaPago,
     fechaVencimiento: pago.fechaVencimiento,
     observaciones: pago.observaciones || '-',

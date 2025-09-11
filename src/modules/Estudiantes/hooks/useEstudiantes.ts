@@ -1,4 +1,5 @@
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { EstudianteDto, CreacionEstudianteDto } from '../types';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
@@ -92,16 +93,17 @@ export const useUpdateEstudiante = () => {
 
 // Hook para eliminar estudiante
 export const useDeleteEstudiante = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
   const { invalidateEstudiantes, invalidatePasantias } =
     useInvalidateDropdowns();
 
-  return useMutation({
-    mutationFn: async (id: number) => {
-      const result = await apiClient.delete<void>(`/students/${id}`);
-      return result;
-    },
-    onSuccess: () => {
+  const deleteEstudiante = async (id: number) => {
+    setIsDeleting(true);
+
+    try {
+      await apiClient.delete<void>(`/students/${id}`);
+
       // Invalidar todas las queries relacionadas con estudiantes
       queryClient.invalidateQueries({ queryKey: ['students'] });
       queryClient.invalidateQueries({ queryKey: ['student'] });
@@ -116,6 +118,19 @@ export const useDeleteEstudiante = () => {
       // Invalidar queries de inicio que muestran estadísticas
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
-    },
-  });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Error al eliminar el estudiante. Inténtalo de nuevo.';
+      throw new Error(message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return {
+    deleteEstudiante,
+    isDeleting,
+  };
 };

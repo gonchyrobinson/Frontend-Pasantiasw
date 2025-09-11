@@ -3,7 +3,7 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getConvenioSearchMetadata,
   formatConvenioSearchFilters,
-} from '../helpers/convenioSearchHelpers';
+} from '../helpers/convenioHelpers';
 import { ConvenioEmpresaDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
@@ -59,8 +59,7 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
     cargarSugerencias();
   }, [empresasOptions]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSearchSubmit = async (filters: Record<string, any>) => {
+  const handleSearchSubmit = async (filters: Record<string, unknown>) => {
     try {
       const searchFilters = formatConvenioSearchFilters(filters);
       const convenios = await apiClient.post<ConvenioEmpresaDto[]>(

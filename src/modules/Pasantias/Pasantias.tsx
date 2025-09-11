@@ -10,6 +10,7 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
+import { formatDate } from '../../helpers/formatHelper';
 
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import { usePasantiaStats, usePasantias } from './hooks/usePasantias';
@@ -246,7 +247,7 @@ const Pasantias: React.FC = () => {
               <BodyText color='text.secondary'>
                 <strong>Fecha de Inicio:</strong>{' '}
                 {selectedPasantia.fechaInicio
-                  ? new Date(selectedPasantia.fechaInicio).toLocaleDateString()
+                  ? formatDate(selectedPasantia.fechaInicio)
                   : 'No especificada'}
               </BodyText>
             </div>

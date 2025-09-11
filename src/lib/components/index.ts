@@ -1,6 +1,5 @@
 // Componentes genéricos
 export { default as DeleteConfirmationDialog } from './DeleteConfirmationDialog';
-export { default as DropdownDataProvider } from './DropdownDataProvider';
 export { EmptyState } from './EmptyState';
 export { default as FormErrorAlert } from './FormErrorAlert';
 export { default as LoadingSpinner } from './LoadingSpinner';

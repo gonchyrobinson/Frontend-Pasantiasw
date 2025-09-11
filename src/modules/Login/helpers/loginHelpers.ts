@@ -1,6 +1,20 @@
 import { FormMetadata } from '../../../lib/FormularioGenerico';
-import { LoginCredentials } from '../types';
 
+/**
+ * Helper para el módulo de Login
+ *
+ * Contiene funciones utilitarias para:
+ * - Generación de metadata del formulario de login
+ */
+
+// ==================== METADATA DE FORMULARIO ====================
+
+/**
+ * Genera la metadata para el formulario de login
+ * Define los campos, validaciones y configuración del formulario
+ *
+ * @returns Configuración completa del formulario de login
+ */
 export const getLoginMetadata = (): FormMetadata => ({
   submitButtonText: 'Iniciar Sesión',
   fields: [
@@ -26,14 +40,3 @@ export const getLoginMetadata = (): FormMetadata => ({
     },
   ],
 });
-
-export const handleLoginError = (error: unknown): string => {
-  if (error instanceof Error && error.message) return error.message;
-  return 'Error de autenticación';
-};
-
-export const validateLoginData = (
-  data: Record<string, unknown>
-): LoginCredentials => {
-  return data as unknown as LoginCredentials;
-};

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { CreacionEmpresaDto, EmpresaDto } from './types';
-import { getCreacionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
+import { getCreacionEmpresaMetadata } from './helpers/empresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';

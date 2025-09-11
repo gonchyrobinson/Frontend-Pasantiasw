@@ -1,6 +1,26 @@
 import { FormMetadata } from '../../../lib/FormularioGenerico';
-import { RegisterData } from '../types';
 
+/**
+ * Helper para el módulo de CreacionUsuarios
+ *
+ * Contiene funciones utilitarias para:
+ * - Generación de metadata del formulario de registro
+ * - Validación de contraseñas
+ */
+
+// ==================== CONSTANTES ====================
+
+/** Patrón de validación para emails */
+const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+// ==================== METADATA DE FORMULARIO ====================
+
+/**
+ * Genera la metadata para el formulario de registro de usuarios
+ * Define los campos, validaciones y configuración del formulario
+ *
+ * @returns Configuración completa del formulario de registro
+ */
 export const getRegistroMetadata = (): FormMetadata => ({
   title: 'Crear Cuenta',
   submitButtonText: 'Registrarse',
@@ -28,7 +48,7 @@ export const getRegistroMetadata = (): FormMetadata => ({
       validations: {
         required: 'Email es requerido',
         pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          value: EMAIL_PATTERN,
           message: 'Email inválido',
         },
       },
@@ -61,19 +81,24 @@ export const getRegistroMetadata = (): FormMetadata => ({
   ],
 });
 
+// ==================== VALIDACIONES ====================
+
+/**
+ * Valida que las contraseñas coincidan en el formulario de registro
+ * Compara los campos 'password' y 'confirmPassword' del formulario
+ *
+ * @param data - Datos del formulario de registro
+ * @returns Mensaje de error si las contraseñas no coinciden, null si son válidas
+ */
 export const validatePasswords = (
   data: Record<string, unknown>
 ): string | null => {
-  const registerData = data as unknown as RegisterData;
+  const password = data.password as string;
+  const confirmPassword = data.confirmPassword as string;
 
-  if (registerData.password !== registerData.confirmPassword) {
+  if (password !== confirmPassword) {
     return 'Las contraseñas no coinciden';
   }
 
   return null;
-};
-
-export const handleRegistrationError = (error: unknown): string => {
-  if (error instanceof Error && error.message) return error.message;
-  return 'Error de registro';
 };

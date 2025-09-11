@@ -59,28 +59,3 @@ export const useApiUpdate = <T, TVariables extends RequestData = RequestData>(
     ...options,
   });
 };
-
-// Mutation hook for DELETE requests
-export const useApiDelete = <T>(
-  endpoint: string,
-  options?: Omit<UseMutationOptions<ApiResponse<T>, Error, void>, 'mutationFn'>
-) => {
-  return useMutation({
-    mutationFn: async () => {
-      const result = await apiClient.delete<T>(endpoint);
-      return { data: result } as ApiResponse<T>;
-    },
-    ...options,
-  });
-};
-
-// Legacy hook for backward compatibility
-export const useApi = <T>(endpoint: string) => {
-  const { data, isLoading, error } = useApiQuery<T>(endpoint);
-
-  return {
-    data: data?.data || null,
-    loading: isLoading,
-    error: error?.message || null,
-  };
-};
