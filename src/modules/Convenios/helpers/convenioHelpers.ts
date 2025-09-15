@@ -1,5 +1,6 @@
 import { ConvenioStats, ConvenioEmpresaDto } from '../types';
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
+import { TIPOS_ACUERDO_CONVENIO_VALIDOS } from '../../../helpers/constants';
 
 /**
  * Helper consolidado para convenios
@@ -20,7 +21,7 @@ import { FieldMetadata } from '../../../lib/ElementCardGenerica';
  */
 export interface ConvenioBusquedaAvanzadaDto {
   nombreEmpresa?: string;
-  numeroAcuerdoMarco?: string;
+  expedienteSudocu?: string;
   vigencia?: boolean; // true = vigente, false = no vigente, undefined = todos
 }
 
@@ -68,24 +69,10 @@ export const getConvenioFormMetadata = () => ({
       type: 'text' as const,
       required: true,
       validations: {
-        minLength: {
-          value: 5,
-          message: 'El documento debe tener al menos 5 caracteres',
+        pattern: {
+          value: /^\d{7,8}$/,
+          message: 'El documento debe ser un DNI válido (7 u 8 dígitos)',
         },
-        maxLength: {
-          value: 20,
-          message: 'El documento no puede exceder 20 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
-      name: 'nroAcuerdoMarco',
-      label: 'Número de Acuerdo Marco',
-      type: 'number' as const,
-      required: true,
-      validations: {
-        min: { value: 1, message: 'El número debe ser mayor a 0' },
       },
       gridSize: 6,
     },
@@ -100,56 +87,53 @@ export const getConvenioFormMetadata = () => ({
           message: 'El domicilio debe tener al menos 10 caracteres',
         },
         maxLength: {
-          value: 200,
-          message: 'El domicilio no puede exceder 200 caracteres',
+          value: 255,
+          message: 'El domicilio no puede exceder 255 caracteres',
         },
       },
-      gridSize: 6,
+      gridSize: 12,
     },
     {
-      name: 'domicilioAlternativo',
-      label: 'Domicilio Alternativo',
-      type: 'textarea' as const,
-      validations: {
-        maxLength: {
-          value: 200,
-          message: 'El domicilio no puede exceder 200 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
-      name: 'caracter',
-      label: 'Carácter',
-      type: 'text' as const,
-      gridSize: 6,
-    },
-    {
-      name: 'sudocu',
-      label: 'SUDOCU',
-      type: 'text' as const,
-      gridSize: 6,
-    },
-    {
-      name: 'docRepresentanteFacultad',
-      label: 'Documento del Representante Facultad',
+      name: 'nombreDecano',
+      label: 'Nombre del Decano',
       type: 'text' as const,
       required: true,
       validations: {
         minLength: {
-          value: 5,
-          message: 'El documento debe tener al menos 5 caracteres',
+          value: 2,
+          message: 'El nombre debe tener al menos 2 caracteres',
         },
         maxLength: {
-          value: 20,
-          message: 'El documento no puede exceder 20 caracteres',
+          value: 100,
+          message: 'El nombre no puede exceder 100 caracteres',
         },
       },
       gridSize: 6,
     },
     {
-      name: 'fechaFirma',
-      label: 'Fecha de Firma',
+      name: 'documentoDecano',
+      label: 'Documento del Decano',
+      type: 'text' as const,
+      required: true,
+      validations: {
+        pattern: {
+          value: /^\d{7,8}$/,
+          message: 'El documento debe ser un DNI válido (7 u 8 dígitos)',
+        },
+      },
+      gridSize: 6,
+    },
+    {
+      name: 'tipoAcuerdo',
+      label: 'Tipo de Acuerdo',
+      type: 'dropdown' as const,
+      required: true,
+      options: TIPOS_ACUERDO_CONVENIO_VALIDOS,
+      gridSize: 6,
+    },
+    {
+      name: 'fechaInicio',
+      label: 'Fecha de Inicio',
       type: 'date' as const,
       required: true,
       gridSize: 6,
@@ -189,10 +173,10 @@ export const getConvenioSearchMetadata = (): {
       placeholder: 'Seleccionar empresa...',
     },
     {
-      name: 'numeroAcuerdoMarco',
-      label: 'Número de Acuerdo Marco',
-      type: 'dynamicDropdown' as const,
-      placeholder: 'Seleccionar número de acuerdo marco...',
+      name: 'expedienteSudocu',
+      label: 'Expediente SUDOCU',
+      type: 'text' as const,
+      placeholder: 'Ingrese el expediente SUDOCU...',
     },
     {
       name: 'vigencia',
@@ -225,8 +209,8 @@ export const formatConvenioSearchFilters = (
   if (filters.nombreEmpresa) {
     searchFilters.nombreEmpresa = filters.nombreEmpresa as string;
   }
-  if (filters.numeroAcuerdoMarco) {
-    searchFilters.numeroAcuerdoMarco = filters.numeroAcuerdoMarco as string;
+  if (filters.expedienteSudocu) {
+    searchFilters.expedienteSudocu = filters.expedienteSudocu as string;
   }
   if (filters.vigencia) {
     // Convertir string del frontend a boolean esperado por el backend
@@ -298,12 +282,10 @@ export const getDefaultConvenioValues = () => ({
   idEmpresa: undefined,
   representanteEmpresa: '',
   docRepresentanteEmpresa: '',
-  nroAcuerdoMarco: undefined,
   domicilioLegal: '',
-  domicilioAlternativo: '',
-  docRepresentanteFacultad: '',
-  fechaFirma: '',
+  nombreDecano: '',
+  documentoDecano: '',
+  tipoAcuerdo: '',
+  fechaInicio: '',
   fechaCaducidad: '',
-  caracter: '',
-  sudocu: '',
 });

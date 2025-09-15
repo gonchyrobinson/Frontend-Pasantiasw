@@ -34,79 +34,21 @@ const DetalleEmpresa: React.FC = () => {
         defaultExpanded: true,
         fields: [
           {
+            name: 'idEmpresa',
+            label: 'ID de la Empresa',
+            type: 'text',
+            gridSize: 6,
+          },
+          {
             name: 'nombre',
             label: 'Nombre de la Empresa',
             type: 'text',
-            gridSize: 12,
-          },
-          {
-            name: 'vigencia',
-            label: 'Estado',
-            type: 'badge',
             gridSize: 6,
-            badgeConfig: {
-              color: 'primary',
-            },
-          },
-          {
-            name: 'tipoContrato',
-            label: 'Tipo de Contrato',
-            type: 'badge',
-            gridSize: 6,
-            badgeConfig: {
-              color: 'secondary',
-            },
-          },
-        ],
-      },
-      {
-        title: 'Fechas del Contrato',
-        gridContainer: true,
-        collapsible: true,
-        defaultExpanded: true,
-        fields: [
-          {
-            name: 'fechaInicio',
-            label: 'Fecha de Inicio',
-            type: 'date',
-            gridSize: 6,
-          },
-          {
-            name: 'fechaFin',
-            label: 'Fecha de Fin',
-            type: 'date',
-            gridSize: 6,
-          },
-        ],
-      },
-      {
-        title: 'Información de Contacto',
-        gridContainer: true,
-        collapsible: true,
-        defaultExpanded: true,
-        fields: [
-          {
-            name: 'encargado',
-            label: 'Encargado',
-            type: 'text',
-            gridSize: 12,
           },
           {
             name: 'correoElectronico',
-            label: 'Email',
+            label: 'Correo Electrónico',
             type: 'email',
-            gridSize: 6,
-          },
-          {
-            name: 'celular',
-            label: 'Teléfono',
-            type: 'phone',
-            gridSize: 6,
-          },
-          {
-            name: 'sudocu',
-            label: 'Sudocu',
-            type: 'text',
             gridSize: 12,
           },
         ],

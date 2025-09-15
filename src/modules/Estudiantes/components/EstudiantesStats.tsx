@@ -24,20 +24,20 @@ const EstudiantesStats: React.FC<EstudiantesStatsProps> = ({ estudiantes }) => {
       {
         icon: <IconoPersona />,
         title: 'Carreras',
-        value: Object.keys(stats.porCarrera).length,
+        value: stats.porCarrera ? Object.keys(stats.porCarrera).length : 0,
         color: 'success',
       },
       {
         icon: <IconoPersona />,
-        title: 'Áreas',
-        value: Object.keys(stats.porAreaTrabajo).length,
+        title: 'Activos',
+        value: stats.activos,
         color: 'warning',
       },
       {
         icon: <IconoEstudiante />,
         title: 'Promedio',
         value:
-          stats.total > 0
+          stats.total > 0 && stats.porCarrera
             ? Math.round(stats.total / Object.keys(stats.porCarrera).length)
             : 0,
         color: 'info',

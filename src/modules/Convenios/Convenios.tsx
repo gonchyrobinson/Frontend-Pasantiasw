@@ -71,14 +71,14 @@ const Convenios: React.FC = () => {
     }
   }, [location.pathname, convenios]);
 
-  const handleClearSearch = () => {
-    setSearchResults([]);
-    setHasSearched(false);
-  };
-
   const handleSearchResults = (convenios: ConvenioEmpresaDto[]) => {
     setSearchResults(convenios);
     setHasSearched(true);
+  };
+
+  const handleClearSearch = () => {
+    setSearchResults([]);
+    setHasSearched(false);
   };
 
   const handleRefresh = async () => {
@@ -282,7 +282,7 @@ const Convenios: React.FC = () => {
         open={showDeleteDialog}
         title='Eliminar Convenio'
         message='¿Está seguro de que desea eliminar este convenio?'
-        itemName={selectedConvenio?.expediente || 'Convenio'}
+        itemName={selectedConvenio?.expedienteSudocu || 'Convenio'}
         itemDetails={
           selectedConvenio && (
             <div>
@@ -291,9 +291,9 @@ const Convenios: React.FC = () => {
                 {selectedConvenio.nombreEmpresa || 'Sin empresa asignada'}
               </BodyText>
               <BodyText color='text.secondary'>
-                <strong>Fecha de Firma:</strong>{' '}
-                {selectedConvenio.fechaFirma
-                  ? formatDate(selectedConvenio.fechaFirma)
+                <strong>Fecha de Inicio:</strong>{' '}
+                {selectedConvenio.fechaInicio
+                  ? formatDate(selectedConvenio.fechaInicio)
                   : 'No especificada'}
               </BodyText>
               <BodyText color='text.secondary'>
@@ -315,7 +315,7 @@ const Convenios: React.FC = () => {
       <ConfirmDialog
         open={showCaducarDialog}
         title='Confirmar Caducidad'
-        message={`¿Está seguro de que desea caducar el convenio "${selectedConvenio?.expediente}"?`}
+        message={`¿Está seguro de que desea caducar el convenio "${selectedConvenio?.expedienteSudocu}"?`}
         onConfirm={handleCaducarConfirm}
         onCancel={handleCloseCaducarDialog}
         confirmText='Caducar'

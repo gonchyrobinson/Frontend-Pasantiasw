@@ -24,19 +24,15 @@ const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
   onAsignarEmpresa,
 }) => {
   const metadata: FieldMetadata[] = [
-    { name: 'expediente', label: 'Expediente', type: 'text' },
+    { name: 'numeroConvenio', label: 'Número Convenio', type: 'text' },
+    { name: 'expedienteSudocu', label: 'Expediente SUDOCU', type: 'text' },
     { name: 'nombreEmpresa', label: 'Empresa', type: 'text' },
     {
       name: 'representanteEmpresa',
       label: 'Representante Empresa',
       type: 'text',
     },
-    {
-      name: 'docRepresentanteFacultad',
-      label: 'Doc. Representante Facultad',
-      type: 'text',
-    },
-    { name: 'fechaFirma', label: 'Fecha de Firma', type: 'date' },
+    { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
     { name: 'fechaCaducidad', label: 'Fecha de Caducidad', type: 'date' },
   ];
 
@@ -96,7 +92,7 @@ const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
       extraButtons={extraButtons}
       pageSize={15}
       pageSizeOptions={[10, 15, 25, 50]}
-      initialSortModel={[{ field: 'expediente', sort: 'asc' }]}
+      initialSortModel={[{ field: 'numeroConvenio', sort: 'asc' }]}
     />
   );
 };

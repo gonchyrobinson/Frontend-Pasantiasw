@@ -28,8 +28,7 @@ const EmpresasTabla: React.FC<EmpresasTablaProps> = ({
 }) => {
   const metadata: FieldMetadata[] = [
     { name: 'nombre', label: 'Nombre', type: 'text' },
-    { name: 'vigencia', label: 'Vigencia', type: 'text' },
-    { name: 'tipoContrato', label: 'Tipo de Contrato', type: 'text' },
+    { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
   ];
 
   // Convertir EmpresaDto[] a Record<string, unknown>[] para compatibilidad
@@ -37,7 +36,6 @@ const EmpresasTabla: React.FC<EmpresasTablaProps> = ({
     ...empresa,
     // Agregar campos adicionales para compatibilidad
     id: empresa.idEmpresa,
-    activa: empresa.vigencia === 'vigente',
   }));
 
   // Wrapper para las funciones de callback para manejar el tipo correcto
