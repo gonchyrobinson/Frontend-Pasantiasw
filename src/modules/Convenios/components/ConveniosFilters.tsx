@@ -3,11 +3,13 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getConvenioSearchMetadata,
   formatConvenioSearchFilters,
-} from '../helpers/convenioSearchHelpers';
-import { ConvenioEmpresaDto } from '../types';
+} from '../helpers/convenioHelpers';
+import { ConvenioEmpresaDto, ConvenioEmpresaFiltroDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
-import { apiClient } from '../../Shared/apis/apiClient';
-import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
+import {
+  useEmpresasConConvenioVigente,
+  useConveniosConFiltros,
+} from '../hooks/useConvenios';
 import AsignarAEmpresaDialog from './AsignarAEmpresaDialog';
 
 interface ConveniosFiltersProps {
@@ -23,61 +25,67 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
   hasResults = false,
 }) => {
   const { showError, showSuccess } = useSnackbar();
-  const { empresasOptions, isLoading: empresasLoading } = useEmpresasDropdown();
+  const { data: empresasConConvenio, isLoading: empresasLoading } =
+    useEmpresasConConvenioVigente();
   const [asignarEmpresaOpen, setAsignarEmpresaOpen] = React.useState(false);
   const [selectedConvenio, setSelectedConvenio] =
     React.useState<ConvenioEmpresaDto | null>(null);
+  const [searchFilters, setSearchFilters] = useState<ConvenioEmpresaFiltroDto>(
+    {}
+  );
   const [dynamicOptions, setDynamicOptions] = useState<
     Record<string, Array<{ value: string | number; label: string }>>
   >({});
 
-  // Cargar sugerencias al montar el componente
+  // Usar el hook para buscar convenios con filtros
+  const {
+    data: conveniosFiltrados,
+    isLoading: searchLoading,
+    error: searchError,
+  } = useConveniosConFiltros(searchFilters);
+
+  // Cargar opciones de empresas con convenio vigente
   useEffect(() => {
-    const cargarSugerencias = async () => {
-      try {
-        // Cargar números de acuerdo marco únicos
-        const numerosAcuerdoMarco = await apiClient.get<string[]>(
-          '/convenios/sugerencias-acuerdos-marco'
-        );
+    if (empresasConConvenio) {
+      const empresasOptions = empresasConConvenio.map(empresa => ({
+        value: empresa.nombreEmpresa,
+        label: empresa.nombreEmpresa,
+      }));
 
-        setDynamicOptions({
-          nombreEmpresa: empresasOptions || [],
-          numeroAcuerdoMarco: numerosAcuerdoMarco.map(numero => ({
-            value: numero,
-            label: numero,
-          })),
-        });
-      } catch (error) {
-        console.error('Error al cargar sugerencias:', error);
-        // Si falla la carga de números de acuerdo marco, al menos cargar empresas
-        setDynamicOptions({
-          nombreEmpresa: empresasOptions || [],
-        });
-      }
-    };
-
-    cargarSugerencias();
-  }, [empresasOptions]);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSearchSubmit = async (filters: Record<string, any>) => {
-    try {
-      const searchFilters = formatConvenioSearchFilters(filters);
-      const convenios = await apiClient.post<ConvenioEmpresaDto[]>(
-        '/convenios/conEmpresa',
-        searchFilters as Record<string, unknown>
-      );
-      onSearchResults(convenios);
-      showSuccess('Búsqueda completada exitosamente');
-    } catch (error) {
-      showError('Error al realizar la búsqueda de convenios');
-      throw error; // Re-lanzar para que SearchDialog maneje el cierre
+      setDynamicOptions({
+        nombreEmpresa: empresasOptions,
+      });
     }
+  }, [empresasConConvenio]);
+
+  // Efecto para manejar los resultados de búsqueda
+  useEffect(() => {
+    if (conveniosFiltrados && Object.keys(searchFilters).length > 0) {
+      onSearchResults(conveniosFiltrados);
+      showSuccess('Búsqueda completada exitosamente');
+    }
+  }, [conveniosFiltrados, searchFilters, onSearchResults, showSuccess]);
+
+  // Efecto para manejar errores de búsqueda
+  useEffect(() => {
+    if (searchError && Object.keys(searchFilters).length > 0) {
+      showError('Error al realizar la búsqueda de convenios');
+    }
+  }, [searchError, searchFilters, showError]);
+
+  const handleSearchSubmit = async (filters: Record<string, unknown>) => {
+    const formattedFilters = formatConvenioSearchFilters(filters);
+    setSearchFilters(formattedFilters);
   };
 
   const handleCloseAsignarEmpresa = () => {
     setAsignarEmpresaOpen(false);
     setSelectedConvenio(null);
+  };
+
+  const handleClearResults = () => {
+    setSearchFilters({});
+    onClearResults();
   };
 
   return (
@@ -87,10 +95,10 @@ const ConveniosFilters: React.FC<ConveniosFiltersProps> = ({
         buttonText='Búsqueda Avanzada'
         metadata={getConvenioSearchMetadata()}
         onSubmit={handleSearchSubmit}
-        onClearResults={onClearResults}
+        onClearResults={handleClearResults}
         hasResults={hasResults}
         dynamicDropdownOptions={dynamicOptions}
-        loading={empresasLoading}
+        loading={empresasLoading || searchLoading}
       />
 
       <AsignarAEmpresaDialog

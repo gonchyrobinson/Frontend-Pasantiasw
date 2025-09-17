@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, CircularProgress } from '@mui/material';
 import { PageTitle } from '../../../lib/components/StyledText';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
+import { safeParseInt } from '../../../helpers/formatHelper';
 import { ROUTES } from '../../../helpers/routesHelper';
 import { FormularioGenerico } from '../../../lib/FormularioGenerico';
 import { useConvenio, useUpdateConvenio } from '../hooks/useConvenios';
@@ -15,7 +16,7 @@ const EditarConvenio: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { showSuccess } = useSnackbar();
 
-  const convenioId = id ? parseInt(id, 10) : 0;
+  const convenioId = safeParseInt(id) || 0;
   const { data: convenioResponse, isLoading, error } = useConvenio(convenioId);
   const convenio = convenioResponse?.data;
   const { empresasParaAsignarOptions, isLoading: empresasLoading } =

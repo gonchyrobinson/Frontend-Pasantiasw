@@ -1,6 +1,6 @@
 import React from 'react';
 import { School } from '@mui/icons-material';
-import { usePasantiasPorVencer } from '../../../Pasantias/hooks/usePasantiasPorVencer';
+import { usePasantiasPorVencer } from '../../../Pasantias/hooks/usePasantias';
 import { PasantiaDto } from '../../../Pasantias/types';
 import VencimientosNotifications, {
   VencimientoItem,

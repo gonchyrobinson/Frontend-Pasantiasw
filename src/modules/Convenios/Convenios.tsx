@@ -10,6 +10,7 @@ import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { RefreshButton } from '../../lib/components/StyledButtons';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { ROUTES } from '../../helpers/routesHelper';
+import { formatDate } from '../../helpers/formatHelper';
 import ConvenioStats from './components/ConvenioStats';
 import {
   ConfirmDialog,
@@ -22,10 +23,10 @@ import {
   useConvenioStats,
   useCaducarConvenio,
   useConvenios,
+  useDeleteConvenio,
 } from './hooks/useConvenios';
-import { useDeleteConvenio } from './hooks/useDeleteConvenio';
 import { ConvenioEmpresaDto } from './types';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import AsignarAEmpresaDialog from './components/AsignarAEmpresaDialog';
 
@@ -70,14 +71,14 @@ const Convenios: React.FC = () => {
     }
   }, [location.pathname, convenios]);
 
-  const handleClearSearch = () => {
-    setSearchResults([]);
-    setHasSearched(false);
-  };
-
   const handleSearchResults = (convenios: ConvenioEmpresaDto[]) => {
     setSearchResults(convenios);
     setHasSearched(true);
+  };
+
+  const handleClearSearch = () => {
+    setSearchResults([]);
+    setHasSearched(false);
   };
 
   const handleRefresh = async () => {
@@ -177,6 +178,14 @@ const Convenios: React.FC = () => {
     setSelectedConvenio(null);
   };
 
+  if (statsLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando convenios...' />
+      </MainContainer>
+    );
+  }
+
   if (error) {
     return (
       <MainContainer>
@@ -273,7 +282,7 @@ const Convenios: React.FC = () => {
         open={showDeleteDialog}
         title='Eliminar Convenio'
         message='¿Está seguro de que desea eliminar este convenio?'
-        itemName={selectedConvenio?.expediente || 'Convenio'}
+        itemName={selectedConvenio?.expedienteSudocu || 'Convenio'}
         itemDetails={
           selectedConvenio && (
             <div>
@@ -282,17 +291,15 @@ const Convenios: React.FC = () => {
                 {selectedConvenio.nombreEmpresa || 'Sin empresa asignada'}
               </BodyText>
               <BodyText color='text.secondary'>
-                <strong>Fecha de Firma:</strong>{' '}
-                {selectedConvenio.fechaFirma
-                  ? new Date(selectedConvenio.fechaFirma).toLocaleDateString()
+                <strong>Fecha de Inicio:</strong>{' '}
+                {selectedConvenio.fechaInicio
+                  ? formatDate(selectedConvenio.fechaInicio)
                   : 'No especificada'}
               </BodyText>
               <BodyText color='text.secondary'>
                 <strong>Fecha de Caducidad:</strong>{' '}
                 {selectedConvenio.fechaCaducidad
-                  ? new Date(
-                      selectedConvenio.fechaCaducidad
-                    ).toLocaleDateString()
+                  ? formatDate(selectedConvenio.fechaCaducidad)
                   : 'No especificada'}
               </BodyText>
             </div>
@@ -308,7 +315,7 @@ const Convenios: React.FC = () => {
       <ConfirmDialog
         open={showCaducarDialog}
         title='Confirmar Caducidad'
-        message={`¿Está seguro de que desea caducar el convenio "${selectedConvenio?.expediente}"?`}
+        message={`¿Está seguro de que desea caducar el convenio "${selectedConvenio?.expedienteSudocu}"?`}
         onConfirm={handleCaducarConfirm}
         onCancel={handleCloseCaducarDialog}
         confirmText='Caducar'

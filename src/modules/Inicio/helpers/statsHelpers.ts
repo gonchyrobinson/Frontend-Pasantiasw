@@ -1,9 +1,50 @@
 import { Convenio, Pasantia, Pago } from '../../../types';
-import { StatItem, QuickAction, SpeedDialAction, ProgressItem } from '../types';
+import { StatItem, QuickAction, SpeedDialAction } from '../types';
 import { ROUTES } from '../../../helpers/routesHelper';
 
 /**
- * Calculate statistics from API data
+ * Helper para el módulo de Inicio (Dashboard)
+ *
+ * Contiene funciones utilitarias para:
+ * - Cálculo de estadísticas del dashboard
+ * - Configuración de acciones rápidas
+ * - Configuración del speed dial
+ */
+
+// ==================== TIPOS AUXILIARES ====================
+
+/**
+ * Configuración de iconos para el dashboard
+ */
+interface DashboardIcons {
+  business: React.ReactNode;
+  school: React.ReactNode;
+  payment: React.ReactNode;
+  add?: React.ReactNode;
+}
+
+/**
+ * Función de navegación
+ */
+type NavigateFunction = (path: string) => void;
+
+// ==================== CÁLCULO DE ESTADÍSTICAS ====================
+
+/**
+ * Calcula las estadísticas principales del dashboard basadas en datos de la API
+ *
+ * @param conveniosData - Array de convenios obtenidos de la API
+ * @param pasantiasData - Array de pasantías obtenidas de la API
+ * @param pagosData - Array de pagos obtenidos de la API
+ * @param conveniosLoading - Estado de carga de convenios
+ * @param pasantiasLoading - Estado de carga de pasantías
+ * @param pagosLoading - Estado de carga de pagos
+ * @param conveniosError - Estado de error de convenios
+ * @param pasantiasError - Estado de error de pasantías
+ * @param pagosError - Estado de error de pagos
+ * @param icons - Iconos para las tarjetas de estadísticas
+ * @param navigate - Función de navegación
+ * @returns Array de elementos de estadísticas configurados
  */
 export const calculateStats = (
   conveniosData: Convenio[] | undefined,
@@ -15,12 +56,8 @@ export const calculateStats = (
   conveniosError: boolean,
   pasantiasError: boolean,
   pagosError: boolean,
-  icons: {
-    business: React.ReactNode;
-    school: React.ReactNode;
-    payment: React.ReactNode;
-  },
-  navigate: (path: string) => void
+  icons: DashboardIcons,
+  navigate: NavigateFunction
 ): StatItem[] => {
   return [
     {
@@ -31,8 +68,6 @@ export const calculateStats = (
       bgColor: 'primary.light',
       loading: conveniosLoading,
       error: conveniosError,
-      trend: '+12%',
-      trendDirection: 'up',
       onClick: () => navigate(ROUTES.CONVENIOS),
     },
     {
@@ -43,8 +78,6 @@ export const calculateStats = (
       bgColor: 'secondary.light',
       loading: pasantiasLoading,
       error: pasantiasError,
-      trend: '+8%',
-      trendDirection: 'up',
       onClick: () => navigate(ROUTES.PASANTIAS),
     },
     {
@@ -55,23 +88,24 @@ export const calculateStats = (
       bgColor: 'warning.light',
       loading: pagosLoading,
       error: pagosError,
-      trend: '-5%',
-      trendDirection: 'down',
       onClick: () => navigate(ROUTES.PAGOS),
     },
   ];
 };
 
+// ==================== ACCIONES RÁPIDAS ====================
+
 /**
- * Get quick actions configuration
+ * Obtiene la configuración de acciones rápidas del dashboard
+ * Define las acciones principales que el usuario puede realizar
+ *
+ * @param icons - Iconos para las tarjetas de acciones
+ * @param navigate - Función de navegación
+ * @returns Array de acciones rápidas configuradas
  */
 export const getQuickActions = (
-  icons: {
-    business: React.ReactNode;
-    school: React.ReactNode;
-    payment: React.ReactNode;
-  },
-  navigate: (path: string) => void
+  icons: DashboardIcons,
+  navigate: NavigateFunction
 ): QuickAction[] => {
   return [
     {
@@ -101,17 +135,19 @@ export const getQuickActions = (
   ];
 };
 
+// ==================== SPEED DIAL ====================
+
 /**
- * Get speed dial actions configuration
+ * Obtiene la configuración del speed dial (botón flotante de acciones)
+ * Define las acciones disponibles en el botón flotante
+ *
+ * @param icons - Iconos para las acciones del speed dial
+ * @param navigate - Función de navegación
+ * @returns Array de acciones del speed dial configuradas
  */
 export const getSpeedDialActions = (
-  icons: {
-    add: React.ReactNode;
-    business: React.ReactNode;
-    school: React.ReactNode;
-    payment: React.ReactNode;
-  },
-  navigate: (path: string) => void
+  icons: DashboardIcons & { add: React.ReactNode },
+  navigate: NavigateFunction
 ): SpeedDialAction[] => {
   return [
     {
@@ -130,38 +166,4 @@ export const getSpeedDialActions = (
       action: () => navigate(ROUTES.PAGOS_CREAR),
     },
   ];
-};
-
-/**
- * Get progress items configuration
- */
-export const getProgressItems = (): ProgressItem[] => {
-  return [
-    {
-      label: 'Convenios Procesados',
-      value: 75,
-      color: 'primary',
-    },
-    {
-      label: 'Pasantías Activas',
-      value: 60,
-      color: 'secondary',
-    },
-    {
-      label: 'Pagos Completados',
-      value: 90,
-      color: 'success',
-    },
-  ];
-};
-
-/**
- * Check if there are any errors in the API calls
- */
-export const hasErrors = (
-  conveniosError: boolean,
-  pasantiasError: boolean,
-  pagosError: boolean
-): boolean => {
-  return [conveniosError, pasantiasError, pagosError].some(Boolean);
 };

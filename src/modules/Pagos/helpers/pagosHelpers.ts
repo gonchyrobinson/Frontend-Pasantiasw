@@ -1,6 +1,24 @@
-import { PagosStats, PagosDto, PagosFilters } from '../types';
+import { PagosStats, PagosDto } from '../types';
 
-// Metadata para formularios de pagos
+/**
+ * Helper consolidado para pagos
+ *
+ * Contiene funciones utilitarias para:
+ * - Generación de metadata de formularios (crear/editar)
+ * - Generación de metadata de formularios de búsqueda
+ * - Formateo de filtros de búsqueda para el backend
+ * - Cálculo de estadísticas de pagos
+ * - Verificación de estados de pagos
+ */
+
+// ==================== METADATA DE FORMULARIOS ====================
+
+/**
+ * Genera la metadata para el formulario de pagos
+ * Utilizado en CrearPago y EditarPago
+ *
+ * @returns Configuración completa del formulario con campos, validaciones y opciones
+ */
 export const getPagosFormMetadata = () => ({
   title: 'Información del Pago',
   submitButtonText: 'Guardar',
@@ -76,7 +94,14 @@ export const getPagosFormMetadata = () => ({
   ],
 });
 
-// Función para calcular estadísticas de pagos
+// ==================== CÁLCULO DE ESTADÍSTICAS ====================
+
+/**
+ * Calcula las estadísticas de pagos basadas en un array de pagos
+ *
+ * @param pagos - Array de pagos para calcular estadísticas
+ * @returns Objeto con estadísticas calculadas (total, vigentes, vencidos, monto total)
+ */
 export const calculatePagosStats = (pagos: PagosDto[]): PagosStats => {
   const totalPagos = pagos.length;
   const fechaActual = new Date();
@@ -109,68 +134,14 @@ export const calculatePagosStats = (pagos: PagosDto[]): PagosStats => {
   };
 };
 
-// Función para filtrar pagos
-export const filterPagos = (
-  pagos: PagosDto[],
-  filters: PagosFilters
-): PagosDto[] => {
-  return pagos.filter(pago => {
-    // Filtro por ID de pasantía
-    if (filters.idPasantia && pago.idPasantia) {
-      if (pago.idPasantia.toString() !== filters.idPasantia) {
-        return false;
-      }
-    }
+// ==================== VERIFICACIÓN DE ESTADOS ====================
 
-    // Filtro por fecha de pago
-    if (filters.fechaPagoDesde && pago.fechaPago) {
-      const fechaPago = new Date(pago.fechaPago);
-      const fechaDesde = new Date(filters.fechaPagoDesde);
-      if (fechaPago < fechaDesde) return false;
-    }
-
-    if (filters.fechaPagoHasta && pago.fechaPago) {
-      const fechaPago = new Date(pago.fechaPago);
-      const fechaHasta = new Date(filters.fechaPagoHasta);
-      if (fechaPago > fechaHasta) return false;
-    }
-
-    // Filtro por fecha de vencimiento
-    if (filters.fechaVencimientoDesde && pago.fechaVencimiento) {
-      const fechaVencimiento = new Date(pago.fechaVencimiento);
-      const fechaDesde = new Date(filters.fechaVencimientoDesde);
-      if (fechaVencimiento < fechaDesde) return false;
-    }
-
-    if (filters.fechaVencimientoHasta && pago.fechaVencimiento) {
-      const fechaVencimiento = new Date(pago.fechaVencimiento);
-      const fechaHasta = new Date(filters.fechaVencimientoHasta);
-      if (fechaVencimiento > fechaHasta) return false;
-    }
-
-    // Filtro por monto
-    if (filters.montoMin && pago.monto) {
-      if (pago.monto < filters.montoMin) return false;
-    }
-
-    if (filters.montoMax && pago.monto) {
-      if (pago.monto > filters.montoMax) return false;
-    }
-
-    return true;
-  });
-};
-
-// Función para obtener valores por defecto del formulario
-export const getDefaultPagosValues = () => ({
-  idPasantia: undefined,
-  fechaPago: '',
-  fechaVencimiento: '',
-  monto: undefined,
-  observaciones: '',
-});
-
-// Función para verificar si un pago está vencido
+/**
+ * Verifica si un pago está vencido basándose en su fecha de vencimiento
+ *
+ * @param fechaVencimiento - Fecha de vencimiento del pago (string ISO)
+ * @returns true si el pago está vencido, false en caso contrario
+ */
 export const isPagoVencido = (fechaVencimiento?: string): boolean => {
   if (!fechaVencimiento) return false;
   const fechaActual = new Date();
@@ -178,20 +149,111 @@ export const isPagoVencido = (fechaVencimiento?: string): boolean => {
   return fechaVencimientoDate <= fechaActual;
 };
 
-// Función para obtener el estado de un pago
+/**
+ * Obtiene el estado de un pago basándose en su información
+ * Utilizado en PagosTabla para mostrar el estado en la tabla
+ *
+ * @param pago - Objeto pago con información completa
+ * @returns Estado del pago: 'Pagado', 'Vencido' o 'Pendiente'
+ */
 export const getPagoEstado = (pago: PagosDto): string => {
   if (pago.pagado) return 'Pagado';
   if (isPagoVencido(pago.fechaVencimiento)) return 'Vencido';
   return 'Pendiente';
 };
 
-// Función para formatear fechas
-export const formatDate = (dateString?: string): string => {
-  if (!dateString) return 'No especificada';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+// ==================== METADATA DE BÚSQUEDA ====================
+
+/**
+ * Genera la metadata para el formulario de búsqueda avanzada de pagos
+ * Utilizado en PagosFilters
+ *
+ * @returns Configuración completa del formulario de búsqueda con campos y opciones
+ */
+export const getPagosSearchMetadata = () => ({
+  title: 'Búsqueda Avanzada de Pagos',
+  submitButtonText: 'Buscar',
+  cancelButtonText: 'Cancelar',
+  fields: [
+    {
+      name: 'idEmpresa',
+      label: 'Empresa',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar empresa...',
+    },
+    {
+      name: 'estudiante',
+      label: 'Documento del Estudiante',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar documento del estudiante...',
+    },
+    {
+      name: 'estadoPago',
+      label: 'Estado del Pago',
+      type: 'dropdown' as const,
+      options: [
+        { value: '', label: 'Todos' },
+        { value: 'true', label: 'Pagado' },
+        { value: 'false', label: 'Pendiente' },
+      ],
+      placeholder: 'Seleccionar estado...',
+    },
+    {
+      name: 'fechaVencimiento',
+      label: 'Fecha de Vencimiento',
+      type: 'date' as const,
+    },
+  ],
+});
+
+// ==================== FORMATEO DE FILTROS ====================
+
+/**
+ * Formatea los filtros del formulario de búsqueda para enviarlos al backend
+ * Convierte los valores del frontend al formato esperado por la API
+ * Compatible con PagosBusquedaAvanzadaDto del backend
+ *
+ * @param filters - Filtros del formulario de búsqueda
+ * @returns Objeto DTO formateado para el backend
+ */
+export const formatPagosSearchFilters = (filters: Record<string, unknown>) => {
+  const searchFilters: Record<string, unknown> = {};
+
+  /**
+   * Verifica si un valor es válido (no vacío, null o 'null')
+   */
+  const isValidValue = (value: unknown): boolean => {
+    return (
+      value !== null && value !== undefined && value !== '' && value !== 'null'
+    );
+  };
+
+  // Mapear campos del formulario al DTO esperado por el backend
+  // Solo incluir campos que tengan valor válido
+
+  // ID de empresa - convertir a número
+  if (isValidValue(filters.idEmpresa)) {
+    searchFilters.idEmpresa = Number(filters.idEmpresa);
+  }
+
+  // Documento del estudiante - mantener como string
+  if (isValidValue(filters.estudiante)) {
+    searchFilters.estudiante = filters.estudiante;
+  }
+
+  // Estado del pago - convertir string a boolean
+  if (isValidValue(filters.estadoPago)) {
+    searchFilters.estadoPago = filters.estadoPago === 'true';
+  }
+
+  // Fecha de vencimiento - formatear para DateOnly del backend
+  if (isValidValue(filters.fechaVencimiento)) {
+    const fecha = new Date(filters.fechaVencimiento as string);
+    if (!isNaN(fecha.getTime())) {
+      // Formatear como YYYY-MM-DD para DateOnly
+      searchFilters.fechaVencimiento = fecha.toISOString().split('T')[0];
+    }
+  }
+
+  return searchFilters;
 };

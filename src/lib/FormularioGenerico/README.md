@@ -113,33 +113,34 @@ useEffect(() => {
 | `dynamicDropdownOptions` | `DynamicDropdownOptions` | ❌        | Opciones para dropdowns dinámicos |
 | `loading`                | `boolean`                | ❌        | Estado de carga                   |
 
-## Helpers Disponibles
+## Validaciones
 
-### Validaciones
-
-```tsx
-import {
-  createEmailValidation,
-  createRequiredValidation,
-  createMinLengthValidation,
-} from '../../FormularioGenerico';
-```
-
-### Creación de Campos
+Las validaciones se definen directamente en la metadata de cada campo:
 
 ```tsx
-import {
-  createTextField,
-  createEmailField,
-  createDateField,
-  createDropdownField,
-} from '../../FormularioGenerico';
-
 const metadata: FormMetadata = {
   fields: [
-    createTextField('nombre', 'Nombre', true, 6),
-    createEmailField('email', 'Email', 6),
-    createDateField('fecha', 'Fecha', true, 6),
+    {
+      name: 'email',
+      type: 'email',
+      label: 'Email',
+      validations: {
+        required: 'Email es requerido',
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: 'Email inválido',
+        },
+      },
+    },
+    {
+      name: 'nombre',
+      type: 'text',
+      label: 'Nombre',
+      validations: {
+        required: 'Nombre es requerido',
+        minLength: { value: 2, message: 'Mínimo 2 caracteres' },
+      },
+    },
   ],
 };
 ```
@@ -147,25 +148,11 @@ const metadata: FormMetadata = {
 ## Ejemplo Completo
 
 ```tsx
-import React, { useState, useEffect } from 'react';
-import {
-  FormularioGenerico,
-  createConvenioFormMetadata,
-  createDropdownOptions,
-} from '../../FormularioGenerico';
+import React, { useState } from 'react';
+import { FormularioGenerico } from '../../FormularioGenerico';
 
 const ConvenioForm = () => {
   const [loading, setLoading] = useState(false);
-  const [dynamicOptions, setDynamicOptions] = useState({});
-
-  useEffect(() => {
-    // Cargar empresas desde API
-    loadEmpresas().then(empresas => {
-      setDynamicOptions({
-        empresa: createDropdownOptions(empresas),
-      });
-    });
-  }, []);
 
   const handleSubmit = async (data: any) => {
     setLoading(true);

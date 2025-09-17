@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatCard } from '../../../lib/components/StatCard';
+import { formatCurrency } from '../../../helpers/formatHelper';
 import { PagosStats as PagosStatsType } from '../types';
 import { Section } from '../../../lib/components/Section';
 import { GridContainer } from '../../../lib/components/StyledContainers';
@@ -30,7 +31,7 @@ const PagosStats: React.FC<PagosStatsProps> = ({ stats, loading }) => {
     },
     {
       title: 'Monto Total',
-      value: `$${stats.montoTotal.toLocaleString()}`,
+      value: formatCurrency(stats.montoTotal),
       color: 'primary.main',
       loading: loading,
     },

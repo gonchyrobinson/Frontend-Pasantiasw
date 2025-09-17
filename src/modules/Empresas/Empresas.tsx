@@ -17,9 +17,9 @@ import EmpresasTabla from './components/EmpresasTabla';
 import { FabNuevaEmpresa } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
-import { useDeleteEmpresa } from '../../lib/hooks/useDelete';
+import { useDeleteEmpresa } from './hooks/useEmpresas';
 import { ROUTES } from '../../helpers/routesHelper';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 
 const Empresas: React.FC = () => {
   const navigate = useNavigate();
@@ -132,6 +132,14 @@ const Empresas: React.FC = () => {
     setEmpresaToDelete(null);
   };
 
+  if (isLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando empresas...' />
+      </MainContainer>
+    );
+  }
+
   if (error) {
     return (
       <MainContainer>
@@ -199,8 +207,7 @@ const Empresas: React.FC = () => {
             Búsqueda de Empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza la búsqueda avanzada para encontrar empresas por nombre,
-            tipo de contrato o vigencia
+            Utiliza la búsqueda avanzada para encontrar empresas por nombre
           </BodyText>
         </CenteredContainer>
       )}
@@ -212,8 +219,7 @@ const Empresas: React.FC = () => {
             No se encontraron empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda (nombre, tipo de
-            contrato, vigencia)
+            Intenta con diferentes criterios de búsqueda (nombre)
           </BodyText>
         </CenteredContainer>
       )}
@@ -234,7 +240,7 @@ const Empresas: React.FC = () => {
                 ID: {empresaToDelete.idEmpresa}
               </BodyText>
               <BodyText color='text.secondary'>
-                Encargado: {empresaToDelete.encargado}
+                Nombre: {empresaToDelete.nombre}
               </BodyText>
               <BodyText color='text.secondary'>
                 Correo: {empresaToDelete.correoElectronico}

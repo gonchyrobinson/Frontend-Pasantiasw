@@ -26,8 +26,8 @@ export interface ElementCardProps {
   }>;
 }
 
-// Stats Component Types
-export interface StatCardProps {
+// Simple Stats Component Types (for basic stat display)
+export interface SimpleStatCardProps {
   icon: React.ReactNode;
   title: string;
   value: number | string;

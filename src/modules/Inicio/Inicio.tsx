@@ -7,14 +7,11 @@ import { Convenio, Pasantia, Pago } from '../../types';
 
 import WelcomeSection from './components/WelcomeSection';
 import StatsCard from './components/StatsCard';
-import ProgressSection from './components/ProgressSection';
 import ActionCard from './components/ActionCard';
 import {
   calculateStats,
   getQuickActions,
   getSpeedDialActions,
-  getProgressItems,
-  hasErrors,
 } from './helpers/statsHelpers';
 import {
   ContenedorPrincipal,
@@ -75,9 +72,6 @@ const Inicio: React.FC = () => {
   // Get speed dial actions using helper
   const speedDialActions = getSpeedDialActions(icons, navigate);
 
-  // Get progress items using helper
-  const progressItems = getProgressItems();
-
   return (
     <ContenedorPrincipal
       sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
@@ -109,9 +103,6 @@ const Inicio: React.FC = () => {
         ))}
       </ContenedorGrid>
 
-      {/* Progress Section */}
-      <ProgressSection title='Progreso del Sistema' items={progressItems} />
-
       {/* Quick Actions */}
       <TituloSeccion>Acciones Rápidas</TituloSeccion>
       <ContenedorGrid>
@@ -129,7 +120,7 @@ const Inicio: React.FC = () => {
       </ContenedorGrid>
 
       {/* Error Display */}
-      {hasErrors(!!conveniosError, !!pasantiasError, !!pagosError) && (
+      {(conveniosError || pasantiasError || pagosError) && (
         <AlertaError mensaje='Error al cargar los datos. Por favor, intente nuevamente.' />
       )}
 

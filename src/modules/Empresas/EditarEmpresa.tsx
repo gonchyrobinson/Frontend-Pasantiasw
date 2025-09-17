@@ -2,16 +2,17 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { EmpresaDto } from './types';
-import { getEdicionEmpresaMetadata } from './helpers/creacionEmpresaHelpers';
+import { getEdicionEmpresaMetadata } from './helpers/empresaHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { safeParseInt } from '../../helpers/formatHelper';
 import { useEmpresa, useUpdateEmpresa } from './hooks/useEmpresas';
 
 const EditarEmpresa: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const empresaId = id ? parseInt(id, 10) : null;
+  const empresaId = safeParseInt(id);
   const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
 
   const { data: empresaData, isLoading, error } = useEmpresa(empresaId);

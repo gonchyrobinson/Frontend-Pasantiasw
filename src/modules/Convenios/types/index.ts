@@ -5,46 +5,36 @@ export interface ConvenioDto {
   representanteEmpresa?: string;
   nroAcuerdoMarco?: number;
   domicilioLegal?: string;
-  domicilioAlternativo?: string;
-  expediente?: string;
+  numeroConvenio: string; // Computed property from backend
   docRepresentanteEmpresa?: string;
-  representanteFacultad?: string;
-  docRepresentanteFacultad?: string;
-  fechaFirma?: string; // DateOnly se maneja como string en frontend
+  nombreDecano?: string;
+  documentoDecano?: string;
+  fechaInicio?: string; // DateOnly se maneja como string en frontend
   fechaCaducidad?: string;
-  caracter?: string;
-  sudocu?: string;
+  tipoAcuerdo?: string;
+  expedienteSudocu?: string;
 }
 
-// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
-export interface ConvenioCreateDto {
-  idEmpresa?: number;
-  representanteEmpresa?: string;
-  nroAcuerdoMarco?: number;
-  domicilioLegal?: string;
-  domicilioAlternativo?: string;
-  docRepresentanteEmpresa?: string;
-  docRepresentanteFacultad?: string;
-  fechaFirma?: string;
-  fechaCaducidad?: string;
-  caracter?: string;
-  sudocu?: string;
-}
+// DTO para creación - omite el ID, numeroConvenio y expedienteSudocu que son generados por el backend
+export type ConvenioCreateDto = Omit<
+  ConvenioDto,
+  'idConvenio' | 'numeroConvenio' | 'expedienteSudocu'
+>;
 
 // DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
 export interface ConvenioEmpresaDto {
   idConvenio: number;
-  expediente?: string;
-  fechaFirma?: string;
+  numeroConvenio: string; // Computed property from backend
+  fechaInicio?: string;
   fechaCaducidad?: string;
   idEmpresa?: number;
   nombreEmpresa?: string;
   representanteEmpresa?: string;
+  nroAcuerdoMarco?: number;
   domicilioLegal?: string;
-  domicilioAlternativo?: string;
-  docRepresentanteFacultad?: string;
-  caracter?: string;
-  sudocu?: string;
+  documentoDecano?: string;
+  tipoAcuerdo?: string;
+  expedienteSudocu?: string;
 }
 
 export interface AsignarEmpresaDto {
@@ -57,28 +47,21 @@ export interface CaducarConvenioDto {
   fechaCaducidad: string;
 }
 
-// Tipos para formularios
-export type ConvenioFormData = ConvenioCreateDto;
+// DTO para dropdown de empresas con convenio vigente
+export interface EmpresaConvenioDropdownDto {
+  idEmpresa: number;
+  nombreEmpresa: string;
+  idConvenio: number;
+  numeroConvenio: string;
+  fechaInicio: string;
+  fechaCaducidad: string;
+}
 
 // DTO para filtros de búsqueda - camelCase (compatible con model binding de ASP.NET Core)
 export interface ConvenioEmpresaFiltroDto {
-  fechaFirmaDesde?: string;
-  fechaFirmaHasta?: string;
-  fechaCaducidadDesde?: string;
-  fechaCaducidadHasta?: string;
   nombreEmpresa?: string;
-  docRepresentanteFacultad?: string;
-  carrera?: string;
-}
-
-// Tipos para filtros locales (para compatibilidad)
-export interface ConvenioFilters {
-  expediente?: string;
-  empresa?: string;
-  fechaFirmaDesde?: string;
-  fechaFirmaHasta?: string;
-  fechaCaducidadDesde?: string;
-  fechaCaducidadHasta?: string;
+  expedienteSudocu?: string;
+  vigencia?: boolean; // true = vigente, false = no vigente, undefined = todos
 }
 
 // Tipos para estadísticas
@@ -89,67 +72,9 @@ export interface ConvenioStats {
   conveniosPorVencer: number;
 }
 
-// Tipos para acciones
-export interface ConvenioActions {
-  onEdit: (convenio: ConvenioDto) => void;
-  onDelete: (convenio: ConvenioDto) => void;
-  onCaducar: (convenio: ConvenioDto) => void;
-  onAsignarEmpresa: (convenio: ConvenioDto) => void;
-}
-
-// Tipos para componentes
-export interface ConvenioCardProps {
-  convenio: ConvenioEmpresaDto;
-  onEdit: () => void;
-  onDelete: () => void;
-  onCaducar: () => void;
-  onAsignarEmpresa: () => void;
-}
-
-export interface ConvenioGridProps {
-  convenios: ConvenioEmpresaDto[];
-  loading: boolean;
-  onEdit: (convenio: ConvenioEmpresaDto) => void;
-  onDelete: (convenio: ConvenioEmpresaDto) => void;
-  onCaducar: (convenio: ConvenioEmpresaDto) => void;
-  onAsignarEmpresa: (convenio: ConvenioEmpresaDto) => void;
-}
-
 export interface ConvenioStatsProps {
   stats: ConvenioStats;
   loading: boolean;
 }
 
-// Tipos para metadata de formularios
-export interface FieldMetadata {
-  name: string;
-  label: string;
-  type:
-    | 'text'
-    | 'email'
-    | 'password'
-    | 'number'
-    | 'select'
-    | 'multiselect'
-    | 'date'
-    | 'textarea';
-  required?: boolean;
-  disabled?: boolean;
-  placeholder?: string;
-  helperText?: string;
-  validation?: {
-    minLength?: number;
-    maxLength?: number;
-    min?: number;
-    max?: number;
-    pattern?: RegExp;
-    custom?: (value: unknown) => string | true;
-  };
-  options?: Array<{ value: string | number; label: string }>;
-  gridProps?: {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-  };
-}
+// Nota: FieldMetadata se importa desde ElementCardGenerica para evitar duplicación

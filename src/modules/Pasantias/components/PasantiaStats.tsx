@@ -3,7 +3,7 @@ import { Stats, StatsProps } from '../../../lib/ElementCardGenerica';
 import { calculatePasantiaStats } from '../helpers/pasantiaHelpers';
 import { PasantiaDto } from '../types';
 import { Work, CheckCircle, Cancel, Warning } from '@mui/icons-material';
-import { usePasantiasPorVencer } from '../hooks/usePasantiasPorVencer';
+import { usePasantiasPorVencer } from '../hooks/usePasantias';
 
 interface PasantiaStatsProps {
   pasantias: PasantiaDto[];

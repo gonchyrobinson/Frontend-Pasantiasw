@@ -7,39 +7,61 @@ export interface PasantiaDto {
   obraSocial?: string;
   art?: string;
   tutorEmpresa?: string;
+  dniTutorEmpresa?: string;
   tutorFacultad?: string;
   dniTutorFacultad?: string;
-  tramite?: string; // Calculado en backend como "EXP-FACET-{IdPasantia:D3}"
   fechaInicio?: string; // DateOnly se maneja como string en frontend
   fechaFin?: string;
   tipoAcuerdo?: string;
   frecuenciaPago?: string;
-  montoPago?: number;
   observaciones?: string;
-  sudocu?: string;
+  tramiteSudocu?: string;
+  horasSemanales?: number;
   areaTrabajo?: string;
-  estado?: string;
+  estado?: string; // Calculado en backend
 }
 
-// DTO unificado - camelCase (compatible con model binding de ASP.NET Core)
+// DTO para creación - usa DNI del estudiante en lugar de ID
 export interface PasantiaCreateDto {
-  idEstudiante?: number;
+  dniEstudiante?: string; // Cambiado de idEstudiante a dniEstudiante
   idConvenio?: number;
   asignacionMensual?: number;
   obraSocial?: string;
   art?: string;
   tutorEmpresa?: string;
+  dniTutorEmpresa?: string;
   tutorFacultad?: string;
   dniTutorFacultad?: string;
   fechaInicio?: string;
   fechaFin?: string;
   tipoAcuerdo?: string;
   frecuenciaPago?: string;
-  montoPago?: number;
   observaciones?: string;
-  sudocu?: string;
+  tramiteSudocu?: string;
+  horasSemanales?: number;
   areaTrabajo?: string;
-  estado?: string;
+}
+
+// DTO para actualización - incluye ID de pasantía y usa DNI del estudiante
+export interface PasantiaUpdateDto {
+  idPasantia: number;
+  dniEstudiante?: string; // Cambiado de idEstudiante a dniEstudiante
+  idConvenio?: number;
+  asignacionMensual?: number;
+  obraSocial?: string;
+  art?: string;
+  tutorEmpresa?: string;
+  dniTutorEmpresa?: string;
+  tutorFacultad?: string;
+  dniTutorFacultad?: string;
+  fechaInicio?: string;
+  fechaFin?: string;
+  tipoAcuerdo?: string;
+  frecuenciaPago?: string;
+  observaciones?: string;
+  tramiteSudocu?: string;
+  horasSemanales?: number;
+  areaTrabajo?: string;
 }
 
 // DTO para pasantía con detalles (incluye estudiante y convenio)
@@ -47,6 +69,18 @@ export interface PasantiaDetalleDto {
   pasantia: PasantiaDto;
   estudiante?: EstudianteDto;
   convenio?: ConvenioDto;
+}
+
+// DTO para tabla de pasantías (endpoint show-table)
+export interface PasantiaShowTableDto {
+  idPasantia: number;
+  tramiteSudocu?: string;
+  estudiante: string;
+  empresa: string;
+  tipoAcuerdo: string;
+  estado: string;
+  fechaInicio?: string;
+  fechaFin?: string;
 }
 
 // DTOs básicos para referencias
@@ -63,23 +97,14 @@ export interface ConvenioDto {
   idEmpresa?: number;
 }
 
-// Tipos para formularios
-export type PasantiaFormData = PasantiaCreateDto;
-
-// DTO para filtros de búsqueda avanzada - camelCase
+// DTO para filtros de búsqueda avanzada - camelCase (compatible con formulario de búsqueda)
 export interface PasantiaBusquedaAvanzadaDto {
-  idEstudiante?: number;
-  idConvenio?: number;
-  obraSocial?: string;
-  art?: string;
-  tutorEmpresa?: string;
-  tutorFacultad?: string;
-  tipoAcuerdo?: string;
-  fechaInicioDesde?: string;
-  fechaInicioHasta?: string;
-  fechaFinDesde?: string;
-  fechaFinHasta?: string;
-  estado?: string;
+  tramiteSudocu?: string;
+  tipo?: string;
+  estudiante?: string;
+  empresa?: string;
+  vigente?: boolean;
+  carrera?: string;
 }
 
 // Tipos para filtros locales (para compatibilidad)
@@ -104,67 +129,9 @@ export interface PasantiaStats {
   pasantiasPorVencer: number;
 }
 
-// Tipos para acciones
-export interface PasantiaActions {
-  onEdit: (pasantia: PasantiaDto) => void;
-  onDelete: (pasantia: PasantiaDto) => void;
-  onFinalizar: (pasantia: PasantiaDto) => void;
-  onActivar: (pasantia: PasantiaDto) => void;
-}
-
-// Tipos para componentes
-export interface PasantiaCardProps {
-  pasantia: PasantiaDto;
-  onEdit: () => void;
-  onDelete: () => void;
-  onFinalizar: () => void;
-  onActivar: () => void;
-}
-
-export interface PasantiaGridProps {
-  pasantias: PasantiaDto[];
-  loading: boolean;
-  onEdit: (pasantia: PasantiaDto) => void;
-  onDelete: (pasantia: PasantiaDto) => void;
-  onFinalizar: (pasantia: PasantiaDto) => void;
-  onActivar: (pasantia: PasantiaDto) => void;
-}
-
 export interface PasantiaStatsProps {
   stats: PasantiaStats;
   loading: boolean;
 }
 
-// Tipos para metadata de formularios
-export interface FieldMetadata {
-  name: string;
-  label: string;
-  type:
-    | 'text'
-    | 'email'
-    | 'password'
-    | 'number'
-    | 'select'
-    | 'multiselect'
-    | 'date'
-    | 'textarea';
-  required?: boolean;
-  disabled?: boolean;
-  placeholder?: string;
-  helperText?: string;
-  validation?: {
-    minLength?: number;
-    maxLength?: number;
-    min?: number;
-    max?: number;
-    pattern?: RegExp;
-    custom?: (value: unknown) => string | true;
-  };
-  options?: Array<{ value: string | number; label: string }>;
-  gridProps?: {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-  };
-}
+// Nota: FieldMetadata se importa desde ElementCardGenerica para evitar duplicación

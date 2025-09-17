@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { PasantiaDto, PasantiaCreateDto, PasantiaDetalleDto } from '../types';
+import {
+  PasantiaDto,
+  PasantiaCreateDto,
+  PasantiaUpdateDto,
+  PasantiaShowTableDto,
+} from '../types';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 import React from 'react';
 
@@ -11,50 +16,11 @@ export const usePasantias = () => {
   return useQuery({
     queryKey: ['pasantias'],
     queryFn: async () => {
-      const data = await apiClient.get<PasantiaDto[]>(API_BASE);
-      return data;
-    },
-  });
-};
-
-// Hook para obtener todas las pasantías con detalle (incluye estudiante y convenio)
-export const usePasantiasDetalle = () => {
-  return useQuery({
-    queryKey: ['pasantias', 'detalle'],
-    queryFn: async () => {
-      const data = await apiClient.get<PasantiaDetalleDto[]>(
-        `${API_BASE}/detalle`
+      const data = await apiClient.get<PasantiaShowTableDto[]>(
+        `${API_BASE}/show-table`
       );
       return data;
     },
-  });
-};
-
-// Hook para obtener pasantías por convenio
-export const usePasantiasByConvenio = (convenioId: number | null) => {
-  return useQuery({
-    queryKey: ['pasantias', 'convenio', convenioId],
-    queryFn: async () => {
-      const data = await apiClient.get<PasantiaDto[]>(
-        `${API_BASE}/convenio/${convenioId}`
-      );
-      return data;
-    },
-    enabled: !!convenioId,
-  });
-};
-
-// Hook para obtener pasantías por estudiante
-export const usePasantiasByEstudiante = (estudianteId: number | null) => {
-  return useQuery({
-    queryKey: ['pasantias', 'estudiante', estudianteId],
-    queryFn: async () => {
-      const data = await apiClient.get<PasantiaDto[]>(
-        `${API_BASE}/estudiante/${estudianteId}`
-      );
-      return data;
-    },
-    enabled: !!estudianteId,
   });
 };
 
@@ -101,15 +67,22 @@ export const useUpdatePasantia = () => {
   const { invalidatePasantias } = useInvalidateDropdowns();
 
   return useMutation({
-    mutationFn: async ({ data }: { data: PasantiaCreateDto }) => {
+    mutationFn: async (data: PasantiaUpdateDto) => {
       const result = await apiClient.put<PasantiaDto>(`${API_BASE}`, data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con pasantías
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
+
+      // Invalidar específicamente la query del detalle de la pasantía actualizada
+      if (data?.idPasantia) {
+        queryClient.invalidateQueries({
+          queryKey: [`/pasantias/${data.idPasantia}`],
+        });
+      }
 
       // Invalidar dropdowns de pasantías
       invalidatePasantias();
@@ -199,39 +172,18 @@ export const usePasantiaStats = () => {
   };
 };
 
-// DEPRECATED: Use useEstudiantesDropdown and useConveniosDropdown from useDropdownData instead
-// Hook para obtener todos los estudiantes (para dropdowns) - DEPRECATED
-// export const useEstudiantesForDropdown = () => {
-//   return useQuery({
-//     queryKey: ['estudiantes', 'dropdown'],
-//     queryFn: async () => {
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//       const data = await apiClient.get<any[]>('/students');
-//       return (
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         data?.map((estudiante: any) => ({
-//           value: estudiante.idEstudiante,
-//           label: `${estudiante.apellido}, ${estudiante.nombre} - ${estudiante.carrera}`,
-//         })) || []
-//       );
-//     },
-//   });
-// };
-
-// Hook para obtener todos los convenios (para dropdowns) - DEPRECATED
-// export const useConveniosForDropdown = () => {
-//   return useQuery({
-//     queryKey: ['convenios', 'dropdown'],
-//     queryFn: async () => {
-//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//       const data = await apiClient.get<any[]>('/convenios');
-//       return (
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         data?.map((convenio: any) => ({
-//           value: convenio.idConvenio,
-//           label: convenio.expediente || `Convenio ${convenio.idConvenio}`,
-//         })) || []
-//       );
-//     },
-//   });
-// };
+// Hook para obtener pasantías por vencer
+export const usePasantiasPorVencer = (diasAdelante = 30) => {
+  return useQuery({
+    queryKey: ['pasantias', 'por-vencer', diasAdelante],
+    queryFn: async () => {
+      const response = await apiClient.get<PasantiaDto[]>(
+        `/pasantias/por-vencer?dias=${diasAdelante}`
+      );
+      return response;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    refetchInterval: 10 * 60 * 1000, // Refrescar cada 10 minutos para notificaciones
+    refetchOnWindowFocus: true, // Refrescar cuando el usuario vuelve a la pestaña
+  });
+};

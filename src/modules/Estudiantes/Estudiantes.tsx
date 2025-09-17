@@ -8,18 +8,18 @@ import {
 } from '../../lib/components/StyledContainers';
 import { CardTitle, BodyText } from '../../lib/components/StyledText';
 import { RefreshButton } from '../../lib/components/StyledButtons';
-import { useApiQuery } from '../../lib/hooks/useApi';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
 import { EstudianteDto } from './types';
+import { useEstudiantes } from './hooks/useEstudiantes';
 import EstudiantesFilters from './components/EstudiantesFilters';
 import EstudiantesStats from './components/EstudiantesStats';
 import EstudiantesTabla from './components/EstudiantesTabla';
 import { FabNuevoEstudiante } from './components/ComponentesPersonalizados';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
-import { useDeleteEstudiante } from '../../lib/hooks/useDelete';
+import { useDeleteEstudiante } from './hooks/useEstudiantes';
 import { ROUTES } from '../../helpers/routesHelper';
-import { PageHeader } from '../../lib/components';
+import { PageHeader, LoadingSpinner } from '../../lib/components';
 
 const Estudiantes: React.FC = () => {
   const navigate = useNavigate();
@@ -28,12 +28,7 @@ const Estudiantes: React.FC = () => {
   const [searchResults, setSearchResults] = useState<EstudianteDto[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const {
-    data: estudiantes,
-    isLoading,
-    error,
-    refetch,
-  } = useApiQuery<EstudianteDto[]>(ROUTES.ESTUDIANTES as string);
+  const { data: estudiantes, isLoading, error, refetch } = useEstudiantes();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [estudianteToDelete, setEstudianteToDelete] =
@@ -84,9 +79,9 @@ const Estudiantes: React.FC = () => {
 
   // Mostrar todos los estudiantes al cargar la página por primera vez
   useEffect(() => {
-    if (!hasSearched && estudiantes?.data && estudiantes.data.length > 0) {
+    if (!hasSearched && estudiantes && estudiantes.length > 0) {
       setHasSearched(true);
-      setSearchResults(estudiantes.data);
+      setSearchResults(estudiantes);
     }
   }, [estudiantes, hasSearched]);
 
@@ -94,12 +89,12 @@ const Estudiantes: React.FC = () => {
   useEffect(() => {
     if (
       location.pathname === ROUTES.ESTUDIANTES &&
-      estudiantes?.data &&
-      estudiantes.data.length > 0
+      estudiantes &&
+      estudiantes.length > 0
     ) {
       // Refrescar datos y mostrar todos los estudiantes
       setHasSearched(true);
-      setSearchResults(estudiantes.data);
+      setSearchResults(estudiantes);
     }
   }, [location.pathname, estudiantes]);
 
@@ -129,6 +124,14 @@ const Estudiantes: React.FC = () => {
     setShowDeleteDialog(false);
     setEstudianteToDelete(null);
   };
+
+  if (isLoading || isRefreshing) {
+    return (
+      <MainContainer>
+        <LoadingSpinner message='Cargando estudiantes...' />
+      </MainContainer>
+    );
+  }
 
   if (error) {
     return (

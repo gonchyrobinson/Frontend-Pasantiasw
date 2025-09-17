@@ -4,11 +4,7 @@ import { authHelper } from '../../helpers/authHelper';
 import { useNavigation } from '../../lib/hooks/useNavigation';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 
-import {
-  getLoginMetadata,
-  handleLoginError,
-  validateLoginData,
-} from './helpers/loginHelpers';
+import { getLoginMetadata } from './helpers/loginHelpers';
 import {
   ContenedorLogin,
   DecoracionFondo1,
@@ -31,7 +27,7 @@ const Login = () => {
   const loginMetadata = getLoginMetadata();
 
   const handleSubmit = async (data: Record<string, unknown>) => {
-    const loginData = validateLoginData(data);
+    const loginData = data as { username: string; password: string };
 
     setLoading(true);
     setError('');
@@ -44,7 +40,7 @@ const Login = () => {
       authHelper.saveToken(result.token);
       redirectAfterLogin();
     } catch (error: unknown) {
-      setError(handleLoginError(error));
+      setError(authHelper.handleAuthError(error, 'Error de autenticación'));
     } finally {
       setLoading(false);
     }

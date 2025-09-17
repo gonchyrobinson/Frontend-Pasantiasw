@@ -3,14 +3,15 @@ import { SearchDialog } from '../../../lib/ElementCardGenerica';
 import {
   getPasantiaSearchMetadata,
   formatPasantiaSearchFilters,
-} from '../helpers/pasantiaSearchHelpers';
-import { PasantiaDto } from '../types';
+} from '../helpers/pasantiaHelpers';
+import { getSugerenciasDocumentos } from '../../Estudiantes/helpers/estudianteHelpers';
+import { PasantiaShowTableDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 
 interface PasantiaFiltersProps {
-  onSearchResults: (pasantias: PasantiaDto[]) => void;
+  onSearchResults: (pasantias: PasantiaShowTableDto[]) => void;
   onClearResults: () => void;
   loading?: boolean;
   hasResults?: boolean;
@@ -31,28 +32,25 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   useEffect(() => {
     const cargarSugerencias = async () => {
       try {
-        // Cargar números de trámite únicos
-        const numerosTramite = await apiClient.get<string[]>(
-          '/pasantias/sugerencias-numeros-tramite'
-        );
-
-        // Cargar documentos de estudiantes únicos
-        const estudiantes = await apiClient.get<
-          Array<{ value: string; label: string }>
-        >('/students/documentos-dropdown');
+        // Cargar números de trámite únicos y documentos de estudiantes en paralelo
+        const [numerosTramite, documentosEstudiantes] = await Promise.all([
+          apiClient.get<string[]>('/pasantias/sugerencias-numeros-tramite'),
+          getSugerenciasDocumentos(),
+        ]);
 
         setDynamicOptions({
-          numeroTramite: numerosTramite.map(numero => ({
+          tramiteSudocu: numerosTramite.map((numero: string) => ({
             value: numero,
             label: numero,
           })),
-          estudiante: estudiantes, // Ya tiene el formato correcto { value, label }
+          estudiante: documentosEstudiantes,
           empresa: empresasOptions || [],
         });
       } catch (error) {
         console.error('Error al cargar sugerencias:', error);
-        // Si falla la carga, al menos cargar empresas
+        // Si falla la carga, al menos cargar opciones de dropdowns
         setDynamicOptions({
+          estudiante: [],
           empresa: empresasOptions || [],
         });
       }
@@ -65,7 +63,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   const handleSearchSubmit = async (filters: Record<string, any>) => {
     try {
       const searchFilters = formatPasantiaSearchFilters(filters);
-      const pasantias = await apiClient.post<PasantiaDto[]>(
+      const pasantias = await apiClient.post<PasantiaShowTableDto[]>(
         '/pasantias/buscar-avanzado',
         searchFilters as Record<string, unknown>
       );

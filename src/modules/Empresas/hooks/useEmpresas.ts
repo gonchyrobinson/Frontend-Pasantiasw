@@ -1,4 +1,5 @@
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { EmpresaDto, CreacionEmpresaDto } from '../types';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
@@ -74,10 +75,17 @@ export const useUpdateEmpresa = () => {
       const result = await apiClient.put<EmpresaDto>('/empresas', data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con empresas
       queryClient.invalidateQueries({ queryKey: ['empresas'] });
       queryClient.invalidateQueries({ queryKey: ['empresa'] });
+
+      // Invalidar específicamente la query del detalle de la empresa actualizada
+      if (data?.idEmpresa) {
+        queryClient.invalidateQueries({
+          queryKey: [`/empresas/${data.idEmpresa}`],
+        });
+      }
 
       // Invalidar dropdowns de empresas
       invalidateEmpresas();
@@ -97,16 +105,17 @@ export const useUpdateEmpresa = () => {
 
 // Hook para eliminar empresa
 export const useDeleteEmpresa = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
   const { invalidateEmpresas, invalidateConvenios, invalidatePasantias } =
     useInvalidateDropdowns();
 
-  return useMutation({
-    mutationFn: async (id: number) => {
-      const result = await apiClient.delete<void>(`/empresas/${id}`);
-      return result;
-    },
-    onSuccess: () => {
+  const deleteEmpresa = async (id: number) => {
+    setIsDeleting(true);
+
+    try {
+      await apiClient.delete<void>(`/empresas/${id}`);
+
       // Invalidar todas las queries relacionadas con empresas
       queryClient.invalidateQueries({ queryKey: ['empresas'] });
       queryClient.invalidateQueries({ queryKey: ['empresa'] });
@@ -123,6 +132,19 @@ export const useDeleteEmpresa = () => {
       // Invalidar queries de inicio que muestran estadísticas
       queryClient.invalidateQueries({ queryKey: ['/convenios/conEmpresa'] });
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
-    },
-  });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Error al eliminar la empresa. Inténtalo de nuevo.';
+      throw new Error(message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return {
+    deleteEmpresa,
+    isDeleting,
+  };
 };

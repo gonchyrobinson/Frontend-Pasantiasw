@@ -1,6 +1,6 @@
 import React from 'react';
 import { Business } from '@mui/icons-material';
-import { useConveniosPorVencer } from '../../../Convenios/hooks/useConveniosPorVencer';
+import { useConveniosPorVencer } from '../../../Convenios/hooks/useConvenios';
 import { ConvenioEmpresaDto } from '../../../Convenios/types';
 import VencimientosNotifications, {
   VencimientoItem,

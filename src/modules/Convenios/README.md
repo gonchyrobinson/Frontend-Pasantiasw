@@ -97,13 +97,15 @@ Hook para estadísticas:
 - Cálculo automático de estadísticas
 - Estados de loading y error
 
-### useConvenioFilters
-
-Hook para filtros:
-
-- Filtrado en tiempo real
-- Múltiples criterios de búsqueda
 - Limpieza de filtros
+
+### useConveniosConFiltros
+
+Hook para búsqueda con filtros:
+
+- Búsqueda en tiempo real
+- Múltiples criterios de búsqueda
+- Dropdown de empresas con convenios vigentes
 
 ## Tipos TypeScript
 
@@ -116,12 +118,14 @@ interface ConvenioDto {
   representanteEmpresa?: string;
   nroAcuerdoMarco?: number;
   domicilioLegal?: string;
-  expediente?: string;
+  numeroConvenio: string; // Computed property from backend
   docRepresentanteEmpresa?: string;
-  representanteFacultad?: string;
-  docRepresentanteFacultad?: string;
-  fechaFirma?: string;
+  nombreDecano?: string;
+  documentoDecano?: string;
+  fechaInicio?: string;
   fechaCaducidad?: string;
+  tipoAcuerdo?: string;
+  expedienteSudocu?: string;
 }
 ```
 
@@ -130,12 +134,17 @@ interface ConvenioDto {
 ```typescript
 interface ConvenioEmpresaDto {
   idConvenio: number;
-  expediente?: string;
-  fechaFirma?: string;
+  numeroConvenio: string; // Computed property from backend
+  fechaInicio?: string;
   fechaCaducidad?: string;
   idEmpresa?: number;
   nombreEmpresa?: string;
   representanteEmpresa?: string;
+  nroAcuerdoMarco?: number;
+  domicilioLegal?: string;
+  documentoDecano?: string;
+  tipoAcuerdo?: string;
+  expedienteSudocu?: string;
 }
 ```
 
@@ -163,6 +172,7 @@ interface ConvenioEmpresaDto {
 - `ConvenioEmpresaDto` - Para listado con empresa
 - `AsignarEmpresaDto` - Para asignar empresa
 - `CaducarConvenioDto` - Para caducar convenio
+- `EmpresaConvenioDropdownDto` - Para dropdown de empresas con convenio vigente
 
 ## Características Técnicas
 
@@ -190,6 +200,28 @@ interface ConvenioEmpresaDto {
 - Grid responsive para convenios
 - Filtros adaptables
 - Formularios optimizados para móvil
+
+## Hooks Disponibles
+
+### Hooks Principales
+
+- `useConvenios()` - Obtener todos los convenios con empresa
+- `useConvenio(id)` - Obtener un convenio específico
+- `useConveniosConFiltros(filtros)` - Buscar convenios con filtros
+- `useConveniosPorVencer(dias)` - Convenios que caducan en X días
+
+### Hooks de Operaciones
+
+- `useCreateConvenio()` - Crear nuevo convenio
+- `useUpdateConvenio()` - Actualizar convenio
+- `useDeleteConvenio()` - Eliminar convenio
+- `useCaducarConvenio()` - Caducar convenio
+- `useAsignarEmpresa()` - Asignar empresa a convenio
+
+### Hooks de Datos Auxiliares
+
+- `useEmpresasConConvenioVigente()` - Empresas con convenio vigente (dropdowns)
+- `useConvenioStats()` - Estadísticas de convenios
 
 ## Uso
 

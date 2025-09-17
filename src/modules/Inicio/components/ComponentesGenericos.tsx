@@ -10,7 +10,6 @@ import {
 import { GridContainer } from '../../../lib/components/StyledContainers';
 import {
   StyledActionCard,
-  StyledProgressSection,
   StyledStatsCard,
   StyledWelcomeSection,
   ContenedorGridStyled,
@@ -155,32 +154,6 @@ export const BotonAccion = ({
   children: React.ReactNode;
   _icon: React.ReactNode;
 }) => <BodyText sx={{ textTransform: 'none' }}>{children}</BodyText>;
-
-// Componentes para ProgressSection.tsx
-export const ContenedorProgreso = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <StyledProgressSection>{children}</StyledProgressSection>;
-
-export const TituloProgreso = ({ children }: { children: React.ReactNode }) => (
-  <CardTitle gutterBottom>{children}</CardTitle>
-);
-
-export const ItemProgreso = ({
-  label,
-  value,
-  color = 'primary',
-}: {
-  label: string;
-  value: number;
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
-}) => (
-  <React.Fragment>
-    <BodyText>{label}</BodyText>
-    <BodyText color={color}>{value}%</BodyText>
-  </React.Fragment>
-);
 
 // Componentes para StatsCard.tsx
 export const TarjetaEstadistica = ({

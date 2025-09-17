@@ -6,12 +6,13 @@ import { getEdicionEstudianteMetadata } from './helpers/estudianteHelpers';
 import { ROUTES } from '../../helpers/routesHelper';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
+import { safeParseInt } from '../../helpers/formatHelper';
 import { useEstudiante, useUpdateEstudiante } from './hooks/useEstudiantes';
 
 const EditarEstudiante: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const estudianteId = id ? parseInt(id, 10) : null;
+  const estudianteId = safeParseInt(id);
   const { snackbar, showSuccess, hideSnackbar } = useSnackbar();
 
   const {
