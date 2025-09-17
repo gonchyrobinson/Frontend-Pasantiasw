@@ -15,7 +15,7 @@ import { formatDate } from '../../helpers/formatHelper';
 import DeleteConfirmationDialog from '../../lib/components/DeleteConfirmationDialog';
 import { usePasantiaStats, usePasantias } from './hooks/usePasantias';
 import { useDeletePasantia } from './hooks/usePasantias';
-import { PasantiaDto } from './types';
+import { PasantiaShowTableDto } from './types';
 import { PageHeader, LoadingSpinner } from '../../lib/components';
 import PersonalizedSnackbar from '../Shared/components/PersonalizedSnackbar';
 import PasantiaFilters from './components/PasantiaFilters';
@@ -27,13 +27,14 @@ const Pasantias: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
-  const [searchResults, setSearchResults] = useState<PasantiaDto[]>([]);
+  const [searchResults, setSearchResults] = useState<PasantiaShowTableDto[]>(
+    []
+  );
   const [hasSearched, setHasSearched] = useState(false);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedPasantia, setSelectedPasantia] = useState<PasantiaDto | null>(
-    null
-  );
+  const [selectedPasantia, setSelectedPasantia] =
+    useState<PasantiaShowTableDto | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { isLoading: statsLoading, error } = usePasantiaStats();
@@ -71,7 +72,7 @@ const Pasantias: React.FC = () => {
     setHasSearched(false);
   };
 
-  const handleSearchResults = (pasantias: PasantiaDto[]) => {
+  const handleSearchResults = (pasantias: PasantiaShowTableDto[]) => {
     setSearchResults(pasantias);
     setHasSearched(true);
   };
@@ -89,11 +90,11 @@ const Pasantias: React.FC = () => {
     }
   };
 
-  const handleEdit = (pasantia: PasantiaDto) => {
+  const handleEdit = (pasantia: PasantiaShowTableDto) => {
     navigate(`${ROUTES.PASANTIAS_EDITAR}/${pasantia.idPasantia}`);
   };
 
-  const handleVerDetalle = (pasantia: PasantiaDto) => {
+  const handleVerDetalle = (pasantia: PasantiaShowTableDto) => {
     navigate(`${ROUTES.PASANTIAS_DETALLE}/${pasantia.idPasantia}`);
   };
 
@@ -101,7 +102,7 @@ const Pasantias: React.FC = () => {
     navigate(ROUTES.PASANTIAS_CREAR);
   };
 
-  const confirmDelete = (pasantia: PasantiaDto) => {
+  const confirmDelete = (pasantia: PasantiaShowTableDto) => {
     setSelectedPasantia(pasantia);
     setShowDeleteDialog(true);
   };
@@ -232,17 +233,17 @@ const Pasantias: React.FC = () => {
         open={showDeleteDialog}
         title='Eliminar Pasantía'
         message='¿Está seguro de que desea eliminar esta pasantía?'
-        itemName={selectedPasantia?.tramite || 'Pasantía'}
+        itemName={selectedPasantia?.tramiteSudocu || 'Pasantía'}
         itemDetails={
           selectedPasantia && (
             <div>
               <BodyText color='text.secondary'>
-                <strong>Obra Social:</strong>{' '}
-                {selectedPasantia.obraSocial || 'No especificada'}
+                <strong>Estudiante:</strong>{' '}
+                {selectedPasantia.estudiante || 'No especificado'}
               </BodyText>
               <BodyText color='text.secondary'>
-                <strong>ART:</strong>{' '}
-                {selectedPasantia.art || 'No especificado'}
+                <strong>Empresa:</strong>{' '}
+                {selectedPasantia.empresa || 'No especificada'}
               </BodyText>
               <BodyText color='text.secondary'>
                 <strong>Fecha de Inicio:</strong>{' '}

@@ -207,8 +207,7 @@ const Empresas: React.FC = () => {
             Búsqueda de Empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza la búsqueda avanzada para encontrar empresas por nombre,
-            tipo de contrato o vigencia
+            Utiliza la búsqueda avanzada para encontrar empresas por nombre
           </BodyText>
         </CenteredContainer>
       )}
@@ -220,8 +219,7 @@ const Empresas: React.FC = () => {
             No se encontraron empresas
           </CardTitle>
           <BodyText color='text.secondary'>
-            Intenta con diferentes criterios de búsqueda (nombre, tipo de
-            contrato, vigencia)
+            Intenta con diferentes criterios de búsqueda (nombre)
           </BodyText>
         </CenteredContainer>
       )}
@@ -242,7 +240,7 @@ const Empresas: React.FC = () => {
                 ID: {empresaToDelete.idEmpresa}
               </BodyText>
               <BodyText color='text.secondary'>
-                Encargado: {empresaToDelete.encargado}
+                Nombre: {empresaToDelete.nombre}
               </BodyText>
               <BodyText color='text.secondary'>
                 Correo: {empresaToDelete.correoElectronico}

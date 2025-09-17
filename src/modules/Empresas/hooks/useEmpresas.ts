@@ -75,10 +75,17 @@ export const useUpdateEmpresa = () => {
       const result = await apiClient.put<EmpresaDto>('/empresas', data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con empresas
       queryClient.invalidateQueries({ queryKey: ['empresas'] });
       queryClient.invalidateQueries({ queryKey: ['empresa'] });
+
+      // Invalidar específicamente la query del detalle de la empresa actualizada
+      if (data?.idEmpresa) {
+        queryClient.invalidateQueries({
+          queryKey: [`/empresas/${data.idEmpresa}`],
+        });
+      }
 
       // Invalidar dropdowns de empresas
       invalidateEmpresas();

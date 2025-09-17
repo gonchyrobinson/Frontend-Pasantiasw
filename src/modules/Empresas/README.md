@@ -47,18 +47,15 @@ Tabla principal que muestra las empresas usando `TablaGenerica`:
 Sistema de filtros avanzado:
 
 - **Búsqueda avanzada**: Múltiples criterios de búsqueda
-- **Filtros por fecha**: Rango de fechas de inicio y fin
-- **Filtros por estado**: Vigente/No vigente
-- **Filtros por tipo**: Tipo de contrato
+- **Filtros por nombre**: Búsqueda por nombre de empresa
 - **Indicador de resultados**: Muestra cantidad filtrada vs total
 
 #### EmpresasStats
 
 Dashboard de estadísticas:
 
-- **Métricas generales**: Total, activas, inactivas, tipos
-- **Distribución por tipo**: Chips con cantidad por tipo de contrato
-- **Indicadores visuales**: Íconos y colores por categoría
+- **Métrica general**: Total de empresas
+- **Indicador visual**: Ícono y color por categoría
 
 ## 🔌 API Integration
 
@@ -76,28 +73,19 @@ Response: Array<EmpresaDto>
 // DTO unificado - camelCase (ASP.NET Core hace model binding automático)
 interface EmpresaDto {
   idEmpresa: number;
-  nombre: string;
-  vigencia: 'vigente' | 'no_vigente';
-  fechaInicio: string; // ISO: YYYY-MM-DD
-  fechaFin: string; // ISO: YYYY-MM-DD
-  tipoContrato: 'indefinido' | 'temporal' | 'otro';
-  encargado: string;
-  celular: string;
-  correoElectronico: string;
-  sudocu: string; // Text field
+  nombre?: string;
+  correoElectronico?: string;
 }
 
-// Mismo DTO para requests - ASP.NET Core acepta camelCase
+// DTO para creación - omite el ID que es generado por el backend
 interface CreacionEmpresaDto {
-  nombre: string;
-  vigencia: 'vigente' | 'no_vigente';
-  fechaInicio: string; // ISO: YYYY-MM-DD
-  fechaFin: string; // ISO: YYYY-MM-DD
-  tipoContrato: 'indefinido' | 'temporal' | 'otro';
-  encargado: string;
-  celular: string;
-  correoElectronico: string;
-  sudocu: string; // Text field
+  nombre?: string;
+  correoElectronico?: string;
+}
+
+// DTO para búsqueda avanzada - compatible con backend
+interface EmpresaBusquedaAvanzadaDto {
+  nombre?: string;
 }
 ```
 
@@ -110,22 +98,13 @@ El módulo aprovecha al máximo las características del `TablaGenerica`:
 ```typescript
 const metadata = [
   { name: 'nombre', label: 'Nombre', type: 'text' },
-  { name: 'vigencia', label: 'Vigencia', type: 'text' },
-  { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
-  { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
-  { name: 'tipoContrato', label: 'Tipo de Contrato', type: 'text' },
-  { name: 'encargado', label: 'Encargado', type: 'text' },
-  { name: 'celular', label: 'Celular', type: 'text' },
   { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
-  { name: 'sudocu', label: 'SUDOCU', type: 'text' },
 ];
 ```
 
 ### Formateo Inteligente
 
-- **Fechas**: Se muestran en formato local
 - **Emails**: Se detectan automáticamente y se formatean apropiadamente
-- **Estados**: La vigencia se muestra con formato apropiado
 - **Campos excluidos**: `idEmpresa` se excluye automáticamente
 
 ### Acciones Dinámicas

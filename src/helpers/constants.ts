@@ -48,6 +48,20 @@ export const TIPOS_ACUERDO_VALIDOS = [
   { value: 'otro', label: 'Otro' },
 ] as const;
 
+/**
+ * Lista de tipos de acuerdo válidos para convenios
+ * Basada en AppConstants.ConvenioTipoAcuerdoPermitidos del backend
+ * Utilizada en formularios de convenios
+ */
+export const TIPOS_ACUERDO_CONVENIO_VALIDOS = [
+  {
+    value: 'Carta Acuerdo de Cooperación y Asistencia Técnica',
+    label: 'Carta Acuerdo de Cooperación y Asistencia Técnica',
+  },
+  { value: 'Pasantías y PPS', label: 'Pasantías y PPS' },
+  { value: 'otro', label: 'Otro' },
+] as const;
+
 // ==================== UTILIDADES DE CARRERAS ====================
 
 /**

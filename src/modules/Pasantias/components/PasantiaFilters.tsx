@@ -4,16 +4,14 @@ import {
   getPasantiaSearchMetadata,
   formatPasantiaSearchFilters,
 } from '../helpers/pasantiaHelpers';
-import { PasantiaDto } from '../types';
+import { getSugerenciasDocumentos } from '../../Estudiantes/helpers/estudianteHelpers';
+import { PasantiaShowTableDto } from '../types';
 import { useSnackbar } from '../../../lib/hooks/useSnackbar';
 import { apiClient } from '../../Shared/apis/apiClient';
-import {
-  useEmpresasDropdown,
-  useEstudiantesDropdown,
-} from '../../../lib/hooks/useDropdownData';
+import { useEmpresasDropdown } from '../../../lib/hooks/useDropdownData';
 
 interface PasantiaFiltersProps {
-  onSearchResults: (pasantias: PasantiaDto[]) => void;
+  onSearchResults: (pasantias: PasantiaShowTableDto[]) => void;
   onClearResults: () => void;
   loading?: boolean;
   hasResults?: boolean;
@@ -26,8 +24,6 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
 }) => {
   const { showError, showSuccess } = useSnackbar();
   const { empresasOptions, isLoading: empresasLoading } = useEmpresasDropdown();
-  const { estudiantesOptions, isLoading: estudiantesLoading } =
-    useEstudiantesDropdown();
   const [dynamicOptions, setDynamicOptions] = useState<
     Record<string, Array<{ value: string | number; label: string }>>
   >({});
@@ -36,37 +32,38 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
   useEffect(() => {
     const cargarSugerencias = async () => {
       try {
-        // Cargar números de trámite únicos
-        const numerosTramite = await apiClient.get<string[]>(
-          '/pasantias/sugerencias-numeros-tramite'
-        );
+        // Cargar números de trámite únicos y documentos de estudiantes en paralelo
+        const [numerosTramite, documentosEstudiantes] = await Promise.all([
+          apiClient.get<string[]>('/pasantias/sugerencias-numeros-tramite'),
+          getSugerenciasDocumentos(),
+        ]);
 
         setDynamicOptions({
-          numeroTramite: numerosTramite.map(numero => ({
+          tramiteSudocu: numerosTramite.map((numero: string) => ({
             value: numero,
             label: numero,
           })),
-          estudiante: estudiantesOptions || [], // Usar el hook en lugar de llamada directa
+          estudiante: documentosEstudiantes,
           empresa: empresasOptions || [],
         });
       } catch (error) {
         console.error('Error al cargar sugerencias:', error);
         // Si falla la carga, al menos cargar opciones de dropdowns
         setDynamicOptions({
-          estudiante: estudiantesOptions || [],
+          estudiante: [],
           empresa: empresasOptions || [],
         });
       }
     };
 
     cargarSugerencias();
-  }, [empresasOptions, estudiantesOptions]);
+  }, [empresasOptions]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
     try {
       const searchFilters = formatPasantiaSearchFilters(filters);
-      const pasantias = await apiClient.post<PasantiaDto[]>(
+      const pasantias = await apiClient.post<PasantiaShowTableDto[]>(
         '/pasantias/buscar-avanzado',
         searchFilters as Record<string, unknown>
       );
@@ -87,7 +84,7 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       onClearResults={onClearResults}
       hasResults={hasResults}
       dynamicDropdownOptions={dynamicOptions}
-      loading={empresasLoading || estudiantesLoading}
+      loading={empresasLoading}
     />
   );
 };

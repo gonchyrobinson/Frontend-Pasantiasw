@@ -12,11 +12,10 @@ import {
   ConvenioDto,
   ConvenioCreateDto,
   AsignarEmpresaDto,
+  EmpresaConvenioDropdownDto,
+  ConvenioEmpresaFiltroDto,
 } from '../types';
-import {
-  calculateConvenioStats,
-  getDefaultConvenioValues,
-} from '../helpers/convenioHelpers';
+import { calculateConvenioStats } from '../helpers/convenioHelpers';
 import { apiClient } from '../../Shared/apis/apiClient';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 
@@ -28,7 +27,7 @@ export const useConvenios = () => {
     queryFn: async () => {
       const response = await apiClient.post<ConvenioEmpresaDto[]>(
         '/convenios/conEmpresa',
-        getDefaultConvenioValues()
+        {} // Enviar objeto vacío para obtener todos los convenios
       );
       return response as unknown as ConvenioEmpresaDto[];
     },
@@ -85,12 +84,19 @@ export const useUpdateConvenio = () => {
   return useApiUpdate<ConvenioDto, ConvenioDto & Record<string, unknown>>(
     ROUTES.CONVENIOS,
     {
-      onSuccess: () => {
+      onSuccess: data => {
         // Invalidar todas las queries relacionadas con convenios
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
         queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+        // Invalidar específicamente la query del detalle del convenio actualizado
+        if (data?.data?.idConvenio) {
+          queryClient.invalidateQueries({
+            queryKey: [`${ROUTES.CONVENIOS}/${data.data.idConvenio}`],
+          });
+        }
 
         // Invalidar dropdowns de convenios
         invalidateConvenios();
@@ -253,5 +259,36 @@ export const useConveniosPorVencer = (diasAdelante = 30) => {
     staleTime: 5 * 60 * 1000, // 5 minutos
     refetchInterval: 10 * 60 * 1000, // Refrescar cada 10 minutos para notificaciones
     refetchOnWindowFocus: true, // Refrescar cuando el usuario vuelve a la pestaña
+  });
+};
+
+// Hook para obtener empresas con convenio vigente (para dropdowns)
+export const useEmpresasConConvenioVigente = () => {
+  return useQuery({
+    queryKey: ['convenios', 'empresas-convenio-vigente'],
+    queryFn: async () => {
+      const data = await apiClient.get<EmpresaConvenioDropdownDto[]>(
+        '/convenios/empresas-convenio-vigente'
+      );
+      return data;
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutos
+    refetchOnWindowFocus: false,
+  });
+};
+
+// Hook para buscar convenios con filtros
+export const useConveniosConFiltros = (filtros: ConvenioEmpresaFiltroDto) => {
+  return useQuery({
+    queryKey: ['convenios', 'conEmpresa', filtros],
+    queryFn: async () => {
+      const response = await apiClient.post<ConvenioEmpresaDto[]>(
+        '/convenios/conEmpresa',
+        filtros
+      );
+      return response as unknown as ConvenioEmpresaDto[];
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutos
+    enabled: Object.keys(filtros).length > 0, // Solo ejecutar si hay filtros
   });
 };

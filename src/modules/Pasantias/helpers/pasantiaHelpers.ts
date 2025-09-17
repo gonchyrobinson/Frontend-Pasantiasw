@@ -33,10 +33,20 @@ export const getPasantiaFormMetadata = () => ({
   cancelButtonText: 'Cancelar',
   fields: [
     {
-      name: 'idEstudiante',
-      label: 'Estudiante',
+      name: 'dniEstudiante',
+      label: 'Documento del Estudiante',
       type: 'dynamicDropdown' as const,
-      placeholder: 'Seleccione un estudiante',
+      placeholder: 'Seleccione un estudiante...',
+      validations: {
+        minLength: {
+          value: 7,
+          message: 'El DNI debe tener al menos 7 caracteres',
+        },
+        maxLength: {
+          value: 20,
+          message: 'El DNI no puede exceder 20 caracteres',
+        },
+      },
       gridSize: 6,
     },
     {
@@ -104,6 +114,22 @@ export const getPasantiaFormMetadata = () => ({
       gridSize: 6,
     },
     {
+      name: 'dniTutorEmpresa',
+      label: 'DNI del Tutor de Empresa',
+      type: 'text' as const,
+      validations: {
+        minLength: {
+          value: 7,
+          message: 'El DNI debe tener al menos 7 caracteres',
+        },
+        maxLength: {
+          value: 20,
+          message: 'El DNI no puede exceder 20 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
+    {
       name: 'tutorFacultad',
       label: 'Tutor de la Facultad',
       type: 'text' as const,
@@ -151,7 +177,7 @@ export const getPasantiaFormMetadata = () => ({
       name: 'tipoAcuerdo',
       label: 'Tipo de Acuerdo',
       type: 'dropdown' as const,
-      options: TIPOS_ACUERDO_VALIDOS,
+      options: [...TIPOS_ACUERDO_VALIDOS],
       gridSize: 6,
     },
     {
@@ -167,18 +193,24 @@ export const getPasantiaFormMetadata = () => ({
       gridSize: 6,
     },
     {
-      name: 'montoPago',
-      label: 'Monto de Pago',
+      name: 'horasSemanales',
+      label: 'Horas Semanales',
       type: 'number' as const,
       validations: {
-        min: { value: 0, message: 'El monto debe ser mayor o igual a 0' },
+        min: { value: 1, message: 'Las horas semanales deben ser positivas' },
+        max: { value: 20, message: 'Las horas semanales no pueden exceder 20' },
       },
       gridSize: 6,
     },
-    // areaTrabajo y estado se calculan automáticamente - no deben estar en el formulario
     {
-      name: 'sudocu',
-      label: 'SUDOCU',
+      name: 'tramiteSudocu',
+      label: 'Trámite SUDOCU',
+      type: 'text' as const,
+      gridSize: 6,
+    },
+    {
+      name: 'areaTrabajo',
+      label: 'Área de Trabajo',
       type: 'text' as const,
       gridSize: 6,
     },
@@ -264,10 +296,10 @@ export const getPasantiaSearchMetadata = (): {
   title: 'Búsqueda Avanzada de Pasantías',
   fields: [
     {
-      name: 'numeroTramite',
-      label: 'Número de Trámite',
+      name: 'tramiteSudocu',
+      label: 'Trámite SUDOCU',
       type: 'dynamicDropdown',
-      placeholder: 'Seleccionar número de trámite...',
+      placeholder: 'Seleccionar trámite SUDOCU...',
     },
     {
       name: 'tipo',
@@ -328,8 +360,8 @@ export const formatPasantiaSearchFilters = (
 ): PasantiaBusquedaAvanzadaDto => {
   const formattedFilters: PasantiaBusquedaAvanzadaDto = {};
 
-  if (filters.numeroTramite) {
-    formattedFilters.numeroTramite = filters.numeroTramite as string;
+  if (filters.tramiteSudocu) {
+    formattedFilters.tramiteSudocu = filters.tramiteSudocu as string;
   }
   if (filters.tipo) {
     formattedFilters.tipo = filters.tipo as string;
@@ -354,4 +386,42 @@ export const formatPasantiaSearchFilters = (
   }
 
   return formattedFilters;
+};
+
+// ==================== METADATA PARA EDICIÓN ====================
+
+/**
+ * Obtiene la metadata específica para el formulario de edición de pasantías
+ * Convierte los campos dniEstudiante e idConvenio a readonly
+ *
+ * @returns Metadata configurada para edición con campos readonly
+ */
+export const getPasantiaEditMetadata = () => {
+  const baseMetadata = getPasantiaFormMetadata();
+
+  // Modificar los campos para que dniEstudiante e idConvenio sean readonly
+  const modifiedFields = baseMetadata.fields.map(field => {
+    if (field.name === 'dniEstudiante') {
+      return {
+        ...field,
+        type: 'text' as const,
+        readonly: true,
+        label: 'Documento del Estudiante',
+      };
+    }
+    if (field.name === 'idConvenio') {
+      return {
+        ...field,
+        type: 'text' as const,
+        readonly: true,
+        label: 'Empresa',
+      };
+    }
+    return field;
+  });
+
+  return {
+    ...baseMetadata,
+    fields: modifiedFields,
+  };
 };

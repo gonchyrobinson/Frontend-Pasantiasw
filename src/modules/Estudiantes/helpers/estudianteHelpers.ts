@@ -44,6 +44,10 @@ export const getCreacionEstudianteMetadata = () => ({
       type: 'text' as const,
       validations: {
         required: 'El apellido es requerido',
+        maxLength: {
+          value: 100,
+          message: 'El apellido no puede exceder 100 caracteres',
+        },
       },
       gridSize: 6,
     },
@@ -53,6 +57,10 @@ export const getCreacionEstudianteMetadata = () => ({
       type: 'text' as const,
       validations: {
         required: 'El nombre es requerido',
+        maxLength: {
+          value: 100,
+          message: 'El nombre no puede exceder 100 caracteres',
+        },
       },
       gridSize: 6,
     },
@@ -62,6 +70,10 @@ export const getCreacionEstudianteMetadata = () => ({
       type: 'text' as const,
       validations: {
         required: 'El documento es requerido',
+        pattern: {
+          value: /^\d{7,8}$/,
+          message: 'El documento debe ser un DNI válido (7 u 8 dígitos)',
+        },
       },
       gridSize: 6,
     },
@@ -71,6 +83,22 @@ export const getCreacionEstudianteMetadata = () => ({
       type: 'text' as const,
       validations: {
         required: 'El domicilio es requerido',
+        maxLength: {
+          value: 255,
+          message: 'El domicilio no puede exceder 255 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
+    {
+      name: 'libreta',
+      label: 'Libreta Universitaria',
+      type: 'text' as const,
+      validations: {
+        maxLength: {
+          value: 50,
+          message: 'La libreta no puede exceder 50 caracteres',
+        },
       },
       gridSize: 6,
     },
@@ -85,15 +113,6 @@ export const getCreacionEstudianteMetadata = () => ({
       gridSize: 6,
     },
     {
-      name: 'areaTrabajo',
-      label: 'Área de Trabajo',
-      type: 'text' as const,
-      validations: {
-        required: 'El área de trabajo es requerida',
-      },
-      gridSize: 6,
-    },
-    {
       name: 'email',
       label: 'Email',
       type: 'email' as const,
@@ -101,10 +120,10 @@ export const getCreacionEstudianteMetadata = () => ({
         required: 'El email es requerido',
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: 'Formato de email inválido',
+          message: 'El email debe tener un formato válido',
         },
       },
-      gridSize: 12,
+      gridSize: 6,
     },
   ],
 });
@@ -129,26 +148,26 @@ export const getEdicionEstudianteMetadata = () => ({
  * Utilizado en EstudiantesStats
  *
  * @param estudiantes - Array de estudiantes para calcular estadísticas
- * @returns Objeto con estadísticas calculadas (total, por carrera, por área de trabajo)
+ * @returns Objeto con estadísticas calculadas (total, por carrera, activos, eliminados)
  */
 export const getEstudiantesStats = (estudiantes: EstudianteDto[]) => {
   const total = estudiantes.length;
-  const porCarrera = estudiantes.reduce(
-    (acc, estudiante) => {
-      acc[estudiante.carrera] = (acc[estudiante.carrera] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-  const porAreaTrabajo = estudiantes.reduce(
-    (acc, estudiante) => {
-      acc[estudiante.areaTrabajo] = (acc[estudiante.areaTrabajo] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
+  const activos = estudiantes.filter(e => !e.eliminado).length;
+  const eliminados = estudiantes.filter(e => e.eliminado).length;
 
-  return { total, porCarrera, porAreaTrabajo };
+  const porCarrera = estudiantes
+    .filter(e => !e.eliminado) // Solo contar estudiantes activos
+    .reduce(
+      (acc, estudiante) => {
+        if (estudiante.carrera) {
+          acc[estudiante.carrera] = (acc[estudiante.carrera] || 0) + 1;
+        }
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+  return { total, porCarrera, activos, eliminados };
 };
 
 // ==================== METADATA DE BÚSQUEDA ====================

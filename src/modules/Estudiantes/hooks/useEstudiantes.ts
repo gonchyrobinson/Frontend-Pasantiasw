@@ -72,10 +72,17 @@ export const useUpdateEstudiante = () => {
       const result = await apiClient.put<EstudianteDto>('/students', data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con estudiantes
       queryClient.invalidateQueries({ queryKey: ['students'] });
       queryClient.invalidateQueries({ queryKey: ['student'] });
+
+      // Invalidar específicamente la query del detalle del estudiante actualizado
+      if (data?.idEstudiante) {
+        queryClient.invalidateQueries({
+          queryKey: [`/students/${data.idEstudiante}`],
+        });
+      }
 
       // Invalidar dropdowns de estudiantes
       invalidateEstudiantes();

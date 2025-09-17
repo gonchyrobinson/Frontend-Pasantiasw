@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../../Shared/apis/apiClient';
-import { PasantiaDto, PasantiaCreateDto, PasantiaShowTableDto } from '../types';
+import {
+  PasantiaDto,
+  PasantiaCreateDto,
+  PasantiaUpdateDto,
+  PasantiaShowTableDto,
+} from '../types';
 import { useInvalidateDropdowns } from '../../../lib/hooks/useDropdownData';
 import React from 'react';
 
@@ -62,15 +67,22 @@ export const useUpdatePasantia = () => {
   const { invalidatePasantias } = useInvalidateDropdowns();
 
   return useMutation({
-    mutationFn: async ({ data }: { data: PasantiaCreateDto }) => {
+    mutationFn: async (data: PasantiaUpdateDto) => {
       const result = await apiClient.put<PasantiaDto>(`${API_BASE}`, data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con pasantías
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
+
+      // Invalidar específicamente la query del detalle de la pasantía actualizada
+      if (data?.idPasantia) {
+        queryClient.invalidateQueries({
+          queryKey: [`/pasantias/${data.idPasantia}`],
+        });
+      }
 
       // Invalidar dropdowns de pasantías
       invalidatePasantias();
