@@ -81,6 +81,12 @@ const DetalleConvenio: React.FC = () => {
             type: 'text',
             gridSize: 6,
           },
+          {
+            name: 'nroAcuerdoMarco',
+            label: 'Número de Acuerdo Marco',
+            type: 'text',
+            gridSize: 6,
+          },
         ],
       },
       {

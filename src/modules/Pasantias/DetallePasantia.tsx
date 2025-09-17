@@ -53,8 +53,8 @@ const DetallePasantia: React.FC = () => {
         defaultExpanded: true,
         fields: [
           {
-            name: 'tramite',
-            label: 'Trámite',
+            name: 'tramiteSudocu',
+            label: 'Trámite SUDOCU',
             type: 'text',
             gridSize: 6,
           },
@@ -71,7 +71,13 @@ const DetallePasantia: React.FC = () => {
             name: 'areaTrabajo',
             label: 'Área de Trabajo',
             type: 'text',
-            gridSize: 12,
+            gridSize: 6,
+          },
+          {
+            name: 'horasSemanales',
+            label: 'Horas Semanales',
+            type: 'number',
+            gridSize: 6,
           },
         ],
       },
@@ -104,12 +110,6 @@ const DetallePasantia: React.FC = () => {
           {
             name: 'asignacionMensual',
             label: 'Asignación Mensual',
-            type: 'currency',
-            gridSize: 6,
-          },
-          {
-            name: 'montoPago',
-            label: 'Monto de Pago',
             type: 'currency',
             gridSize: 6,
           },
@@ -160,6 +160,13 @@ const DetallePasantia: React.FC = () => {
             gridSize: 6,
           },
           {
+            name: 'dniTutorEmpresa',
+            label: 'DNI Tutor Empresa',
+            type: 'text',
+            gridSize: 6,
+            prefix: 'DNI: ',
+          },
+          {
             name: 'tutorFacultad',
             label: 'Tutor de la Facultad',
             type: 'text',
@@ -180,12 +187,6 @@ const DetallePasantia: React.FC = () => {
         collapsible: true,
         defaultExpanded: true,
         fields: [
-          {
-            name: 'sudocu',
-            label: 'Sudocu',
-            type: 'text',
-            gridSize: 6,
-          },
           {
             name: 'observaciones',
             label: 'Observaciones',

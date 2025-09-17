@@ -84,12 +84,19 @@ export const useUpdateConvenio = () => {
   return useApiUpdate<ConvenioDto, ConvenioDto & Record<string, unknown>>(
     ROUTES.CONVENIOS,
     {
-      onSuccess: () => {
+      onSuccess: data => {
         // Invalidar todas las queries relacionadas con convenios
         queryClient.invalidateQueries({
           queryKey: ['/convenios/conEmpresa'],
         });
         queryClient.invalidateQueries({ queryKey: ['convenio'] });
+
+        // Invalidar específicamente la query del detalle del convenio actualizado
+        if (data?.data?.idConvenio) {
+          queryClient.invalidateQueries({
+            queryKey: [`${ROUTES.CONVENIOS}/${data.data.idConvenio}`],
+          });
+        }
 
         // Invalidar dropdowns de convenios
         invalidateConvenios();

@@ -80,10 +80,17 @@ export const useUpdatePago = () => {
       const result = await apiClient.put<PagosDto>('/pagos', data);
       return result;
     },
-    onSuccess: () => {
+    onSuccess: data => {
       // Invalidar todas las queries relacionadas con pagos
       queryClient.invalidateQueries({ queryKey: ['pagos'] });
       queryClient.invalidateQueries({ queryKey: ['pago'] });
+
+      // Invalidar específicamente la query del detalle del pago actualizado
+      if (data?.idPago) {
+        queryClient.invalidateQueries({
+          queryKey: [`/pagos/${data.idPago}`],
+        });
+      }
 
       // Invalidar queries de inicio que muestran estadísticas
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });

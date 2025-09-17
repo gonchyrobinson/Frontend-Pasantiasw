@@ -36,9 +36,23 @@ const TextField: React.FC<TextFieldProps> = ({
       fullWidth
       margin='normal'
       variant='outlined'
+      disabled={readonly} // Usar disabled en lugar de readOnly para mejor apariencia visual
       InputProps={{
         readOnly: readonly,
       }}
+      sx={
+        readonly
+          ? {
+              '& .MuiInputBase-input': {
+                backgroundColor: 'action.disabledBackground',
+                color: 'text.secondary',
+              },
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'action.disabledBackground',
+              },
+            }
+          : {}
+      }
       autoComplete={autoComplete}
       multiline={multiline}
       rows={multiline ? rows : undefined}

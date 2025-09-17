@@ -21,7 +21,7 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
   onDelete,
 }) => {
   const metadata: FieldMetadata[] = [
-    { name: 'tramite', label: 'Trámite', type: 'text' },
+    { name: 'tramiteSudocu', label: 'Trámite', type: 'text' },
     { name: 'estudiante', label: 'Estudiante', type: 'text' },
     { name: 'empresa', label: 'Empresa', type: 'text' },
     { name: 'tipoAcuerdo', label: 'Tipo de Acuerdo', type: 'text' },
@@ -32,21 +32,21 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
 
   const pasantiasData = pasantias.map(pasantia => ({
     ...pasantia,
-    id: pasantia.id,
+    id: pasantia.idPasantia,
   }));
 
   const handleRowClick = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.id === row.id);
+    const pasantia = pasantias.find(p => p.idPasantia === row.id);
     if (pasantia && onRowClick) onRowClick(pasantia);
   };
 
   const handleRowEdit = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.id === row.id);
+    const pasantia = pasantias.find(p => p.idPasantia === row.id);
     if (pasantia) onEdit(pasantia);
   };
 
   const handleRowDelete = (row: Record<string, unknown>) => {
-    const pasantia = pasantias.find(p => p.id === row.id);
+    const pasantia = pasantias.find(p => p.idPasantia === row.id);
     if (pasantia) onDelete(pasantia);
   };
 
@@ -62,7 +62,7 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
       onRowDelete={handleRowDelete}
       pageSize={15}
       pageSizeOptions={[10, 15, 25, 50]}
-      initialSortModel={[{ field: 'tramite', sort: 'asc' }]}
+      initialSortModel={[{ field: 'tramiteSudocu', sort: 'asc' }]}
     />
   );
 };

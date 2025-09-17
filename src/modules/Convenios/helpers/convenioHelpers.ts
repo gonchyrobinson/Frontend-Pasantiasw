@@ -77,6 +77,19 @@ export const getConvenioFormMetadata = () => ({
       gridSize: 6,
     },
     {
+      name: 'nroAcuerdoMarco',
+      label: 'Número de Acuerdo Marco',
+      type: 'number' as const,
+      required: false,
+      validations: {
+        min: {
+          value: 1,
+          message: 'El número debe ser mayor a 0',
+        },
+      },
+      gridSize: 6,
+    },
+    {
       name: 'domicilioLegal',
       label: 'Domicilio Legal',
       type: 'textarea' as const,
@@ -209,6 +222,9 @@ export const formatConvenioSearchFilters = (
   if (filters.nombreEmpresa) {
     searchFilters.nombreEmpresa = filters.nombreEmpresa as string;
   }
+  if (filters.representanteEmpresa) {
+    searchFilters.representanteEmpresa = filters.representanteEmpresa as string;
+  }
   if (filters.expedienteSudocu) {
     searchFilters.expedienteSudocu = filters.expedienteSudocu as string;
   }
@@ -282,6 +298,7 @@ export const getDefaultConvenioValues = () => ({
   idEmpresa: undefined,
   representanteEmpresa: '',
   docRepresentanteEmpresa: '',
+  nroAcuerdoMarco: undefined,
   domicilioLegal: '',
   nombreDecano: '',
   documentoDecano: '',

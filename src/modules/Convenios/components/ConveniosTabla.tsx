@@ -32,6 +32,8 @@ const ConveniosTabla: React.FC<ConveniosTablaProps> = ({
       label: 'Representante Empresa',
       type: 'text',
     },
+    { name: 'nroAcuerdoMarco', label: 'Nro. Acuerdo Marco', type: 'text' },
+    { name: 'tipoAcuerdo', label: 'Tipo Acuerdo', type: 'text' },
     { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
     { name: 'fechaCaducidad', label: 'Fecha de Caducidad', type: 'date' },
   ];
