@@ -71,6 +71,32 @@ const DetallePago: React.FC = () => {
         ],
       },
       {
+        title: 'Información de la Pasantía',
+        gridContainer: true,
+        collapsible: true,
+        defaultExpanded: true,
+        fields: [
+          {
+            name: 'tramiteSudocu',
+            label: 'Trámite SUDOCU',
+            type: 'text',
+            gridSize: 4,
+          },
+          {
+            name: 'nombreEstudiante',
+            label: 'Estudiante',
+            type: 'text',
+            gridSize: 4,
+          },
+          {
+            name: 'nombreEmpresa',
+            label: 'Empresa',
+            type: 'text',
+            gridSize: 4,
+          },
+        ],
+      },
+      {
         title: 'Fechas Importantes',
         gridContainer: true,
         collapsible: true,
