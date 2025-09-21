@@ -20,7 +20,7 @@ const EditarPasantia: React.FC = () => {
   const { data: pasantiaData, isLoading, error } = usePasantia(pasantiaId);
   const { mutate: updatePasantia, isPending: isUpdating } = useUpdatePasantia();
   const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
-    useEmpresasConvenioDropdown();
+    useEmpresasConvenioDropdown('Pasantias y PPS');
 
   // Obtener datos del estudiante para mostrar información readonly
   const { data: estudianteData, isLoading: estudianteLoading } = useEstudiante(

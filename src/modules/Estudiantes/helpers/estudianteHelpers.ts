@@ -91,18 +91,6 @@ export const getCreacionEstudianteMetadata = () => ({
       gridSize: 6,
     },
     {
-      name: 'libreta',
-      label: 'Libreta Universitaria',
-      type: 'text' as const,
-      validations: {
-        maxLength: {
-          value: 50,
-          message: 'La libreta no puede exceder 50 caracteres',
-        },
-      },
-      gridSize: 6,
-    },
-    {
       name: 'carrera',
       label: 'Carrera',
       type: 'dropdown' as const,
