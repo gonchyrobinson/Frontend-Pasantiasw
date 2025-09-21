@@ -20,7 +20,7 @@ const CrearPasantia: React.FC = () => {
 
   const { mutate: createPasantia, isPending: isCreating } = useCreatePasantia();
   const { empresasConvenioOptions, isLoading: empresasConvenioLoading } =
-    useEmpresasConvenioDropdown();
+    useEmpresasConvenioDropdown('Pasantías y PPS');
 
   const metadata = getPasantiaFormMetadata();
 
