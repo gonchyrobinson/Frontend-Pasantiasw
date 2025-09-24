@@ -58,12 +58,6 @@ const DetalleEstudiante: React.FC = () => {
             type: 'text',
             gridSize: 6,
           },
-          {
-            name: 'libreta',
-            label: 'Libreta Universitaria',
-            type: 'text',
-            gridSize: 6,
-          },
         ],
       },
       {

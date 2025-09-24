@@ -26,7 +26,7 @@ export const getPagosFormMetadata = () => ({
   fields: [
     {
       name: 'idPasantia',
-      label: 'Pasantía',
+      label: 'Número de trámite - SUDOCU',
       type: 'dynamicDropdown' as const,
       placeholder: 'Seleccione una pasantía',
       required: true,

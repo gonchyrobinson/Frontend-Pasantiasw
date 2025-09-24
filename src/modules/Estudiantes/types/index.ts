@@ -4,7 +4,6 @@ export interface EstudianteDto {
   nombre?: string;
   documento?: string;
   domicilio?: string;
-  libreta?: string;
   carrera?: string;
   email?: string;
   eliminado?: boolean;
