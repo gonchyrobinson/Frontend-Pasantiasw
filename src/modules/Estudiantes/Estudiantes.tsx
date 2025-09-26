@@ -155,7 +155,7 @@ const Estudiantes: React.FC = () => {
     <MainContainer>
       <PageHeader
         title='Gestión de Estudiantes'
-        subtitle='Administra los estudiantes del sistema de pasantías'
+        subtitle='Administra los estudiantes del sistema de Acuerdos Individuales'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onAction={handleNuevoEstudiante}

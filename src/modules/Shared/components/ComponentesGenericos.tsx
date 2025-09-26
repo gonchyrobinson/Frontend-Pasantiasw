@@ -78,7 +78,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       }}
     >
       {!isCollapsed && (
-        <CardTitle component='div'>Sistema de Pasantías</CardTitle>
+        <CardTitle component='div'>Sistema de Acuerdos Individuales</CardTitle>
       )}
       {!isMobile && (
         <CollapseButton isCollapsed={isCollapsed} onClick={onToggleCollapse} />

@@ -20,8 +20,8 @@ const Footer = () => {
     >
       <CenteredContainer sx={{ textAlign: 'center' }}>
         <BodyText color='text.secondary' align='center'>
-          © {new Date().getFullYear()} Sistema de Pasantías. Todos los derechos
-          reservados.
+          © {new Date().getFullYear()} Sistema de Acuerdos Individuales. Todos
+          los derechos reservados.
         </BodyText>
       </CenteredContainer>
     </MainContainer>

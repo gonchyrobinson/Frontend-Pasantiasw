@@ -161,7 +161,7 @@ const Empresas: React.FC = () => {
     <MainContainer>
       <PageHeader
         title='Gestión de Empresas'
-        subtitle='Administra las empresas del sistema de pasantías'
+        subtitle='Administra las empresas del sistema de Acuerdos Individuales'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onAction={handleNuevaEmpresa}

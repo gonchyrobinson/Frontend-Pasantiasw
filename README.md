@@ -1,6 +1,6 @@
-# Sistema de Gestión de Pasantías
+# Sistema de Gestión de Acuerdos Individuales
 
-Un sistema moderno de gestión de pasantías desarrollado con React, TypeScript, Material-UI y Vite.
+Un sistema moderno de gestión de Acuerdos Individuales desarrollado con React, TypeScript, Material-UI y Vite.
 
 ## 🚀 Características
 
@@ -287,7 +287,7 @@ frontend/
 │   │   │   ├── helpers/              # Helpers específicos
 │   │   │   └── types/                # Tipos específicos
 │   │   ├── Convenios/                # Módulo de convenios
-│   │   ├── Pasantias/                # Módulo de pasantías
+│   │   ├── Pasantias/                # Módulo de Acuerdos Individuales
 │   │   ├── Pagos/                    # Módulo de pagos
 │   │   ├── Reportes/                 # Módulo de reportes
 │   │   ├── Inicio/                   # Módulo de inicio
@@ -384,7 +384,7 @@ VITE_VERSION=1.0.0
 
 - Actualizados en `frontend/src/types/index.ts`
 - Mantiene compatibilidad con `ApiResponse<T>` para futuras implementaciones
-- Tipos básicos para el sistema de gestión de pasantías
+- Tipos básicos para el sistema de gestión de Acuerdos Individuales
 
 ### Instrucciones para Probar
 

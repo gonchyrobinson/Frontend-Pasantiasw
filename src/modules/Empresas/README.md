@@ -1,6 +1,6 @@
 # Módulo de Empresas
 
-Módulo completo para la gestión de empresas en el sistema de pasantías, implementando el componente genérico `TablaGenerica`.
+Módulo completo para la gestión de empresas en el sistema de Acuerdos Individuales, implementando el componente genérico `TablaGenerica`.
 
 ## 📁 Estructura
 
@@ -154,4 +154,4 @@ Para completar el módulo se pueden implementar:
 4. **Exportación**: Funcionalidad para exportar datos
 5. **Filtros adicionales**: Más criterios de búsqueda
 
-Este módulo demuestra el poder y flexibilidad del componente `TablaGenerica` en un caso de uso real del sistema de pasantías, proporcionando una interfaz limpia y funcional para la gestión de empresas.
+Este módulo demuestra el poder y flexibilidad del componente `TablaGenerica` en un caso de uso real del sistema de Acuerdos Individuales, proporcionando una interfaz limpia y funcional para la gestión de empresas.

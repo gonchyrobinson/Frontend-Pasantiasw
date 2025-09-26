@@ -17,12 +17,12 @@ const PasantiasVencerNotifications: React.FC<
 > = ({ onClose, onNavigateToPasantia }) => {
   const { data: pasantias, isLoading, error } = usePasantiasPorVencer();
 
-  // Configuración específica para pasantías
+  // Configuración específica para Acuerdos Individuales
   const config: VencimientoConfig = {
-    title: 'Pasantías por Vencer',
+    title: 'Acuerdos Individuales por Vencer',
     icon: <School />,
-    emptyMessage: 'No hay pasantías por vencer',
-    emptySubtitle: 'Todas las pasantías están al día',
+    emptyMessage: 'No hay Acuerdos Individuales por vencer',
+    emptySubtitle: 'Todas las Acuerdos Individuales están al día',
     getItemTitle: (item: VencimientoItem) => {
       const pasantia = item as unknown as PasantiaDto;
       return pasantia.tramite || `Pasantía ID: ${pasantia.idPasantia}`;
@@ -36,7 +36,7 @@ const PasantiasVencerNotifications: React.FC<
     },
   };
 
-  // Convertir pasantías a VencimientoItem
+  // Convertir Acuerdos Individuales a VencimientoItem
   const items: VencimientoItem[] = (pasantias || []).map(pasantia => ({
     id: pasantia.idPasantia,
     fechaVencimiento: pasantia.fechaFin,

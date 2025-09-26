@@ -167,7 +167,7 @@ const Pagos: React.FC = () => {
     <MainContainer>
       <PageHeader
         title='Gestión de Pagos'
-        subtitle='Administra los pagos del sistema de pasantías. Use la búsqueda para encontrar pagos por ID de pasantía.'
+        subtitle='Administra los pagos del sistema de Acuerdos Individuales. Use la búsqueda para encontrar pagos por ID de pasantía.'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onAction={handleCreate}

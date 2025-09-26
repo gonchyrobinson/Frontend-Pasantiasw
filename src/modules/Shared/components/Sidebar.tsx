@@ -74,7 +74,7 @@ const Sidebar = () => {
       path: ROUTES.CONVENIOS,
     },
     {
-      text: 'Pasantías',
+      text: 'Acuerdos Individuales',
       icon: <School />,
       onClick: goToPasantias,
       path: ROUTES.PASANTIAS,

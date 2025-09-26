@@ -154,7 +154,7 @@ export const useConveniosDropdown = () => {
   };
 };
 
-// Hook para pasantías en dropdowns
+// Hook para Acuerdos Individuales en dropdowns
 export const usePasantiasDropdown = () => {
   // Query para datos completos (para asignación)
   const queryCompletas = useQuery({
@@ -178,7 +178,7 @@ export const usePasantiasDropdown = () => {
     ...DROPDOWN_CACHE_CONFIG,
   });
 
-  // Opciones para selección de pasantías (usando ID)
+  // Opciones para selección de Acuerdos Individuales (usando ID)
   const pasantiasOptions: DropdownOption[] = React.useMemo(() => {
     if (!queryCompletas.data || !Array.isArray(queryCompletas.data)) {
       return [];
@@ -223,7 +223,7 @@ export const usePasantiasDropdown = () => {
   };
 };
 
-// Hook para empresas con último convenio vigente (para dropdown de pasantías)
+// Hook para empresas con último convenio vigente (para dropdown de Acuerdos Individuales)
 export const useEmpresasConvenioDropdown = () => {
   const query = useQuery({
     queryKey: [...DROPDOWN_QUERY_KEYS.convenios, 'empresas-convenio-vigente'],
