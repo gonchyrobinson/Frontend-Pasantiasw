@@ -53,7 +53,7 @@ export const useCreateEmpresa = () => {
       invalidateConvenios();
       invalidatePasantias();
 
-      // Invalidar dropdowns que dependen de empresas (convenios, pasantías)
+      // Invalidar dropdowns que dependen de empresas (convenios, Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'convenios'] });
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
@@ -92,7 +92,7 @@ export const useUpdateEmpresa = () => {
       invalidatePasantias();
       invalidateConvenios();
 
-      // Invalidar dropdowns que dependen de empresas (convenios, pasantías)
+      // Invalidar dropdowns que dependen de empresas (convenios, Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'convenios'] });
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
@@ -125,7 +125,7 @@ export const useDeleteEmpresa = () => {
       invalidateConvenios();
       invalidatePasantias();
 
-      // Invalidar dropdowns que dependen de empresas (convenios, pasantías)
+      // Invalidar dropdowns que dependen de empresas (convenios, Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'convenios'] });
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 

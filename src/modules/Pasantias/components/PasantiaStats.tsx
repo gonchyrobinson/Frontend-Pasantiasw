@@ -10,14 +10,14 @@ interface PasantiaStatsProps {
 }
 
 const PasantiaStats: React.FC<PasantiaStatsProps> = ({ pasantias }) => {
-  // Obtener pasantías por vencer del hook (ya calculadas)
+  // Obtener Acuerdos Individuales por vencer del hook (ya calculadas)
   const { data: pasantiasPorVencer } = usePasantiasPorVencer();
 
   // Calcular estadísticas usando el valor pre-calculado
   const stats = calculatePasantiaStats(pasantias, pasantiasPorVencer?.length);
 
   const statsData: StatsProps = {
-    title: 'Estadísticas de Pasantías',
+    title: 'Estadísticas de Acuerdos Individuales',
     titleIcon: <Work />,
     stats: [
       {

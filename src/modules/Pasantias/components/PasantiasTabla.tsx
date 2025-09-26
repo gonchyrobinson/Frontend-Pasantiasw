@@ -54,8 +54,8 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
     <TablaGenericaWrapper
       metadata={metadata}
       data={pasantiasData}
-      title='Pasantías'
-      subtitle='Lista de pasantías registradas en el sistema'
+      title='Acuerdos Individuales'
+      subtitle='Lista de Acuerdos Individuales registrados en el sistema'
       loading={loading}
       onRowClick={handleRowClick}
       onRowEdit={handleRowEdit}

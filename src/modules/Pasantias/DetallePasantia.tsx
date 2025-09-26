@@ -21,8 +21,8 @@ const DetallePasantia: React.FC = () => {
   } = useApiQuery<PasantiaDto>(`${ROUTES.PASANTIAS}/${id}`);
 
   const metadata: DisplayMetadata = {
-    title: 'Detalle de la Pasantía',
-    subtitle: 'Información completa de la pasantía',
+    title: 'Detalle del acuerdo individual',
+    subtitle: 'Información completa del acuerdo individual',
     showEditButton: true,
     showCopyButton: true,
     editButtonText: 'Editar',

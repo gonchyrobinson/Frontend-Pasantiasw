@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Módulo principal del dashboard que muestra estadísticas, acciones rápidas y progreso del sistema de gestión de pasantías.
+Módulo principal del dashboard que muestra estadísticas, acciones rápidas y progreso del sistema de gestión de Acuerdos Individuales.
 
 ## Componentes
 
@@ -34,7 +34,7 @@ Tarjetas de estadísticas con:
 Tarjetas de acción rápida para:
 
 - Nuevo Convenio
-- Nueva Pasantía
+- Nuevo acuerdo individual
 - Registrar Pago
 
 ### SpeedDialRapido

@@ -1,23 +1,23 @@
-# Módulo de Pasantías
+# Módulo de Acuerdos Individuales
 
-Este módulo maneja la gestión completa de pasantías estudiantiles.
+Este módulo maneja la gestión completa de Acuerdos Individuales estudiantiles.
 
 ## Funcionalidades
 
-### Listado de Pasantías
+### Listado de Acuerdos Individuales
 
-- Visualización de todas las pasantías con información completa
+- Visualización de todas las Acuerdos Individuales con información completa
 - Estadísticas en tiempo real (total, activas, finalizadas, por vencer)
 - Filtros avanzados por expediente, área de trabajo, estado y fechas
 - Acciones rápidas (editar, eliminar, finalizar, activar)
 
-### Creación de Pasantías
+### Creación de Acuerdos Individuales
 
 - Formulario completo con validaciones
 - Integración con estudiantes y convenios existentes
 - Campos requeridos y opcionales según especificaciones
 
-### Edición de Pasantías
+### Edición de Acuerdos Individuales
 
 - Carga automática de datos existentes
 - Validación de formularios
@@ -25,8 +25,8 @@ Este módulo maneja la gestión completa de pasantías estudiantiles.
 
 ### Gestión de Estados
 
-- Marcado de pasantías como finalizadas
-- Activación de pasantías suspendidas
+- Marcado de Acuerdos Individuales como finalizadas
+- Activación de Acuerdos Individuales suspendidas
 - Seguimiento de fechas de inicio y fin
 
 ## Estructura del Módulo
@@ -40,7 +40,7 @@ src/modules/Pasantias/
 │   ├── EditarPasantia.tsx          # Formulario de edición
 │   ├── PasantiaFilters.tsx         # Filtros de búsqueda
 │   ├── PasantiaStats.tsx           # Estadísticas
-│   ├── PasantiasTabla.tsx          # Tabla de pasantías
+│   ├── PasantiasTabla.tsx          # Tabla de Acuerdos Individuales
 │   └── index.ts                     # Exportaciones de componentes
 ├── hooks/
 │   └── usePasantias.ts             # Hooks personalizados
@@ -58,7 +58,7 @@ src/modules/Pasantias/
 
 Componente principal que maneja:
 
-- Listado de pasantías
+- Listado de Acuerdos Individuales
 - Estadísticas
 - Filtros
 - Acciones CRUD
@@ -66,7 +66,7 @@ Componente principal que maneja:
 
 ### PasantiasTabla.tsx
 
-Tabla de pasantías usando `TablaGenericaWrapper`:
+Tabla de Acuerdos Individuales usando `TablaGenericaWrapper`:
 
 - Visualización en formato tabla
 - Columnas: expediente, área de trabajo, estado, fechas, asignación, tutores
@@ -95,7 +95,7 @@ Formulario de edición con:
 
 Hook principal para operaciones CRUD:
 
-- `usePasantias()` - Obtener todas las pasantías
+- `usePasantias()` - Obtener todas las Acuerdos Individuales
 - `usePasantia(id)` - Obtener pasantía específica
 - `useCreatePasantia()` - Crear pasantía
 - `useUpdatePasantia()` - Actualizar pasantía
@@ -173,7 +173,7 @@ interface PasantiaCreateDto {
 
 ### Endpoints Utilizados
 
-- `GET /api/Pasantias` - Listar todas las pasantías
+- `GET /api/Pasantias` - Listar todas las Acuerdos Individuales
 - `GET /api/Pasantias/{id}` - Obtener pasantía específica
 - `POST /api/Pasantias` - Crear pasantía
 - `PUT /api/Pasantias` - Actualizar pasantía
@@ -209,7 +209,7 @@ interface PasantiaCreateDto {
 
 ### Responsive Design
 
-- Grid responsive para pasantías
+- Grid responsive para Acuerdos Individuales
 - Filtros adaptables
 - Formularios optimizados para móvil
 
@@ -243,7 +243,7 @@ import { Pasantias } from '../modules/Pasantias';
 
 ### Características Futuras
 
-- Dashboard de pasantías con gráficos
-- Notificaciones de pasantías por vencer
+- Dashboard de Acuerdos Individuales con gráficos
+- Notificaciones de Acuerdos Individuales por vencer
 - Sistema de reportes avanzados
 - Integración con calendario académico

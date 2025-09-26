@@ -70,14 +70,14 @@ const PasantiaFilters: React.FC<PasantiaFiltersProps> = ({
       onSearchResults(pasantias);
       showSuccess('Búsqueda completada exitosamente');
     } catch (error) {
-      showError('Error al realizar la búsqueda de pasantías');
+      showError('Error al realizar la búsqueda de Acuerdos Individuales');
       throw error; // Re-lanzar para que SearchDialog maneje el cierre
     }
   };
 
   return (
     <SearchDialog
-      title='Búsqueda Avanzada de Pasantías'
+      title='Búsqueda Avanzada de Acuerdos Individuales'
       buttonText='Búsqueda Avanzada'
       metadata={getPasantiaSearchMetadata()}
       onSubmit={handleSearchSubmit}

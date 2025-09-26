@@ -34,13 +34,13 @@ type NavigateFunction = (path: string) => void;
  * Calcula las estadísticas principales del dashboard basadas en datos de la API
  *
  * @param conveniosData - Array de convenios obtenidos de la API
- * @param pasantiasData - Array de pasantías obtenidas de la API
+ * @param pasantiasData - Array de Acuerdos Individuales obtenidas de la API
  * @param pagosData - Array de pagos obtenidos de la API
  * @param conveniosLoading - Estado de carga de convenios
- * @param pasantiasLoading - Estado de carga de pasantías
+ * @param pasantiasLoading - Estado de carga de Acuerdos Individuales
  * @param pagosLoading - Estado de carga de pagos
  * @param conveniosError - Estado de error de convenios
- * @param pasantiasError - Estado de error de pasantías
+ * @param pasantiasError - Estado de error de Acuerdos Individuales
  * @param pagosError - Estado de error de pagos
  * @param icons - Iconos para las tarjetas de estadísticas
  * @param navigate - Función de navegación
@@ -71,7 +71,7 @@ export const calculateStats = (
       onClick: () => navigate(ROUTES.CONVENIOS),
     },
     {
-      title: 'Pasantías Activas',
+      title: 'Acuerdos Individuales Activos',
       value: pasantiasData?.length || 0,
       icon: icons.school,
       color: 'secondary.main',
@@ -117,8 +117,8 @@ export const getQuickActions = (
       onClick: () => navigate(ROUTES.CONVENIOS_CREAR),
     },
     {
-      title: 'Nueva Pasantía',
-      description: 'Registrar una nueva pasantía',
+      title: 'Nuevo acuerdo individual',
+      description: 'Registrar un nuevo acuerdo individual',
       icon: icons.school,
       path: ROUTES.PASANTIAS_CREAR,
       color: 'secondary',
@@ -157,7 +157,7 @@ export const getSpeedDialActions = (
     },
     {
       icon: icons.school,
-      name: 'Nueva Pasantía',
+      name: 'Nuevo acuerdo individual',
       action: () => navigate(ROUTES.PASANTIAS_CREAR),
     },
     {

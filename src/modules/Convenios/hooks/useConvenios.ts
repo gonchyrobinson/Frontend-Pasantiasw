@@ -66,7 +66,7 @@ export const useCreateConvenio = () => {
       // Invalidar dropdowns de convenios
       invalidateConvenios();
 
-      // Invalidar dropdowns que dependen de convenios (pasantías)
+      // Invalidar dropdowns que dependen de convenios (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -101,7 +101,7 @@ export const useUpdateConvenio = () => {
         // Invalidar dropdowns de convenios
         invalidateConvenios();
 
-        // Invalidar dropdowns que dependen de convenios (pasantías)
+        // Invalidar dropdowns que dependen de convenios (Acuerdos Individuales)
         queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
         // Invalidar queries de inicio que muestran estadísticas
@@ -138,7 +138,7 @@ export const useCaducarConvenio = () => {
       // Invalidar dropdowns de convenios
       invalidateConvenios();
 
-      // Invalidar dropdowns que dependen de convenios (pasantías)
+      // Invalidar dropdowns que dependen de convenios (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -166,7 +166,7 @@ export const useAsignarEmpresa = () => {
         // Invalidar dropdowns de convenios
         invalidateConvenios();
 
-        // Invalidar dropdowns que dependen de convenios (pasantías)
+        // Invalidar dropdowns que dependen de convenios (Acuerdos Individuales)
         queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
         // Invalidar queries de inicio que muestran estadísticas
@@ -223,7 +223,7 @@ export const useDeleteConvenio = () => {
       // Invalidar dropdowns de convenios
       invalidateConvenios();
 
-      // Invalidar dropdowns que dependen de convenios (pasantías)
+      // Invalidar dropdowns que dependen de convenios (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas

@@ -2,7 +2,7 @@
 
 ## VencimientosNotifications
 
-Componente genérico para mostrar notificaciones de elementos por vencer (pagos, convenios, pasantías, etc.).
+Componente genérico para mostrar notificaciones de elementos por vencer (pagos, convenios, Acuerdos Individuales, etc.).
 
 ### Características
 
@@ -65,7 +65,7 @@ const config: VencimientoConfig = {
 
 1. **PagosVencerNotifications**: Para pagos por vencer
 2. **ConveniosVencerNotifications**: Para convenios por vencer
-3. **PasantiasVencerNotifications**: Para pasantías por vencer
+3. **PasantiasVencerNotifications**: Para Acuerdos Individuales por vencer
 
 ### Personalización
 

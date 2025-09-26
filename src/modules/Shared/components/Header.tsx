@@ -112,7 +112,11 @@ const Header: React.FC = () => {
     { label: 'Empresas', icon: <Domain />, onClick: goToEmpresas },
     { label: 'Estudiantes', icon: <School />, onClick: goToEstudiantes },
     { label: 'Convenios', icon: <Business />, onClick: goToConvenios },
-    { label: 'Pasantías', icon: <School />, onClick: goToPasantias },
+    {
+      label: 'Acuerdos Individuales',
+      icon: <School />,
+      onClick: goToPasantias,
+    },
     { label: 'Pagos', icon: <Payment />, onClick: goToPagos },
     { label: 'Reportes', icon: <Assessment />, onClick: goToReportes },
   ];
@@ -142,7 +146,7 @@ const Header: React.FC = () => {
     <StyledAppBar position='static'>
       <StyledToolbar>
         <CardTitle component='div' sx={{ flexGrow: 1, fontWeight: 600 }}>
-          Sistema de Pasantías
+          Sistema de Acuerdos Individuales
         </CardTitle>
 
         <FlexContainer sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
@@ -194,7 +198,7 @@ const Header: React.FC = () => {
             {/* Separador */}
             <Divider sx={{ my: 1 }} />
 
-            {/* Pasantías por Vencer */}
+            {/* Acuerdos Individuales por Vencer */}
             <PasantiasVencerNotifications
               onClose={handleNotificationsClose}
               onNavigateToPasantia={goToDetallePasantia}
