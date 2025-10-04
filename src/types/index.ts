@@ -1,5 +1,5 @@
 /**
- * Tipos globales del sistema de gestión de pasantías
+ * Tipos globales del sistema de gestión de Acuerdos Individuales
  *
  * Contiene únicamente tipos que se usan en múltiples módulos
  * o que son fundamentales para la arquitectura del sistema.

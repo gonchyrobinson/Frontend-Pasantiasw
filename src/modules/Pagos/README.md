@@ -1,6 +1,6 @@
 # Módulo de Pagos
 
-Este módulo maneja la gestión completa de pagos asociados a las pasantías de los estudiantes.
+Este módulo maneja la gestión completa de pagos asociados a las Acuerdos Individuales de los estudiantes.
 
 ## Funcionalidades
 
@@ -16,7 +16,7 @@ Este módulo maneja la gestión completa de pagos asociados a las pasantías de 
 
 - Formulario completo con validaciones
 - Campos requeridos y opcionales según especificaciones
-- Integración con pasantías existentes
+- Integración con Acuerdos Individuales existentes
 - Creación de nuevos pagos
 - Edición de pagos existentes
 

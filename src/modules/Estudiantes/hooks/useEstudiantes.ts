@@ -51,7 +51,7 @@ export const useCreateEstudiante = () => {
       // Invalidar dropdowns de estudiantes
       invalidateEstudiantes();
       invalidatePasantias();
-      // Invalidar dropdowns que dependen de estudiantes (pasantías)
+      // Invalidar dropdowns que dependen de estudiantes (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -88,7 +88,7 @@ export const useUpdateEstudiante = () => {
       invalidateEstudiantes();
       invalidatePasantias();
 
-      // Invalidar dropdowns que dependen de estudiantes (pasantías)
+      // Invalidar dropdowns que dependen de estudiantes (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -119,7 +119,7 @@ export const useDeleteEstudiante = () => {
       invalidateEstudiantes();
       invalidatePasantias();
 
-      // Invalidar dropdowns que dependen de estudiantes (pasantías)
+      // Invalidar dropdowns que dependen de estudiantes (Acuerdos Individuales)
       queryClient.invalidateQueries({ queryKey: ['dropdown', 'pasantias'] });
 
       // Invalidar queries de inicio que muestran estadísticas

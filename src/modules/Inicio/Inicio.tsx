@@ -77,7 +77,7 @@ const Inicio: React.FC = () => {
       sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
     >
       <WelcomeSection
-        title='Bienvenido al Sistema de Gestión de Pasantías'
+        title='Bienvenido al Sistema de Gestión de Acuerdos Individuales'
         subtitle='Secretaría de Bienestar Estudiantil'
         statusLabel='Sistema Activo'
         statusColor='success'

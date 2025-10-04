@@ -11,7 +11,7 @@ import React from 'react';
 
 const API_BASE = '/pasantias';
 
-// Hook para obtener todas las pasantías
+// Hook para obtener todas las Acuerdos Individuales
 export const usePasantias = () => {
   return useQuery({
     queryKey: ['pasantias'],
@@ -47,12 +47,12 @@ export const useCreatePasantia = () => {
       return result;
     },
     onSuccess: () => {
-      // Invalidar todas las queries relacionadas con pasantías
+      // Invalidar todas las queries relacionadas con Acuerdos Individuales
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
 
-      // Invalidar dropdowns de pasantías
+      // Invalidar dropdowns de Acuerdos Individuales
       invalidatePasantias();
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -72,19 +72,19 @@ export const useUpdatePasantia = () => {
       return result;
     },
     onSuccess: data => {
-      // Invalidar todas las queries relacionadas con pasantías
+      // Invalidar todas las queries relacionadas con Acuerdos Individuales
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
 
-      // Invalidar específicamente la query del detalle de la pasantía actualizada
+      // Invalidar específicamente la query del Detalle del acuerdo individual actualizada
       if (data?.idPasantia) {
         queryClient.invalidateQueries({
           queryKey: [`/pasantias/${data.idPasantia}`],
         });
       }
 
-      // Invalidar dropdowns de pasantías
+      // Invalidar dropdowns de Acuerdos Individuales
       invalidatePasantias();
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -104,12 +104,12 @@ export const useDeletePasantia = () => {
       return result;
     },
     onSuccess: () => {
-      // Invalidar todas las queries relacionadas con pasantías
+      // Invalidar todas las queries relacionadas con Acuerdos Individuales
       queryClient.invalidateQueries({ queryKey: ['pasantias'] });
       queryClient.invalidateQueries({ queryKey: ['pasantia'] });
       queryClient.invalidateQueries({ queryKey: ['pasantiaStats'] });
 
-      // Invalidar dropdowns de pasantías
+      // Invalidar dropdowns de Acuerdos Individuales
       invalidatePasantias();
 
       // Invalidar queries de inicio que muestran estadísticas
@@ -118,7 +118,7 @@ export const useDeletePasantia = () => {
   });
 };
 
-// Hook para obtener estadísticas de pasantías
+// Hook para obtener estadísticas de Acuerdos Individuales
 export const usePasantiaStats = () => {
   const { data: pasantias, isLoading, error } = usePasantias();
 
@@ -147,7 +147,7 @@ export const usePasantiaStats = () => {
       return fechaFin <= fechaActual;
     }).length;
 
-    // Pasantías que finalizan en los próximos 30 días
+    // Acuerdos Individuales que finalizan en los próximos 30 días
     const treintaDias = new Date();
     treintaDias.setDate(treintaDias.getDate() + 30);
 
@@ -172,7 +172,7 @@ export const usePasantiaStats = () => {
   };
 };
 
-// Hook para obtener pasantías por vencer
+// Hook para obtener Acuerdos Individuales por vencer
 export const usePasantiasPorVencer = (diasAdelante = 30) => {
   return useQuery({
     queryKey: ['pasantias', 'por-vencer', diasAdelante],

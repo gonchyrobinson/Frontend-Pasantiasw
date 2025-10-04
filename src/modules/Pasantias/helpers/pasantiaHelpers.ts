@@ -10,25 +10,25 @@ import {
 import { FieldMetadata } from '../../../lib/ElementCardGenerica';
 
 /**
- * Helper consolidado para pasantías
+ * Helper consolidado para Acuerdos Individuales
  *
  * Contiene funciones utilitarias para:
  * - Generación de metadata de formularios (crear/editar)
  * - Generación de metadata de formularios de búsqueda
  * - Formateo de filtros de búsqueda para el backend
- * - Cálculo de estadísticas de pasantías
+ * - Cálculo de estadísticas de Acuerdos Individuales
  */
 
 // ==================== METADATA DE FORMULARIOS ====================
 
 /**
- * Genera la metadata para el formulario de pasantías
+ * Genera la metadata para el formulario de Acuerdos Individuales
  * Utilizado en CrearPasantia y EditarPasantia
  *
  * @returns Configuración completa del formulario con campos, validaciones y opciones
  */
 export const getPasantiaFormMetadata = () => ({
-  title: 'Información de la Pasantía',
+  title: 'Informacion del acuerdo individual',
   submitButtonText: 'Guardar',
   cancelButtonText: 'Cancelar',
   fields: [
@@ -232,10 +232,10 @@ export const getPasantiaFormMetadata = () => ({
 // ==================== CÁLCULO DE ESTADÍSTICAS ====================
 
 /**
- * Calcula las estadísticas de pasantías basadas en un array de pasantías
+ * Calcula las estadísticas de Acuerdos Individuales basadas en un array de Acuerdos Individuales
  *
- * @param pasantias - Array de pasantías para calcular estadísticas
- * @param pasantiasPorVencer - Número opcional de pasantías por vencer (si no se proporciona, se calcula automáticamente)
+ * @param pasantias - Array de Acuerdos Individuales para calcular estadísticas
+ * @param pasantiasPorVencer - Número opcional de Acuerdos Individuales por vencer (si no se proporciona, se calcula automáticamente)
  * @returns Objeto con estadísticas calculadas (total, activas, finalizadas, por vencer)
  */
 export const calculatePasantiaStats = (
@@ -282,7 +282,7 @@ export const calculatePasantiaStats = (
 // ==================== METADATA DE BÚSQUEDA ====================
 
 /**
- * Genera la metadata para el formulario de búsqueda avanzada de pasantías
+ * Genera la metadata para el formulario de búsqueda avanzada de Acuerdos Individuales
  * Utilizado en PasantiaFilters
  *
  * @returns Configuración completa del formulario de búsqueda con campos y opciones
@@ -293,7 +293,7 @@ export const getPasantiaSearchMetadata = (): {
   submitButtonText: string;
   cancelButtonText: string;
 } => ({
-  title: 'Búsqueda Avanzada de Pasantías',
+  title: 'Búsqueda Avanzada de Acuerdos Individuales',
   fields: [
     {
       name: 'tramiteSudocu',
@@ -391,7 +391,7 @@ export const formatPasantiaSearchFilters = (
 // ==================== METADATA PARA EDICIÓN ====================
 
 /**
- * Obtiene la metadata específica para el formulario de edición de pasantías
+ * Obtiene la metadata específica para el formulario de edición de Acuerdos Individuales
  * Convierte los campos dniEstudiante e idConvenio a readonly
  *
  * @returns Metadata configurada para edición con campos readonly

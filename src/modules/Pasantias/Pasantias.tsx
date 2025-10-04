@@ -46,7 +46,7 @@ const Pasantias: React.FC = () => {
   } = usePasantias();
   const { mutate: deletePasantia, isPending: isDeleting } = useDeletePasantia();
 
-  // Mostrar todas las pasantías al cargar la página por primera vez
+  // Mostrar todas las Acuerdos Individuales al cargar la página por primera vez
   useEffect(() => {
     if (!hasSearched && pasantias && pasantias.length > 0) {
       setHasSearched(true);
@@ -54,14 +54,14 @@ const Pasantias: React.FC = () => {
     }
   }, [pasantias, hasSearched]);
 
-  // Al regresar a la página, hacer GET a la API y mostrar todas las pasantías
+  // Al regresar a la página, hacer GET a la API y mostrar todas las Acuerdos Individuales
   useEffect(() => {
     if (
       location.pathname === ROUTES.PASANTIAS &&
       pasantias &&
       pasantias.length > 0
     ) {
-      // Refrescar datos y mostrar todas las pasantías
+      // Refrescar datos y mostrar todas las Acuerdos Individuales
       setHasSearched(true);
       setSearchResults(pasantias);
     }
@@ -84,7 +84,9 @@ const Pasantias: React.FC = () => {
       await Promise.all([refetchPasantias()]);
       showSuccess('Datos actualizados exitosamente');
     } catch (error) {
-      showError('Error al actualizar las pasantías. Inténtalo de nuevo.');
+      showError(
+        'Error al actualizar las Acuerdos Individuales. Inténtalo de nuevo.'
+      );
     } finally {
       setIsRefreshing(false);
     }
@@ -135,7 +137,7 @@ const Pasantias: React.FC = () => {
   if (statsLoading || pasantiasLoading || isRefreshing) {
     return (
       <MainContainer>
-        <LoadingSpinner message='Cargando pasantías...' />
+        <LoadingSpinner message='Cargando Acuerdos Individuales...' />
       </MainContainer>
     );
   }
@@ -151,7 +153,8 @@ const Pasantias: React.FC = () => {
             </RefreshButton>
           }
         >
-          Error al cargar las pasantías: {(error || pasantiasError)?.message}
+          Error al cargar las Acuerdos Individuales:{' '}
+          {(error || pasantiasError)?.message}
         </Alert>
       </MainContainer>
     );
@@ -160,12 +163,12 @@ const Pasantias: React.FC = () => {
   return (
     <MainContainer>
       <PageHeader
-        title='Gestión de Pasantías'
-        subtitle='Administra las pasantías del sistema de pasantías'
+        title='Gestión de Acuerdos Individuales'
+        subtitle='Administra las Acuerdos Individuales del sistema de Acuerdos Individuales'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onAction={handleCreate}
-        actionButtonText='Nueva Pasantía'
+        actionButtonText='Nuevo acuerdo individual'
       />
 
       <PasantiaFilters
@@ -203,11 +206,11 @@ const Pasantias: React.FC = () => {
           }}
         >
           <CardTitle color='text.secondary' gutterBottom>
-            Búsqueda de Pasantías
+            Búsqueda de Acuerdos Individuales
           </CardTitle>
           <BodyText color='text.secondary'>
-            Utiliza la búsqueda avanzada para encontrar pasantías por número de
-            trámite, tipo, estudiante, empresa, vigente o carrera
+            Utiliza la búsqueda avanzada para encontrar Acuerdos Individuales
+            por número de trámite, tipo, estudiante, empresa, vigente o carrera
           </BodyText>
         </CenteredContainer>
       )}
@@ -216,7 +219,7 @@ const Pasantias: React.FC = () => {
       {hasSearched && searchResults.length === 0 && (
         <CenteredContainer sx={{ textAlign: 'center', py: 8 }}>
           <CardTitle color='text.secondary' gutterBottom>
-            No se encontraron pasantías
+            No se encontraron Acuerdos Individuales
           </CardTitle>
           <BodyText color='text.secondary'>
             Intenta con diferentes criterios de búsqueda (número de trámite,

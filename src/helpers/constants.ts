@@ -1,5 +1,5 @@
 /**
- * Constantes globales del sistema de pasantías
+ * Constantes globales del sistema de Acuerdos Individuales
  *
  * Centraliza todas las constantes que se usan en múltiples módulos
  * para evitar dependencias cruzadas y duplicación.
@@ -39,8 +39,8 @@ export const CARRERAS_VALIDAS = [
 // ==================== TIPOS DE ACUERDO ====================
 
 /**
- * Lista de tipos de acuerdo válidos para pasantías
- * Utilizada en formularios de pasantías y filtros de búsqueda
+ * Lista de tipos de acuerdo válidos para Acuerdos Individuales
+ * Utilizada en formularios de Acuerdos Individuales y filtros de búsqueda
  */
 export const TIPOS_ACUERDO_VALIDOS = [
   { value: 'Pasantia', label: 'Pasantía' },

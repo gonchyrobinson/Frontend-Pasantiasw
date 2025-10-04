@@ -1,5 +1,5 @@
 /**
- * Constantes de rutas del sistema de pasantías
+ * Constantes de rutas del sistema de Acuerdos Individuales
  *
  * Centraliza todas las rutas de la aplicación para evitar hardcoding
  * y facilitar el mantenimiento y refactoring.
@@ -45,10 +45,10 @@ export const ROUTES = {
   /** Ver detalle de convenio */
   CONVENIOS_DETALLE: '/convenios/detalle',
 
-  // ==================== MÓDULO PASANTÍAS ====================
-  /** Listado de pasantías */
+  // ==================== MÓDULO Acuerdos Individuales ====================
+  /** Listado de Acuerdos Individuales */
   PASANTIAS: '/pasantias',
-  /** Crear nueva pasantía */
+  /** Crear Nuevo acuerdo individual */
   PASANTIAS_CREAR: '/pasantias/crear',
   /** Editar pasantía existente */
   PASANTIAS_EDITAR: '/pasantias/editar',

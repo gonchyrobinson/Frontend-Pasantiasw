@@ -1,4 +1,4 @@
-// Exportaciones del módulo de Pasantías
+// Exportaciones del módulo de Acuerdos Individuales
 export { default as Pasantias } from './Pasantias';
 export { default as CrearPasantia } from './components/CrearPasantia';
 export { default as EditarPasantia } from './components/EditarPasantia';

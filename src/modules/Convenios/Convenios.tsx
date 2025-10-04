@@ -207,7 +207,7 @@ const Convenios: React.FC = () => {
     <MainContainer>
       <PageHeader
         title='Gestión de Convenios'
-        subtitle='Administra los convenios del sistema de pasantías'
+        subtitle='Administra los convenios del sistema de Acuerdos Individuales'
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         onAction={handleCreate}

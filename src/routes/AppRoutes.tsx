@@ -31,6 +31,7 @@ import CrearPago from '../modules/Pagos/components/CrearPago';
 import EditarPago from '../modules/Pagos/components/EditarPago';
 import DetallePago from '../modules/Pagos/DetallePago';
 import Reportes from '../modules/Reportes/Reportes';
+import Configuracion from '../modules/Configuracion/Configuracion';
 import RegistroUsuarios from '../modules/CreacionUsuarios/RegistroUsuarios';
 import ProtectedRoute from './helpers/ProtectedRoute';
 import NotFound from '../modules/PaginasError/NotFound';
@@ -263,6 +264,16 @@ const AppRoutes: React.FC = () => {
             <ProtectedRoute>
               <Layout>
                 <Reportes />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.CONFIGURACION}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Configuracion />
               </Layout>
             </ProtectedRoute>
           }

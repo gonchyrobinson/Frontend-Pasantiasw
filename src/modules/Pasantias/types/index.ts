@@ -71,7 +71,7 @@ export interface PasantiaDetalleDto {
   convenio?: ConvenioDto;
 }
 
-// DTO para tabla de pasantías (endpoint show-table)
+// DTO para tabla de Acuerdos Individuales (endpoint show-table)
 export interface PasantiaShowTableDto {
   idPasantia: number;
   tramiteSudocu?: string;

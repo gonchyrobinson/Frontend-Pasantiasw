@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este sistema centraliza y optimiza la carga de datos para dropdowns (empresas, estudiantes, convenios, pasantías) con un sistema de caché inteligente usando React Query.
+Este sistema centraliza y optimiza la carga de datos para dropdowns (empresas, estudiantes, convenios, Acuerdos Individuales) con un sistema de caché inteligente usando React Query.
 
 ## Características
 
