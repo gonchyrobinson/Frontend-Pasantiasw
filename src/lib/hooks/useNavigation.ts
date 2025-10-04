@@ -49,6 +49,10 @@ export const useNavigation = () => {
     navigate(ROUTES.REPORTES);
   };
 
+  const goToAuditoria = () => {
+    navigate(ROUTES.AUDITORIA);
+  };
+
   const goToPerfil = () => {
     navigate(ROUTES.PERFIL);
   };
@@ -70,6 +74,7 @@ export const useNavigation = () => {
     goToPasantias,
     goToPagos,
     goToReportes,
+    goToAuditoria,
     goToPerfil,
     goToConfiguracion,
   };

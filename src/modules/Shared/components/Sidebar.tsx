@@ -16,6 +16,7 @@ import {
   Settings,
   Domain,
   Menu,
+  History,
 } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 import { useNavigation } from '../../../lib/hooks/useNavigation';
@@ -45,6 +46,7 @@ const Sidebar = () => {
     goToPasantias,
     goToPagos,
     goToReportes,
+    goToAuditoria,
     goToConfiguracion,
   } = useNavigation();
 
@@ -90,6 +92,12 @@ const Sidebar = () => {
       icon: <Assessment />,
       onClick: goToReportes,
       path: ROUTES.REPORTES,
+    },
+    {
+      text: 'Auditoría',
+      icon: <History />,
+      onClick: goToAuditoria,
+      path: ROUTES.AUDITORIA,
     },
     {
       text: 'Configuración',
