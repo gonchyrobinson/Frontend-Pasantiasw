@@ -186,7 +186,7 @@ export const usePasantiasDropdown = () => {
 
     return queryCompletas.data.map(pasantia => ({
       value: pasantia.idPasantia,
-      label: pasantia.tramite || `Pasantía ${pasantia.idPasantia}`,
+      label: pasantia.tramiteSudocu || `Pasantía ${pasantia.idPasantia}`,
     }));
   }, [queryCompletas.data]);
 

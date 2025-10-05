@@ -145,3 +145,21 @@ export const usePagosStats = () => {
     error,
   };
 };
+
+// Hook para obtener sugerencias de trámites SUDOCU
+export const useTramitesSudocuDropdown = () => {
+  return useQuery({
+    queryKey: ['pagos', 'sugerencias-tramites-sudocu'],
+    queryFn: async () => {
+      const data = await apiClient.get<string[]>(
+        '/pagos/sugerencias-tramites-sudocu'
+      );
+      // Convertir array de strings a formato dropdown
+      return data.map(tramite => ({
+        value: tramite,
+        label: tramite,
+      }));
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
+  });
+};

@@ -26,7 +26,8 @@ export const getPagosFormMetadata = () => ({
   fields: [
     {
       name: 'idPasantia',
-      label: 'Número de trámite - SUDOCU',
+      label:
+        'Número de trámite - SUDOCU (o id de pasantía en caso de no tener asignado)',
       type: 'dynamicDropdown' as const,
       placeholder: 'Seleccione una pasantía',
       required: true,
@@ -176,6 +177,12 @@ export const getPagosSearchMetadata = () => ({
   cancelButtonText: 'Cancelar',
   fields: [
     {
+      name: 'tramiteSudocu',
+      label: 'Trámite SUDOCU',
+      type: 'dynamicDropdown' as const,
+      placeholder: 'Seleccionar trámite SUDOCU...',
+    },
+    {
       name: 'idEmpresa',
       label: 'Empresa',
       type: 'dynamicDropdown' as const,
@@ -230,6 +237,11 @@ export const formatPagosSearchFilters = (filters: Record<string, unknown>) => {
 
   // Mapear campos del formulario al DTO esperado por el backend
   // Solo incluir campos que tengan valor válido
+
+  // Trámite SUDOCU - mantener como string
+  if (isValidValue(filters.tramiteSudocu)) {
+    searchFilters.tramiteSudocu = filters.tramiteSudocu;
+  }
 
   // ID de empresa - convertir a número
   if (isValidValue(filters.idEmpresa)) {

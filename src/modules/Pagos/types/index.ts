@@ -7,6 +7,11 @@ export interface PagosDto {
   fechaVencimiento?: string;
   monto?: number;
   observaciones?: string;
+
+  // Campos adicionales de navegación
+  tramiteSudocu?: string;
+  nombreEstudiante?: string;
+  nombreEmpresa?: string;
 }
 
 // DTO para creación - omite el ID y pagado que son manejados por el backend

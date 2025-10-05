@@ -68,6 +68,8 @@ export const ROUTES = {
   // ==================== MÓDULOS ADICIONALES ====================
   /** Página de reportes */
   REPORTES: '/reportes',
+  /** Página de auditoría */
+  AUDITORIA: '/auditoria',
 
   // ==================== USUARIO Y CONFIGURACIÓN ====================
   /** Perfil del usuario */

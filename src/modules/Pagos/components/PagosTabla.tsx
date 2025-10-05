@@ -23,7 +23,9 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
 }) => {
   const metadata: FieldMetadata[] = [
     { name: 'idPago', label: 'ID Pago', type: 'text' },
-    { name: 'idPasantia', label: 'ID Pasantía', type: 'text' },
+    { name: 'tramiteSudocu', label: 'Trámite SUDOCU', type: 'text' },
+    { name: 'nombreEstudiante', label: 'Estudiante', type: 'text' },
+    { name: 'nombreEmpresa', label: 'Empresa', type: 'text' },
     { name: 'estado', label: 'Estado', type: 'text' },
     { name: 'fechaPago', label: 'Fecha de Pago', type: 'date' },
     { name: 'fechaVencimiento', label: 'Fecha de Vencimiento', type: 'date' },
@@ -34,6 +36,9 @@ const PagosTabla: React.FC<PagosTablaProps> = ({
   const pagosData = pagos.map(pago => ({
     ...pago,
     id: pago.idPago,
+    tramiteSudocu: pago.tramiteSudocu || '-',
+    nombreEstudiante: pago.nombreEstudiante || '-',
+    nombreEmpresa: pago.nombreEmpresa || '-',
     estado: getPagoEstado(pago),
     monto: pago.monto ? formatCurrency(pago.monto) : '-',
     fechaPago: pago.fechaPago,

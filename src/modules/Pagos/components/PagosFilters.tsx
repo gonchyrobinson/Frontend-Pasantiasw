@@ -11,6 +11,7 @@ import {
   useEmpresasDropdown,
   useEstudiantesDropdown,
 } from '../../../lib/hooks/useDropdownData';
+import { useTramitesSudocuDropdown } from '../hooks/usePagos';
 
 interface PagosFiltersProps {
   onSearchResults: (pagos: PagosDto[]) => void;
@@ -29,6 +30,8 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
     useEmpresasDropdown();
   const { estudiantesOptions, isLoading: estudiantesLoading } =
     useEstudiantesDropdown();
+  const { data: tramitesSudocuOptions, isLoading: tramitesLoading } =
+    useTramitesSudocuDropdown();
   const [dynamicOptions, setDynamicOptions] = useState<
     Record<string, Array<{ value: string | number; label: string }>>
   >({});
@@ -36,10 +39,11 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
   // Configurar opciones dinámicas usando los hooks centralizados
   useEffect(() => {
     setDynamicOptions({
+      tramiteSudocu: tramitesSudocuOptions || [], // Opciones de trámites SUDOCU
       idEmpresa: empresasParaAsignarOptions || [], // Usar opciones para asignar (con ID)
       estudiante: estudiantesOptions || [], // Usar opciones de estudiantes (documentos)
     });
-  }, [empresasParaAsignarOptions, estudiantesOptions]);
+  }, [tramitesSudocuOptions, empresasParaAsignarOptions, estudiantesOptions]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSearchSubmit = async (filters: Record<string, any>) => {
@@ -69,7 +73,7 @@ const PagosFilters: React.FC<PagosFiltersProps> = ({
       onClearResults={onClearResults}
       hasResults={hasResults}
       dynamicDropdownOptions={dynamicOptions}
-      loading={empresasLoading || estudiantesLoading}
+      loading={empresasLoading || estudiantesLoading || tramitesLoading}
     />
   );
 };
