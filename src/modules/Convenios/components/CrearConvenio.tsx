@@ -17,14 +17,30 @@ const CrearConvenio: React.FC = () => {
     useEmpresasDropdown();
 
   const handleSubmit = async (data: ConvenioCreateDto) => {
-    const response = await createMutation.mutateAsync(
-      data as ConvenioCreateDto & Record<string, unknown>
-    );
-    showSuccess('Convenio creado exitosamente');
-    if (response?.data && response.data.idConvenio) {
-      navigate(`${ROUTES.CONVENIOS_DETALLE}/${response.data.idConvenio}`);
-    } else {
+    if (data.tipoAcuerdo === 'AMBOS') {
+      // Crear dos convenios: uno de cada tipo
+      await createMutation.mutateAsync({
+        ...data,
+        tipoAcuerdo: 'Pasantías y PPS',
+      } as ConvenioCreateDto & Record<string, unknown>);
+
+      await createMutation.mutateAsync({
+        ...data,
+        tipoAcuerdo: 'Carta Acuerdo de Cooperación y Asistencia Técnica',
+      } as ConvenioCreateDto & Record<string, unknown>);
+
+      showSuccess('Convenios creados exitosamente');
       navigate(ROUTES.CONVENIOS);
+    } else {
+      const response = await createMutation.mutateAsync(
+        data as ConvenioCreateDto & Record<string, unknown>
+      );
+      showSuccess('Convenio creado exitosamente');
+      if (response?.data && response.data.idConvenio) {
+        navigate(`${ROUTES.CONVENIOS_DETALLE}/${response.data.idConvenio}`);
+      } else {
+        navigate(ROUTES.CONVENIOS);
+      }
     }
   };
 

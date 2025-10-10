@@ -60,6 +60,7 @@ export const getPasantiaFormMetadata = () => ({
       name: 'asignacionMensual',
       label: 'Asignación Mensual',
       type: 'number' as const,
+      required: false,
       validations: {
         min: { value: 0, message: 'La asignación debe ser mayor o igual a 0' },
       },
@@ -184,11 +185,13 @@ export const getPasantiaFormMetadata = () => ({
       name: 'frecuenciaPago',
       label: 'Frecuencia de Pago',
       type: 'dropdown' as const,
+      required: false,
       options: [
         { value: 'Mensual', label: 'Mensual' },
         { value: 'Trimestral', label: 'Trimestral' },
         { value: 'Semestral', label: 'Semestral' },
         { value: 'Anual', label: 'Anual' },
+        { value: 'Otro', label: 'Otro' },
       ],
       gridSize: 6,
     },

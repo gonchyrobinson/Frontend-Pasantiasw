@@ -55,6 +55,32 @@ export const getCreacionEmpresaMetadata = () => ({
       },
       gridSize: 12,
     },
+    {
+      name: 'celular',
+      label: 'Teléfono',
+      type: 'text' as const,
+      required: false,
+      validations: {
+        maxLength: {
+          value: 50,
+          message: 'El teléfono no puede exceder 50 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
+    {
+      name: 'encargado',
+      label: 'Encargado',
+      type: 'text' as const,
+      required: false,
+      validations: {
+        maxLength: {
+          value: 100,
+          message: 'El encargado no puede exceder 100 caracteres',
+        },
+      },
+      gridSize: 6,
+    },
   ],
 });
 
