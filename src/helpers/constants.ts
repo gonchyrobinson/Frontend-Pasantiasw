@@ -58,7 +58,12 @@ export const TIPOS_ACUERDO_CONVENIO_VALIDOS = [
     value: 'Carta Acuerdo de Cooperación y Asistencia Técnica',
     label: 'Carta Acuerdo de Cooperación y Asistencia Técnica',
   },
-  { value: 'Pasantías y PPS', label: 'Pasantías y PPS' },
+  { value: 'Pasantías y PPS', label: 'Acuerdo Marco de Pasantías y Prácticas' },
+  {
+    value: 'AMBOS',
+    label:
+      'Carta Acuerdo de Cooperación y Asistencia Técnica Y Acuerdo Marco de Pasantías y Prácticas',
+  },
   { value: 'otro', label: 'Otro' },
 ] as const;
 

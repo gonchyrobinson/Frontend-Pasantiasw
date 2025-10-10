@@ -49,6 +49,18 @@ const DetalleEmpresa: React.FC = () => {
             name: 'correoElectronico',
             label: 'Correo Electrónico',
             type: 'email',
+            gridSize: 6,
+          },
+          {
+            name: 'celular',
+            label: 'Teléfono',
+            type: 'text',
+            gridSize: 6,
+          },
+          {
+            name: 'encargado',
+            label: 'Nombre del representante de la facultad',
+            type: 'text',
             gridSize: 12,
           },
         ],

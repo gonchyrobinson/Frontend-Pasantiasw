@@ -29,6 +29,8 @@ const EmpresasTabla: React.FC<EmpresasTablaProps> = ({
   const metadata: FieldMetadata[] = [
     { name: 'nombre', label: 'Nombre', type: 'text' },
     { name: 'correoElectronico', label: 'Correo Electrónico', type: 'email' },
+    { name: 'celular', label: 'Teléfono', type: 'text' },
+    { name: 'encargado', label: 'Representante', type: 'text' },
   ];
 
   // Convertir EmpresaDto[] a Record<string, unknown>[] para compatibilidad

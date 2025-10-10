@@ -2,6 +2,8 @@ export interface EmpresaDto {
   idEmpresa: number;
   nombre?: string;
   correoElectronico?: string;
+  celular?: string;
+  encargado?: string;
 }
 
 // DTO para creación - omite el ID que es generado por el backend
