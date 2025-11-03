@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../Shared/apis/apiClient';
 import { authHelper } from '../../helpers/authHelper';
-import { useNavigation } from '../../lib/hooks/useNavigation';
 import { FormularioGenerico } from '../../lib/FormularioGenerico';
 import { ROUTES } from '../../helpers/routesHelper';
 import { useSnackbar } from '../../lib/hooks/useSnackbar';
@@ -20,7 +19,6 @@ import { RegisterData } from './types';
 const RegistroUsuarios = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { redirectAfterLogin } = useNavigation();
   const { snackbar, showSuccess, showError, hideSnackbar } = useSnackbar();
 
   const registerMetadata = getRegistroMetadata();
@@ -36,20 +34,16 @@ const RegistroUsuarios = () => {
 
     try {
       const registerData = data as unknown as RegisterData;
-      const result = await apiClient.post<{ token: string }>(
-        '/v1/authn/register',
-        {
-          username: registerData.username,
-          email: registerData.email,
-          password: registerData.password,
-        }
-      );
+      await apiClient.post<{ token: string }>('/v1/authn/register', {
+        username: registerData.username,
+        email: registerData.email,
+        password: registerData.password,
+      });
 
-      authHelper.saveToken(result.token);
-      showSuccess('Usuario registrado exitosamente');
+      showSuccess('Usuario creado exitosamente');
 
       setTimeout(() => {
-        redirectAfterLogin();
+        navigate(ROUTES.DASHBOARD);
       }, 2000);
     } catch (error: unknown) {
       const errorMessage = authHelper.handleAuthError(
@@ -63,7 +57,7 @@ const RegistroUsuarios = () => {
   };
 
   const handleRegresar = () => {
-    navigate(ROUTES.LOGIN);
+    navigate(ROUTES.DASHBOARD);
   };
 
   return (

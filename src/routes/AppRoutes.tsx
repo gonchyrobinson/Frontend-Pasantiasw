@@ -34,6 +34,8 @@ import Reportes from '../modules/Reportes/Reportes';
 import Auditoria from '../modules/Auditoria/Auditoria';
 import Configuracion from '../modules/Configuracion/Configuracion';
 import RegistroUsuarios from '../modules/CreacionUsuarios/RegistroUsuarios';
+import EditarUsuario from '../modules/CreacionUsuarios/EditarUsuario';
+import DetalleUsuario from '../modules/CreacionUsuarios/DetalleUsuario';
 import ProtectedRoute from './helpers/ProtectedRoute';
 import NotFound from '../modules/PaginasError/NotFound';
 
@@ -46,7 +48,6 @@ const AppRoutes: React.FC = () => {
 
         {/* Rutas públicas */}
         <Route path={ROUTES.LOGIN} element={<Login />} />
-        <Route path={ROUTES.REGISTRAR_USUARIO} element={<RegistroUsuarios />} />
 
         {/* Rutas protegidas */}
         <Route
@@ -290,11 +291,31 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path='/usuarios'
+          path={ROUTES.REGISTRAR_USUARIO}
           element={
             <ProtectedRoute>
               <Layout>
                 <RegistroUsuarios />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.PERFIL}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DetalleUsuario />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={`${ROUTES.USUARIOS_EDITAR}/:id`}
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditarUsuario />
               </Layout>
             </ProtectedRoute>
           }

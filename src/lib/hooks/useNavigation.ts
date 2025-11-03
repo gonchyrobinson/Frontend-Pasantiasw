@@ -54,11 +54,25 @@ export const useNavigation = () => {
   };
 
   const goToPerfil = () => {
-    navigate(ROUTES.PERFIL);
+    const userId = authHelper.getUserId();
+    if (userId) {
+      navigate(`${ROUTES.PERFIL}/${userId}`);
+    }
   };
 
   const goToConfiguracion = () => {
     navigate(ROUTES.CONFIGURACION);
+  };
+
+  const goToEditarUsuario = () => {
+    const userId = authHelper.getUserId();
+    if (userId) {
+      navigate(`${ROUTES.USUARIOS_EDITAR}/${userId}`);
+    }
+  };
+
+  const goToCrearUsuario = () => {
+    navigate(ROUTES.REGISTRAR_USUARIO);
   };
 
   return {
@@ -77,5 +91,7 @@ export const useNavigation = () => {
     goToAuditoria,
     goToPerfil,
     goToConfiguracion,
+    goToEditarUsuario,
+    goToCrearUsuario,
   };
 };

@@ -12,7 +12,6 @@ import {
   Business,
   School,
   Payment,
-  Assessment,
   Settings,
   Domain,
   Menu,
@@ -45,7 +44,6 @@ const Sidebar = () => {
     goToConvenios,
     goToPasantias,
     goToPagos,
-    goToReportes,
     goToAuditoria,
     goToConfiguracion,
   } = useNavigation();
@@ -86,12 +84,6 @@ const Sidebar = () => {
       icon: <Payment />,
       onClick: goToPagos,
       path: ROUTES.PAGOS,
-    },
-    {
-      text: 'Reportes',
-      icon: <Assessment />,
-      onClick: goToReportes,
-      path: ROUTES.REPORTES,
     },
     {
       text: 'Auditoría',
