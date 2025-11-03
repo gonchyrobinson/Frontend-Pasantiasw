@@ -8,6 +8,8 @@ import {
   Logout,
   Person,
   Domain,
+  Edit,
+  PersonAdd,
 } from '@mui/icons-material';
 import { AppBar, Toolbar, Divider } from '@mui/material';
 import { FlexContainer } from '../../../lib/components/StyledContainers';
@@ -63,6 +65,8 @@ const Header: React.FC = () => {
     goToReportes,
     goToPerfil,
     goToConfiguracion,
+    goToEditarUsuario,
+    goToCrearUsuario,
     logout,
   } = useNavigation();
 
@@ -128,6 +132,16 @@ const Header: React.FC = () => {
       icon: Person,
       primary: 'Perfil',
       onClick: goToPerfil,
+    },
+    {
+      icon: Edit,
+      primary: 'Editar Usuario',
+      onClick: goToEditarUsuario,
+    },
+    {
+      icon: PersonAdd,
+      primary: 'Crear Usuario',
+      onClick: goToCrearUsuario,
     },
     {
       icon: Settings,

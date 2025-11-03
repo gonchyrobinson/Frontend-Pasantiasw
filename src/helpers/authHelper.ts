@@ -41,4 +41,38 @@ export const authHelper = {
     }
     return defaultMessage;
   },
+
+  /**
+   * Decodifica el JWT para obtener el payload
+   * @returns El payload del token o null si no es válido
+   */
+  decodeToken: (): { UserId?: string; [key: string]: unknown } | null => {
+    const token = authHelper.getToken();
+    if (!token) return null;
+
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Obtiene el ID del usuario actual desde el token
+   * @returns El ID del usuario o null si no está disponible
+   */
+  getUserId: (): number | null => {
+    const payload = authHelper.decodeToken();
+    if (!payload?.UserId) return null;
+    const userId = parseInt(payload.UserId as string, 10);
+    return isNaN(userId) ? null : userId;
+  },
 } as const;

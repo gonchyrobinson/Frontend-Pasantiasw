@@ -14,9 +14,6 @@ import {
   TituloLogin,
   SubtituloLogin,
   AlertaErrorLogin,
-  FooterLogin,
-  TextoFooter,
-  EnlaceRegistroLogin,
 } from './components/ComponentesGenericos';
 
 const Login = () => {
@@ -68,14 +65,6 @@ const Login = () => {
           onSubmit={handleSubmit}
           loading={loading}
         />
-
-        {/* Footer del formulario */}
-        <FooterLogin>
-          <TextoFooter>
-            ¿No tienes cuenta?{' '}
-            <EnlaceRegistroLogin>Regístrate aquí</EnlaceRegistroLogin>
-          </TextoFooter>
-        </FooterLogin>
       </TarjetaPrincipal>
 
       {/* Estilos CSS para animaciones */}

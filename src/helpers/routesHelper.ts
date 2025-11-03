@@ -73,7 +73,9 @@ export const ROUTES = {
 
   // ==================== USUARIO Y CONFIGURACIÓN ====================
   /** Perfil del usuario */
-  PERFIL: '/perfil',
+  PERFIL: '/usuarios/detalle',
+  /** Editar usuario */
+  USUARIOS_EDITAR: '/usuarios/editar',
   /** Configuración del sistema */
   CONFIGURACION: '/configuracion',
 

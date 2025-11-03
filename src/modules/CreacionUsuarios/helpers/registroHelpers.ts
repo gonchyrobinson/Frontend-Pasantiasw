@@ -22,15 +22,15 @@ const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
  * @returns Configuración completa del formulario de registro
  */
 export const getRegistroMetadata = (): FormMetadata => ({
-  title: 'Crear Cuenta',
-  submitButtonText: 'Registrarse',
-  cancelButtonText: 'Regresar',
+  title: 'Crear Nuevo Usuario',
+  submitButtonText: 'Crear Usuario',
+  cancelButtonText: 'Cancelar',
   fields: [
     {
       name: 'username',
       type: 'text',
       label: 'Usuario',
-      placeholder: 'Ingrese su usuario',
+      placeholder: 'Nombre de usuario',
       validations: {
         required: 'Usuario es requerido',
         minLength: {
@@ -44,7 +44,7 @@ export const getRegistroMetadata = (): FormMetadata => ({
       name: 'email',
       type: 'email',
       label: 'Email',
-      placeholder: 'Ingrese su email',
+      placeholder: 'Correo electrónico',
       validations: {
         required: 'Email es requerido',
         pattern: {
@@ -58,7 +58,7 @@ export const getRegistroMetadata = (): FormMetadata => ({
       name: 'password',
       type: 'password',
       label: 'Contraseña',
-      placeholder: 'Ingrese su contraseña',
+      placeholder: 'Contraseña del usuario',
       validations: {
         required: 'Contraseña es requerida',
         minLength: {
