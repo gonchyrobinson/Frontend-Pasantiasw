@@ -26,6 +26,8 @@ const PasantiasTabla: React.FC<PasantiasTablaProps> = ({
     { name: 'empresa', label: 'Empresa', type: 'text' },
     { name: 'tipoAcuerdo', label: 'Tipo de Acuerdo', type: 'text' },
     { name: 'estado', label: 'Estado', type: 'text' },
+    { name: 'tutorEmpresa', label: 'Tutor Empresa', type: 'text' },
+    { name: 'tutorFacultad', label: 'Tutor Facultad', type: 'text' },
     { name: 'fechaInicio', label: 'Fecha de Inicio', type: 'date' },
     { name: 'fechaFin', label: 'Fecha de Fin', type: 'date' },
   ];
