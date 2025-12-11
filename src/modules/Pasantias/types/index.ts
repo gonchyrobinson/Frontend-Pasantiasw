@@ -81,6 +81,8 @@ export interface PasantiaShowTableDto {
   estado: string;
   fechaInicio?: string;
   fechaFin?: string;
+  tutorEmpresa?: string;
+  tutorFacultad?: string;
 }
 
 // DTOs básicos para referencias
